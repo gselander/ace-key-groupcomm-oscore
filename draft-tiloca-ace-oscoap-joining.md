@@ -48,16 +48,21 @@ author:
 
 normative:
   RFC2119:
+  RFC7252:
+  I-D.tiloca-core-multicast-oscoap:
+  I-D.ietf-ace-oauth-authz:
+  I-D.seitz-ace-oscoap-profile:
+  I-D.gerdes-ace-dtls-authorize:
 
 informative:
-  I-D.ietf-ace-oauth-authz:
+  RFC6347:
+  RFC6749:
+  RFC7390:
   I-D.selander-ace-cose-ecdhe:
-
-
 
 --- abstract
 
-TODO
+TBD
 
 --- middle
 
@@ -71,7 +76,23 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 TBD
 
-# Section 1 {#sec-section-1}
+# Protocol Overview {#sec-protocol-overview}
+
+TBD
+
+# Joining Node to Authorization Server {#sec-joining-node-to-AS}
+
+TBD
+
+# Joining Node to Group Manager {#sec-joining-node-to-GM}
+
+TBD
+
+# Alternative Key Establishment Modes {#sec-alternative-key-establishment-modes}
+
+TBD
+
+# Updating Authorization Information {#sec-updating-authorization-information}
 
 TBD
 
