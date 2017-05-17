@@ -92,7 +92,11 @@ Readers are expected to be familiar with the terms and concepts related to the D
 
 This document refers also to the following terminology.
 
-* Joining: the process through which a node becomes a member of a multicast group where communication are based on CoAP and secured by OSCOAP as described in {{I-D.tiloca-core-multicast-oscoap}}. The joining process is assisted by the Group Manager responsible for that group.
+* Joining node: a network node willing to join an OSCOAP multicast group, where communication are based on CoAP and secured by OSCOAP as described in {{I-D.tiloca-core-multicast-oscoap}}.
+
+* Join process: the process through which a joining node becomes a member of a group. The join process is enforced and assisted by the Group Manager responsible for that group.
+
+* Joining endpoint: an endpoint at a Group Manager denoting a resource that a joining node access to join the related group under the control of that Group Manager.
 
 # Protocol Overview {#sec-protocol-overview}
 
