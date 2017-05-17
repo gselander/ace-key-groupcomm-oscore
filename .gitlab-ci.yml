@@ -3,12 +3,12 @@ pages:
   script:
   - apt-get update -qy
   - apt-get install -y python-dev python-pip xsltproc
-  - mkdir public
+  - mkdir -p public
   - pip install xml2rfc
   - if head -1 -q *.md | grep '^\-\-\-' >/dev/null 2>&1; then gem install --no-doc kramdown-rfc2629; fi
   - if head -1 -q *.md | grep '^%%%' >/dev/null 2>&1; then go get "$mmark_src" && go build "$mmark_src"; fi
   - make
-  - mv *.html public/index.html
+  - mv *.html ./public/index.html
   - make clean
   artifacts:
     paths:
