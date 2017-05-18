@@ -1,6 +1,6 @@
 ---
 title: ACE profile for joining OSCOAP multicast groups
-# abbrev: group-OSCOAP-ACE
+abbrev: Group OSCOAP joining for ACE
 docname: draft-tiloca-ace-oscoap-joining-00
 # date: 2017-04-25
 category: std
@@ -64,17 +64,26 @@ informative:
   RFC7231:
   RFC7250:
   RFC7390:
+  I-D.ietf-cose-msg:
   I-D.selander-ace-cose-ecdhe:
 
 --- abstract
 
-TODO
+This document describes a profile of the ACE framework for Authentication and Authorization. The profile delegates the authentication and authorization of a client willing to join a multicast group where communication is based on CoAP and secured with Object Security of CoAP (OSCOAP). The profile establishes a secure communication channel between the client and the resource server, which is responsible for the multicast group and the joining of new members. The client and resource server leverage protocol-specific profiles for ACE to achieve communication security, proof of possession and server authentication.
 
 --- middle
 
 # Introduction {#sec-introduction}
 
-TBD
+The Constrained Application Protocol (CoAP) {{RFC7252}} supports also group communication scenarios, where request messages can be delivered to multiple recipients using CoAP on top of IP multicast {{RFC7390}}.
+
+Object Security of CoAP (OSCOAP) {{I-D.ietf-core-object-security}} is a method for application layer protection of CoAP messages, using the CBOR Object Signing and Encryption (COSE) {{I-D.ietf-cose-msg}}, and enabling end-to-end security of CoAP payload and options.
+
+OSCOAP may also be used to protect group communication for CoAP over IP multicast, as described in {{I-D.tiloca-core-multicast-oscoap}}. This relies on a Group Manager entity, which is responsible for managing a multicast group where members exchange CoAP messages secured with OSCOAP. In particular, the Group Manager coordinates the join process of new group members and can be responsible for multiple groups.
+
+This document specifies a profile of the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}. In this profile, a client willing to join an OSCOAP multicast group securely communicates with a resource server acting as the Group Manager responsible for that group. The access to the resource server concerns a specific resource associated with the multicast group to join and is the first step of the join process.
+
+The client acting as joining node uses an access token bound to a proof-of-possession key to authorize its access to the resource server. The client and resource server leverage protocol-specific profiles for ACE such as {{I-D.seitz-ace-oscoap-profile}} and {{I-D.gerdes-ace-dtls-authorize}} in order to achieve communication security, proof of possession and server authentication.
 
 ## Terminology {#ssec-terminology}
 
@@ -92,11 +101,11 @@ Readers are expected to be familiar with the terms and concepts related to the D
 
 This document refers also to the following terminology.
 
-* Joining node: a network node willing to join an OSCOAP multicast group, where communication are based on CoAP and secured by OSCOAP as described in {{I-D.tiloca-core-multicast-oscoap}}.
+* Joining node: a network node willing to join an OSCOAP multicast group, where communication is based on CoAP and secured with OSCOAP as described in {{I-D.tiloca-core-multicast-oscoap}}.
 
-* Join process: the process through which a joining node becomes a member of a group. The join process is enforced and assisted by the Group Manager responsible for that group.
+* Join process: the process through which a joining node becomes a member of an OSCOAP multicast group. The join process is enforced and assisted by the Group Manager responsible for that group.
 
-* Joining endpoint: an endpoint at a Group Manager denoting a resource that a joining node access to join the related group under the control of that Group Manager.
+* Joining endpoint: an endpoint at a Group Manager denoting a resource that an authorized joining node accesses, in order to join the related group under the control of that Group Manager.
 
 # Protocol Overview {#sec-protocol-overview}
 
