@@ -14,13 +14,14 @@ keyword: Internet-Draft
 
 coding: us-ascii
 
-pi:    # can use array (if all yes) or hash here
+#pi:    # can use array (if all yes) or hash here
+pi: [toc, sortrefs, symrefs]
 #  - toc
 #  - sortrefs
 #  - symrefs
-toc: yes
-sortrefs:   # defaults to yes
-symrefs: yes
+#toc: yes
+#sortrefs:   # defaults to yes
+#symrefs: yes
 
 
 author:
@@ -70,7 +71,7 @@ informative:
 
 --- abstract
 
-This document describes a method to join a multicast group where communication is based on CoAP and secured with Object Security of CoAP (OSCOAP). The proposed method delegates the authentication and authorization of client nodes that join a multicast group through a Group Manager server. This approach builds on the ACE framework for Authentication and Authorization, and leverages protocol-specific profiles of ACE to achieve communication security, proof-of-possession and server authentication.
+This document describes a method to join a multicast group where communications are based on CoAP and secured with Object Security of CoAP (OSCOAP). The proposed method delegates the authentication and authorization of client nodes that join a multicast group through a Group Manager server. This approach builds on the ACE framework for Authentication and Authorization, and leverages protocol-specific profiles of ACE to achieve communication security, proof-of-possession and server authentication.
 
 --- middle
 
@@ -126,17 +127,17 @@ If authorized to join the multicast group, the joining node receives from the AS
 
 Finally, the joining node accesses the join endpoint at the Group Manager, so starting the join process to become a member of the multicast group. A same Access Token can authorize the joining node to access multiple groups under the same Group Manager. In such a case, the joining node sequentially performs multiple join processes with the Group Manager, separately for each multicast group to join and by accessing the respective join endpoint.
 
-The AS is not necessarily expected to release Access Tokens for any other purpose than accessing join resources on registered Group Managers. In particular, the AS is not necessarily expected to release Access Tokens for accessing protected resources at members of multicast groups. All communications between the involved entities rely on the CoAP protocol and MUST be secured.
+The AS is not necessarily expected to release Access Tokens for any other purpose than accessing join resources on registered Group Managers. In particular, the AS is not necessarily expected to release Access Tokens for accessing protected resources at members of multicast groups.
 
 The following steps are performed for joining an OSCOAP multicast group, by leveraging the CoAP-DTLS profile of ACE {{I-D.gerdes-ace-dtls-authorize}} or the OSCOAP profile of ACE {{I-D.seitz-ace-oscoap-profile}}.
 
 1. The joining node retrieves an Access Token from AS to access a join resource on the Group Manager ({{sec-joining-node-to-AS}}). The response from AS enables the joining node to start a secure channel with the Group Manager, if not already established. The joining node can also contact the AS for updating a previously released Access Token, in order to access further groups under the same Group Manager ({{sec-updating-authorization-information}}).
 
-2. Authentication and authorization information are transferred between the joining node and the Group Manager, starting a secure channel if not already established ({{sec-joining-node-to-GM}}). That is, a joining node MUST establish a secure communication channel with a Group Manager, before joining a multicast group under that Group Manager for the first time.
+2. Authentication and authorization information are transferred between the joining node and the Group Manager, which establish a secure channel in case one is not already available ({{sec-joining-node-to-GM}}). That is, a joining node MUST establish a secure communication channel with a Group Manager, before joining a multicast group under that Group Manager for the first time.
 
 3. The joining node starts the join process to become a member of the multicast group, by accessing the related join resource hosted by the Group Manager ({{sec-joining-node-to-GM}}).
 
-Communications between the joining node and AS (/token endpoint) and between the Group Manager and AS (/introspection endpoint) can be secured by different means, e.g. with DTLS {{RFC6347}} or with OSCOAP (see Sections 3 and 4 of {{I-D.seitz-ace-oscoap-profile}}).
+All communications between the involved entities rely on the CoAP protocol and MUST be secured. In particular, communications between the joining node and AS (/token endpoint) and between the Group Manager and AS (/introspection endpoint) can be secured by different means, e.g. with DTLS {{RFC6347}} or with OSCOAP (see Sections 3 and 4 of {{I-D.seitz-ace-oscoap-profile}}).
 
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
