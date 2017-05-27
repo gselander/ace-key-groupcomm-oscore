@@ -85,7 +85,7 @@ OSCOAP may also be used to protect group communication for CoAP over IP multicas
 
 This document builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}} and specifies how a client joins an OSCOAP multicast group through a resource server acting as Group Manager. The client acting as joining node relies on an Access Token, which is bound to a proof-of-possession key and authorizes the access to a specific join resource at the Group Manager.
 
-The client and the Group Manager leverage protocol-specific profiles of ACE such as {{I-D.seitz-ace-oscoap-profile}} and {{I-D.gerdes-ace-dtls-authorize}}, in order to achieve communication security, proof of possession and server authentication.
+The client and the Group Manager leverage protocol-specific profiles of ACE such as {{I-D.seitz-ace-oscoap-profile}} and {{I-D.gerdes-ace-dtls-authorize}}, in order to achieve communication security, proof-of-possession and server authentication.
 
 ## Terminology {#ssec-terminology}
 
