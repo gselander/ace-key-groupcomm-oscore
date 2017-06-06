@@ -1,5 +1,5 @@
 .PHONY: latest
-latest:: txt html
+latest:: txt html pdf
 
 LIBDIR ?= lib
 include $(LIBDIR)/config.mk
