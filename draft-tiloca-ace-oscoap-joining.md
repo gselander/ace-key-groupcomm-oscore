@@ -32,7 +32,7 @@ author:
     street: Isafjordsgatan 22
     city: Kista
     code: SE-164 29 Stockholm
-    country: Swedenn
+    country: Sweden
     phone: +46 70 604 65 01
     email: marco.tiloca@ri.se
 
