@@ -55,7 +55,7 @@ normative:
   I-D.ietf-ace-actors:
   I-D.ietf-ace-oauth-authz:
   I-D.seitz-ace-oscoap-profile:
-  I-D.gerdes-ace-dtls-authorize:
+  I-D.ietf-ace-dtls-authorize:
 
 informative:
   RFC4279:
@@ -85,7 +85,7 @@ OSCOAP may also be used to protect group communication for CoAP over IP multicas
 
 This document builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}} and specifies how a client joins an OSCOAP multicast group through a resource server acting as Group Manager. The client acting as joining node relies on an Access Token, which is bound to a proof-of-possession key and authorizes the access to a specific join resource at the Group Manager.
 
-The client and the Group Manager leverage protocol-specific profiles of ACE such as {{I-D.seitz-ace-oscoap-profile}} and {{I-D.gerdes-ace-dtls-authorize}}, in order to achieve communication security, proof-of-possession and server authentication.
+The client and the Group Manager leverage protocol-specific profiles of ACE such as {{I-D.seitz-ace-oscoap-profile}} and {{I-D.ietf-ace-dtls-authorize}}, in order to achieve communication security, proof-of-possession and server authentication.
 
 ## Terminology {#ssec-terminology}
 
@@ -99,7 +99,7 @@ Readers are expected to be familiar with the terms and concepts related to the C
 
 Readers are expected to be familiar with the terms and concepts for protection and processing of CoAP messages through OSCOAP {{I-D.ietf-core-object-security}} also in group communication contexts {{I-D.tiloca-core-multicast-oscoap}}; and with the OSCOAP profile of ACE described in {{I-D.seitz-ace-oscoap-profile}}.
 
-Readers are expected to be familiar with the terms and concepts related to the DTLS protocol {{RFC6347}}; the support for DTLS handshake based on Raw Public Keys (RPK) {{RFC7250}} and on Pre-Shared Keys (PSK) {{RFC4279}}; and the DTLS profile of ACE {{I-D.gerdes-ace-dtls-authorize}}.
+Readers are expected to be familiar with the terms and concepts related to the DTLS protocol {{RFC6347}}; the support for DTLS handshake based on Raw Public Keys (RPK) {{RFC7250}} and on Pre-Shared Keys (PSK) {{RFC4279}}; and the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}}.
 
 This document refers also to the following terminology.
 
@@ -129,7 +129,7 @@ Finally, the joining node accesses the join endpoint at the Group Manager, so st
 
 The AS is not necessarily expected to release Access Tokens for any other purpose than accessing join resources on registered Group Managers. In particular, the AS is not necessarily expected to release Access Tokens for accessing protected resources at members of multicast groups.
 
-The following steps are performed for joining an OSCOAP multicast group, by leveraging the CoAP-DTLS profile of ACE {{I-D.gerdes-ace-dtls-authorize}} or the OSCOAP profile of ACE {{I-D.seitz-ace-oscoap-profile}}.
+The following steps are performed for joining an OSCOAP multicast group, by leveraging the CoAP-DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} or the OSCOAP profile of ACE {{I-D.seitz-ace-oscoap-profile}}.
 
 1. The joining node retrieves an Access Token from AS to access a join resource on the Group Manager ({{sec-joining-node-to-AS}}). The response from AS enables the joining node to start a secure channel with the Group Manager, if not already established. The joining node can also contact the AS for updating a previously released Access Token, in order to access further groups under the same Group Manager ({{sec-updating-authorization-information}}).
 
@@ -143,7 +143,7 @@ All communications between the involved entities rely on the CoAP protocol and M
 
 This section considers a joining node that intends to contact the Group Manager for the first time. That is, the joining node has never attempted before to join a multicast group under that Group Manager. Also, the joining node and the Group Manager do not have a secure communication channel already established.
 
-In case the specific AS associated to the Group Manager is unknown to the joining node, the latter can rely on mechanisms like the one described in Section 2.2 of {{I-D.gerdes-ace-dtls-authorize}} to discover the correct AS in charge of the Group Manager.
+In case the specific AS associated to the Group Manager is unknown to the joining node, the latter can rely on mechanisms like the one described in Section 2.2 of {{I-D.ietf-ace-dtls-authorize}} to discover the correct AS in charge of the Group Manager.
 
 The joining node contacts the AS, in order to request an Access Token for accessing the join resource(s) hosted by the Group Manager. In particular, the Access Token request sent to the /token endpoint specifies the join endpoint(s) of interest at the Group Manager.
 
@@ -151,11 +151,11 @@ The AS is responsible for authorizing the joining node, accordingly to group joi
 
 Then, the AS provides the joining node with the Access Token, together with an Access Token response. In particular, the Access Token response indicates how to secure communications with the Group Manager, when accessing the join resource(s) for which the Access Token is valid. Specifically, the Access Token response MUST specify one of the following alternatives:
 
-* CoAP over DTLS, i.e. coaps://, indicating to consider the CoAP-DTLS profile of ACE {{I-D.gerdes-ace-dtls-authorize}}, with asymmetric or symmetric proof-of-possession key (see Sections 3 and 4, respectively).
+* CoAP over DTLS, i.e. coaps://, indicating to consider the CoAP-DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}}, with asymmetric or symmetric proof-of-possession key (see Sections 3 and 4, respectively).
 
 * OSCOAP, indicating to consider the OSCOAP profile of ACE with asymmetric or symmetric proof-of-possession key, as described in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}.
 
-Consistently with the profiles of ACE specified in {{I-D.gerdes-ace-dtls-authorize}} and {{I-D.seitz-ace-oscoap-profile}}, a symmetric proof-of-possession key is generated by the AS, which uses it as proof-of-possession key bound to the Access Token, and provides it to the joining node in the Access Token response. Instead, in case of asymmetric proof-of-possession key, the joining node provides its own public key to the AS in the Access Token request. Then, the AS uses it as proof-of-possession key bound to the Access Token, and provides the joining node with the Group Manager's public key in the Access Token response.
+Consistently with the profiles of ACE specified in {{I-D.ietf-ace-dtls-authorize}} and {{I-D.seitz-ace-oscoap-profile}}, a symmetric proof-of-possession key is generated by the AS, which uses it as proof-of-possession key bound to the Access Token, and provides it to the joining node in the Access Token response. Instead, in case of asymmetric proof-of-possession key, the joining node provides its own public key to the AS in the Access Token request. Then, the AS uses it as proof-of-possession key bound to the Access Token, and provides the joining node with the Group Manager's public key in the Access Token response.
 
 # Joining Node to Group Manager {#sec-joining-node-to-GM}
 
@@ -207,7 +207,7 @@ At any point in time, a node might want to join further OSCOAP multicast groups 
 
 The joining node uploads the new Access Token to the /authz-info resource at the Group Manager, using the already existing secure channel. After that, the joining node performs the joining process described in {{sec-joining-node-to-GM}}, separately for each multicast group to join.
 
-Since the joining node and the Group Manager already share a secure communication channel, they are not required to establish a new one. However, according to the specific profile of ACE in use, the joining node and the Group Manager may leverage the new Access Token to establish a new secure communication channel or update the currently existing one. For instance, Section 4.2 of {{I-D.gerdes-ace-dtls-authorize}} describes how the new Access Token can be used to renegotiate an existing DTLS session or to establish a new one by performing a new DTLS handshake.
+Since the joining node and the Group Manager already share a secure communication channel, they are not required to establish a new one. However, according to the specific profile of ACE in use, the joining node and the Group Manager may leverage the new Access Token to establish a new secure communication channel or update the currently existing one. For instance, Section 4.2 of {{I-D.ietf-ace-dtls-authorize}} describes how the new Access Token can be used to renegotiate an existing DTLS session or to establish a new one by performing a new DTLS handshake.
 
 # Security Considerations {#sec-security-considerations}
 
@@ -219,7 +219,7 @@ This document relies on the security considerations included in Section 7 of {{I
 
 * Provisioning of public keys (Section 7.4). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository. Section {{sec-public-keys-of-joining-nodes}} of this specification leverages and builds on such considerations.
 
-Further security considerations are (going to be) inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, as well as from the DTLS profile {{I-D.gerdes-ace-dtls-authorize}} and the OSCOAP profile {{I-D.seitz-ace-oscoap-profile}} of ACE.
+Further security considerations are (going to be) inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, as well as from the DTLS profile {{I-D.ietf-ace-dtls-authorize}} and the OSCOAP profile {{I-D.seitz-ace-oscoap-profile}} of ACE.
 
 # IANA Considerations {#sec-iana}
 
