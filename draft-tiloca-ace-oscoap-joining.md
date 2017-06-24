@@ -133,7 +133,7 @@ The following steps are performed for joining an OSCOAP multicast group, by leve
 
 1. The joining node retrieves an Access Token from AS to access a join resource on the Group Manager ({{sec-joining-node-to-AS}}). The response from AS enables the joining node to start a secure channel with the Group Manager, if not already established. The joining node can also contact the AS for updating a previously released Access Token, in order to access further groups under the same Group Manager ({{sec-updating-authorization-information}}).
 
-2. Authentication and authorization information are transferred between the joining node and the Group Manager, which establish a secure channel in case one is not already available ({{sec-joining-node-to-GM}}). That is, a joining node MUST establish a secure communication channel with a Group Manager, before joining a multicast group under that Group Manager for the first time.
+2. Authentication and authorization information is transferred between the joining node and the Group Manager, which establish a secure channel in case one is not already available ({{sec-joining-node-to-GM}}). That is, a joining node MUST establish a secure communication channel with a Group Manager, before joining a multicast group under that Group Manager for the first time.
 
 3. The joining node starts the join process to become a member of the multicast group, by accessing the related join resource hosted by the Group Manager ({{sec-joining-node-to-GM}}).
 
@@ -151,7 +151,7 @@ The AS is responsible for authorizing the joining node, accordingly to group joi
 
 Then, the AS provides the joining node with the Access Token, together with an Access Token response. In particular, the Access Token response indicates how to secure communications with the Group Manager, when accessing the join resource(s) for which the Access Token is valid. Specifically, the Access Token response MUST specify one of the following alternatives:
 
-* CoAP over DTLS, i.e. coaps://, indicating to consider the CoAP-DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}}, with asymmetric or symmetric proof-of-possession key (see Sections 3 and 4, respectively).
+* CoAP over DTLS, i.e. coaps://, indicating to consider the CoAP-DTLS profile of ACE, with asymmetric or symmetric proof-of-possession key (see Sections 3 and 4 of {{I-D.ietf-ace-dtls-authorize}}, respectively).
 
 * OSCOAP, indicating to consider the OSCOAP profile of ACE with asymmetric or symmetric proof-of-possession key, as described in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}.
 
@@ -165,7 +165,7 @@ First, the joining node establishes a secure channel with the Group Manager, acc
 
 * If the OSCOAP profile of ACE is considered, the joining node and the Group Manager establish an OSCOAP channel, as described in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}. In particular, if the EDHOC protocol {{I-D.selander-ace-cose-ecdhe}} is used, the joining node MUST include the Access Token in the EDHOC message_1 sent to the /authz-info resource. The Group Manager processes the Access Token as specified in {{I-D.ietf-ace-oauth-authz}} and proceeds as defined in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}.
 
-Once the secure channel has been established, the joining node requests to join the OSCOAP multicast groups of interest, by accessing the related join resources hosted by the Group Manager. That is, the joining node performs multiple join processes with the Group Manager, separately for each multicast group to join and by accessing the respective join endpoint.
+Once the secure channel has been established, the joining node requests to join the OSCOAP multicast groups of interest, by accessing the related join resources at the Group Manager. That is, the joining node performs multiple join processes with the Group Manager, separately for each multicast group to join and by accessing the respective join endpoint.
 
 In particular, for each multicast group to join, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that multicast group. The request payload specifies the intended role(s) of the joining node in the multicast group, i.e. multicaster and/or (pure) listener {{I-D.tiloca-core-multicast-oscoap}}.
 
@@ -179,9 +179,9 @@ From then on, the joining node is registered as a member of the multicast group,
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
-Source authentication of OSCOAP messages exchanged within the multicast group is ensured by means of digital counter signatures {{I-D.tiloca-core-multicast-oscoap}}. Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify an incoming group message. As also discussed in Section 7.4 of {{I-D.tiloca-core-multicast-oscoap}}, the Group Manager can be configured to store public keys of group members and provide them upon request.
+Source authentication of OSCOAP messages exchanged within the multicast group is ensured by means of digital counter signatures {{I-D.tiloca-core-multicast-oscoap}}. Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify the authenticity of an incoming group message. As also discussed in Section 7.4 of {{I-D.tiloca-core-multicast-oscoap}}, the Group Manager can be configured to store public keys of group members and provide them upon request.
 
-Upon joining a multicast group, a joining node is expected to make its own public key available to the other group members, either through the Group Manager or through another trusted, publicly available, key repository. However, this is not required, if at least one of the following cases hold.
+Upon joining a multicast group, a joining node is expected to make its own public key available to the other group members, either through the Group Manager or through another trusted, publicly available, key repository. However, this is not required, if at least one of the following conditions hold.
 
 * The joining node joins a group exclusively as pure listener.
 
@@ -199,7 +199,7 @@ Furthermore, if the Group Manager is configured as key repository, it SHOULD pro
 
 * The public keys of the non-pure listeners currently in the joined multicast group, if the joining node is configured (also) as multicaster.
 
-* The public keys of the multicasters currently in the joined multicast group, if the joining node is configured (also) as non-pure listener node.
+* The public keys of the multicasters currently in the joined multicast group, if the joining node is configured (also) as non-pure listener.
 
 # Updating Authorization Information {#sec-updating-authorization-information}
 
@@ -217,7 +217,7 @@ This document relies on the security considerations included in Section 7 of {{I
 
 * Synchronization of sequence numbers (Section 7.3). This concerns how a listener node that has just joined a multicast group can synchronize with the sender sequence number of multicasters in the same group. To this end, the new listener node can perform a challenge-response with a multicaster node, leveraging the Repeat Option for CoAP {{I-D.mattsson-core-coap-actuators}}.
 
-* Provisioning of public keys (Section 7.4). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository. Section {{sec-public-keys-of-joining-nodes}} of this specification leverages and builds on such considerations.
+* Provisioning of public keys (Section 7.4). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository. {{sec-public-keys-of-joining-nodes}} of this specification leverages and builds on such considerations.
 
 Further security considerations are (going to be) inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, as well as from the DTLS profile {{I-D.ietf-ace-dtls-authorize}} and the OSCOAP profile {{I-D.seitz-ace-oscoap-profile}} of ACE.
 
