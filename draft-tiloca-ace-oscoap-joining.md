@@ -66,7 +66,7 @@ informative:
   RFC7250:
   RFC7390:
   I-D.ietf-cose-msg:
-  I-D.mattsson-core-coap-actuators:
+  I-D.amsuess-core-repeat-request-tag:
   I-D.selander-ace-cose-ecdhe:
 
 --- abstract
@@ -161,7 +161,7 @@ Consistently with the profiles of ACE specified in {{I-D.ietf-ace-dtls-authorize
 
 First, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response. In particular:
 
-* If the CoAP-DTLS profile of ACE is considered, the joining node MUST upload the Access Token to the /authz-info resource before starting the DTLS handshake. Then, the Group Manager processes the Access Token according to {{I-D.ietf-ace-oauth-authz}}. If this yields to a positive response, the joining node and the Group Manager establish a DTLS session, as described in Section 3 and Section 4 of {{I-D.ietf-ace-oauth-authz}}, in case of either asymmetric or symmetric proof-of-possession key, respectively.
+* If the CoAP-DTLS profile of ACE is considered, the joining node MUST upload the Access Token to the /authz-info resource before starting the DTLS handshake. Then, the Group Manager processes the Access Token according to {{I-D.ietf-ace-oauth-authz}}. If this yields to a positive response, the joining node and the Group Manager establish a DTLS session, as described in Section 3 and Section 4 of {{I-D.ietf-ace-dtls-authorize}}, in case of either asymmetric or symmetric proof-of-possession key, respectively.
 
 * If the OSCOAP profile of ACE is considered, the joining node and the Group Manager establish an OSCOAP channel, as described in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}. In particular, if the EDHOC protocol {{I-D.selander-ace-cose-ecdhe}} is used, the joining node MUST include the Access Token in the EDHOC message_1 sent to the /authz-info resource. The Group Manager processes the Access Token as specified in {{I-D.ietf-ace-oauth-authz}} and proceeds as defined in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}.
 
@@ -175,7 +175,7 @@ The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}
 
 * The OSCOAP Security Common Context associated to the joined multicast group (see Section 4 of {{I-D.tiloca-core-multicast-oscoap}}).
 
-From then on, the joining node is registered as a member of the multicast group, and can exchange group messages secured with OSCOAP as described in Section 6 of {{I-D.tiloca-core-multicast-oscoap}}.
+From then on, the joining node is registered as a member of the multicast group, and can exchange group messages secured with OSCOAP as described in Section 5 of {{I-D.tiloca-core-multicast-oscoap}}.
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
@@ -215,7 +215,7 @@ This document relies on the security considerations included in Section 7 of {{I
 
 * Management of group keying material (Section 7.2). This includes the need to revoke and renew the keying material currently used in the multicast group, upon changes in the group membership. In particular, renewing the keying material is required upon a new node joining the multicast group, in order to preserve backward security. The Group Manager is responsible to enforce rekeying policies and accordingly update the keying material within the multicast groups of its competence.
 
-* Synchronization of sequence numbers (Section 7.3). This concerns how a listener node that has just joined a multicast group can synchronize with the sender sequence number of multicasters in the same group. To this end, the new listener node can perform a challenge-response with a multicaster node, leveraging the Repeat Option for CoAP {{I-D.mattsson-core-coap-actuators}}.
+* Synchronization of sequence numbers (Section 7.3). This concerns how a listener node that has just joined a multicast group can synchronize with the sender sequence number of multicasters in the same group. To this end, the new listener node can perform a challenge-response with a multicaster node, leveraging the Repeat Option for CoAP {{I-D.amsuess-core-repeat-request-tag}}.
 
 * Provisioning of public keys (Section 7.4). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository. {{sec-public-keys-of-joining-nodes}} of this specification leverages and builds on such considerations.
 
