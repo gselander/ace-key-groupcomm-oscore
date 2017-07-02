@@ -23,7 +23,6 @@ pi: [toc, sortrefs, symrefs]
 #sortrefs:   # defaults to yes
 #symrefs: yes
 
-
 author:
  -
     ins: M. Tiloca
