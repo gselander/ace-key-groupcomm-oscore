@@ -189,21 +189,15 @@ Source authentication of OSCORE messages exchanged within the multicast group is
 
 Upon joining a multicast group, a joining node is expected to make its own public key available to the other group members, either through the Group Manager or through another trusted, publicly available, key repository. However, this is not required if the joining node joins a group exclusively as pure listener.
 
-As also discussed in Appendix C.2 of {{I-D.tiloca-core-multicast-oscoap}}, the Group Manager can be configured to store public keys of group members and to provide them upon request.
-
-In case the Group Manager is not configured to store public keys of group members, a joining node SHOULD specify to the Group Manager the address of a trusted key repository where its own public key is available. In particular, upon performing a join process with a given Group Manager for the first time, the joining node additionally includes this information in the payload of the POST request targeting the join endpoint. The Group Manager can then redirect group members to the correct key repository in case of need.
-
-Instead, in case the Group Manager is configured to store public keys of group members, two main cases can occur.
+As also discussed in Section 3 of {{I-D.tiloca-core-multicast-oscoap}}, it is recommended that the Group Manager is configured to store the public keys of the group members and to provide them upon request. If so, two cases can occur.
 
 * The joining node and the Group Manager have used an asymmetric proof-of-possession key to establish a secure communication channel. In this case, the Group Manager stores the proof-of-possession key conveyed in the Access Token as the public key of the joining node.
 
-* The joining node and the Group Manager have used a symmetric proof-of-possession key to establish a secure communication channel. In this case, upon performing a join process with that Group Manager for the first time, the joining node includes its own public key in the payload of the POST request targeting the join endpoint. Then, the Group Manager MUST verify that the joining node actually owns the associated private key, for instance by performing a proof-of-possession challenge-response.
+* The joining node and the Group Manager have used a symmetric proof-of-possession key to establish a secure communication channel. In this case, upon performing a join process with that Group Manager for the first time, the joining node includes its own public key in the "Identity credentials" of the POST request targeting the join endpoint (see Appendix C.1 of {{I-D.tiloca-core-multicast-oscoap}}). Then, the Group Manager MUST verify that the joining node actually owns the associated private key, for instance by performing a proof-of-possession challenge-response.
 
-Furthermore, if the Group Manager is configured as key repository, it SHOULD provide a joining node with the public keys of the current members in the joined group. In particular, when providing the OSCORE Endpoint ID and the OSCORE Security Common Context as described in {{sec-joining-node-to-GM}}, the Group Manager additionally includes the following material in the response to the joining node:
+Then, if the joining node has explicitly requested it, the Group Manager provides also the public keys of the current members in the joined group, when replying to the joining node during the same join process (see Appendix C.1 of {{I-D.tiloca-core-multicast-oscoap}}).
 
-* The public keys of the non-pure listeners currently in the joined multicast group, if the joining node is configured (also) as multicaster.
-
-* The public keys of the multicasters currently in the joined multicast group, if the joining node is configured (also) as non-pure listener.
+Instead, in case the Group Manager is not configured to store public keys of group members, the joining node provides the Group Manager with its own certificate and with the identifier of the Certification Authority that issues that certificate (see Appendix C.2 of {{I-D.tiloca-core-multicast-oscoap}}). 
 
 # Updating Authorization Information {#sec-updating-authorization-information}
 
@@ -215,15 +209,15 @@ Since the joining node and the Group Manager already share a secure communicatio
 
 # Security Considerations {#sec-security-considerations}
 
-This document relies on the security considerations included in Section 7 of {{I-D.tiloca-core-multicast-oscoap}}, as to different management aspects related to OSCORE multicast groups:
+This approach described in this document leverages the following management aspects related to OSCORE multicast groups and discussed in different sections of {{I-D.tiloca-core-multicast-oscoap}}.
 
-* Management of group keying material (Section 7.2). This includes the need to revoke and renew the keying material currently used in the multicast group, upon changes in the group membership. In particular, renewing the keying material is required upon a new node joining the multicast group, in order to preserve backward security. The Group Manager is responsible to enforce rekeying policies and accordingly update the keying material within the multicast groups of its competence.
+* Management of group keying material (Section 3.1). This includes the need to revoke and renew the keying material currently used in the multicast group, upon changes in the group membership. In particular, renewing the keying material is required upon a new node joining the multicast group, in order to preserve backward security. The Group Manager is responsible to enforce rekeying policies and accordingly update the keying material within the multicast groups of its competence.
 
-* Synchronization of sequence numbers (Section 7.3). This concerns how a listener node that has just joined a multicast group can synchronize with the sender sequence number of multicasters in the same group. To this end, the new listener node performs a challenge-response with a multicaster node, leveraging the Repeat Option for CoAP.
+* Synchronization of sequence numbers (Section 6). This concerns how a listener node that has just joined a multicast group can synchronize with the sequence number of multicasters in the same group.
 
-* Provisioning of public keys (Section 7.4). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository. {{sec-public-keys-of-joining-nodes}} of this specification leverages and builds on such considerations.
+* Provisioning and retrieval of public keys (Appendix C.2). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository.
 
-Further security considerations are (going to be) inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, as well as from the CoAP-DTLS profile {{I-D.ietf-ace-dtls-authorize}} and the OSCOAP profile {{I-D.seitz-ace-oscoap-profile}} of ACE.
+Further security considerations are inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, as well as from the profiles of ACE {{I-D.ietf-ace-dtls-authorize}}, {{I-D.seitz-ace-oscoap-profile}}, and {{I-D.aragon-ace-ipsec-profile}}.
 
 # IANA Considerations {#sec-iana}
 
@@ -231,6 +225,6 @@ This document has no actions for IANA.
 
 # Acknowledgments {#sec-acknowledgments}
 
-The authors sincerely thank G&ouml;ran Selander, Santiago Arag&oacute;n, Ludwig Seitz and Martin Gunnarsson, Francesca Palombini, Jim Schaad and Stefan Beck for their comments and feedback.
+The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Francesca Palombini, Jim Schaad, Ludwig Seitz and G&ouml;ran Selander for their comments and feedback.
 
 --- back
