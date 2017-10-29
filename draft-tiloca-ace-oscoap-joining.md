@@ -1,7 +1,7 @@
 ---
 title: Joining of OSCORE multicast groups in ACE
 abbrev: OSCORE group joining in ACE
-docname: draft-tiloca-ace-oscoap-joining-01
+docname: draft-tiloca-ace-oscoap-joining-02
 # date: 2017-04-25
 category: std
 
@@ -81,7 +81,7 @@ OSCORE may also be used to protect group communication for CoAP over IP multicas
 
 This document builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}} and specifies how a client joins an OSCORE multicast group through a resource server acting as Group Manager. The client acting as joining node relies on an Access Token, which is bound to a proof-of-possession key and authorizes the access to a specific join resource at the Group Manager.
 
-In order to achieve communication security, proof-of-possession and server authentication, the client and the Group Manager leverage protocol-specific profiles of ACE such as the CoAP-DTLS profile {{I-D.ietf-ace-dtls-authorize}}, the OSCOAP profile {{I-D.seitz-ace-oscoap-profile}}, or the IPsec profile {{I-D.aragon-ace-ipsec-profile}}.
+In order to achieve communication security, proof-of-possession and server authentication, the client and the Group Manager leverage protocol-specific profiles of ACE such as the CoAP-DTLS profile {{I-D.ietf-ace-dtls-authorize}}, the OSCORE profile {{I-D.seitz-ace-oscoap-profile}}, or the IPsec profile {{I-D.aragon-ace-ipsec-profile}}.
 
 ## Terminology {#ssec-terminology}
 
@@ -95,7 +95,7 @@ Readers are expected to be familiar with the terms and concepts related to the C
 
 Readers are expected to be familiar with the terms and concepts related to the DTLS protocol {{RFC6347}} and with the CoAP-DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}}.
 
-Readers are expected to be familiar with the terms and concepts for protection and processing of CoAP messages through OSCORE {{I-D.ietf-core-object-security}} also in group communication contexts {{I-D.tiloca-core-multicast-oscoap}}; and with the OSCOAP profile of ACE {{I-D.seitz-ace-oscoap-profile}}.
+Readers are expected to be familiar with the terms and concepts for protection and processing of CoAP messages through OSCORE {{I-D.ietf-core-object-security}} also in group communication contexts {{I-D.tiloca-core-multicast-oscoap}}; and with the OSCORE profile of ACE {{I-D.seitz-ace-oscoap-profile}}.
 
 Readers are expected to be familiar with the terms and concepts related to the IPsec protocol suite {{RFC4301}}; and with the IPsec profile of ACE {{I-D.aragon-ace-ipsec-profile}}.
 
@@ -127,7 +127,7 @@ Finally, the joining node accesses the join endpoint at the Group Manager, so st
 
 The AS is not necessarily expected to release Access Tokens for any other purpose than accessing join resources on registered Group Managers. However, the AS may be configured also to release Access Tokens for accessing resources at members of multicast groups.
 
-The following steps are performed for joining an OSCORE multicast group, by leveraging one of the available profiles of ACE, such as the CoAP-DTLS profile {{I-D.ietf-ace-dtls-authorize}}, the OSCOAP profile {{I-D.seitz-ace-oscoap-profile}}, or the IPsec profile {{I-D.aragon-ace-ipsec-profile}}.
+The following steps are performed for joining an OSCORE multicast group, by leveraging one of the available profiles of ACE, such as the CoAP-DTLS profile {{I-D.ietf-ace-dtls-authorize}}, the OSCORE profile {{I-D.seitz-ace-oscoap-profile}}, or the IPsec profile {{I-D.aragon-ace-ipsec-profile}}.
 
 1. The joining node retrieves an Access Token from the AS to access a join resource on the Group Manager (see {{sec-joining-node-to-AS}}). The response from the AS enables the joining node to start a secure channel with the Group Manager, if not already established. The joining node can also contact the AS for updating a previously released Access Token, in order to access further groups under the same Group Manager (see {{sec-updating-authorization-information}}).
 
@@ -135,7 +135,7 @@ The following steps are performed for joining an OSCORE multicast group, by leve
 
 3. The joining node starts the join process to become a member of the OSCORE multicast group, by accessing the related join resource hosted by the Group Manager (see {{sec-joining-node-to-GM}}).
 
-All communications between the involved entities rely on the CoAP protocol and MUST be secured. In particular, communications between the joining node and the AS (/token endpoint) and between the Group Manager and the AS (/introspection endpoint) can be secured by different means, for instance by means of DTLS {{RFC6347}}, OSCORE (see Sections 2.3 and 3 of {{I-D.seitz-ace-oscoap-profile}}), or IPsec (see Sections 3.2 and 3.4 of {{I-D.aragon-ace-ipsec-profile}}).
+All communications between the involved entities rely on the CoAP protocol and MUST be secured. In particular, communications between the joining node and the AS (/token endpoint) and between the Group Manager and the AS (/introspection endpoint) can be secured by different means, for instance by means of DTLS {{RFC6347}}, OSCORE (see Sections 3 and 4 of {{I-D.seitz-ace-oscoap-profile}}), or IPsec (see Sections 3.2 and 3.4 of {{I-D.aragon-ace-ipsec-profile}}).
 
 Further details on how the AS secures communications (with the joining node and the Group Manager) depend on the specifically used profile of ACE, and are out of the scope of this specification.
 
@@ -153,7 +153,7 @@ Then, the AS provides the joining node with the Access Token, together with an A
 
 * CoAP over DTLS, i.e. coaps://, indicating to consider the CoAP-DTLS profile of ACE, with asymmetric or symmetric proof-of-possession key (see Section 3 and Section 4 of {{I-D.ietf-ace-dtls-authorize}}, respectively).
 
-* OSCOAP, indicating to consider the OSCOAP profile of ACE with the symmetric proof-of-possession key used directly as Master Secret in OSCORE {{I-D.ietf-core-object-security}}, as described in Section 2 of {{I-D.seitz-ace-oscoap-profile}}.
+* OSCORE, indicating to consider the OSCORE profile of ACE with the symmetric proof-of-possession key used directly as Master Secret in OSCORE {{I-D.ietf-core-object-security}}, as described in Section 2 of {{I-D.seitz-ace-oscoap-profile}}.
 
 * IPsec, indicating to consider the IPsec profile of ACE, with symmetric or asymmetric proof-of-possession key (see Section 3.2.2 and Section 3.2.3 of {{I-D.aragon-ace-ipsec-profile}}, respectively).
 
@@ -167,7 +167,7 @@ First, the joining node establishes a secure channel with the Group Manager, acc
 
 * If the CoAP-DTLS profile of ACE is specified, the joining node MUST upload the Access Token to the /authz-info resource, before starting the DTLS handshake and establishing a DTLS channel with the Group Manager. Then, the Group Manager processes the Access Token according to {{I-D.ietf-ace-oauth-authz}}. If this yields to a positive response, the joining node and the Group Manager establish a DTLS session, as described in Section 3 and Section 4 of {{I-D.ietf-ace-dtls-authorize}}, in case of either asymmetric or symmetric proof-of-possession key, respectively.
 
-* If the OSCOAP profile of ACE is specified, the joining node and the Group Manager establish an OSCORE Security Context, as described in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}. The Group Manager processes the Access Token as specified in {{I-D.ietf-ace-oauth-authz}} and proceeds as defined in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}.
+* If the OSCORE profile of ACE is specified, the joining node and the Group Manager establish an OSCORE Security Context, as described in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}. The Group Manager processes the Access Token as specified in {{I-D.ietf-ace-oauth-authz}} and proceeds as defined in Section 2.2 of {{I-D.seitz-ace-oscoap-profile}}.
 
 * If the IPsec profile of ACE is specified, the joining node MUST upload the Access Token to the /authz-info resource, before performing the key management protocol indicated by the AS (e.g. IKEv2 {{RFC7296}}) to establish an IPsec Security Association pair and an IPsec channel with the Group Manager. Then, the Group Manager processes the Access Token according to {{I-D.ietf-ace-oauth-authz}}. If this yields to a positive response, the joining node and the Group Manager establish an IPsec Security Association pair and an IPsec channel, as described in Section 3.3.2 of {{I-D.aragon-ace-ipsec-profile}}.
 
