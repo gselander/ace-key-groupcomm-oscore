@@ -143,7 +143,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
 * The "aud" parameter is set to the address of the Group Manager.
 
-* The "scope" parameter includes a list of the join resource(s) at the Group Manager related to the group(s) that the joning node intends to join. If a join resource is identified with the Gid of the respective group, the identifier in the "scope" parameter may not fully coincide with the Gid currently associated to the group, e.g. if it includes a dynamic component.
+* The "scope" parameter includes a list of the join resource(s) at the Group Manager related to the group(s) that the joining node intends to join. If a join resource is identified with the Gid of the respective group, the identifier in the "scope" parameter may not fully coincide with the Gid currently associated to the group, e.g. if it includes a dynamic component.
 
 * The "role" parameter MUST be present and includes the role(s) that the joining node intends to have, separately for each group it intends to join. Roles and their combinations are defined in {{I-D.ietf-core-oscore-groupcomm}}, and indicated in the "role" parameter as "multicaster", "listener" and "purelistener". Multiple roles for a same group are separated by a white space. Sets of roles for different groups are separated by a comma.
 
