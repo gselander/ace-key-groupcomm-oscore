@@ -267,4 +267,6 @@ This document has no actions for IANA.
 
 The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Francesca Palombini, Jim Schaad, Ludwig Seitz and G&ouml;ran Selander for their comments and feedback.
 
+The work on this document has been partly supported by the EIT-Digital High Impact Initiative ACTIVE.
+
 --- back
