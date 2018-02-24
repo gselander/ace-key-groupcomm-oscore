@@ -143,11 +143,11 @@ The joining node contacts the AS, in order to request an Access Token for access
 
 * The "aud" parameter is set to the address of the Group Manager.
 
-* The "scope" parameter includes a list of the join resource(s) at the Group Manager related to the group(s) that the joining node intends to join. If a join resource is identified with the Gid of the respective group, the identifier in the "scope" parameter may not fully coincide with the Gid currently associated to the group, e.g. if it includes a dynamic component.
+* The "scope" parameter includes a list of the join resource(s) at the Group Manager related to the group(s) that the joining node intends to join. If a join resource is identified with the Gid of the respective group, an identifier in the "scope" parameter may not fully coincide with the Gid currently associated to the respective group, e.g. if it includes a dynamic component.
 
-* The "role" parameter MUST be present and includes the role(s) that the joining node intends to have, separately for each group it intends to join. Roles and their combinations are defined in {{I-D.ietf-core-oscore-groupcomm}}, and indicated in the "role" parameter as "multicaster", "listener" and "purelistener". Multiple roles for a same group are separated by a white space. Sets of roles for different groups are separated by a comma.
+* The "role" parameter MUST be present and includes the role(s) that the joining node intends to have, separately for each group it intends to join. Roles and their combinations are defined in {{I-D.ietf-core-oscore-groupcomm}}, and indicated in the "role" parameter as "multicaster", "listener" and "purelistener". Multiple roles for the same group are separated by a white space. Sets of roles for different groups are separated by a comma.
 
-* The "get_pub_keys" is present only if the Group Manager is configured to store the public keys of the group members and, at the same time, the joining node wants to retrieve such public keys during the joining process (see {{sec-public-keys-of-joining-nodes}}). In any other case, this parameter MUST NOT be present.
+* The "get_pub_keys" parameter is present only if the Group Manager is configured to store the public keys of the group members and, at the same time, the joining node wants to retrieve such public keys during the joining process (see {{sec-public-keys-of-joining-nodes}}). In any other case, this parameter MUST NOT be present.
 
 ## Authorization Response {#ssec-auth-resp}
 
@@ -165,13 +165,14 @@ First, the joining node posts the Access Token to the /authz-info endpoint at th
 
 Once a secure communication channel with the Group Manager has been established, the joining node requests to join the OSCORE multicast group(s) of interest, by accessing the related join resource(s) at the Group Manager. The joining node performs multiple join processes with the Group Manager, separately for each multicast group to join and by accessing the respective join endpoint.
 
-In particular, for each OSCORE multicast group to join, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that group. This join request follows the format of the Keying Material request defined in Section 4.1 of [NEW_DRAFT]. In particular:
+In particular, for each OSCORE multicast group to join, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that group. This join request follows the format of the Keying Distribution request defined in Section 4.1 of [NEW_DRAFT]. In particular:
 
 * The "aud" parameter MUST be present and is set to the multicast IP address associated to the group.
 
 * The "scope" parameter MUST be present and is set to the Group Identifier (Gid) of the group, as known to the joining node at this point in time. This may not fully coincide with the Gid currently associated to the group, e.g. if it includes a dynamic component.
 
-* The "client_id" parameter is present if included also in the Authorization Request previously sent to the AS. In such a case, its value is the same as in the Authorization Request. Otherwise, this parameter MUST NOT be present.
+<!--
+* The "client_id" parameter is present if included also in the Authorization Request previously sent to the AS. In such a case, its value is the same as in the Authorization Request. Otherwise, this parameter MUST NOT be present.-->
 
 * The "get_pub_keys" parameter is present if included also in the Authorization Request previously sent to the AS. In such a case, its value is the same as in the Authorization Request. Otherwise, this parameter MUST NOT be present.
 
@@ -181,23 +182,24 @@ In particular, for each OSCORE multicast group to join, the joining node sends t
 
 * The "cert" parameter is present if public keys are used as proof-of-possession keys and, at the same time, the Group Manager is not configured to store the public keys of the group members. In such a case, this parameter contains a public certificate of the joining node.
 
+* The "pub_keys_repos" parameter may be present if the "cert" parameter is present. In such a case, this parameter contains the list of public key repositories storing the certificate of the joining node. In case the "cert" parameter is not present, this parameter MUST NOT be present. 
+
 ## Join Response {#ssec-join-resp}
 
 The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}}. If this yields to a positive response, the Group Manager updates the group membership by registering the joining node as a new member of the group.
 
-Then, the Group Manager replies to the joining node providing the information specified in Appendix C.1 of {{I-D.ietf-core-oscore-groupcomm}}. This join response follows the format of the Keying Material response defined in Section 4.2 of [NEW_DRAFT]. In particular:
+Then, the Group Manager replies to the joining node providing the information specified in Appendix C.1 of {{I-D.ietf-core-oscore-groupcomm}}. This join response follows the format of the Keying Distribution success response defined in Section 4.2 of [NEW_DRAFT]. In particular:
 
-* The "role" indicates the effective role(s) that the join can take in the group. This parameter can be omitted if the Group Manager confirms all the same roles indicated in the join request.
+<!--
+* The "role" indicates the effective role(s) that the joining node can take in the group. This parameter can be omitted if the Group Manager confirms all the same roles indicated in the join request.-->
 
-* The "cnf_pub_keys" parameter is present only if the "get_pub_keys" parameter was present in the join request. This parameter includes the public keys of the group members.
-
-* The "keying_material" parameter includes what the joining node needs to set up the OSCORE Security Context (see Section 3 of {{I-D.ietf-core-oscore-groupcomm}}).
+* The "key" parameter includes what the joining node needs to set up the OSCORE Security Context (see Section 3 of {{I-D.ietf-core-oscore-groupcomm}}).
 
    * The "kty" parameter has value "Symmetric".
 
    * The "k" parameter includes the OSCORE Master Secret.
 
-   * The "alg" parameter, if present, has as value the AEAD algorithm.
+   * The "alg" parameter, if present, has as value the AEAD algorithm used in the group.
 
    * The "kid" parameter, if present, has as value the identifier of the key in the parameter "k".
 
@@ -207,15 +209,17 @@ Then, the Group Manager replies to the joining node providing the information sp
 
    * The "serverID" parameter MUST be present and has as value the Group Identifier (Gid) currently associated to the group.
 
-   * The "kdf" parameter, if present, has as value the KDF algorithm.
+   * The "kdf" parameter, if present, has as value the KDF algorithm used in the group.
 
    * The "slt" parameter, if present, has as value the OSCORE Master Salt.
 
-   * The "cs_alg" parameter MUST be present and has as value the countersignature algorithm.
+   * The "cs_alg" parameter MUST be present and has as value the countersignature algorithm used in the group.
 
-* The "group_policies" parameter SHOULD be present and includes a list of key words indicating particular policies enforced in the group. This comprises, for instance, the list of supported signature algorithms and the method to achieve synchronization of sequence numbers among group members (see Appendix D of {{I-D.ietf-core-oscore-groupcomm}}).
+* The "pub_keys" parameter is present only if the "get_pub_keys" parameter was present in the join request. This parameter includes the public keys of the group members.
 
-* The "mgt_key_material" parameter SHOULD be present and includes the administrative keying material that the joining node requires to participate in the rekeying process led by the Group Manager. The exact content depends on the specific rekeying scheme used in the group.
+* The "group_policies" parameter SHOULD be present and includes a list of key words indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix D of {{I-D.ietf-core-oscore-groupcomm}}), as well as the rekeying protocol used to renew the keying material in the group (see Section 3.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+
+* The "mgt_key_material" parameter SHOULD be present and includes the administrative keying material that the joining node requires to participate in the rekeying process led by the Group Manager. The exact content and format depends on the specific rekeying scheme used in the group.
 
 Finally, the joining node uses the information received in the join response to set up the OSCORE Security Context, as described in Section 3 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in Section 5 of {{I-D.ietf-core-oscore-groupcomm}}.
 
