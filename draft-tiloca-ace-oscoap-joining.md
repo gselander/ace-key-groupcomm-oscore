@@ -50,7 +50,6 @@ normative:
   RFC8174:
   I-D.ietf-core-object-security:
   I-D.ietf-core-oscore-groupcomm:
-  I-D.ietf-core-echo-request-tag:
   I-D.ietf-ace-actors:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-oscore-profile:
@@ -243,7 +242,7 @@ As also discussed in Section 6 of {{I-D.ietf-core-oscore-groupcomm}}, it is reco
 
 * The joining node and the Group Manager use a symmetric proof-of-possession key to establish a secure communication channel. In this case, upon performing a join process with that Group Manager for the first time, the joining node specifies its own public key as "Identity credentials" of the join request targeting the join endpoint (see Appendix D.1 of {{I-D.ietf-core-oscore-groupcomm}}). In particular, the joining node includes its own public key in the "cnf" parameter of the join request.
 
-Then, the Group Manager MUST verify that the joining node actually owns the associated private key, by performing a proof-of-possession challenge-response.<!-- described in Appendix D.2 of {{I-D.ietf-core-oscore-groupcomm}} and based on the CoAP Echo option {{I-D.ietf-core-echo-request-tag}} included in the join response.-->
+Then, the Group Manager MUST verify that the joining node actually owns the associated private key, by performing a proof-of-possession challenge-response.
 
 Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. through the "get_pub_keys" parameter in the join request. In this case, the Group Manager includes also such public keys in the "cnf_pub_keys" parameter of the join response.
 
