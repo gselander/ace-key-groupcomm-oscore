@@ -27,7 +27,7 @@ author:
  -
     ins: M. Tiloca
     name: Marco Tiloca
-    org: RISE SICS AB
+    org: RISE SICS
     street: Isafjordsgatan 22
     city: Kista
     code: SE-164 29 Stockholm
@@ -83,7 +83,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Readers are expected to be familiar with the terms and concepts described in the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
-Readers are expected to be familiar with the terms and concepts related to the CoAP protocol described in {{RFC7252}} {{RFC7390}}. Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
+Readers are expected to be familiar with the terms and concepts related to the CoAP protocol described in {{RFC7252}}{{RFC7390}}. Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
 Readers are expected to be familiar with the terms and concepts for protection and processing of CoAP messages through OSCORE {{I-D.ietf-core-object-security}} also in group communication scenarios {{I-D.ietf-core-oscore-groupcomm}}. These include the concept of Group Manager, as the entity reponsible for a set of groups where communications are secured with OSCORE. In this specification, the Group Manager acts as Resource Server.
 
@@ -96,6 +96,12 @@ This document refers also to the following terminology.
 * Join resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A join resource is identifiable with the Group Identifier (Gid) of the respective group. A joining node accesses a join resource to start the join process and become a member of that group.
 
 * Join endpoint: an endpoint at the Group Manager associated to a join resource.
+
+* Requester: member of an OSCORE group that sends request messages to other members of the group.
+
+* Listener: member of an OSCORE group that receives request messages from other members of the group. A listener may reply back, by sending a response message to the requester which has sent the request message.
+
+* Pure listener: member of a group that is configured as listener and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
 # Protocol Overview {#sec-protocol-overview}
 
@@ -143,7 +149,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
     - in the first element, the Group Identifier (Gid) of the group to join under the Group Manager. The value of this identifier may not fully coincide with the Gid value currently associated to the group, e.g. if the Gid is composed of a variable part such as a Group Epoch (see Appendix C of {{I-D.ietf-core-oscore-groupcomm}}).
 
-    * in the second element, which MUST be present, the role(s) that the joining node intends to have in the group it intends to join. Roles and their combinations are defined in {{I-D.ietf-core-oscore-groupcomm}}, and indicated as "multicaster", "listener" and "purelistener". Multiple roles are specified in the form of a CBOR array.
+    * in the second element, which MUST be present, the role(s) that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: "requester and listener"; and "requester and pure listener". Multiple roles are specified in the form of a CBOR array.
 
 * The "aud" parameter MUST be present and is set to the identifier of the Group Manager.
 
@@ -189,6 +195,8 @@ Then, the Group Manager replies to the joining node providing the information ne
 
    * The "k" parameter includes the OSCORE Master Secret.
 
+   * The "exp" parameter specifies when the OSCORE Master Secret expires. 
+   
    * The "alg" parameter, if present, has as value the AEAD algorithm used in the group.
 
    * The "kid" parameter, if present, has as value the identifier of the key in the parameter "k".
@@ -205,13 +213,15 @@ Then, the Group Manager replies to the joining node providing the information ne
 
    * The "cs_alg" parameter MUST be present and has as value the countersignature algorithm used in the group.
 
-* The "pub_keys" parameter is present only if the "get_pub_keys" parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as multicaster; and ii) the public keys of the multicasters currently in the group, in case the joining node is configured (also) as listener or pure listener.
+* The "pub_keys" parameter is present only if the "get_pub_keys" parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as listener or pure listener.
 
 * The "group_policies" parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as well as the rekeying protocol used to renew the keying material in the group (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}).
 
 * The "mgt_key_material" parameter SHOULD be present and includes the administrative keying material that the joining node requires to participate in the rekeying process led by the Group Manager. The exact content and format depend on the specific rekeying protocol used in the group.
 
 Finally, the joining node uses the information received in the join response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in Section 4 of {{I-D.ietf-core-oscore-groupcomm}}.
+
+When the OSCORE Master Secret expires, as specified by the "exp" parameter of the join response, the node considers the OSCORE Security Context also invalid and to be renewed. A possible approach to renew the OSCORE Security Context through the Group Manager is described in Section 6 of {{I-D.palombini-ace-key-groupcomm}}. 
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
@@ -229,6 +239,8 @@ As also discussed in Section 6 of {{I-D.ietf-core-oscore-groupcomm}}, it is reco
 
 Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. through the "get_pub_keys" parameter in the join request. In this case, the Group Manager includes also such public keys in the "pub_keys" parameter of the join response (see {{ssec-join-resp}}).
 
+Later on as a group member, the node may need to retrieve the public keys of other group members. A possible approach to do this through the Group Manager is described in Section 7 of {{I-D.palombini-ace-key-groupcomm}}.
+
 On the other hand, in case the Group Manager is not configured to store public keys of group members, the joining node provides the Group Manager with its own certificate in the "client_cred" parameter of the join request targeting the join endpoint (see {{ssec-join-req}}). Then, the Group Manager validates and handles the certificate, for instance as described in Appendix D.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 # Security Considerations {#sec-security-considerations}
@@ -237,7 +249,7 @@ The method described in this document leverages the following management aspects
 
 * Management of group keying material (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}). This includes the need to revoke and renew the keying material currently used in the OSCORE group, upon changes in the group membership. In particular, renewing the keying material is required upon a new node joining the group, in order to preserve backward security. That is, the Group Manager should renew the keying material before completing the join process and sending a join response. Such a join response provides the joining node with updated the keying material just established in the group. The Group Manager is responsible to enforce rekeying policies and accordingly update the keying material in the groups of its competence (see Section 6 of {{I-D.ietf-core-oscore-groupcomm}}).
 
-* Synchronization of sequence numbers (see Section 5 of {{I-D.ietf-core-oscore-groupcomm}}). This concerns how a listener node that has just joined an OSCORE group can synchronize with the sequence number of multicasters in the same group.
+* Synchronization of sequence numbers (see Section 5 of {{I-D.ietf-core-oscore-groupcomm}}). This concerns how a listener node that has just joined an OSCORE group can synchronize with the sequence number of requesters in the same group.
 
 * Provisioning and retrieval of public keys (see Appendix D.2 of {{I-D.ietf-core-oscore-groupcomm}}). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository (see Section 6 of {{I-D.ietf-core-oscore-groupcomm}}).
 
