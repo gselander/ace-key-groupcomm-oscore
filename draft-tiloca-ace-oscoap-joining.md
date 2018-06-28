@@ -129,7 +129,7 @@ The following steps are performed for joining an OSCORE group. Messages exchange
 
 3. The joining node starts the join process to become a member of the OSCORE group, by accessing the related join resource hosted by the Group Manager (see {{sec-joining-node-to-GM}}).
 
-4. At the end of the join process, the joining node has received from the Group Manager the parameters and keying material to securely communicate with the other OSCORE group members.
+4. At the end of the join process, the joining node has received from the Group Manager the parameters and keying material to securely communicate with the other members of the OSCORE group.
 
 5. The joining node and the Group Manager maintain the secure channel, to support possible future communications.
 
