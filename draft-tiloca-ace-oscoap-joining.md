@@ -1,7 +1,7 @@
 ---
-title: Joining OSCORE groups in ACE
-abbrev: OSCORE group joining in ACE
-docname: draft-tiloca-ace-oscoap-joining-04
+title: Key Management for OSCORE Groups in ACE
+abbrev: Key Management for OSCORE Groups in ACE
+docname: draft-tiloca-ace-oscoap-joining-05
 # date: 2017-04-25
 category: std
 
@@ -24,17 +24,16 @@ pi: [toc, sortrefs, symrefs]
 #symrefs: yes
 
 author:
- -
+-
     ins: M. Tiloca
     name: Marco Tiloca
-    org: RISE SICS
+    org: RISE AB
     street: Isafjordsgatan 22
     city: Kista
     code: SE-164 29 Stockholm
     country: Sweden
     email: marco.tiloca@ri.se
-
- -
+-
     ins: J. Park
     name: Jiye Park
     org: Universitaet Duisburg-Essen
@@ -43,6 +42,15 @@ author:
     code: 45127
     country: Germany
     email: ji-ye.park@uni-due.de
+-
+    ins: F. Palombini
+    name: Francesca Palombini
+    org: Ericsson AB
+    street: Torshamnsgatan 23
+    city: Kista
+    code: SE-16440 Stockholm
+    country: Sweden
+    email: francesca.palombini@ericsson.com
 
 normative:
   RFC2119:
@@ -263,10 +271,13 @@ Further security considerations are inherited from the ACE framework for Authent
 
 This document has no actions for IANA.
 
+--- back
+
 # Acknowledgments {#sec-acknowledgments}
+{: numbered="no"}
 
 The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Francesca Palombini, Jim Schaad, Ludwig Seitz, G&ouml;ran Selander and Peter van der Stok for their comments and feedback.
 
 The work on this document has been partly supported by the EIT-Digital High Impact Initiative ACTIVE.
 
---- back
+--- fluff
