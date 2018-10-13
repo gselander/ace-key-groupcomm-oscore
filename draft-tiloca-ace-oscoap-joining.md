@@ -71,7 +71,7 @@ informative:
 
 --- abstract
 
-This document describes a method to join a group where communications are based on CoAP and secured with Object Security for Constrained RESTful Environments (OSCORE). The proposed method delegates the authentication and authorization of client nodes that join an OSCORE group through a Group Manager server. This approach builds on the ACE framework for Authentication and Authorization, and leverages protocol-specific profiles of ACE to achieve communication security, proof-of-possession and server authentication.
+This document describes a method to provision and renew group keying material in group communication scenarios where communications are based on CoAP and secured with Object Security for Constrained RESTful Environments (OSCORE). The proposed method delegates the authentication and authorization of new client nodes that join an OSCORE group through a Group Manager server. This approach builds on the ACE framework for Authentication and Authorization, and leverages protocol-specific profiles of ACE to achieve communication security, proof-of-possession and server authentication.
 
 --- middle
 
@@ -284,13 +284,13 @@ The method described in this document leverages the following management aspects
 
 * Management of group keying material (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}). This includes the need to revoke and renew the keying material currently used in the OSCORE group, upon changes in the group membership. In particular, renewing the keying material is required upon a new node joining the group, in order to preserve backward security. That is, the Group Manager should renew the keying material before completing the join process and sending a join response. Such a join response provides the joining node with the updated keying material just established in the group. The Group Manager is responsible to enforce rekeying policies and accordingly update the keying material in the groups of its competence (see Section 6 of {{I-D.ietf-core-oscore-groupcomm}}).
 
-* Synchronization of sequence numbers (see Section 5 of {{I-D.ietf-core-oscore-groupcomm}}). This concerns how a listener node that has just joined an OSCORE group can synchronize with the sequence number of requesters in the same group.
+* Synchronization of sequence numbers (see Section 6 of {{I-D.ietf-core-oscore-groupcomm}}). This concerns how a listener node that has just joined an OSCORE group can synchronize with the sequence number of requesters in the same group.
 
 * Provisioning and retrieval of public keys (see Appendix D.2 of {{I-D.ietf-core-oscore-groupcomm}}). This provides guidelines about how to ensure the availability of group members' public keys, possibly relying on the Group Manager as trusted key repository (see Section 6 of {{I-D.ietf-core-oscore-groupcomm}}).
 
 Before sending the join response, the Group Manager should verify that the joining node actually owns the associated private key, for instance by performing a proof-of-possession challenge-response, whose details are out of the scope of this specification.
 
-Further security considerations are inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, as well as from the specific profile of ACE signalled by the AS, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
+Further security considerations are inherited from {{I-D.palombini-ace-key-groupcomm}}, from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, as well as from the specific profile of ACE signalled by the AS, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
 
 # IANA Considerations {#sec-iana}
 
@@ -301,7 +301,7 @@ This document has no actions for IANA.
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
 
-The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Francesca Palombini, Jim Schaad, Ludwig Seitz, G&ouml;ran Selander and Peter van der Stok for their comments and feedback.
+The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Jim Schaad, Ludwig Seitz, G&ouml;ran Selander and Peter van der Stok for their comments and feedback.
 
 The work on this document has been partly supported by the EIT-Digital High Impact Initiative ACTIVE.
 
