@@ -79,9 +79,19 @@ This document describes a method to provision and renew group keying material in
 
 Object Security for Constrained RESTful Environments (OSCORE) {{I-D.ietf-core-object-security}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{RFC8152}} and enabling end-to-end security of CoAP payload and options.
 
-As described in {{I-D.ietf-core-oscore-groupcomm}}, OSCORE may be used also to protect CoAP group communication over IP multicast {{RFC7390}}. This relies on a Group Manager entity, which is responsible for managing an OSCORE group, where members exchange CoAP messages secured with OSCORE. In particular, the Group Manager coordinates the join process of new group members and can be responsible for multiple groups.
+As described in {{I-D.ietf-core-oscore-groupcomm}}, OSCORE may be used to protect CoAP group communication over IP multicast {{RFC7390}}. This relies on a Group Manager, which is responsible for managing an OSCORE group, where members exchange CoAP messages secured with OSCORE. The Group Manager can be responsible for multiple groups, coordinates the join process of new group members, and is entrusted with the distribution and renewal of group keying material.
 
-This specification builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}} and defines how a client joins an OSCORE group through a resource server acting as Group Manager. The client acting as joining node relies on an Access Token, which is bound to a proof-of-possession key and authorizes the access to a specific join resource at the Group Manager. Messages exchanged among the participants follow the formats defined in {{I-D.palombini-ace-key-groupcomm}} for provisioning keying material in group communication scenarios.
+This specification builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}} and defines a method to:
+
+* Authorize a node to join an OSCORE group, and provide it with the group keying material to communicate with other group members.
+
+* Provide updated keying material to group members upon request.
+
+* Renew the group keying material and distribute it to the OSCORE group (rekeying) upon changes in the group membership.
+
+A client node joins an OSCORE group through a resource server acting as Group Manager. The joining process relies on an Access Token, which is bound to a proof-of-possession key and authorizes the client to access a specific join resource at the Group Manager.
+
+Messages exchanged among the participants follow the formats defined in {{I-D.palombini-ace-key-groupcomm}} for provisioning and renewing keying material in group communication scenarios.
 
 In order to achieve communication security, proof-of-possession and server authentication, the client and the Group Manager leverage protocol-specific profiles of ACE. These include also possible forthcoming profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
