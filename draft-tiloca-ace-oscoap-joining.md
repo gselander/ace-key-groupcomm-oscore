@@ -111,6 +111,31 @@ This document refers also to the following terminology.
 
 * Pure listener: member of a group that is configured as listener and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
+## Relation to Other Documents
+
+{{fig-references}} overviews the main documents related to this specification. Arrows and asterisk-arrows denote normative references and informative refences, respectively.
+
+~~~~~~~~~~~
+                        +---------------------------------+
+                        |                                 |
+                        v                                 |
+   Pub-sub --->  Key Groupcomm  ---> ACE Framework <---- OSCORE joining
+   profile          *   *               [[WG]]         [[This document]]
+      |             *   *               ^               ^ | |
+      |             *   *               *               * | |
+      |             *   *               * +************** | |
+      | *************   *               * *               | |
+      | *               *               * * +-------------+ |
+ACE   | *               *               * * |               |
+------|-*---------------*---------------*-*-|---------------|----
+CoRE  | *               *               * * |               |
+      v v               v               * * v               v
+      CoRE            CoRE             OSCORE   --------> OSCORE
+     Pubsub         Groupcomm <------ Groupcomm <******** [[WG]]
+     [[WG]]        [[RFC7390]]         [[WG]]           
+~~~~~~~~~~~
+{: #fig-references title="Related Documents" artwork-align="center"}
+
 # Protocol Overview {#sec-protocol-overview}
 
 Group communication for CoAP over IP multicast has been enabled in {{RFC7390}} and can be secured with Object Security for Constrained RESTful Environments (OSCORE) {{I-D.ietf-core-object-security}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node explicitly joins an OSCORE group, by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
