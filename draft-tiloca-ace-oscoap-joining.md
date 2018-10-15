@@ -308,6 +308,10 @@ Furthermore, as described in {{ssec-join-req}}, the joining node may have explic
 
 Later on as a group member, the node may need to retrieve the public keys of other group members. A possible approach to do this through the Group Manager is described in Section 7 of {{I-D.palombini-ace-key-groupcomm}}.
 
+# Group Rekeying Process {#sec-group-rekeying-process}
+
+TBD
+
 # Security Considerations {#sec-security-considerations}
 
 The method described in this document leverages the following management aspects related to OSCORE groups and discussed in the sections of {{I-D.ietf-core-oscore-groupcomm}} referred below.
