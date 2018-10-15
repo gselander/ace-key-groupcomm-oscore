@@ -280,7 +280,7 @@ The Group Manager replies to the joining node providing the information necessar
 
 * The 'mgt_key_material' parameter SHOULD be present and includes the administrative keying material that the joining node requires to participate in the group rekeying process performed by the Group Manager. The exact content and format depend on the specific group rekeying scheme used in the group.
 
-Finally, the joining node uses the information received in the join response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in Section 5 of {{I-D.ietf-core-oscore-groupcomm}}.
+Finally, the joining node uses the information received in the join response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in Section 6 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 When the OSCORE Master Secret expires, as specified by 'exp' in the 'key' parameter of the join response, the node considers the OSCORE Security Context also invalid and to be renewed. A possible approach for the node to retrieve updated keying material from the Group Manager and renew the OSCORE Security Context is described in Section 6 of {{I-D.palombini-ace-key-groupcomm}}. 
 
@@ -290,11 +290,13 @@ TBD
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
-Source authentication of OSCORE messages exchanged within the group is ensured by means of digital counter signatures {{I-D.ietf-core-oscore-groupcomm}}. Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify the source authenticity of incoming group messages.
+Source authentication of OSCORE messages exchanged within the group is ensured by means of digital counter signatures (see Sections 2 and 3 of {{I-D.ietf-core-oscore-groupcomm}}). Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify source authenticity of incoming group messages.
 
-Upon joining an OSCORE group, a joining node is expected to make its own public key available to the other group members, either through the Group Manager or through another trusted, publicly available, key repository. However, this is not required for a node that joins a group exclusively as pure listener.
+As also discussed in Section 7 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager acts as trusted repository of the public keys of the group members, and provides those public keys to group members if requested to. Upon joining an OSCORE group, a joining node is thus expected to provide its own public key to the Group Manager.
 
-As also discussed in Section 6 of {{I-D.ietf-core-oscore-groupcomm}}, it is recommended that the Group Manager is configured to store the public keys of the group members and to provide them upon request. If so, three cases can occur when a new node joins a group.
+In particular, four cases can occur when a new node joins a group.
+
+* The joining node is going to join the group exclusively as pure listener. That is, it is not going to send messages to the group, and hence to produce signatures to be verified with its own private key. In this case, the joining node is not required to provide its own public key to the Group Manager upon joining the group.
 
 * The Group Manager already acquired the public key of the joining node during a previous join process. In this case, the joining node may not provide again its own public key to the Group Manager, in order to limit the size of the join request.
 
@@ -305,8 +307,6 @@ As also discussed in Section 6 of {{I-D.ietf-core-oscore-groupcomm}}, it is reco
 Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. through the 'get_pub_keys' parameter in the join request. In this case, the Group Manager includes also such public keys in the 'pub_keys' parameter of the join response (see {{ssec-join-resp}}).
 
 Later on as a group member, the node may need to retrieve the public keys of other group members. A possible approach to do this through the Group Manager is described in Section 7 of {{I-D.palombini-ace-key-groupcomm}}.
-
-On the other hand, in case the Group Manager is not configured to store public keys of group members, the joining node provides the Group Manager with its own certificate in the 'client_cred' parameter of the join request targeting the join endpoint (see {{ssec-join-req}}). Then, the Group Manager validates and handles the certificate, for instance as described in Appendix D.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 # Security Considerations {#sec-security-considerations}
 
