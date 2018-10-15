@@ -121,7 +121,7 @@ This document refers also to the following terminology.
 
 * Pure listener: member of a group that is configured as listener and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
-* Group rekeying process: the process through which the Group Manager renews the security parameters and group keying material and re-distributes them to the OSCORE group members.
+* Group rekeying process: the process through which the Group Manager renews the security parameters and group keying material, and (re-)distributes them to the OSCORE group members.
 
 ## Relation to Other Documents
 
@@ -152,9 +152,17 @@ CoRE  | *               *               * * |               |
 
 Group communication for CoAP over IP multicast has been enabled in {{RFC7390}} and can be secured with Object Security for Constrained RESTful Environments (OSCORE) {{I-D.ietf-core-object-security}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node explicitly joins an OSCORE group, by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
 
-This specification describes how a network node joins an OSCORE group by using the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}}. With reference to the ACE framework and the terminology defined in OAuth 2.0 {{RFC6749}}:
+This specification describes how to use the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}} in order to:
 
-* The Group Manager acts as Resource Server (RS), and hosts one join resource for each OSCORE group it manages. Each join resource is exported by a distinct join endpoint. During the join process, the Group Manager provides joining nodes with the parameters and keying material for taking part to secure communications in the group.
+* Enable a node to join an OSCORE group through the Group Manager and receive the security parameters and key material to communicate with other members of the gorup.
+
+* Enable members of OSCORE groups to retrieve updated group keying material from the Group Manager.
+
+* Enable the Group Manager to renew the security parameters and group keying material, and to (re-)distribute them to the members of the OSCORE group (rekeing).
+
+With reference to the ACE framework and the terminology defined in OAuth 2.0 {{RFC6749}}:
+
+* The Group Manager acts as Resource Server (RS), and hosts one join resource for each OSCORE group it manages. Each join resource is exported by a distinct join endpoint. During the join process, the Group Manager provides joining nodes with the parameters and keying material for taking part to secure communications in the OSCORE group. The Group Manager also maintains the group keying material and performs the group rekeying process to distribute update keying material to the current group members.
 
 * The joining node acts as Client (C), and requests to join an OSCORE group by accessing the related join endpoint at the Group Manager.
 
@@ -166,7 +174,9 @@ In particular, communications between the joining node and the Group Manager lev
 
 With reference to the AS, communications between the joining node and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance by means of DTLS {{RFC6347}} or OSCORE {{I-D.ietf-core-object-security}}. Further details on how the AS secures communications (with the joining node and the Group Manager) depend on the specifically used profile of ACE, and are out of the scope of this specification.
 
-The following steps are performed for joining an OSCORE group. Messages exchanged among the participants follow the formats defined in {{I-D.palombini-ace-key-groupcomm}}, and are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document. The Group Manager acts as the Key Distribution Center (KDC) referred in {{I-D.palombini-ace-key-groupcomm}}.
+## Overview of the Join Process {#ssec-overview-join-process}
+
+The following steps are performed for joining an OSCORE group. Messages exchanged among the participants follow the formats defined in {{I-D.palombini-ace-key-groupcomm}}, and are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document. The Group Manager acts as the Key Distribution Center (KDC) in {{I-D.palombini-ace-key-groupcomm}}.
 
 1. The joining node requests an Access Token from the AS, in order to access a join resource on the Group Manager and hence join the associated OSCORE group (see {{sec-joining-node-to-AS}}). The joining node will start or continue using a secure communication channel with the Group Manager, according to the response from the AS.
 
@@ -177,6 +187,10 @@ The following steps are performed for joining an OSCORE group. Messages exchange
 4. At the end of the join process, the joining node has received from the Group Manager the parameters and keying material to securely communicate with the other members of the OSCORE group.
 
 5. The joining node and the Group Manager maintain the secure channel, to support possible future communications.
+
+## Overview of the Group Rekeying Process {#ssec-overview-group-rekeying-process}
+
+TBD
 
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
