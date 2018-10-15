@@ -284,6 +284,10 @@ Finally, the joining node uses the information received in the join response to 
 
 When the OSCORE Master Secret expires, as specified by 'exp' in the 'key' parameter of the join response, the node considers the OSCORE Security Context also invalid and to be renewed. A possible approach for the node to retrieve updated keying material from the Group Manager and renew the OSCORE Security Context is described in Section 6 of {{I-D.palombini-ace-key-groupcomm}}. 
 
+# Leaving of a Group Member # {#sec-leaving}
+
+TBD
+
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
 Source authentication of OSCORE messages exchanged within the group is ensured by means of digital counter signatures {{I-D.ietf-core-oscore-groupcomm}}. Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify the source authenticity of incoming group messages.
