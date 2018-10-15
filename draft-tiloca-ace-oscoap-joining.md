@@ -121,6 +121,8 @@ This document refers also to the following terminology.
 
 * Pure listener: member of a group that is configured as listener and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
+* Group rekeying process: the process through which the Group Manager renews the security parameters and group keying material and re-distributes them to the OSCORE group members.
+
 ## Relation to Other Documents
 
 {{fig-references}} overviews the main documents related to this specification. Arrows and asterisk-arrows denote normative references and informative refences, respectively.
