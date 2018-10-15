@@ -236,19 +236,19 @@ First, the joining node posts the Access Token to the /authz-info endpoint at th
 
 Once a secure communication channel with the Group Manager has been established, the joining node requests to join the OSCORE group, by accessing the related join resource at the Group Manager.
 
-In particular, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that group. This join request follows the format of the Key Distribution Request message defined in Section 4.1 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
+In particular, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that group. This join request follows the format and processing of the Key Distribution Request message defined in Section 4.1 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
 
-* The 'get_pub_keys' parameter is present only if the Group Manager is configured to store the public keys of the group members and, at the same time, the joining node wants to retrieve such public keys during the joining process (see {{sec-public-keys-of-joining-nodes}}). In any other case, this parameter MUST NOT be present.
+* The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the join process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
-* The 'client_cred' parameter, if present, includes the public key or certificate of the joining node. Specifically, it includes the public key of the joining node if the Group Manager is configured to store the public keys of the group members, or the certificate of the joining node otherwise. This parameter MAY be omitted if: i) public keys are used as proof-of-possession keys between the joining node and the Group Manager; or ii) the joining node is asking to access the group exclusively as pure listener; or iii) the Group Manager already acquired this information during a previous join process. In any other case, this parameter MUST be present.
-
-* The 'pub_keys_repos' parameter MAY be present if the 'client_cred' parameter is both present and with value a certificate of the joining node. If present, this parameter contains the list of public key repositories storing the certificate of the joining node. In any other case, this parameter MUST NOT be present. 
+* The 'client_cred' parameter, if present, includes the public key of the joining node. This parameter MAY be omitted if: i) public keys are used as proof-of-possession keys between the joining node and the Group Manager; or ii) the joining node is asking to access the group exclusively as pure listener; or iii) the Group Manager already acquired this information during a previous join process. In any other case, this parameter MUST be present.
 
 ## Join Response {#ssec-join-resp}
 
 The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}}. If this yields a positive outcome, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
 
-Then, the Group Manager replies to the joining node providing the information necessary to participate in the group communication. This join response follows the format of the Key Distribution success Response message defined in Section 4.2 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
+If the application requires backward security, the Group Manager SHALL generate updated security paramenters and group rekeying material, and provide it to the current group members as per Section TBD. These security parameters and keying meterial are provided to the joining node.
+
+The Group Manager replies to the joining node providing the information necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
 
 * The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In particular:
 
@@ -257,16 +257,16 @@ Then, the Group Manager replies to the joining node providing the information ne
    * The 'k' parameter includes the OSCORE Master Secret.
 
    * The 'exp' parameter specifies when the OSCORE Master Secret expires. 
-   
+
    * The 'alg' parameter, if present, has as value the AEAD algorithm used in the group.
 
    * The 'kid' parameter, if present, has as value the identifier of the key in the parameter 'k'.
 
    * The 'base IV' parameter, if present, has as value the OSCORE Common IV.
 
-   * The 'clientID' parameter, if present, has as value the OSCORE Endpoint ID assigned to the joining node by the Group Manager. This parameter is not present if the node joins the group exclusively as pure listener, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
+   * The 'clientID' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager. This parameter is not present if the node joins the group exclusively as pure listener, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
 
-   * The 'serverID' parameter MUST be present and has as value the Group Identifier (Gid) currently associated to the group.
+   * The 'serverID' parameter MUST be present and has as value the Group Identifier (Gid) associated to the group.
 
    * The 'kdf' parameter, if present, has as value the KDF algorithm used in the group.
 
@@ -276,13 +276,13 @@ Then, the Group Manager replies to the joining node providing the information ne
 
 * The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as listener or pure listener.
 
-* The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as well as the rekeying protocol used to renew the keying material in the group (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+* The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as well as the group rekeying scheme used by the Group Manager to renew the keying material in the group.
 
-* The 'mgt_key_material' parameter SHOULD be present and includes the administrative keying material that the joining node requires to participate in the rekeying process led by the Group Manager. The exact content and format depend on the specific rekeying protocol used in the group.
+* The 'mgt_key_material' parameter SHOULD be present and includes the administrative keying material that the joining node requires to participate in the group rekeying process performed by the Group Manager. The exact content and format depend on the specific group rekeying scheme used in the group.
 
-Finally, the joining node uses the information received in the join response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in Section 4 of {{I-D.ietf-core-oscore-groupcomm}}.
+Finally, the joining node uses the information received in the join response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in Section 5 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-When the OSCORE Master Secret expires, as specified by 'exp' in the 'key' parameter of the join response, the node considers the OSCORE Security Context also invalid and to be renewed. A possible approach for the node to renew the OSCORE Security Context through the Group Manager is described in Section 6 of {{I-D.palombini-ace-key-groupcomm}}. 
+When the OSCORE Master Secret expires, as specified by 'exp' in the 'key' parameter of the join response, the node considers the OSCORE Security Context also invalid and to be renewed. A possible approach for the node to retrieve updated keying material from the Group Manager and renew the OSCORE Security Context is described in Section 6 of {{I-D.palombini-ace-key-groupcomm}}. 
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
