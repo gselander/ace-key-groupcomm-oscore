@@ -246,7 +246,7 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}}. If this yields a positive outcome, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
 
-If the application requires backward security, the Group Manager SHALL generate updated security paramenters and group rekeying material, and provide it to the current group members as per Section TBD. These security parameters and keying meterial are provided to the joining node.
+If the application requires backward security, the Group Manager SHALL generate updated security parameters and group rekeying material, and provide it to the current group members (see {{sec-group-rekeying-process}}). These security parameters and keying meterial are provided to the joining node.
 
 The Group Manager replies to the joining node providing the information necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
 
@@ -286,7 +286,11 @@ When the OSCORE Master Secret expires, as specified by 'exp' in the 'key' parame
 
 # Leaving of a Group Member # {#sec-leaving}
 
-TBD
+A node may be removed from the OSCORE group, due to expired or revoked authorization, or after its own request to the Group Manager.
+
+If the application requires forward security, the Group Manager SHALL generate updated security parameters and group rekeying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). The leaving node must not be able to acquire the new security parameters and group keying material.
+
+Same considerations in Section 5 of {{I-D.palombini-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC. In particular, a node requests to leave the OSCORE group as described in Section 5.2 of {{I-D.palombini-ace-key-groupcomm}}.
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
