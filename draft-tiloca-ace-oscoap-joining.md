@@ -190,11 +190,13 @@ The following steps are performed for joining an OSCORE group. Messages exchange
 
 ## Overview of the Group Rekeying Process {#ssec-overview-group-rekeying-process}
 
-If the application requires backward and forward security security, the Group Manager MUST generate new security parameters and group keying material, and distribute them to the group upon membership changes (rekeying). These include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+If the application requires backward and forward security, the Group Manager MUST generate new security parameters and group keying material, and distribute them to the group upon membership changes (rekeying).
 
-The Group Manager rekeys the OSCORE group by means of a group key management scheme and using rekeying messages formatted as defined in Section 8.1 of {{I-D.palombini-ace-key-groupcomm}}. The Group Manager MUST support the Basic Rekeying scheme defined in Section 8.2 {{I-D.palombini-ace-key-groupcomm}}.
+That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access group communications prior its joining, while a leaving node cannot access group communications after its leaving. 
 
-{{sec-group-rekeying-process}} of this specification describes how the Group Manager uses the rekeying message format and the Basic Rekeying scheme defined in {{I-D.palombini-ace-key-groupcomm}} to rekey an OSCORE group.
+Parameters and keying material include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+
+The Group Manager rekeys the OSCORE group by means of a group key management scheme and MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} and based on the Basic Rekeying scheme defined in Section 8.2 of {{I-D.palombini-ace-key-groupcomm}}.
 
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
