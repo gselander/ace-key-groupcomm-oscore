@@ -190,13 +190,13 @@ The following steps are performed for joining an OSCORE group. Messages exchange
 
 ## Overview of the Group Rekeying Process {#ssec-overview-group-rekeying-process}
 
-If the application requires backward and forward security, the Group Manager MUST generate new security parameters and group keying material, and distribute them to the group upon membership changes (rekeying).
+If the application requires backward and forward security, the Group Manager MUST generate new security parameters and group keying material, and distribute them to the group (rekeying) upon membership changes.
 
-That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access group communications prior its joining, while a leaving node cannot access group communications after its leaving. 
+That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access communications in the group prior its joining, while a leaving node cannot access communications in the group after its leaving. 
 
-Parameters and keying material include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+Parameters and keying material include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
-The Group Manager rekeys the OSCORE group by means of a group key management scheme and MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} and based on the Basic Rekeying scheme defined in Section 8.2 of {{I-D.palombini-ace-key-groupcomm}}.
+The Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} and based on the Basic Rekeying scheme defined in Section 8.2 of {{I-D.palombini-ace-key-groupcomm}}.
 
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
@@ -252,9 +252,9 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}}. If this yields a positive outcome, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
 
-If the application requires backward security, the Group Manager SHALL generate updated security parameters and group rekeying material, and provide it to the current group members (see {{sec-group-rekeying-process}}). These security parameters and keying meterial are provided to the joining node.
+If the application requires backward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to the current group members (see {{ssec-join-rekeying}}).
 
-The Group Manager replies to the joining node providing the information necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
+The Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
 
 * The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In particular:
 
@@ -294,7 +294,7 @@ When the OSCORE Master Secret expires, as specified by 'exp' in the 'key' parame
 
 A node may be removed from the OSCORE group, due to expired or revoked authorization, or after its own request to the Group Manager.
 
-If the application requires forward security, the Group Manager SHALL generate updated security parameters and group rekeying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). The leaving node must not be able to acquire the new security parameters and group keying material.
+If the application requires forward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to the remaining group members (see {{ssec-leave-rekeying}}). The leaving node must not be able to acquire the new security parameters and group keying material distributed after its leaving.
 
 Same considerations in Section 5 of {{I-D.palombini-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC. In particular, a node requests to leave the OSCORE group as described in Section 5.2 of {{I-D.palombini-ace-key-groupcomm}}.
 
@@ -320,13 +320,43 @@ Later on as a group member, the node may need to retrieve the public keys of oth
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
-TBD
+The Group Manager maintains its own private-public key pair and a symmetric Group Management Key (GMK) for each of its OSCORE groups, as defined in Section 8.2 of {{I-D.palombini-ace-key-groupcomm}.
+
+## Initialization of Joining Nodes {#ssec-init-joining}
+
+When sending the Join Response to a joining node (see {{ssec-join-resp}}), the Group Manager fills the 'mgt_key_material' parameter as specified in Section 8.2.1 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
+
+* If the Gid of the group is composed of a variable part such as Group Epoch (see Appendix C of {{I-D.ietf-core-oscore-groupcomm}}), that variable part MUST be included in the parameter Rekeying Instance Counter, with the same value it has in the 'serverID' parameter of the 'key' parameter in the Join Response.
+
+* If the node joins the group exclusively as pure listener, the parameter Node Identifier includes an identifier which is assigned to the joining node and MUST be unique in the pool of Sender IDs of the group. In any other case, this parameter MUST be either omitted or set to the value of the 'clientID' parameter of the 'key' parameter in the Join Response.
+
+## Join Rekeying {#ssec-join-rekeying}
+
+When a new node joins the group (see {{sec-joining-node-to-GM}}), the Group Manager rekeys the OSCORE group using the message format defined in Section 8.1 of {{I-D.palombini-ace-key-groupcomm}} and as described in Section 8.2.2 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
+
+* At step 2, the Group Manager sets the "Destination ID" field to the value of the Group ID before the rekeying process started.
+
+* At step 2, the Group Manager includes the new Group ID of the group and the new Master Secret as new group keying material of the "Rekeying material" field.
+
+## Leave Rekeying {#ssec-leave-rekeying}
+
+When a node leaves the group (see {{sec-leaving}}), the Group Manager rekeys the OSCORE group using the message format defined in Section 8.1 of {{I-D.palombini-ace-key-groupcomm}} and as described in Section 8.2.3 of {{I-D.palombini-ace-key-groupcomm}}.
+
+In particular, for each individual rekeying message providing the new GMK:
+
+* At step 1, the Group Manager sets "Destination ID" to the identifier of the rekeyed group member U intended as message recipient. The value of this identifier is the Sender ID of node U in the group. If node U is configured exclusively as pure listener in the group, the value of this identifier is the one received by node U in the 'mgt_key_material' parameter of the Join Response, as described in {{ssec-init-joining}}.
+
+Then, upon sending the single rekeying message with the new group keying material:
+
+* At step 2, the Group Manager sets the "Destination ID" field to the value of the Group ID before the rekeying started.
+
+* At step 2, the Group Manager includes the new Group ID of the group and the new Master Secret as new group keying material of the "Rekeying material" field.
 
 # Security Considerations {#sec-security-considerations}
 
 The method described in this document leverages the following management aspects related to OSCORE groups and discussed in the sections of {{I-D.ietf-core-oscore-groupcomm}} referred below.
 
-* Management of group keying material (see Section 8.3 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renew and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
+* Management of group keying material (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renewal and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
 
 * Provisioning and retrieval of public keys (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager acts as key repository of public keys of group members, and provides them upon request.
 
