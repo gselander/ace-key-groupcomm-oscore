@@ -128,25 +128,25 @@ This document refers also to the following terminology.
 {{fig-references}} overviews the main documents related to this specification. Arrows and asterisk-arrows denote normative references and informative refences, respectively.
 
 ~~~~~~~~~~~
-                       +--------------------------------------+
-                       |                                      |
-      +----------------|--------------+                       |
-      |                |              |                       |
-      |                v              v                    OSCORE
-   Pub-sub ---> Key Groupcomm ---> ACE Framework <---  Key Management
-   profile         *   *              [[WG]]         [[This document]]
-      |            *   *              ^               ^  |    |
-      |            *   *              *               *  |    |
-      |            *   *              * +**************  |    |
-      | ************   *              * *                |    |
-      | *              *              * * +--------------+    |
-ACE   | *              *              * * |                   |
-------|-*--------------*--------------*-*-|-------------------|-------
-CoRE  | *              *              * * |                   |
-      v v              v              * * v                   v
-      CoRE           CoRE            OSCORE  -------------> OSCORE
-     Pubsub        Groupcomm  <*** Groupcomm <************* [[WG]]
-     [[WG]]       [[RFC7390]]        [[WG]]           
+                      +---------------------------------------+
+                      |                                       |
+     +----------------|--------------+                        |
+     |                |              |                        |
+     |                v              v                 Key Management
+  Pub-sub ---> Key Groupcomm ---> ACE Framework <--- for OSCORE Groups
+  profile         *   *              [[WG]]          [[This document]]
+     |            *   *              ^               ^  |     |
+     |            *   *              *               *  |     |
+     |            *   *              * ***************  |     |
+     | ************   *              * *                |     |
+     | *              *              * * +--------------+     |
+ACE  | *              *              * * |                    |
+-----|-*--------------*--------------*-*-|--------------------|-------
+CoRE | *              *              * * |                    |
+     v v              v              * * v                    v
+    CoRE             CoRE            OSCORE  -------------> OSCORE
+   Pubsub          Groupcomm  <*** Groupcomm <************* [[WG]]
+   [[WG]]         [[RFC7390]]        [[WG]]           
 ~~~~~~~~~~~
 {: #fig-references title="Related Documents" artwork-align="center"}
 
