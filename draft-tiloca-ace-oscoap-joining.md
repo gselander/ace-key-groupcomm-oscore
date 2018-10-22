@@ -326,7 +326,7 @@ In order to rekey the OSCORE group, the Group Manager distributes a new Group ID
 
 The Group Manager uses the same format of the Join Response message in {{ssec-join-resp}}. In particular:
 
-* Only the 'k' parameter is present.
+* Only the 'key' parameter is present.
 
 * The 'k' parameter of the 'key' parameter includes the new OSCORE Master Secret.
 
