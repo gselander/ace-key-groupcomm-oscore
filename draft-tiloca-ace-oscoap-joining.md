@@ -208,19 +208,19 @@ This section describes how the joining node interacts with the AS in order to be
 
 The message exchange between the joining node and the AS consists of the messages Authorization Request and Authorization Response defined in Section 3 of {{I-D.palombini-ace-key-groupcomm}}.
 
-In case the specific AS associated to the Group Manager is unknown to the joining node, the latter can rely on mechanisms like the Unauthorized Resource Request message described in Section 2 of {{I-D.ietf-ace-dtls-authorize}} to discover the correct AS to contact.
+In case the specific AS associated to the Group Manager is unknown to the joining node, the latter can rely on mechanisms like the Unauthorized Resource Request message described in Section 5.1.1 of {{I-D.ietf-ace-oauth-authz}} to discover the correct AS to contact.
 
 ## Authorization Request {#ssec-auth-req}
 
 The joining node contacts the AS, in order to request an Access Token for accessing the join resource hosted by the Group Manager and associated to the OSCORE group. The Access Token request sent to the /token endpoint follows the format of the Authorization Request message defined in Section 3.1 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
 
-* The 'scope' parameter MUST be present and includes:
+* The 'scope' parameter MUST be present and MUST include:
 
-    - in the first element, the Group Identifier (Gid) of the group to join under the Group Manager. The value of this identifier may not fully coincide with the Gid value currently associated to the group, e.g. if the Gid is composed of a variable part such as a Group Epoch (see Appendix C of {{I-D.ietf-core-oscore-groupcomm}}).
+    - in the first element, either the Group Identifier (Gid) of the group to join under the Group Manager, or a value from which the Group Manager can derive the Gid of the group to join. It is up to the application to define how the Group Manager possibly performs the derivation of the full Gid. Appendix C of {{I-D.ietf-core-oscore-groupcomm}} provides an example of structured Gid, composed of a fixed part, namely Group Prefix, and a variable part, namely Group Epoch.
 
-    * in the second element, which MUST be present, the role(s) that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: "requester" and "listener"; "requester" and "pure listener".
+    * in the second element, the role(s) that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: ["requester" , "listener"]; ["requester" , "pure listener"].
 
-* The 'aud' parameter MUST be present and is set to the identifier of the Group Manager.
+* The 'req_aud' parameter MUST be present and is set to the identifier of the Group Manager.
 
 ## Authorization Response {#ssec-auth-resp}
 
@@ -264,7 +264,7 @@ The Group Manager replies to the joining node providing the updated security par
 
    * The 'k' parameter includes the OSCORE Master Secret.
 
-   * The 'exp' parameter specifies when the OSCORE Master Secret expires. 
+   * The 'exp' parameter specifies when the OSCORE Security Context derived from these parameters expires.
 
    * The 'alg' parameter, if present, has as value the AEAD algorithm used in the group.
 
