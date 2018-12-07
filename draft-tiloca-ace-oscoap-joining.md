@@ -260,7 +260,7 @@ The Group Manager replies to the joining node providing the updated security par
 
 * The 'kty' parameter has value "Group_OSCORE_Security_Context Object", defined in this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object defined in this specification. In particular, it extends the OSCORE_Security_Context Object defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}} with the two parameters 'exp' and 'cs_alg' also defined in this specification:
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object defined in this specification. In particular, it extends the CBOR OSCORE_Security_Context Object defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}} with the two parameters 'exp' and 'cs_alg' also defined in this specification:
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
