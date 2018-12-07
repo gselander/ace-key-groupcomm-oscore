@@ -374,7 +374,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.1 of {{I-D.palombini-ace-key-groupcomm}}.
 
-*  Name: Group_OSCORE_Security_Context
+*  Name: Group_OSCORE_Security_Context object
 *  CBOR Type: map
 *  CBOR Value: the OSCORE Security Context encoded as a Group_OSCORE_Security_Context object.
 *  Registry: OSCORE Security Context Parameters.
