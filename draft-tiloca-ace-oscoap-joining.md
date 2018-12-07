@@ -316,7 +316,7 @@ In particular, four cases can occur when a new node joins a group.
 
 Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. through the 'get_pub_keys' parameter in the join request. In this case, the Group Manager includes also such public keys in the 'pub_keys' parameter of the join response (see {{ssec-join-resp}}).
 
-Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined in Section 7 of {{I-D.palombini-ace-key-groupcomm}}.
+Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined~~~~~~~~~~~ in Section 7 of {{I-D.palombini-ace-key-groupcomm}}.
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
@@ -348,7 +348,26 @@ Further security considerations are inherited from {{I-D.palombini-ace-key-group
 
 # IANA Considerations {#sec-iana}
 
-This document has no actions for IANA.
+This document has the following actions for IANA.
+
+## OSCORE Security Context Parameters Registry {#ssec-iana-sec-context-parameters}
+
+IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.2 of {{I-D.ietf-ace-oscore-profile}}.
+
+*  Name: cs_alg
+*  CBOR Label: TBD
+*  CBOR Type: tstr / int
+*  Registry: COSE Algorithm Values (ECDSA, EdDSA)
+*  Description: OSCORE Counter Signature Algorithm Value
+*  Reference: \[\[this specification\]\]
+
+
+*  Name: exp
+*  CBOR Label: TBD
+*  CBOR Type: int / float
+*  Registry: 
+*  Description: Expiration time of the OSCORE Security Context
+*  Reference: \[\[this specification\]\]
 
 --- back
 
