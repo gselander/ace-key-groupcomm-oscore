@@ -280,6 +280,8 @@ The Group Manager replies to the joining node providing the updated security par
 
    * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from these parameters is not valid anymore.
 
+* The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in this specification.
+
 * The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as listener or pure listener.
 
 * The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}).
@@ -350,7 +352,7 @@ Further security considerations are inherited from {{I-D.palombini-ace-key-group
 
 This document has the following actions for IANA.
 
-## OSCORE Security Context Parameters Registry {#ssec-iana-sec-context-parameters}
+## OSCORE Security Context Parameters Registry
 
 IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.2 of {{I-D.ietf-ace-oscore-profile}}.
 
@@ -368,6 +370,18 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Registry: 
 *  Description: Expiration time of the OSCORE Security Context
 *  Reference: \[\[this specification\]\]
+
+## ACE Groupcomm Profile Registry
+
+TBD
+
+## ACE Groupcomm Key Type
+
+TBD
+
+## ACE Groupcomm Key
+
+TBD
 
 --- back
 
