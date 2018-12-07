@@ -363,7 +363,6 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Value
 *  Reference: \[\[this specification\]\]
 
-
 *  Name: exp
 *  CBOR Label: TBD
 *  CBOR Type: int / float
@@ -371,17 +370,34 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: Expiration time of the OSCORE Security Context
 *  Reference: \[\[this specification\]\]
 
+## ACE Groupcomm Key Registry
+
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.1 of {{I-D.palombini-ace-key-groupcomm}}.
+
+*  Name: Group_OSCORE_Security_Context
+*  CBOR Type: map
+*  CBOR Value: the OSCORE Security Context encoded as a Group_OSCORE_Security_Context object.
+*  Registry: OSCORE Security Context Parameters.
+*  Description: Group OSCORE Security Context.
+*  Reference: \[\[this specification\]\]
+
+## ACE Groupcomm Key Type Registry
+
+IANA is asked to register the following entry in the "ACE Groupcomm Key Type" Registry defined in Section 9.2 of {{I-D.palombini-ace-key-groupcomm}}.
+
+*  Name: Group_OSCORE_Security_Context object
+*  CBOR Value: TBD
+*  Description: CBOR abbreviation for the Group_OSCORE_Security_Context object used as value of the 'key' parameter in the Join Response message.
+*  Reference: \[\[this specification\]\]
+
 ## ACE Groupcomm Profile Registry
 
-TBD
+IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.3 of {{I-D.palombini-ace-key-groupcomm}}.
 
-## ACE Groupcomm Key Type
-
-TBD
-
-## ACE Groupcomm Key
-
-TBD
+*  Name: coap_group_oscore
+*  CBOR Value: TBD
+*  Description: Profile to provision keying material for participating in group communication protected with Group OSCORE.
+*  Reference: \[\[this specification\]\]
 
 --- back
 
