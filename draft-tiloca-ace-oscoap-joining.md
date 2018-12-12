@@ -377,7 +377,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Key" Registr
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD
 *  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
-*  Description: A Group OSCORE Security Context encoded as described in {{ssec-join-resp}} of this specification.
+*  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
 *  Reference: \[\[this specification\]\]
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
@@ -385,7 +385,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Key" Registr
 IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.2 of {{I-D.palombini-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore
-*  Description: Profile to provision keying material for participating in group communication protected with Group OSCORE.
+*  Description: Profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
 *  CBOR Value: TBD
 *  Reference: \[\[this specification\]\]
 
