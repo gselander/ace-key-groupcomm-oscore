@@ -258,9 +258,9 @@ The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}
 
 The Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.palombini-ace-key-groupcomm}}. In particular:
 
-* The 'kty' parameter has value "Group_OSCORE_Security_Context Object", defined in this specification.
+* The 'kty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object defined in this specification. In particular, it extends the CBOR OSCORE_Security_Context Object defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}} with the two parameters 'exp' and 'cs_alg' also defined in this specification:
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter includes a Group_OSCORE_Security_Context object, which is defined in this specification and extends the CBOR OSCORE_Security_Context object defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the two additional parameters 'cs_alg' and 'exp' defined in this specification. More specifically, the 'key' parameter is composed as follows.
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
@@ -280,7 +280,7 @@ The Group Manager replies to the joining node providing the updated security par
 
    * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from these parameters is not valid anymore.
 
-* The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in this specification.
+* The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as listener or pure listener.
 
@@ -326,7 +326,7 @@ In order to rekey the OSCORE group, the Group Manager distributes a new Group ID
 
 The Group Manager uses the same format of the Join Response message in {{ssec-join-resp}}. In particular:
 
-* Only the 'key' parameter is present.
+* Only the parameters 'kty', 'key' and 'profile' are present.
 
 * The 'ms' parameter of the 'key' parameter includes the new OSCORE Master Secret value.
 
@@ -352,7 +352,7 @@ Further security considerations are inherited from {{I-D.palombini-ace-key-group
 
 This document has the following actions for IANA.
 
-## OSCORE Security Context Parameters Registry
+## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
 
 IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.2 of {{I-D.ietf-ace-oscore-profile}}.
 
@@ -376,7 +376,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Key" Registr
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD
-*  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification
+*  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 *  Description: A Group OSCORE Security Context encoded as described in {{ssec-join-resp}} of this specification.
 *  Reference: \[\[this specification\]\]
 
