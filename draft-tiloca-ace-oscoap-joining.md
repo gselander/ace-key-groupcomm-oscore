@@ -370,33 +370,23 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: Expiration time of the OSCORE Security Context
 *  Reference: \[\[this specification\]\]
 
-## ACE Groupcomm Key Registry
+## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
 IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.1 of {{I-D.palombini-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Security_Context object
-*  CBOR Type: map
-*  CBOR Value: the OSCORE Security Context encoded as a Group_OSCORE_Security_Context object.
-*  Registry: OSCORE Security Context Parameters.
-*  Description: Group OSCORE Security Context.
+*  Key Type Value: TBD
+*  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification
+*  Description: A Group OSCORE Security Context encoded as described in {{ssec-join-resp}} of this specification.
 *  Reference: \[\[this specification\]\]
 
-## ACE Groupcomm Key Type Registry
+## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Key Type" Registry defined in Section 9.2 of {{I-D.palombini-ace-key-groupcomm}}.
-
-*  Name: Group_OSCORE_Security_Context object
-*  CBOR Value: TBD
-*  Description: CBOR abbreviation for the Group_OSCORE_Security_Context object used as value of the 'key' parameter in the Join Response message.
-*  Reference: \[\[this specification\]\]
-
-## ACE Groupcomm Profile Registry
-
-IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.3 of {{I-D.palombini-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.2 of {{I-D.palombini-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore
-*  CBOR Value: TBD
 *  Description: Profile to provision keying material for participating in group communication protected with Group OSCORE.
+*  CBOR Value: TBD
 *  Reference: \[\[this specification\]\]
 
 --- back
