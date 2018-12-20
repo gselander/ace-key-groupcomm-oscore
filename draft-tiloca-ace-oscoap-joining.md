@@ -1,7 +1,7 @@
 ---
 title: Key Management for OSCORE Groups in ACE
 abbrev: Key Management for OSCORE Groups in ACE
-docname: draft-tiloca-ace-oscoap-joining-05
+docname: draft-ietf-ace-key-groupcomm-oscore-00
 # date: 2017-04-25
 category: std
 
