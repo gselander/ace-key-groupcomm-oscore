@@ -134,11 +134,11 @@ This document refers also to the following terminology.
      |                |              |                        |
      |                v              v                 Key Management
   Pub-sub ---> Key Groupcomm ---> ACE Framework <--- for OSCORE Groups
-  profile         *   *              [[WG]]          [[This document]]
-     |            *   *              ^               ^  |     |
-     |            *   *              *               *  |     |
-     |            *   *              * ***************  |     |
-     | ************   *              * *                |     |
+  profile        *  [[WG]]           [[WG]]          [[This document]]
+     |           *    *              ^               ^  |     |
+     |           *    *              *               *  |     |
+     |           *    *              * ***************  |     |
+     | ***********    *              * *                |     |
      | *              *              * * +--------------+     |
 ACE  | *              *              * * |                    |
 -----|-*--------------*--------------*-*-|--------------------|-------
