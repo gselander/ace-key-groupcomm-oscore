@@ -1,4 +1,4 @@
-# Key Managemen for OSCORE Groups in ACE
+# Key Managemen for OSCORE Groups in ACE [![Build Status](https://travis-ci.org/ace-wg/ace-key-groupcomm-oscore.svg?branch=master)](https://travis-ci.org/ace-wg/ace-key-groupcomm-oscore)
 
 This is the working area for the IETF [ACE Working Group](https://datatracker.ietf.org/wg/ace/documents/) Internet-Draft, "Key Managemen for OSCORE Groups in ACE".
 
