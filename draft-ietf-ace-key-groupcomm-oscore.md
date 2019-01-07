@@ -364,13 +364,6 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Value
 *  Reference: \[\[this specification\]\]
 
-*  Name: exp
-*  CBOR Label: TBD
-*  CBOR Type: int / float
-*  Registry:
-*  Description: Expiration time of the OSCORE Security Context
-*  Reference: \[\[this specification\]\]
-
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
 IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.1 of {{I-D.palombini-ace-key-groupcomm}}.
