@@ -1,7 +1,7 @@
 ---
 title: Key Management for OSCORE Groups in ACE
 abbrev: Key Management for OSCORE Groups in ACE
-docname: draft-ietf-ace-key-groupcomm-oscore-01
+docname: draft-ietf-ace-key-groupcomm-oscore-latest
 # date: 2017-04-25
 category: std
 
@@ -282,6 +282,7 @@ The Group Manager replies to the joining node providing the updated security par
 
 * The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
+
 * The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as listener or pure listener.
 
 * The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}).
@@ -318,7 +319,7 @@ In particular, four cases can occur when a new node joins a group.
 
 Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. through the 'get_pub_keys' parameter in the join request. In this case, the Group Manager includes also such public keys in the 'pub_keys' parameter of the join response (see {{ssec-join-resp}}).
 
-Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined~~~~~~~~~~~ in Section 7 of {{I-D.palombini-ace-key-groupcomm}}.
+Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined in Section 7 of {{I-D.palombini-ace-key-groupcomm}}.
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
@@ -331,7 +332,7 @@ The Group Manager uses the same format of the Join Response message in {{ssec-jo
 * The 'ms' parameter of the 'key' parameter includes the new OSCORE Master Secret value.
 
 * The 'contextId' parameter of the 'key' parameter includes the new Group ID.
- 
+
 The Group Manager separately sends a group rekeying message to each group member to be rekeyed. Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the join process.
 
 # Security Considerations {#sec-security-considerations}
