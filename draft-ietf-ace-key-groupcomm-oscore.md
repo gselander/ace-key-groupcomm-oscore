@@ -326,11 +326,11 @@ In order to rekey the OSCORE group, the Group Manager distributes a new Group ID
 
 The Group Manager uses the same format of the Join Response message in {{ssec-join-resp}}. In particular:
 
-* Only the parameters 'kty', 'key' and 'profile' are present.
+* Only the parameters 'kty', 'key', 'profile' and 'exp' are present.
 
-* The 'ms' parameter of the 'key' parameter includes the new OSCORE Master Secret value.
+* The 'ms' parameter of the 'key' parameter specifies the new OSCORE Master Secret value.
 
-* The 'contextId' parameter of the 'key' parameter includes the new Group ID.
+* The 'contextId' parameter of the 'key' parameter specifies the new Group ID.
 
 The Group Manager separately sends a group rekeying message to each group member to be rekeyed. Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the join process.
 
