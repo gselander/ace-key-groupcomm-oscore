@@ -352,6 +352,16 @@ Further security considerations are inherited from {{I-D.ietf-ace-key-groupcomm}
 
 This document has the following actions for IANA.
 
+## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
+
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.1 of {{I-D.ietf-ace-key-groupcomm}}.
+
+*  Name: Group_OSCORE_Security_Context object
+*  Key Type Value: TBD
+*  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
+*  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
+*  Reference: \[\[this specification\]\]
+
 ## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
 
 IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.2 of {{I-D.ietf-ace-oscore-profile}}.
@@ -361,16 +371,6 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithm Values (ECDSA, EdDSA)
 *  Description: OSCORE Counter Signature Algorithm Value
-*  Reference: \[\[this specification\]\]
-
-## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
-
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.1 of {{I-D.ietf-ace-key-groupcomm}}.
-
-*  Name: Group_OSCORE_Security_Context object
-*  Key Type Value: TBD
-*  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
-*  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
 *  Reference: \[\[this specification\]\]
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
