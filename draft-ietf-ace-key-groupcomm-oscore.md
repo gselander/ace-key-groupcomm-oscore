@@ -260,7 +260,7 @@ The Group Manager replies to the joining node providing the updated security par
 
 * The 'kty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter includes a Group_OSCORE_Security_Context object, which is defined in this specification and extends the CBOR OSCORE_Security_Context object defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the two additional parameters 'cs_alg' and 'exp' defined in this specification. More specifically, the 'key' parameter is composed as follows.
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter includes a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameter 'cs_alg' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
@@ -272,16 +272,15 @@ The Group Manager replies to the joining node providing the updated security par
 
    * The 'salt' parameter, if present, has as value the OSCORE Master Salt.
 
-   * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid) associated to the group.
+   * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid) associated to the OSCORE group.
 
    * The 'rpl' parameter, if present, specifies the OSCORE Replay Window Size and Type value.
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
-   * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from these parameters is not valid anymore.
-
 * The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
+* The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from the 'key' parameter is not valid anymore.
 
 * The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as listener or pure listener.
 
