@@ -2,7 +2,7 @@
 title: Key Management for OSCORE Groups in ACE
 abbrev: Key Management for OSCORE Groups in ACE
 docname: draft-ietf-ace-key-groupcomm-oscore-latest
-# date: 2017-04-25
+# date: 2018-01-07
 category: std
 
 ipr: trust200902
@@ -146,7 +146,7 @@ CoRE | *              *              * * |                    |
      v v              v              * * v                    v
     CoRE             CoRE            OSCORE  -------------> OSCORE
    Pubsub          Groupcomm  <*** Groupcomm <************* [[WG]]
-   [[WG]]         [[RFC7390]]        [[WG]]           
+   [[WG]]         [[RFC7390]]        [[WG]]
 ~~~~~~~~~~~
 {: #fig-references title="Related Documents" artwork-align="center"}
 
@@ -196,7 +196,7 @@ All further communications between the joining node and the Group Manager MUST b
 
 If the application requires backward and forward security, the Group Manager MUST generate new security parameters and group keying material, and distribute them to the group (rekeying) upon membership changes.
 
-That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access communications in the group prior its joining, while a leaving node cannot access communications in the group after its leaving. 
+That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access communications in the group prior its joining, while a leaving node cannot access communications in the group after its leaving.
 
 Parameters and keying material include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
@@ -218,7 +218,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
     - in the first element, either the Group Identifier (Gid) of the group to join under the Group Manager, or a value from which the Group Manager can derive the Gid of the group to join. It is up to the application to define how the Group Manager possibly performs the derivation of the full Gid. Appendix C of {{I-D.ietf-core-oscore-groupcomm}} provides an example of structured Gid, composed of a fixed part, namely Group Prefix, and a variable part, namely Group Epoch.
 
-    * in the second element, the role(s) that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: ["requester" , "listener"]; ["requester" , "pure listener"].
+    * in the second element, the role(s) that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: \["requester" , "listener"\]; \["requester" , "pure listener"\].
 
 * The 'req_aud' parameter MUST be present and is set to the identifier of the Group Manager.
 
@@ -367,7 +367,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Name: exp
 *  CBOR Label: TBD
 *  CBOR Type: int / float
-*  Registry: 
+*  Registry:
 *  Description: Expiration time of the OSCORE Security Context
 *  Reference: \[\[this specification\]\]
 
