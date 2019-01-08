@@ -290,7 +290,7 @@ Finally, the joining node uses the information received in the join response to 
 
 If the application requires backward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to all the current group members (see {{sec-group-rekeying-process}}).
 
-When the OSCORE Master Secret expires, as specified by 'exp' in the 'key' parameter of the join response, the node considers the OSCORE Security Context also invalid and to be renewed. Then, the node retrieves updated security parameters and keying material, by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}. Finally, the node uses the updated security parameters and keying material to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+When the OSCORE Security Context expires, as specified by the 'exp' parameter of the join response, the node considers it invalid and to be renewed. Then, the node retrieves updated security parameters and keying material, by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}. Finally, the node uses the updated security parameters and keying material to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 # Leaving of a Group Member # {#sec-leaving}
 
