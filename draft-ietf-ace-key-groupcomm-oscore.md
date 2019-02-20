@@ -387,7 +387,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
 
-The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Jim Schaad, Ludwig Seitz, G&ouml;ran Selander and Peter van der Stok for their comments and feedback.
+The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Rikard Hoeglund, Jim Schaad, Ludwig Seitz, G&ouml;ran Selander and Peter van der Stok for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and by the EIT-Digital High Impact Initiative ACTIVE.
 
