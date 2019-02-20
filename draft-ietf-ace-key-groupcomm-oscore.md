@@ -220,7 +220,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
     * in the second element, the role(s) that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: \["requester" , "listener"\]; \["requester" , "pure listener"\].
 
-* The 'req_aud' parameter MUST be present and is set to the identifier of the Group Manager.
+* The 'audience' parameter MUST be present and is set to the identifier of the Group Manager.
 
 ## Authorization Response {#ssec-auth-resp}
 
