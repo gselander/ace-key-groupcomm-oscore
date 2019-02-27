@@ -247,13 +247,11 @@ The following subsections describe the interactions between the joining node and
 
 The joining node posts the Access Token to the /authz-info endpoint at the Group Manager, according to the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
-The CoAP POST request MUST use the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and MUST include the access token using the correct CBOR label (e.g., "cwt" for CWT, "jwt" for JWT).
+If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and includes also the parameter 'kid' defined in Section 5.1.2 of {{I-D.ietf-ace-oauth-authz}}, encoding the CBOR simple value Null as a CBOR Byte String. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
-The CoAP POST request MAY also include the parameter 'kid' defined in Section 5.1.2 of {{I-D.ietf-ace-oauth-authz}}, encoding the CBOR simple value Null as a CBOR Byte String. This parameter is present if the joining node wants to get information from the Group Manager about the countersignature algorithm and related parameters used in the OSCORE group. The joining node may have retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE.
 
-If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE. The payload of the 2.01 (Created) response MUST be a CBOR map.
-
-The payload of the 2.01 (Created) response MAY include a 'kid' parameter, which MUST be present if the POST request included the 'kid' parameter encoding the CBOR simple value Null. If present, the 'kid' parameter of the 2.01 (Created) response wraps as a CBOR Byte String a CBOR array formatted as follows:
+The payload of the 2.01 (Created) response MAY be a CBOR map including a 'kid' parameter, which MUST be present if the POST request included the 'kid' parameter encoding the CBOR simple value Null. If present, the 'kid' parameter of the 2.01 (Created) response wraps as a CBOR Byte String a CBOR array formatted as follows:
 
 * The first element is an integer, which MUST be present and indicates the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
