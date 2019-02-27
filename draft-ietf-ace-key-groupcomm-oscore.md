@@ -414,6 +414,22 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 
 --- back
 
+# Document Updates # {#sec-document-updates}
+
+RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -00 to -01 ## {#sec-00-01}
+
+* Changed name of 'req_aud' to 'audience' in the Authorization Request (Section 3.1).
+
+* Added negotiation of countersignature algorithm/parameters between Client and Group Manager (Section 4).
+
+* Updated format of the Key Distribution Response as a whole (Section 4.3).
+
+* Added parameter 'cs_params' in the 'key' parameter of the Key Distribution Response (Section 4.3).
+
+* New IANA registrations in the "ACE Groupcomm Key", "OSCORE Security Context Parameters Registry" and "ACE Groupcomm Profile Registry" (Section 9).
+
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
 
