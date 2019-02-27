@@ -64,6 +64,7 @@ normative:
 
 informative:
   I-D.ietf-ace-dtls-authorize:
+  I-D.tiloca-core-oscore-discovery:
   RFC6347:
   RFC6749:
   RFC7390:
@@ -240,7 +241,25 @@ In particular, if symmetric keys are used, the AS generates a proof-of-possessio
 
 # Joining Node to Group Manager {#sec-joining-node-to-GM}
 
-First, the joining node posts the Access Token to the /authz-info endpoint at the Group Manager, in accordance with the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}. Then, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and to the signalled profile of ACE.
+The following subsections describe the interactions between the joining node and the Group Manager, i.e. the Access Token post and the Request-Response exchange to join the OSCORE group.
+
+## Token post {#ssec-token-post}
+
+The joining node posts the Access Token to the /authz-info endpoint at the Group Manager, according to the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}.
+
+The CoAP POST request MUST use the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and MUST include the access token using the correct CBOR label (e.g., "cwt" for CWT, "jwt" for JWT).
+
+The CoAP POST request MAY also include the parameter 'kid' defined in Section 5.1.2 of {{I-D.ietf-ace-oauth-authz}}, encoding the CBOR simple value Null as a CBOR Byte String. This parameter is present if the joining node wants to get information from the Group Manager about the countersignature algorithm and related parameters used in the OSCORE group. The joining node may have retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+
+If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE. The payload of the 2.01 (Created) response MUST be a CBOR map.
+
+The payload of the 2.01 (Created) response MAY include a 'kid' parameter, which MUST be present if the POST request included the 'kid' parameter encoding the CBOR simple value Null. If present, the 'kid' parameter of the 2.01 (Created) response wraps as a CBOR Byte String a CBOR array formatted as follows:
+
+* The first element is an integer, which MUST be present and indicates the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
+
+* The second element MAY be present and indicates the counter signature algorithm parameters, encoded as specified in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+
+Finally, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and the signalled profile of ACE.
 
 ## Join Request {#ssec-join-req}
 
@@ -250,13 +269,17 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the join process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
-* The 'client_cred' parameter, if present, includes the public key of the joining node. This parameter MAY be omitted if: i) public keys are used as proof-of-possession keys between the joining node and the Group Manager; or ii) the joining node is asking to access the group exclusively as pure listener; or iii) the Group Manager already acquired this information during a previous join process. In any other case, this parameter MUST be present.
+* The 'client_cred' parameter, if present, includes the public key of the joining node. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as pure listener; or ii) the Group Manager already acquired this information, for instance during a previous join process. In any other case, this parameter MUST be present.
 
 ## Join Response {#ssec-join-resp}
 
-The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}}. If this yields a positive outcome, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
+The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}} and Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. If this yields a positive outcome, the Group Manager performs the following check. In case the Join Request included the 'client_cred' parameter, the Group Manager checks that the public key of the joining node is consistent with the counter signature algorithm used in the OSCORE group.
 
-The Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
+If the public key of the joining node does not have an accepted format, the Group Manager MUST reply to the joining node with a 2.01 (Created) response. The payload of this response is a CBOR map, which includes a 'kid' parameter formatted as in the Token POST response in {{ssec-token-post}}. Upon receiving this response, the joining node SHOULD send a new Join Request to the Group Manager, with the 'client_cred' parameter including its public key in a format consistent with the countersignature algorithm indicated by the Group Manager.
+
+Otherwise, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
+
+Then, the Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
 * The 'kty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
@@ -278,7 +301,7 @@ The Group Manager replies to the joining node providing the updated security par
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
-   * The 'cs_params' parameter MAY be present and specifies the additional parameters for the countersigning algorithm. This parameter is encoded as specified in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+   * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is encoded as specified in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 * The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
