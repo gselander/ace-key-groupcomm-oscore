@@ -452,7 +452,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Added parameter 'cs_params' in the 'key' parameter of the Key Distribution Response (Section 4.3).
 
-* New IANA registrations in the "ACE Groupcomm Key", "OSCORE Security Context Parameters Registry" and "ACE Groupcomm Profile Registry" (Section 9).
+* New IANA registrations in the "ACE Authorization Server Request Creation Hints" Registry, "ACE Groupcomm Key" Registry, "OSCORE Security Context Parameters" Registry and "ACE Groupcomm Profile" Registry (Section 9).
 
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
