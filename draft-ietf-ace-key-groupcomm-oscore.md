@@ -386,16 +386,18 @@ Further security considerations are inherited from {{I-D.ietf-ace-key-groupcomm}
 
 # IANA Considerations {#sec-iana}
 
+Note to RFC Editor: Please replace all occurrences of "\[\[This specification\]\]" with the RFC number of this specification and delete this paragraph.
+
 This document has the following actions for IANA.
 
-## ACE Authorization Server Request Creation Hints {#iana-kinfo}
+## ACE Authorization Server Request Creation Hints Registry {#iana-kinfo}
 
 IANA is asked to register the following entry in the "ACE Authorization Server Request Creation Hints" Registry defined in Section 8.1 of {{I-D.ietf-ace-oauth-authz}}.
 
 * Name: key info
 * CBOR Key: TBD (range -256 to 255)
 * Value Type: any
-* Reference: \[\[this specification\]\]
+* Reference: \[\[This specification\]\]
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
@@ -405,7 +407,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Key" Registr
 *  Key Type Value: TBD
 *  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 *  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
-*  Reference: \[\[this specification\]\]
+*  Reference: \[\[This specification\]\]
 
 ## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
 
@@ -416,14 +418,14 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithm Values (ECDSA, EdDSA)
 *  Description: OSCORE Counter Signature Algorithm Value
-*  Reference: \[\[this specification\]\]
+*  Reference: \[\[This specification\]\]
 
 *  Name: cs_params
 *  CBOR Label: TBD
 *  CBOR Type: bstr
 *  Registry: Counter Signatures Parameters
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
-*  Reference: \[\[this specification\]\]
+*  Reference: \[\[This specification\]\]
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
