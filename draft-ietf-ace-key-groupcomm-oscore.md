@@ -247,17 +247,17 @@ The following subsections describe the interactions between the joining node and
 
 The joining node posts the Access Token to the /authz-info endpoint at the Group Manager, according to the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
-If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and includes also the parameter 'key info' defined in {{key-info}} and registered in {{iana-kinfo}}, encoding the CBOR simple value Null. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}, and includes also the parameter 'key info' defined in {{key-info}} and registered in {{iana-kinfo}}, encoding the CBOR simple value Null. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
 If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE.
 
 The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key info' parameter, which MUST be present if the POST request included the 'key info' parameter with value Null. If present, the 'key info' parameter of the 2.01 (Created) response is a CBOR array formatted as follows:
 
-* The first element is an integer or a text string and indicates the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
+* The first element is an integer or a text string indicating the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
-* The second element indicates the counter signature algorithm parameters. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted, if there are no parameters for that algorithm value.
+* The second element indicates the counter signature algorithm parameters. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted if there are no parameters for that algorithm value.
 
-The CDDL notation of the key info parameter is given below.
+The CDDL notation of the 'key info' parameter is given below.
 
 ~~~~~~~~~~~ CDDL
    key_info = [
@@ -270,7 +270,7 @@ Finally, the joining node establishes a secure channel with the Group Manager, a
 
 ### key info Parameter {#key-info}
 
-The "key info" parameter is an OPTIONAL parameter of the AS Request Creation Hints message defined in Section 5.1.2. of {{I-D.ietf-ace-oauth-authz}}. This parameter contains information about the key to be used in the security association between the Client and the RS. Its format is application specific.
+The 'key info' parameter is an OPTIONAL parameter of the AS Request Creation Hints message defined in Section 5.1.2. of {{I-D.ietf-ace-oauth-authz}}. This parameter contains information about the key to be used in the security association between the Client and the RS. Its format is application specific.
 
 ## Join Request {#ssec-join-req}
 
