@@ -247,11 +247,11 @@ The following subsections describe the interactions between the joining node and
 
 The joining node posts the Access Token to the /authz-info endpoint at the Group Manager, according to the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
-If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and includes also the parameter 'key_info' defined in {{key-info}} and registered in {{iana-kinfo}}, encoding the CBOR simple value Null. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and includes also the parameter 'key info' defined in {{key-info}} and registered in {{iana-kinfo}}, encoding the CBOR simple value Null. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
 If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE.
 
-The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key_info' parameter, which MUST be present if the POST request included the 'key_info' parameter with value Null. If present, the 'key_info' parameter of the 2.01 (Created) response is a CBOR array formatted as follows:
+The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key info' parameter, which MUST be present if the POST request included the 'key info' parameter with value Null. If present, the 'key info' parameter of the 2.01 (Created) response is a CBOR array formatted as follows:
 
 * The first element is an integer or a text string and indicates the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
@@ -286,7 +286,7 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}} and Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. If this yields a positive outcome, the Group Manager performs the following check. In case the Join Request included the 'client_cred' parameter, the Group Manager checks that the public key of the joining node is consistent with the counter signature algorithm used in the OSCORE group.
 
-If the public key of the joining node does not have an accepted format, the Group Manager MUST reply to the joining node with a 2.01 (Created) response. The payload of this response is a CBOR map, which includes a 'kid' parameter formatted as in the Token POST response in {{ssec-token-post}}. Upon receiving this response, the joining node SHOULD send a new Join Request to the Group Manager, with the 'client_cred' parameter including its public key in a format consistent with the countersignature algorithm indicated by the Group Manager.
+If the public key of the joining node does not have an accepted format, the Group Manager MUST reply to the joining node with a 2.01 (Created) response. The payload of this response is a CBOR map, which includes a 'key info' parameter formatted as in the Token POST response in {{ssec-token-post}}. Upon receiving this response, the joining node SHOULD send a new Join Request to the Group Manager, with the 'client_cred' parameter including its public key in a format consistent with the countersignature algorithm indicated by the Group Manager.
 
 Otherwise, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
 
