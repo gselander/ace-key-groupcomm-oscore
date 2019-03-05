@@ -243,21 +243,34 @@ In particular, if symmetric keys are used, the AS generates a proof-of-possessio
 
 The following subsections describe the interactions between the joining node and the Group Manager, i.e. the Access Token post and the Request-Response exchange to join the OSCORE group.
 
-## Token post {#ssec-token-post}
+## Token Post {#ssec-token-post}
 
 The joining node posts the Access Token to the /authz-info endpoint at the Group Manager, according to the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
-If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and includes also the parameter 'kid' defined in Section 5.1.2 of {{I-D.ietf-ace-oauth-authz}}, encoding the CBOR simple value Null as a CBOR Byte String. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}) and includes also the parameter 'key_info' defined in {{key-info}} and registered in {{iana-kinfo}}, encoding the CBOR simple value Null. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
 If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE.
 
-The payload of the 2.01 (Created) response MAY be a CBOR map including a 'kid' parameter, which MUST be present if the POST request included the 'kid' parameter encoding the CBOR simple value Null. If present, the 'kid' parameter of the 2.01 (Created) response wraps as a CBOR Byte String a CBOR array formatted as follows:
+The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key_info' parameter, which MUST be present if the POST request included the 'key_info' parameter with value Null. If present, the 'key_info' parameter of the 2.01 (Created) response is a CBOR array formatted as follows:
 
-* The first element is an integer, which MUST be present and indicates the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
+* The first element is an integer or a text string and indicates the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
-* The second element MAY be present and indicates the counter signature algorithm parameters, encoded as specified in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+* The second element indicates the counter signature algorithm parameters. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted, if there are no parameters for that algorithm value.
+
+The CDDL notation of the key info parameter is given below.
+
+~~~~~~~~~~~ CDDL
+   key_info = [
+     sign_alg : int / tstr,
+     ? sign_parameters : any
+   ]
+~~~~~~~~~~~
 
 Finally, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and the signalled profile of ACE.
+
+### key info Parameter {#key-info}
+
+The "key info" parameter is an OPTIONAL parameter of the AS Request Creation Hints message defined in Section 5.1.2. of {{I-D.ietf-ace-oauth-authz}}. This parameter contains information about the key to be used in the security association between the Client and the RS. Its format is application specific.
 
 ## Join Request {#ssec-join-req}
 
@@ -374,6 +387,15 @@ Further security considerations are inherited from {{I-D.ietf-ace-key-groupcomm}
 # IANA Considerations {#sec-iana}
 
 This document has the following actions for IANA.
+
+## ACE Authorization Server Request Creation Hints {#iana-kinfo}
+
+IANA is asked to register the following entry in the "ACE Authorization Server Request Creation Hints" Registry defined in Section 8.1 of {{I-D.ietf-ace-oauth-authz}}.
+
+* Name: key info
+* CBOR Key: TBD (range -256 to 255)
+* Value Type: any
+* Reference: \[\[this specification\]\]
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
