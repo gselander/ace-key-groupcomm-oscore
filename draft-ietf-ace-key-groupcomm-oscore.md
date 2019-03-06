@@ -253,9 +253,9 @@ If the Access Token is valid, the Group Manager responds to the POST request wit
 
 The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key info' parameter, which MUST be present if the POST request included the 'key info' parameter with value Null. If present, the 'key info' parameter of the 2.01 (Created) response is a CBOR array formatted as follows:
 
-* The first element is an integer or a text string indicating the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
+* The first element is an integer or a text string, indicating the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
-* The second element indicates the counter signature algorithm parameters. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted if there are no parameters for that algorithm value.
+* The second element indicates the parameters of the counter signature algorithm. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted if there are no parameters for that algorithm value.
 
 The CDDL notation of the 'key info' parameter is given below.
 
@@ -268,7 +268,7 @@ The CDDL notation of the 'key info' parameter is given below.
 
 Finally, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and the signalled profile of ACE.
 
-### key info Parameter {#key-info}
+### 'key info' Parameter {#key-info}
 
 The 'key info' parameter is an OPTIONAL parameter of the AS Request Creation Hints message defined in Section 5.1.2. of {{I-D.ietf-ace-oauth-authz}}. This parameter contains information about the key to be used in the security association between the Client and the RS. Its format is application specific.
 
@@ -434,7 +434,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 *  Name: coap_group_oscore
 *  Description: Profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
 *  CBOR Value: TBD
-*  Reference: \[\[this specification\]\]
+*  Reference: \[\[This specification\]\]
 
 --- back
 
@@ -457,7 +457,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
 
-The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Rikard Hoeglund, Jim Schaad, Ludwig Seitz, G&ouml;ran Selander and Peter van der Stok for their comments and feedback.
+The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Rikard Hoeglund, Jim Schaad, Ludwig Seitz, Goeran Selander and Peter van der Stok for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Plus project CRITISEC; and by the EIT-Digital High Impact Initiative ACTIVE.
 
