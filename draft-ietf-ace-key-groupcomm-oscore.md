@@ -459,6 +459,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Rikard Hoeglund, Jim Schaad, Ludwig Seitz, Goeran Selander and Peter van der Stok for their comments and feedback.
 
-The work on this document has been partly supported by VINNOVA and the Celtic-Plus project CRITISEC; and by the EIT-Digital High Impact Initiative ACTIVE.
+The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the EIT-Digital High Impact Initiative ACTIVE.
 
 --- fluff
