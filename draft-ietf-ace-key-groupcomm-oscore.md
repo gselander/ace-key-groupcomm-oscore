@@ -64,6 +64,7 @@ normative:
 
 informative:
   I-D.ietf-ace-dtls-authorize:
+  I-D.tiloca-core-oscore-discovery:
   RFC6347:
   RFC6749:
   RFC7390:
@@ -220,7 +221,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
     * in the second element, the role(s) that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: \["requester" , "listener"\]; \["requester" , "pure listener"\].
 
-* The 'req_aud' parameter MUST be present and is set to the identifier of the Group Manager.
+* The 'audience' parameter MUST be present and is set to the identifier of the Group Manager.
 
 ## Authorization Response {#ssec-auth-resp}
 
@@ -240,7 +241,36 @@ In particular, if symmetric keys are used, the AS generates a proof-of-possessio
 
 # Joining Node to Group Manager {#sec-joining-node-to-GM}
 
-First, the joining node posts the Access Token to the /authz-info endpoint at the Group Manager, in accordance with the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}. Then, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and to the signalled profile of ACE.
+The following subsections describe the interactions between the joining node and the Group Manager, i.e. the Access Token post and the Request-Response exchange to join the OSCORE group.
+
+## Token Post {#ssec-token-post}
+
+The joining node posts the Access Token to the /authz-info endpoint at the Group Manager, according to the Token post defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}.
+
+If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}, and includes also the parameter 'key info' defined in {{key-info}} and registered in {{iana-kinfo}}, encoding the CBOR simple value Null. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+
+If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE.
+
+The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key info' parameter, which MUST be present if the POST request included the 'key info' parameter with value Null. If present, the 'key info' parameter of the 2.01 (Created) response is a CBOR array formatted as follows:
+
+* The first element is an integer or a text string, indicating the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
+
+* The second element indicates the parameters of the counter signature algorithm. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted if there are no parameters for that algorithm value.
+
+The CDDL notation of the 'key info' parameter is given below.
+
+~~~~~~~~~~~ CDDL
+   key_info = [
+     sign_alg : int / tstr,
+     ? sign_parameters : any
+   ]
+~~~~~~~~~~~
+
+Finally, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and the signalled profile of ACE.
+
+### 'key info' Parameter {#key-info}
+
+The 'key info' parameter is an OPTIONAL parameter of the AS Request Creation Hints message defined in Section 5.1.2. of {{I-D.ietf-ace-oauth-authz}}. This parameter contains information about the key to be used in the security association between the Client and the RS. Its format is application specific.
 
 ## Join Request {#ssec-join-req}
 
@@ -250,17 +280,21 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the join process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
-* The 'client_cred' parameter, if present, includes the public key of the joining node. This parameter MAY be omitted if: i) public keys are used as proof-of-possession keys between the joining node and the Group Manager; or ii) the joining node is asking to access the group exclusively as pure listener; or iii) the Group Manager already acquired this information during a previous join process. In any other case, this parameter MUST be present.
+* The 'client_cred' parameter, if present, includes the public key of the joining node. In case the joining node knows the countersignature algorithm and possible associated parameters used in the OSCORE group, the included public key MUST be in a consistent format. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as pure listener; or ii) the Group Manager already acquired this information, for instance during a previous join process. In any other case, this parameter MUST be present.
 
 ## Join Response {#ssec-join-resp}
 
-The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}}. If this yields a positive outcome, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
+The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}} and Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. If this yields a positive outcome, the Group Manager performs the following check. In case the Join Request included the 'client_cred' parameter, the Group Manager checks that the public key of the joining node is consistent with the counter signature algorithm and possible associated parameters used in the OSCORE group.
 
-The Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
+If the public key of the joining node does not have an accepted format, the Group Manager MUST reply to the joining node with a 2.01 (Created) response. The payload of this response is a CBOR map, which includes a 'key info' parameter formatted as in the Token POST response in {{ssec-token-post}}. Upon receiving this response, the joining node SHOULD send a new Join Request to the Group Manager, with the 'client_cred' parameter including its own public key in a format consistent with the countersignature algorithm and possible associated parameters indicated by the Group Manager.
+
+Otherwise, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
+
+Then, the Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This join response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
 * The 'kty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter includes a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameter 'cs_alg' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter includes a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg' and 'cs_params' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
@@ -277,6 +311,8 @@ The Group Manager replies to the joining node providing the updated security par
    * The 'rpl' parameter, if present, specifies the OSCORE Replay Window Size and Type value.
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
+
+   * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is encoded as specified in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 * The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
@@ -350,7 +386,18 @@ Further security considerations are inherited from {{I-D.ietf-ace-key-groupcomm}
 
 # IANA Considerations {#sec-iana}
 
+Note to RFC Editor: Please replace all occurrences of "\[\[This specification\]\]" with the RFC number of this specification and delete this paragraph.
+
 This document has the following actions for IANA.
+
+## ACE Authorization Server Request Creation Hints Registry {#iana-kinfo}
+
+IANA is asked to register the following entry in the "ACE Authorization Server Request Creation Hints" Registry defined in Section 8.1 of {{I-D.ietf-ace-oauth-authz}}.
+
+* Name: key info
+* CBOR Key: TBD (range -256 to 255)
+* Value Type: any
+* Reference: \[\[This specification\]\]
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
@@ -360,7 +407,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Key" Registr
 *  Key Type Value: TBD
 *  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 *  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
-*  Reference: \[\[this specification\]\]
+*  Reference: \[\[This specification\]\]
 
 ## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
 
@@ -371,7 +418,14 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithm Values (ECDSA, EdDSA)
 *  Description: OSCORE Counter Signature Algorithm Value
-*  Reference: \[\[this specification\]\]
+*  Reference: \[\[This specification\]\]
+
+*  Name: cs_params
+*  CBOR Label: TBD
+*  CBOR Type: bstr
+*  Registry: Counter Signatures Parameters
+*  Description: OSCORE Counter Signature Algorithm Additional Parameters
+*  Reference: \[\[This specification\]\]
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
@@ -380,15 +434,31 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 *  Name: coap_group_oscore
 *  Description: Profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
 *  CBOR Value: TBD
-*  Reference: \[\[this specification\]\]
+*  Reference: \[\[This specification\]\]
 
 --- back
+
+# Document Updates # {#sec-document-updates}
+
+RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -00 to -01 ## {#sec-00-01}
+
+* Changed name of 'req_aud' to 'audience' in the Authorization Request (Section 3.1).
+
+* Added negotiation of countersignature algorithm/parameters between Client and Group Manager (Section 4).
+
+* Updated format of the Key Distribution Response as a whole (Section 4.3).
+
+* Added parameter 'cs_params' in the 'key' parameter of the Key Distribution Response (Section 4.3).
+
+* New IANA registrations in the "ACE Authorization Server Request Creation Hints" Registry, "ACE Groupcomm Key" Registry, "OSCORE Security Context Parameters" Registry and "ACE Groupcomm Profile" Registry (Section 9).
 
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
 
-The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Jim Schaad, Ludwig Seitz, G&ouml;ran Selander and Peter van der Stok for their comments and feedback.
+The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Martin Gunnarsson, Rikard Hoeglund, Jim Schaad, Ludwig Seitz, Goeran Selander and Peter van der Stok for their comments and feedback.
 
-The work on this document has been partly supported by VINNOVA and by the EIT-Digital High Impact Initiative ACTIVE.
+The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the EIT-Digital High Impact Initiative ACTIVE.
 
 --- fluff
