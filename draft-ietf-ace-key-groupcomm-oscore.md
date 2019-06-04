@@ -343,13 +343,13 @@ Source authentication of OSCORE messages exchanged within the group is ensured b
 
 As also discussed in {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager acts as trusted repository of the public keys of the group members, and provides those public keys to group members if requested to. Upon joining an OSCORE group, a joining node is thus expected to provide its own public key to the Group Manager.
 
-In particular, four cases can occur when a new node joins a group.
+In particular, one of the following four cases can occur when a new node joins a group.
 
-* The joining node is going to join the group exclusively as pure listener. That is, it is not going to send messages to the group, and hence to produce signatures with its own private key. In this case, the joining node is not required to provide its own public key to the Group Manager upon joining the group.
+* The joining node is going to join the group exclusively as pure listener. That is, it is not going to send messages to the group, and hence to produce signatures with its own private key. In this case, the joining node is not required to provide its own public key to the Group Manager, which thus does not have to perform any check related to a countersignature algorithm and its parameters for that joining node.
 
-* The Group Manager already acquired the public key of the joining node during a previous join process. In this case, the joining node may not provide again its own public key to the Group Manager, in order to limit the size of the join request.
+* The Group Manager already acquired the public key of the joining node during a previous join process. In this case, the joining node may not provide again its own public key to the Group Manager, in order to limit the size of the join request. If the joining node provides its own public key anyway, the Group Manager performs consistency checks on the public key as in {{ssec-join-resp}}.
 
-* The joining node and the Group Manager use an asymmetric proof-of-possession key to establish a secure communication channel. In this case, the Group Manager stores the proof-of-possession key conveyed in the Access Token as the public key of the joining node.
+* The joining node and the Group Manager use an asymmetric proof-of-possession key to establish a secure communication channel. In this case, the Group Manager stores the proof-of-possession key conveyed in the Access Token as the public key of the joining node. However, if the stored proof-of-possession key is not consistent with the counter signature algorithm and possible assocated parameters used in the OSCORE group, the joining node has to provide a different consistent public key to the Group Manager, in the 'client_cred' parameter of the join request targeting the join endpoint (see {{ssec-join-req}}). Then, the Group Manager performs consistency checks on this latest provided public key as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
 
 * The joining node and the Group Manager use a symmetric proof-of-possession key to establish a secure communication channel. In this case, upon performing a join process with that Group Manager for the first time, the joining node specifies its own public key in the 'client_cred' parameter of the join request targeting the join endpoint (see {{ssec-join-req}}).
 
