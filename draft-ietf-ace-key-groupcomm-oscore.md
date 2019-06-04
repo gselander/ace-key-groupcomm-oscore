@@ -271,7 +271,7 @@ Finally, the joining node establishes a secure channel with the Group Manager, a
 
 ### 'key info' Parameter {#key-info}
 
-The 'key info' parameter is an OPTIONAL parameter of the AS Request Creation Hints message defined in Section 5.1.2. of {{I-D.ietf-ace-oauth-authz}}. This parameter contains information about the key to be used in the security association between the Client and the RS. Its format is application specific.
+The 'key info' parameter is an OPTIONAL parameter of the AS Request Creation Hints message defined in Section 5.1.2. of {{I-D.ietf-ace-oauth-authz}}. This parameter contains information about the key to be used in the security association between the Client and the RS. Its exact content is application specific.
 
 ## Join Request {#ssec-join-req}
 
