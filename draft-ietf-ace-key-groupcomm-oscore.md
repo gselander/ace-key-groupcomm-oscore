@@ -285,9 +285,13 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 ## Join Response {#ssec-join-resp}
 
-The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}} and Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. If this yields a positive outcome, the Group Manager performs the following check. In case the Join Request included the 'client_cred' parameter, the Group Manager checks that the public key of the joining node is consistent with the counter signature algorithm and possible associated parameters used in the OSCORE group.
+The Group Manager processes the request according to {{I-D.ietf-ace-oauth-authz}} and Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. If this yields a positive outcome, the Group Manager performs the following checks.
 
-If the public key of the joining node does not have an accepted format, the Group Manager MUST reply to the joining node with a 2.01 (Created) response. The payload of this response is a CBOR map, which includes a 'key info' parameter formatted as in the Token POST response in {{ssec-token-post}}. Upon receiving this response, the joining node SHOULD send a new Join Request to the Group Manager, with the 'client_cred' parameter including its own public key in a format consistent with the countersignature algorithm and possible associated parameters indicated by the Group Manager.
+* In case the Join Request include the 'client_cred' parameter, the Group Manager checks that the public key of the joining node is consistent with the counter signature algorithm and possible associated parameters used in the OSCORE group. The join process fails if the public key of the joining node does not have an accepted format.
+
+* In case the Join Request does not include the 'client_cred' parameter, the Group Manager checks whether it is already storing a public key for the joining node, which is consistent with the counter signature algorithm and possible associated parameters used in the OSCORE group. The join process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
+
+If the join process has failed, the Group Manager MUST reply to the joining node with a 2.01 (Created) response. The payload of this response is a CBOR map, which includes a 'key info' parameter formatted as in the Token POST response in {{ssec-token-post}}. Upon receiving this response, the joining node SHOULD send a new Join Request to the Group Manager, with the 'client_cred' parameter including its own public key in a format consistent with the countersignature algorithm and possible associated parameters indicated by the Group Manager.
 
 Otherwise, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
 
