@@ -75,7 +75,7 @@ informative:
 
 --- abstract
 
-This document describes a method to request and provision keying material in group communication scenarios where the group communication is based on CoAP and secured with Object Security for Constrained RESTful Environments (OSCORE). The proposed method delegates the authentication and authorization of new client nodes that join an OSCORE group through a Group Manager server. This approach builds on the ACE framework for Authentication and Authorization, and leverages protocol-specific profiles of ACE to achieve communication security, proof-of-possession and server authentication.
+This document describes a method to request and provision keying material in group communication scenarios where the group communication is based on CoAP and secured with Object Security for Constrained RESTful Environments (OSCORE). The proposed method delegates the authentication and authorization of new client nodes that join an OSCORE group through a Group Manager server. This approach builds on the ACE framework for Authentication and Authorization, and leverages protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication.
 
 --- middle
 
@@ -97,7 +97,7 @@ A client node joins an OSCORE group through a resource server acting as Group Ma
 
 Messages exchanged among the participants follow the formats defined in {{I-D.ietf-ace-key-groupcomm}} for provisioning and renewing keying material in group communication scenarios.
 
-In order to achieve communication security, proof-of-possession and server authentication, the client and the Group Manager leverage protocol-specific profiles of ACE. These include also possible forthcoming profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
+In order to achieve communication security, proof-of-possession and server authentication, the client and the Group Manager leverage protocol-specific transport profiles of ACE. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
 ## Terminology {#ssec-terminology}
 
@@ -176,9 +176,9 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
 
-In particular, communications between the joining node and the Group Manager leverage protocol-specific profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS must signal the specific profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}.
+In particular, communications between the joining node and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS must signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}.
 
-With reference to the AS, communications between the joining node and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}} or OSCORE {{I-D.ietf-core-object-security}}. Further details on how the AS secures communications (with the joining node and the Group Manager) depend on the specifically used profile of ACE, and are out of the scope of this specification.
+With reference to the AS, communications between the joining node and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}} or OSCORE {{I-D.ietf-core-object-security}}. Further details on how the AS secures communications (with the joining node and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this specification.
 
 ## Overview of the Join Process {#ssec-overview-join-process}
 
@@ -238,7 +238,7 @@ The 'exp' parameter MUST be present. Other means for the AS to specify the lifet
 
 The AS must include the 'scope' parameter in the response when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of 'scope' MUST be present and includes the role or CBOR array of roles that the joining node is actually authorized to take in the group, encoded as specified in {{ssec-auth-req}} of this document.
 
-Also, the 'profile' parameter indicates the specific profile of ACE to use for securing communications between the joining node and the Group Manager (see Section 5.6.4.3 of {{I-D.ietf-ace-oauth-authz}}).
+Also, the 'profile' parameter indicates the specific transport profile of ACE to use for securing communications between the joining node and the Group Manager (see Section 5.6.4.3 of {{I-D.ietf-ace-oauth-authz}}).
 
 In particular, if symmetric keys are used, the AS generates a proof-of-possession key, binds it to the Access Token, and provides it to the joining node in the 'cnf' parameter of the  Access Token response. Instead, if asymmetric keys are used, the joining node provides its own public key to the AS in the 'req_cnf' parameter of the Access Token request. Then, the AS uses it as proof-of-possession key bound to the Access Token, and provides the joining node with the Group Manager's public key in the 'rs_cnf' parameter of the Access Token response.
 
@@ -252,7 +252,7 @@ The joining node posts the Access Token to the /authz-info endpoint at the Group
 
 If the joining node is not aware of the countersignature algorithm and related parameters used in the OSCORE group, it may want to get that information from the Group Manager. In such a case, the CoAP POST request uses the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}, and includes also the parameter 'key info' defined in {{key-info}} and registered in {{iana-kinfo}}, encoding the CBOR simple value Null. Alternatively, the joining node may retrieve that information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
-If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled profile of ACE.
+If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled transport profile of ACE.
 
 The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key info' parameter, which MUST be present if the POST request included the 'key info' parameter with value Null. If present, the 'key info' parameter of the 2.01 (Created) response is a CBOR array formatted as follows:
 
@@ -272,7 +272,7 @@ The CDDL notation of the 'key info' parameter is given below.
    ]
 ~~~~~~~~~~~
 
-Finally, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and the signalled profile of ACE.
+Finally, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and the signalled transport profile of ACE.
 
 ### 'key info' Parameter {#key-info}
 
@@ -406,7 +406,7 @@ The method described in this document leverages the following management aspects
 
 Before sending the Join Response, the Group Manager should verify that the joining node actually owns the associated private key, for instance by performing a proof-of-possession challenge-response, whose details are out of the scope of this specification.
 
-Further security considerations are inherited from {{I-D.ietf-ace-key-groupcomm}}, the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, and the specific profile of ACE signalled by the AS, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
+Further security considerations are inherited from {{I-D.ietf-ace-key-groupcomm}}, the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, and the specific transport profile of ACE signalled by the AS, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
 
 # IANA Considerations {#sec-iana}
 
@@ -451,12 +451,12 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
 *  Reference: \[\[This specification\]\]
 
-## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
+## ACE Groupcomm Application Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.2 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Application Profile" Registry defined in Section 9.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore
-*  Description: Profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
+*  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
 *  CBOR Value: TBD
 *  Reference: \[\[This specification\]\]
 
@@ -476,7 +476,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Added parameter 'cs_params' in the 'key' parameter of the Key Distribution Response (Section 4.3).
 
-* New IANA registrations in the "ACE Authorization Server Request Creation Hints" Registry, "ACE Groupcomm Key" Registry, "OSCORE Security Context Parameters" Registry and "ACE Groupcomm Profile" Registry (Section 9).
+* New IANA registrations in the "ACE Authorization Server Request Creation Hints" Registry, "ACE Groupcomm Key" Registry, "OSCORE Security Context Parameters" Registry and "ACE Groupcomm Application Profile" Registry (Section 9).
 
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
