@@ -256,14 +256,17 @@ The payload of the 2.01 (Created) response MAY be a CBOR map including a 'key in
 
 * The first element is an integer or a text string, indicating the counter signature algorithm used in the OSCORE group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
-* The second element indicates the parameters of the counter signature algorithm. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted if there are no parameters for that algorithm value.
+* The second element, if present, indicates the parameters of the counter signature algorithm. Its structure depends on the value of the first element, and is defined in the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted if there are no signature parameters for that algorithm value.
+
+* The third element, if present, indicates the parameters of the key used with the counter signature algorithm. Its structure depends on the value of the first element, and is defined in the Counter Signature Key Parameters Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}). This parameter MUST be omitted if there are no signature key parameters for that algorithm value.
 
 The CDDL notation of the 'key info' parameter is given below.
 
 ~~~~~~~~~~~ CDDL
    key_info = [
      sign_alg : int / tstr,
-     ? sign_parameters : any
+     ? sign_parameters : any,
+     ? sign_key_parameters : any
    ]
 ~~~~~~~~~~~
 
