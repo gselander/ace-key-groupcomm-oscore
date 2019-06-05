@@ -65,10 +65,12 @@ normative:
 informative:
   I-D.dijk-core-groupcomm-bis:
   I-D.ietf-ace-dtls-authorize:
+  I-D.ietf-core-coap-pubsub:
   I-D.tiloca-core-oscore-discovery:
   RFC6347:
   RFC6749:
   RFC7390:
+  RFC7641:
   RFC8152:
 
 --- abstract
@@ -381,6 +383,16 @@ The Group Manager uses the same format of the Join Response message in {{ssec-jo
 * The 'contextId' parameter of the 'key' parameter specifies the new Group ID.
 
 The Group Manager separately sends a group rekeying message to each group member to be rekeyed. Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the join process.
+
+This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{I-D.ietf-core-object-security}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
+
+Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}, and are based on the following rationale:
+
+* A group member queries the Group Manager for updated group keying material, by sending a dedicated request to the same join resource targeted when joining the group.
+
+* A group member subscribes for updates to the join resource and its associated group keying material on the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
+
+Either case, the Group Manager provides the (updated) group keying material as specified above in this section.
 
 # Security Considerations {#sec-security-considerations}
 
