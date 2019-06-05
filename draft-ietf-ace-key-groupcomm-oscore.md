@@ -488,6 +488,24 @@ IANA is asked to register the following entry in the "ACE Groupcomm Application 
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -01 to -02 ## {#sec-01-02}
+
+* Editorial fixes.
+
+* Changed: "listener" to "responder"; "pure listener" to "monitor".
+
+* Challenge-response for proof-of-possession of signature keys (Section 4).
+
+* Extended 'key_info' parameter, now including also parameters of the countersignature key (Section 4.1).
+
+* Code 4.00 (Bad request), in responses to joining nodes providing an invalid public key (Section 4.3).
+
+* Clarifications on provisioning and checking of public keys (Sections 4.6 and 6).
+
+* Extended discussion on group rekeying and possible different approaches (Section 7).
+
+* Extended security considerations: proof-of-possession of signature keys; collision of OSCORE Group Identifiers (Section 8).
+
 ## Version -00 to -01 ## {#sec-00-01}
 
 * Changed name of 'req_aud' to 'audience' in the Authorization Request (Section 3.1).
