@@ -119,9 +119,9 @@ This document refers also to the following terminology.
 
 * Requester: member of an OSCORE group that sends request messages to other members of the group.
 
-* Listener: member of an OSCORE group that receives request messages from other members of the group. A listener may reply back, by sending a response message to the requester which has sent the request message.
+* Responder: member of an OSCORE group that receives request messages from other members of the group. A responder may reply back, by sending a response message to the requester which has sent the request message.
 
-* Pure listener: member of a group that is configured as listener and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
+* Monitor: member of a group that is configured as responder and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
 * Group rekeying process: the process through which the Group Manager renews the security parameters and group keying material, and (re-)distributes them to the OSCORE group members.
 
@@ -220,7 +220,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
     - in the first element, either the Group Identifier (Gid) of the group to join under the Group Manager, or a value from which the Group Manager can derive the Gid of the group to join. It is up to the application to define how the Group Manager possibly performs the derivation of the full Gid. Appendix C of {{I-D.ietf-core-oscore-groupcomm}} provides an example of structured Gid, composed of a fixed part, namely Group Prefix, and a variable part, namely Group Epoch.
 
-    * in the second element, the role or CBOR array of roles that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "listener"; and "pure listener". Possible combinations are: \["requester" , "listener"\]; \["requester" , "pure listener"\].
+    * in the second element, the role or CBOR array of roles that the joining node intends to have in the group it intends to join. Possible values are: "requester"; "responder"; and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
 
 * The 'audience' parameter MUST be present and is set to the identifier of the Group Manager.
 
@@ -281,7 +281,7 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the join process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
-* The 'client_cred' parameter, if present, includes the public key of the joining node. In case the joining node knows the countersignature algorithm and possible associated parameters used in the OSCORE group, the included public key MUST be in a consistent format. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as pure listener; or ii) the Group Manager already acquired this information, for instance during a previous join process. In any other case, this parameter MUST be present.
+* The 'client_cred' parameter, if present, includes the public key of the joining node. In case the joining node knows the countersignature algorithm and possible associated parameters used in the OSCORE group, the included public key MUST be in a consistent format. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as monitor; or ii) the Group Manager already acquired this information, for instance during a previous join process. In any other case, this parameter MUST be present.
 
 ## Join Response {#ssec-join-resp}
 
@@ -303,7 +303,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
-   * The 'clientId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager. This parameter is not present if the node joins the group exclusively as pure listener, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
+   * The 'clientId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager. This parameter is not present if the node joins the group exclusively as monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
 
    * The 'hkdf' parameter, if present, has as value the KDF algorithm used in the group.
 
@@ -323,7 +323,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
 * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from the 'key' parameter is not valid anymore.
 
-* The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the non-pure listeners currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as listener or pure listener.
+* The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the join request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor.
 
 * The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}).
 
@@ -349,7 +349,7 @@ As also discussed in {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager acts 
 
 In particular, one of the following four cases can occur when a new node joins an OSCORE group.
 
-* The joining node is going to join the group exclusively as pure listener. That is, it is not going to send messages to the group, and hence to produce signatures with its own private key. In this case, the joining node is not required to provide its own public key to the Group Manager, which thus does not have to perform any check related to a countersignature algorithm and its parameters for that joining node.
+* The joining node is going to join the group exclusively as monitor. That is, it is not going to send messages to the group, and hence to produce signatures with its own private key. In this case, the joining node is not required to provide its own public key to the Group Manager, which thus does not have to perform any check related to a countersignature algorithm and its parameters for that joining node.
 
 * The Group Manager already acquired the public key of the joining node during a previous join process. In this case, the joining node MAY not provide again its own public key to the Group Manager, in order to limit the size of the join request. The joining node MUST provide its own public key again if it has provided the Group Manager with multiple public keys during previous join processes, intended for different OSCORE groups. If the joining node provides its own public key, the Group Manager performs consistency checks as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
 
@@ -387,7 +387,7 @@ The method described in this document leverages the following management aspects
 
 * Provisioning and retrieval of public keys (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager acts as key repository of public keys of group members, and provides them upon request.
 
-* Synchronization of sequence numbers (see Section 5 of {{I-D.ietf-core-oscore-groupcomm}}). This concerns how a listener node that has just joined an OSCORE group can synchronize with the sequence number of requesters in the same group.
+* Synchronization of sequence numbers (see Section 5 of {{I-D.ietf-core-oscore-groupcomm}}). This concerns how a responder node that has just joined an OSCORE group can synchronize with the sequence number of requesters in the same group.
 
 Before sending the join response, the Group Manager should verify that the joining node actually owns the associated private key, for instance by performing a proof-of-possession challenge-response, whose details are out of the scope of this specification.
 
