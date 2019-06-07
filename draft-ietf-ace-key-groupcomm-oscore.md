@@ -324,7 +324,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
 * The 'kty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg' and 'cs_params' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg', 'cs_params' and 'cs_key_params' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
@@ -342,7 +342,9 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
-   * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is encoded as specified in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+   * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}.
+
+   * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 * The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
@@ -468,9 +470,16 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 *  Name: cs_params
 *  CBOR Label: TBD
-*  CBOR Type: bstr
+*  CBOR Type: map
 *  Registry: Counter Signatures Parameters
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
+*  Reference: \[\[This specification\]\]
+
+*  Name: cs_key_params
+*  CBOR Label: TBD
+*  CBOR Type: map
+*  Registry: Counter Signatures Key Parameters
+*  Description: OSCORE Counter Signature Key Additional Parameters
 *  Reference: \[\[This specification\]\]
 
 ## ACE Groupcomm Application Profile Registry {#ssec-iana-groupcomm-profile-registry}
