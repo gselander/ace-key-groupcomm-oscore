@@ -346,7 +346,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
    * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-* The 'profile' parameter MUST be present and has value "coap_group_oscore", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
+* The 'profile' parameter MUST be present and has value "coap_group_oscore_app", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from the 'key' parameter is not valid anymore.
 
@@ -453,7 +453,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Key" Registr
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD
-*  Profile: "coap_group_oscore", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
+*  Profile: "coap_group_oscore_app", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 *  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
 *  Reference: \[\[This specification\]\]
 
@@ -486,7 +486,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 IANA is asked to register the following entry in the "ACE Groupcomm Application Profile" Registry defined in Section 9.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
-*  Name: coap_group_oscore
+*  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
 *  CBOR Value: TBD
 *  Reference: \[\[This specification\]\]
@@ -502,6 +502,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Editorial fixes.
 
 * Changed: "listener" to "responder"; "pure listener" to "monitor".
+
+* Changed profile name to "coap_group_oscore_app", to reflect it is an application profile.
 
 * Challenge-response for proof-of-possession of signature keys (Section 4).
 
