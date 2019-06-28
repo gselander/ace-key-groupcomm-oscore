@@ -55,6 +55,7 @@ author:
 normative:
   RFC2119:
   RFC7252:
+  RFC8152:
   RFC8174:
   I-D.ietf-core-object-security:
   I-D.ietf-core-oscore-groupcomm:
@@ -72,7 +73,6 @@ informative:
   RFC6749:
   RFC7390:
   RFC7641:
-  RFC8152:
 
 --- abstract
 
@@ -297,7 +297,7 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 Furthermore, the CBOR map specified as payload of the Join Request MAY also include the following additional parameter, which MUST be present if the 'client_cred' parameter is present.
 
-* The 'client_cred_verify' parameter, which is encoded as a CBOR byte string and contains a signature computed by the joining node, in order to prove possession of its own private key. In particular, the signature is computed over the nonce N received in the 2.01 (Created) response to the Token POST (see {{ssec-token-post}}). The joining node computes the signature by using the same private key and countersignature algorithm it intends to use for signing messages in the OSCORE group.
+* The 'client_cred_verify' parameter, which is encoded as a CBOR byte string and contains a signature computed by the joining node, in order to prove possession of its own private key. The signature is computed over the nonce N received in the 2.01 (Created) response to the Token POST (see {{ssec-token-post}}). In particular, the joining node MUST use the COSE_CounterSignature0 object {{RFC8152}}, with the Sig_structure containing the nonce N as payload; and an empty external_aad. The joining node computes the signature by using the same private key and countersignature algorithm it intends to use for signing messages in the OSCORE group.
 
 ## Join Response {#ssec-join-resp}
 
