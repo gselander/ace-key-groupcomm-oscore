@@ -449,7 +449,7 @@ IANA is asked to register the following entry in the "ACE Authorization Server R
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.1 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 10.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD
@@ -482,9 +482,9 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Key Additional Parameters
 *  Reference: \[\[This specification\]\]
 
-## ACE Groupcomm Application Profile Registry {#ssec-iana-groupcomm-profile-registry}
+## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Application Profile" Registry defined in Section 9.2 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 10.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -527,7 +527,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Added parameter 'cs_params' in the 'key' parameter of the Key Distribution Response (Section 4.3).
 
-* New IANA registrations in the "ACE Authorization Server Request Creation Hints" Registry, "ACE Groupcomm Key" Registry, "OSCORE Security Context Parameters" Registry and "ACE Groupcomm Application Profile" Registry (Section 9).
+* New IANA registrations in the "ACE Authorization Server Request Creation Hints" Registry, "ACE Groupcomm Key" Registry, "OSCORE Security Context Parameters" Registry and "ACE Groupcomm Profile" Registry (Section 9).
 
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
