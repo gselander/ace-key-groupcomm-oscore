@@ -67,6 +67,7 @@ informative:
   I-D.ietf-ace-dtls-authorize:
   I-D.ietf-core-coap-pubsub:
   I-D.tiloca-core-oscore-discovery:
+  I-D.ietf-core-echo-request-tag:
   RFC6347:
   RFC6749:
   RFC7390:
@@ -352,7 +353,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
 * The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the Join Request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor.
 
-* The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, it can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}).
+* The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, its field "Sequence Number Synchronization Method" can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as indicated by the corresponding value from the "Sequence Number Synchronization Method" Registry defined in Section 10.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 Finally, the joining node uses the information received in the Join Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}.
 
@@ -491,6 +492,25 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 *  CBOR Value: TBD
 *  Reference: \[\[This specification\]\]
 
+## Sequence Number Synchronization Method Registry {#ssec-iana-sn-synch-method-registry}
+
+IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 10.5 of {{I-D.ietf-ace-key-groupcomm}}.
+
+*  Name: Best effort
+*  Value: 0
+*  Description: No action is taken.
+*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.1).
+
+*  Name: Baseline
+*  Value: 1
+*  Description: The first received request sets the baseline reference point, and is discarded with no delivery to the application.
+*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.2).
+
+*  Name: Echo challenge-response
+*  Value: 2
+*  Description: Challenge response using the Echo Option for CoAP from {{I-D.ietf-core-echo-request-tag}}.
+*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.3).
+
 --- back
 
 # Document Updates # {#sec-document-updates}
@@ -516,6 +536,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Extended discussion on group rekeying and possible different approaches (Section 7).
 
 * Extended security considerations: proof-of-possession of signature keys; collision of OSCORE Group Identifiers (Section 8).
+
+* Registered three entries in the IANA Registry "Sequence Number Synchronization Method Registry" (Section 9).
 
 ## Version -00 to -01 ## {#sec-00-01}
 
