@@ -355,7 +355,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
 * The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the Join Request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor.
 
-* The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, its field "Sequence Number Synchronization Method" can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as indicated by the corresponding value from the "Sequence Number Synchronization Method" Registry defined in Section 10.5 of {{I-D.ietf-ace-key-groupcomm}}.
+* The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, its field "Sequence Number Synchronization Method" can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as indicated by the corresponding value from the "Sequence Number Synchronization Method" Registry defined in Section 11.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 Finally, the joining node uses the information received in the Join Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}.
 
@@ -460,7 +460,7 @@ IANA is asked to register the following entry in the "ACE Authorization Server R
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 10.2 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 11.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD
@@ -495,7 +495,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 10.3 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 11.4 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -504,7 +504,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 
 ## Sequence Number Synchronization Method Registry {#ssec-iana-sn-synch-method-registry}
 
-IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 10.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 11.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Best effort
 *  Value: 0
@@ -567,7 +567,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Code 4.00 (Bad request), in responses to joining nodes providing an invalid public key (Section 4.3).
 
-* Clarifications on provisioning and checking of public keys (Sections 4.6 and 6).
+* Clarifications on provisioning and checking of public keys (Sections 4 and 6).
 
 * Extended discussion on group rekeying and possible different approaches (Section 7).
 
