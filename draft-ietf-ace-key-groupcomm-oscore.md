@@ -523,6 +523,30 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 
 --- back
 
+# Profile Requirements # {#profile-req}
+
+This appendix lists the specifications on this application profile of ACE, based on the requiremens defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
+
+* Communication protocol that the members of the group must use: CoAP, possibly over IP multicast.
+
+* Security protocols that the group members must use to protect their communication: Group OSCORE.
+
+* Exact encoding of 'scope': see {{ssec-auth-req}}.
+
+* Negotiation of parameters for signature algorithm and signature keys: three methods are indicated: i) explicit instruction from the Group Manager upon Token POST and response (see {{ssec-token-post}}); ii) explicit instruction from the Group Manager upon trial-and-error group joining (see {{ssec-join-resp}}); iii) pre-knowledge by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
+
+* Profile identifier: coap_group_oscore_app
+
+* Acceptable values of 'kty': "Group_OSCORE_Security_Context object
+
+* Format and content of 'group\_policies' entries: three values are defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
+
+* Specify the format and content of 'mgt\_key\_material': no.
+
+* (Optional) specify transport profile of ACE {{I-D.ietf-ace-oauth-authz}} to use between Client and Group Manager: any transport profile of ACE that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
+
+* (Optional) specify encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: none.
+
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
