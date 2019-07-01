@@ -291,6 +291,8 @@ Once a secure communication channel with the Group Manager has been established,
 
 In particular, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that group. This Join Request follows the format and processing of the Key Distribution Request message defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
+* The 'type' parameter is set to 1 ("key distribution").
+
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the join process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
 * The 'client_cred' parameter, if present, includes the public key of the joining node. In case the joining node knows the countersignature algorithm and possible associated parameters used in the OSCORE group, the included public key MUST be in a consistent format. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as monitor; or ii) the Group Manager already acquired this information, for instance during a past join process. In any other case, this parameter MUST be present.
@@ -359,7 +361,13 @@ Finally, the joining node uses the information received in the Join Response to 
 
 If the application requires backward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to all the current group members (see {{sec-group-rekeying-process}}).
 
-When the OSCORE Security Context expires, as specified by the 'exp' parameter of the Join Response, the node considers it invalid and to be renewed. Then, the node retrieves updated security parameters and keying material, by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}. Finally, the node uses the updated security parameters and keying material to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+When the OSCORE Security Context expires, as specified by the 'exp' parameter of the Join Response, the node considers it invalid and to be renewed. Then, the node retrieves updated security parameters and keying material, by exchanging with the Group Manager a shortened Join Request sent to the same Join Resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}. Finally, the node uses the updated security parameters and keying material to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+
+Furthermore, as discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, the node may at some point experience a wrap-around of its own Sender Sequence Number in the group. When this happens, the node MUST send to the Group Manager a shortened Join Request message to the same Join Resource, with the 'type' parameter set to 4 ("new"). Upon receiving this request message, the Group Manager either rekeys the whole OSCORE group as discussed in {{sec-group-rekeying-process}}, or generates a new Sender ID for that node and replies with a shortened Join Response message where:
+
+* Only the parameters 'type', 'kty', 'key', 'profile' and 'exp' are present.
+
+* The 'clientId' parameter of the 'key' parameter specifies the new Sender ID of the node.
 
 # Leaving of a Group Member # {#sec-leaving}
 
@@ -367,7 +375,7 @@ A node may be removed from the OSCORE group, due to expired or revoked authoriza
 
 If the application requires forward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). The leaving node must not be able to acquire the new security parameters and group keying material distributed after its leaving.
 
-Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC. In particular, a node requests to leave the OSCORE group as described in Section 5.2 of {{I-D.ietf-ace-key-groupcomm}}.
+Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC. In particular, a node requests to leave the OSCORE group as described in Section 5.2 of {{I-D.ietf-ace-key-groupcomm}}, i.e. by sending to the Group Manager a request to the same Join Resource with the 'type' parameter set to 2 ("leave").
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
@@ -391,7 +399,7 @@ In particular, one of the following four cases can occur when a new node joins a
 
 Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. through the 'get_pub_keys' parameter in the Join Request. In this case, the Group Manager includes also such public keys in the 'pub_keys' parameter of the Join Response (see {{ssec-join-resp}}).
 
-Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging shortened Join Request and Join Response messages with the Group Manager, according to the approach defined in Section 7 of {{I-D.ietf-ace-key-groupcomm}}.
+Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging with the Group Manager a shortened Join Request sent to the same Join Resource with the 'type' parameter set to 5 ("pub keys") and a shortened Join Response, according to the approach defined in Section 7 of {{I-D.ietf-ace-key-groupcomm}}.
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
@@ -399,7 +407,7 @@ In order to rekey the OSCORE group, the Group Manager distributes a new Group ID
 
 The Group Manager uses the same format of the Join Response message in {{ssec-join-resp}}. In particular:
 
-* Only the parameters 'kty', 'key', 'profile' and 'exp' are present.
+* Only the parameters 'type', 'kty', 'key', 'profile' and 'exp' are present.
 
 * The 'ms' parameter of the 'key' parameter specifies the new OSCORE Master Secret value.
 
@@ -411,7 +419,7 @@ This approach requires group members to act (also) as servers, in order to corre
 
 Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}, and are based on the following rationale:
 
-* A group member queries the Group Manager for updated group keying material, by sending a dedicated request to the same join resource targeted when joining the group.
+* A group member queries the Group Manager for updated group keying material, by sending a dedicated request to the same Join Resource targeted when joining the group. Like for the case discussed in {{ssec-join-resp}} where the OSCORE Security Context expires, the group member exchanges with the Group Manager a shortened Join Request sent to the same Join Resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * A group member subscribes for updates to the join resource and its associated group keying material on the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
 
@@ -524,6 +532,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Changed: "listener" to "responder"; "pure listener" to "monitor".
 
 * Changed profile name to "coap_group_oscore_app", to reflect it is an application profile.
+
+* Added the 'type' parameter for all requests to a Join Resource.
 
 * Challenge-response for proof-of-possession of signature keys (Section 4).
 
