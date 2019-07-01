@@ -403,7 +403,9 @@ Later on as a group member, the node may need to retrieve the public keys of oth
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
-In order to rekey the OSCORE group, the Group Manager distributes a new Group ID of the group and a new OSCORE Master Secret for that group. To this end, the Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
+In order to rekey the OSCORE group, the Group Manager distributes a new Group ID of the group and a new OSCORE Master Secret for that group. When doing so, the Group Manager MAY take a best effort to preserve the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of message countersignatures.
+
+The Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
 
 The Group Manager uses the same format of the Join Response message in {{ssec-join-resp}}. In particular:
 
