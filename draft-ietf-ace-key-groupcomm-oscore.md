@@ -572,7 +572,7 @@ The columns of this Registry are:
 
 * Reference: This field contains a pointer to the public specification providing the public key encoding, if one exists.
 
-This registry will be initially populated by the value in {{fig-pub-key-enc-values}}.
+This registry will be initially populated by the value in {{fig-pub-key-enc-values}}. The value 0 is to be marked as "Reserved".
 
 ## Expert Review Instructions {#review}
 
