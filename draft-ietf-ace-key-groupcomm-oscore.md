@@ -290,7 +290,7 @@ The 'pub key enc' parameter MUST be present if the POST request included the 'pu
 +----------+-------+--------------------------------+-------------+
 | Name     | Value |          Description           |  Reference  |
 +----------+-------+--------------------------------+-------------+
-| COSE Key |   1   | Public key encoded as COSE Key | {{RFC8152}} |
+| COSE_Key |   1   | Public key encoded as COSE Key | {{RFC8152}} |
 +----------+-------+--------------------------------+-------------+
 ~~~~~~~~~~~
 {: #fig-pub-key-enc-values title="ACE Public Key Encoding Values" artwork-align="center"}
@@ -371,7 +371,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
    * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is taken from the "ACE Public Key Encoding" Registry. If this parameter is not present, 1 ("COSE Key") MUST be assumed as default value.
+  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is taken from the "ACE Public Key Encoding" Registry. If this parameter is not present, 1 ("COSE_Key") MUST be assumed as default value.
 
 * The 'profile' parameter MUST be present and has value "coap_group_oscore_app", which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
