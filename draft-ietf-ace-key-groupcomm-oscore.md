@@ -270,7 +270,7 @@ If present in the response:
 
 * 'sign_key_parameters', i.e. the third element of the 'sign_info' parameter, takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
 
-* 'pub_key_enc' takes value from {{fig-pub-key-enc-values}}, as a public key encoding from the "ACE Public Key Encoding" Registry (see Section 11.2 of {{I-D.ietf-ace-key-groupcomm}}).
+* 'pub_key_enc' takes value from {{fig-pub-key-enc-values}}, as a public key encoding in the "ACE Public Key Encoding" Registry (see Section 11.2 of {{I-D.ietf-ace-key-groupcomm}}).
 
 ~~~~~~~~~~~
 +----------+-------+--------------------------------+-------------+
@@ -349,7 +349,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
    * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is taken from the "ACE Public Key Encoding" Registry. If this parameter is not present, COSE_Key (1) MUST be assumed as default value.
+  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is taken from {{fig-pub-key-enc-values}}, as a public key encoding in the "ACE Public Key Encoding" Registry (see Section 11.2 of {{I-D.ietf-ace-key-groupcomm}}). If this parameter is not present, COSE_Key (1) MUST be assumed as default value.
 
 * The 'profile' parameter MUST be present and has value coap_group_oscore_app (TBD), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
