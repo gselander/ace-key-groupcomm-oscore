@@ -224,7 +224,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
     - in the first element, either the Group Identifier (Gid) of the group to join under the Group Manager, or a value from which the Group Manager can derive the Gid of the group to join. It is up to the application to define how the Group Manager possibly performs the derivation of the full Gid. Appendix C of {{I-D.ietf-core-oscore-groupcomm}} provides an example of structured Gid, composed of a fixed part, namely Group Prefix, and a variable part, namely Group Epoch.
 
-    * in the second element, the role (encoded as a byte string) or CBOR array of roles that the joining node intends to have in the group it intends to join. Accepted values of roles are: "requester", "responder", and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
+    * in the second element, the role (encoded as a text string) or CBOR array of roles that the joining node intends to have in the group it intends to join. Accepted values of roles are: "requester", "responder", and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
 
 * The 'audience' parameter MUST be present and is set to the identifier of the Group Manager.
 
