@@ -266,9 +266,9 @@ If present in the response:
 
 * 'sign_alg', i.e. the first element of the 'sign_info' parameter, takes values from Tables 5 and 6 of {{RFC8152}}.
 
-* 'sign_parameters', i.e. the second element of the 'sign_info' parameter, takes values from the Counter Signature Parameters Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified, 'sign_parameters' MUST be encoding the CBOR simple value Null.
+* 'sign_parameters', i.e. the second element of the 'sign_info' parameter, takes values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified, 'sign_parameters' MUST be encoding the CBOR simple value Null.
 
-* 'sign_key_parameters', i.e. the third element of the 'sign_info' parameter, takes values from the Counter Signature Key Parameters Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
+* 'sign_key_parameters', i.e. the third element of the 'sign_info' parameter, takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
 
 * 'pub_key_enc' has the value specified in {{fig-pub-key-enc-values}}.
 
@@ -535,21 +535,23 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * Security protocols that the group members must use to protect their communication: Group OSCORE.
 
-* Exact encoding of 'scope': see {{ssec-auth-req}}.
-
-* Negotiation of parameters for signature algorithm and signature keys: three methods are indicated: i) explicit instruction from the Group Manager upon Token POST and response (see {{ssec-token-post}}); ii) explicit instruction from the Group Manager upon trial-and-error group joining (see {{ssec-join-resp}}); iii) pre-knowledge by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
+* Specify the encoding and value of the identifier of group and role of 'scope': see {{ssec-auth-req}}.
 
 * Profile identifier: coap_group_oscore_app
 
-* Acceptable values of 'kty': "Group_OSCORE_Security_Context object
+* Acceptable values of 'kty': Group_OSCORE_Security_Context object
 
-* Format and content of 'group\_policies' entries: three values are defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
+* Specify the format and content of 'group\_policies' entries: three values are defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
 
-* Specify the format and content of 'mgt\_key\_material': no.
+* (Optional) specify the format and content of 'mgt\_key\_material': no.
 
-* (Optional) specify transport profile of ACE {{I-D.ietf-ace-oauth-authz}} to use between Client and Group Manager: any transport profile of ACE that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
+* (Optional) specify the transport profile of ACE {{I-D.ietf-ace-oauth-authz}} to use between Client and Group Manager: any transport profile of ACE that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
-* (Optional) specify encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: none.
+* (Optional) specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
+
+* (Optional) specify the acceptable values for parameters related to signature algorithm and signature keys: 'sign_alg' takes values from Tables 5 and 6 of {{RFC8152}}; 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}); 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}); 'pub_key_enc' takes values from {{fig-pub-key-enc-values}} in {{ssec-token-post}}.
+
+* (Optional) specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' and 'pub_key_enc' are not used: pre-knowledge by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
 # Document Updates # {#sec-document-updates}
 
@@ -580,6 +582,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Extended security considerations: proof-of-possession of signature keys; collision of OSCORE Group Identifiers (Section 8).
 
 * Registered three entries in the IANA Registry "Sequence Number Synchronization Method Registry" (Section 9).
+
+* Registered one public key encoding in the "ACE Public Key Encoding" IANA Registry (Section 9).
 
 ## Version -00 to -01 ## {#sec-00-01}
 
