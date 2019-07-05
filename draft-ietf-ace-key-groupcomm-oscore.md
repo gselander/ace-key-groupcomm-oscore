@@ -55,7 +55,6 @@ author:
 normative:
   RFC2119:
   RFC7252:
-  RFC8126:
   RFC8152:
   RFC8174:
   I-D.ietf-core-object-security:
