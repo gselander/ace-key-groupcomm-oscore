@@ -547,6 +547,10 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -02 to -03 ## {#sec-02-03}
+
+TBD
+
 ## Version -01 to -02 ## {#sec-01-02}
 
 * Editorial fixes.
