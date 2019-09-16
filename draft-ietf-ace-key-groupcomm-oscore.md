@@ -54,6 +54,7 @@ author:
 
 normative:
   RFC2119:
+  RFC3986:
   RFC7252:
   RFC8152:
   RFC8174:
@@ -116,7 +117,9 @@ This document refers also to the following terminology.
 
 * Join process: the process through which a joining node becomes a member of an OSCORE group. The join process is enforced and assisted by the Group Manager responsible for that group.
 
-* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the Group Identifier (Gid) of the respective group. A joining node accesses a group-membership resource to start the join process and become a member of that group. The URI path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group.
+* Group name: stable and invariant identifier of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
+
+* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the join process and become a member of that group. The URI path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group.
 
 * Group-membership endpoint: an endpoint at the Group Manager associated to a group-membership resource.
 
@@ -221,7 +224,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
 * The 'scope' parameter MUST be present and MUST include:
 
-    - in the first element, either the Group Identifier (Gid) of the group to join under the Group Manager, or a value from which the Group Manager can derive the Gid of the group to join. It is up to the application to define how the Group Manager possibly performs the derivation of the full Gid. Appendix C of {{I-D.ietf-core-oscore-groupcomm}} provides an example of structured Gid, composed of a fixed part, namely Group Prefix, and a variable part, namely Group Epoch.
+    - in the first element, the name of the OSCORE group to join under the Group Manager.
 
     * in the second element, the role (encoded as a text string) or CBOR array of roles that the joining node intends to have in the group it intends to join. Accepted values of roles are: "requester", "responder", and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
 
