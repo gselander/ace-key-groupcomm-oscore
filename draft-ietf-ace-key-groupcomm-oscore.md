@@ -57,7 +57,7 @@ normative:
   RFC7252:
   RFC8152:
   RFC8174:
-  I-D.ietf-core-object-security:
+  RFC8613:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-oauth-authz:
@@ -82,7 +82,7 @@ This document describes a method to request and provision keying material in gro
 
 # Introduction {#sec-introduction}
 
-Object Security for Constrained RESTful Environments (OSCORE) {{I-D.ietf-core-object-security}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{RFC8152}} and enabling end-to-end security of CoAP payload and options.
+Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{RFC8152}} and enabling end-to-end security of CoAP payload and options.
 
 As described in {{I-D.ietf-core-oscore-groupcomm}}, OSCORE may be used to protect CoAP group communication over IP multicast {{RFC7390}}{{I-D.dijk-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group, where members exchange CoAP messages secured with OSCORE. The Group Manager can be responsible for multiple groups, coordinates the join process of new group members, and is entrusted with the distribution and renewal of group keying material.
 
@@ -108,7 +108,7 @@ Readers are expected to be familiar with the terms and concepts described in the
 
 Readers are expected to be familiar with the terms and concepts related to the CoAP protocol described in {{RFC7252}}{{RFC7390}}{{I-D.dijk-core-groupcomm-bis}}. Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
-Readers are expected to be familiar with the terms and concepts for protection and processing of CoAP messages through OSCORE {{I-D.ietf-core-object-security}} also in group communication scenarios {{I-D.ietf-core-oscore-groupcomm}}. These include the concept of Group Manager, as the entity responsible for a set of groups where communications are secured with OSCORE. In this specification, the Group Manager acts as Resource Server.
+Readers are expected to be familiar with the terms and concepts for protection and processing of CoAP messages through OSCORE {{RFC8613}} also in group communication scenarios {{I-D.ietf-core-oscore-groupcomm}}. These include the concept of Group Manager, as the entity responsible for a set of groups where communications are secured with OSCORE. In this specification, the Group Manager acts as Resource Server.
 
 This document refers also to the following terminology.
 
@@ -116,7 +116,7 @@ This document refers also to the following terminology.
 
 * Join process: the process through which a joining node becomes a member of an OSCORE group. The join process is enforced and assisted by the Group Manager responsible for that group.
 
-* Join resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A join resource is identifiable with the Group Identifier (Gid) of the respective group. A joining node accesses a join resource to start the join process and become a member of that group. The URI of a join resource is fixed.
+* Join resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A join resource is identifiable with the Group Identifier (Gid) of the respective group. A joining node accesses a join resource to start the join process and become a member of that group. The URI path of a join resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group.
 
 * Join endpoint: an endpoint at the Group Manager associated to a join resource.
 
@@ -157,7 +157,7 @@ CoRE | *              *              * * |                    |
 
 # Protocol Overview {#sec-protocol-overview}
 
-Group communication for CoAP over IP multicast has been enabled in {{RFC7390}}{{I-D.dijk-core-groupcomm-bis}} and can be secured with Object Security for Constrained RESTful Environments (OSCORE) {{I-D.ietf-core-object-security}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
+Group communication for CoAP over IP multicast has been enabled in {{RFC7390}}{{I-D.dijk-core-groupcomm-bis}} and can be secured with Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
 
 This specification describes how to use the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}} to:
 
@@ -177,25 +177,25 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
 
-In particular, communications between the joining node and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS must signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}.
+In particular, communications between the joining node and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}. Note that in the commonly referred base-case the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
 
-With reference to the AS, communications between the joining node and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}} or OSCORE {{I-D.ietf-core-object-security}}. Further details on how the AS secures communications (with the joining node and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this specification.
+With reference to the AS, communications between the joining node and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the joining node and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this specification.
 
 ## Overview of the Join Process {#ssec-overview-join-process}
 
 A node performs the following steps in order to join an OSCORE group. Messages exchanged among the participants follow the formats defined in {{I-D.ietf-ace-key-groupcomm}}, and are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document. The Group Manager acts as the Key Distribution Center (KDC) defined in {{I-D.ietf-ace-key-groupcomm}}.
 
-1. The joining node requests an Access Token from the AS, in order to access a join resource on the Group Manager and hence join the associated OSCORE group (see {{sec-joining-node-to-AS}}). The joining node will start or continue using a secure communication channel with the Group Manager, according to the response from the AS.
+1. The joining node requests an Access Token from the AS, in order to access a join resource on the Group Manager and hence join the associated OSCORE group (see {{sec-joining-node-to-AS}}). The joining node will start or continue using a secure communication association with the Group Manager, according to the response from the AS.
 
-2. The joining node transfers authentication and authorization information to the Group Manager by posting the obtained Access Token (see {{sec-joining-node-to-GM}}). After that, a joining node must have a secure communication channel established with the Group Manager, before starting to join an OSCORE group under that Group Manager (see {{sec-joining-node-to-GM}}). Possible ways to provide a secure communication channel are DTLS {{RFC6347}} and OSCORE {{I-D.ietf-core-object-security}}.
+2. The joining node transfers authentication and authorization information to the Group Manager, by posting the obtained Access Token to the /authz-info endpoint at the Group Manager (see {{sec-joining-node-to-GM}}). After that, a joining node must have a secure communication association established with the Group Manager, before starting to join an OSCORE group under that Group Manager (see {{sec-joining-node-to-GM}}). Possible ways to provide a secure communication association are DTLS {{RFC6347}} and OSCORE {{RFC8613}}.
 
 3. The joining node starts the join process to become a member of the OSCORE group, by accessing the related join resource hosted by the Group Manager (see {{sec-joining-node-to-GM}}).
 
 4. At the end of the join process, the joining node has received from the Group Manager the parameters and keying material to securely communicate with the other members of the OSCORE group.
 
-5. The joining node and the Group Manager maintain the secure channel, to support possible future communications.
+5. The joining node and the Group Manager maintain the secure association, to support possible future communications. These especially include key management operations, such as retrieval of updated keying material from the Group Manager or participation to a group rekeying process (see {{ssec-overview-group-rekeying-process}}).
 
-All further communications between the joining node and the Group Manager MUST be secured, for instance with the same secure channel mentioned in step 2.
+All further communications between the joining node and the Group Manager MUST be secured, for instance with the same secure association mentioned in step 2.
 
 ## Overview of the Group Rekeying Process {#ssec-overview-group-rekeying-process}
 
@@ -239,13 +239,13 @@ The 'exp' parameter MUST be present. Other means for the AS to specify the lifet
 
 The AS must include the 'scope' parameter in the response when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of 'scope' MUST be present and includes the role or CBOR array of roles that the joining node is actually authorized to take in the group, encoded as specified in {{ssec-auth-req}} of this document.
 
-Also, the 'profile' parameter indicates the specific transport profile of ACE to use for securing communications between the joining node and the Group Manager (see Section 5.6.4.3 of {{I-D.ietf-ace-oauth-authz}}).
+The AS may also include the 'profile' parameter, in order to indicate the specific transport profile of ACE to use for securing communications between the joining node and the Group Manager (see Section 5.6.4.3 of {{I-D.ietf-ace-oauth-authz}}).
 
 In particular, if symmetric keys are used, the AS generates a proof-of-possession key, binds it to the Access Token, and provides it to the joining node in the 'cnf' parameter of the  Access Token response. Instead, if asymmetric keys are used, the joining node provides its own public key to the AS in the 'req_cnf' parameter of the Access Token request. Then, the AS uses it as proof-of-possession key bound to the Access Token, and provides the joining node with the Group Manager's public key in the 'rs_cnf' parameter of the Access Token response.
 
 # Joining Node to Group Manager {#sec-joining-node-to-GM}
 
-The following subsections describe the interactions between the joining node and the Group Manager, i.e. the Access Token post and the Request-Response exchange to join the OSCORE group.
+The following subsections describe the interactions between the joining node and the Group Manager, i.e. the sending of the Access Token and the Request-Response exchange to join the OSCORE group.
 
 ## Token Post {#ssec-token-post}
 
@@ -257,7 +257,7 @@ Alternatively, the joining node may retrieve this information by other means, e.
 
 If the Access Token is valid, the Group Manager responds to the POST request with a 2.01 (Created) response, according to what is specified in the signalled transport profile of ACE. The Group Manager MUST use the Content-Format "application/ace+cbor" defined in Section 8.14 of {{I-D.ietf-ace-oauth-authz}}.
 
-The payload of the 2.01 (Created) response is a CBOR map, which MUST include the 'cnonce' parameter defined in section 5.1.2 of {{I-D.ietf-ace-oauth-authz}}, and MAY include the 'sign_info' parameter as well as the 'pub_key_enc' parameter.
+The payload of the 2.01 (Created) response is a CBOR map, which MUST include the 'cnonce' parameter defined in section 5.1.2 of {{I-D.ietf-ace-oauth-authz}}, and MAY include the 'sign_info' parameter as well as the 'pub_key_enc' parameter.  Note that this deviates from the default payload format for this response message as defined in the ACE framework (see Section 5.8.1 of {{I-D.ietf-ace-oauth-authz}}).
 
 The 'cnonce' parameter includes a nonce N generated by the Group Manager. The joining node may use this nonce in order to prove the possession of its own private key, upon joining the group (see {{ssec-join-req}}).
 
@@ -280,7 +280,7 @@ If present in the response:
 ~~~~~~~~~~~
 {: #fig-pub-key-enc-values title="ACE Public Key Encoding Values" artwork-align="center"}
 
-Note that the CBOR map specified as payload of the 2.01 (Created) response may include further parameters, e.g. according to the signalled transport profile of ACE.
+The CBOR map specified as payload of the 2.01 (Created) response may include further parameters, e.g. according to the signalled transport profile of ACE.
 
 Finally, the joining node establishes a secure channel with the Group Manager, according to what is specified in the Access Token response and the signalled transport profile of ACE.
 
@@ -294,7 +294,7 @@ In particular, the joining node sends to the Group Manager a confirmable CoAP re
 
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the join process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
-* The 'client_cred' parameter, if present, includes the public key of the joining node. In case the joining node knows the encoding of public keys in the OSCORE group, as well as the countersignature algorithm and possible associated parameters used in the OSCORE group, the included public key MUST be in a consistent format. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as monitor; or ii) the Group Manager already acquired this information, for instance during a past join process. In any other case, this parameter MUST be present.
+* The 'client_cred' parameter, if present, includes the public key of the joining node. In case the joining node knows the encoding of public keys in the OSCORE group, as well as the countersignature algorithm and possible associated parameters used in the OSCORE group, the included public key MUST be compatible with those criteria. That is, the public key MUST be encoded according to the encoding of public keys in the OSCORE group, and MUST be compatible with the countersignature algorithm and possible associated parameters used in the OSCORE group. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as monitor; or ii) the Group Manager already acquired this information, for instance during a past join process. In any other case, this parameter MUST be present.
 
 Furthermore, the CBOR map specified as payload of the Join Request MAY also include the following additional parameter, which MUST be present if the 'client_cred' parameter is present.
 
@@ -306,9 +306,9 @@ The Group Manager processes the Join Request according to {{I-D.ietf-ace-oauth-a
 
 If the request processing yields a positive outcome, the Group Manager performs the further following checks.
 
-* In case the Join Request includes the 'client_cred' parameter, the Group Manager checks that the public key of the joining node has an accepted format. That is, the public key has to be encoded as expected in the OSCORE group, and has to be consistent with the counter signature algorithm and possible associated parameters used in the OSCORE group. The join process fails if the public key of the joining node does not have an accepted format.
+* In case the Join Request includes the 'client_cred' parameter, the Group Manager checks that the public key of the joining node has an accepted format. That is, the public key has to be encoded as expected in the OSCORE group, and has to be compatible with the counter signature algorithm and possible associated parameters used in the OSCORE group. The join process fails if the public key of the joining node does not have an accepted format.
 
-* In case the Join Request does not include the 'client_cred' parameter, the Group Manager checks whether it is storing a public key for the joining node, which is consistent with the encoding, counter signature algorithm and possible associated parameters used in the OSCORE group. The join process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
+* In case the Join Request does not include the 'client_cred' parameter, the Group Manager checks whether it is storing a public key for the joining node, which is compatible with the encoding, counter signature algorithm and possible associated parameters used in the OSCORE group. The join process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
 * In case the Join Request includes the 'client_cred_verify' parameter, the Group Manager verifies the signature contained in the parameter. To this end, it considers: i) as signed value, the nonce N previously provided in the 2.01 (Created) response to the Token POST (see {{ssec-token-post}}); ii) the countersignature algorithm used in the OSCORE group; and iii) the public key of the joining node, either retrieved from the 'client_cred' parameter, or as stored from a past join process. The join process fails if the Group Manager does not successfully verify the signature.
 
@@ -316,7 +316,7 @@ If the join process has failed, the Group Manager MUST reply to the joining node
 
 Upon receiving this response, the joining node SHOULD send a new Join Request to the Group Manager, which contains:
 
-* The 'client_cred' parameter, including a public key in a format consistent with the encoding, countersignature algorithm and possible associated parameters indicated by the Group Manager.
+* The 'client_cred' parameter, including a public key compatible with the encoding, countersignature algorithm and possible associated parameters indicated by the Group Manager.
 
 * The 'client_cred_verify' parameter, including a signature computed as described in {{ssec-join-req}}, by using the public key indicated in the current 'client_cred' parameter, with the countersignature algorithm and possible associated parameters indicated by the Group Manager.
 
@@ -388,13 +388,13 @@ In particular, one of the following four cases can occur when a new node joins a
 
 * The joining node is going to join the group exclusively as monitor. That is, it is not going to send messages to the group, and hence to produce signatures with its own private key. In this case, the joining node is not required to provide its own public key to the Group Manager, which thus does not have to perform any check related to the public key encoding, or to a countersignature algorithm and possible associated parameters for that joining node.
 
-* The Group Manager already acquired the public key of the joining node during a past join process. In this case, the joining node MAY not provide again its own public key to the Group Manager, in order to limit the size of the Join Request. The joining node MUST provide its own public key again if it has provided the Group Manager with multiple public keys during past join processes, intended for different OSCORE groups. If the joining node provides its own public key, the Group Manager performs consistency checks as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
+* The Group Manager already acquired the public key of the joining node during a past join process. In this case, the joining node MAY choose not to provide again its own public key to the Group Manager, in order to limit the size of the Join Request. The joining node MUST provide its own public key again if it has provided the Group Manager with multiple public keys during past join processes, intended for different OSCORE groups. If the joining node provides its own public key, the Group Manager performs consistency checks as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
 
 * The joining node and the Group Manager use an asymmetric proof-of-possession key to establish a secure communication channel. Then, two cases can occur.
 
-   1. The proof-of-possession key is consistent with the encoding as well as with the counter signature algorithm and possible associated parameters used in the OSCORE group. Then, the Group Manager considers the proof-of-possession key as the public key associated to the joining node in the OSCORE group. If the joining node is aware that the proof-of-possession key is also valid for the OSCORE group, it MAY not provide it again as its own public key to the Group Manager. The joining node MUST provide its own public key again if it has provided the Group Manager with multiple public keys during past join processes, intended for different OSCORE groups. If the joining node provides its own public key in the 'client_cred' parameter of the Join Request (see {{ssec-join-req}}), the Group Manager performs consistency checks as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
+   1. The proof-of-possession key is compatible with the encoding as well as with the counter signature algorithm and possible associated parameters used in the OSCORE group. Then, the Group Manager considers the proof-of-possession key as the public key associated to the joining node in the OSCORE group. If the joining node is aware that the proof-of-possession key is also valid for the OSCORE group, it MAY not provide it again as its own public key to the Group Manager. The joining node MUST provide its own public key again if it has provided the Group Manager with multiple public keys during past join processes, intended for different OSCORE groups. If the joining node provides its own public key in the 'client_cred' parameter of the Join Request (see {{ssec-join-req}}), the Group Manager performs consistency checks as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
 
-   2. The proof-of-possession key is not consistent with the encoding or with the counter signature algorithm and possible associated parameters used in the OSCORE group. In this case, the joining node MUST provide a different consistent public key to the Group Manager in the 'client_cred' parameter of the Join Request (see {{ssec-join-req}}). Then, the Group Manager performs consistency checks on this latest provided public key as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
+   2. The proof-of-possession key is not compatible with the encoding or with the counter signature algorithm and possible associated parameters used in the OSCORE group. In this case, the joining node MUST provide a different compatible public key to the Group Manager in the 'client_cred' parameter of the Join Request (see {{ssec-join-req}}). Then, the Group Manager performs consistency checks on this latest provided public key as in {{ssec-join-resp}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
 
 * The joining node and the Group Manager use a symmetric proof-of-possession key to establish a secure communication channel. In this case, upon performing a join process with that Group Manager for the first time, the joining node specifies its own public key in the 'client_cred' parameter of the Join Request targeting the join endpoint (see {{ssec-join-req}}).
 
@@ -404,7 +404,7 @@ Later on as a group member, the node may need to retrieve the public keys of oth
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
-In order to rekey the OSCORE group, the Group Manager distributes a new Group ID of the group and a new OSCORE Master Secret for that group. When doing so, the Group Manager MAY take a best effort to preserve the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of message countersignatures.
+In order to rekey the OSCORE group, the Group Manager distributes a new Group ID of the group and a new OSCORE Master Secret for that group. When doing so, the Group Manager MUST preserve the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of message countersignatures.
 
 The Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
 
@@ -418,7 +418,7 @@ The Group Manager uses the same format of the Join Response message in {{ssec-jo
 
 The Group Manager separately sends a group rekeying message to each group member to be rekeyed. Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the join process.
 
-This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{I-D.ietf-core-object-security}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
+This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
 Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}, and are based on the following rationale:
 
@@ -438,7 +438,7 @@ The method described in this document leverages the following management aspects
 
 * Synchronization of sequence numbers (see Section 5 of {{I-D.ietf-core-oscore-groupcomm}}). This concerns how a responder node that has just joined an OSCORE group can synchronize with the sequence number of requesters in the same group.
 
-Before sending the Join Response, the Group Manager MUST verify that the joining node actually owns the associated private key. To this end, the Group Manager can rely on the proof-of-possession challenge-response defined in {{sec-joining-node-to-GM}}. Alternatively, the joining node can use its own public key as asymmetric proof-of-possession key to establish a secure channel with the Group Manager, e.g. as in Section 3.2 of {{I-D.ietf-ace-dtls-authorize}}. However, this requires such proof-of-possession key to be consistent with the encoding as well as with the countersignature algorithm and possible associated parameters used in the OSCORE group.
+Before sending the Join Response, the Group Manager MUST verify that the joining node actually owns the associated private key. To this end, the Group Manager can rely on the proof-of-possession challenge-response defined in {{sec-joining-node-to-GM}}. Alternatively, the joining node can use its own public key as asymmetric proof-of-possession key to establish a secure channel with the Group Manager, e.g. as in Section 3.2 of {{I-D.ietf-ace-dtls-authorize}}. However, this requires such proof-of-possession key to be compatible with the encoding as well as with the countersignature algorithm and possible associated parameters used in the OSCORE group.
 
 A node may have joined multiple OSCORE groups under different non-synchronized Group Managers. Therefore, it can happen that those OSCORE groups have the same Group Identifier (Gid). It follows that, upon receiving a Group OSCORE message addressed to one of those groups, the node would have multiple Security Contexts matching with the Gid in the incoming message. It is up to the application to decide how to handle such collisions of Group Identifiers, e.g. by trying to process the incoming message using one Security Context at the time until the right one is found.
 
