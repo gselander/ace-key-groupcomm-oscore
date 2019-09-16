@@ -94,7 +94,7 @@ This specification builds on the ACE framework for Authentication and Authorizat
 
 * Renew the group keying material and distribute it to the OSCORE group (rekeying) upon changes in the group membership.
 
-A client node joins an OSCORE group through a resource server acting as Group Manager for that group. The join process relies on an Access Token, which is bound to a proof-of-possession key and authorizes the client to access a specific join resource at the Group Manager.
+A client node joins an OSCORE group through a resource server acting as Group Manager for that group. The join process relies on an Access Token, which is bound to a proof-of-possession key and authorizes the client to access a specific group-membership resource at the Group Manager.
 
 Messages exchanged among the participants follow the formats defined in {{I-D.ietf-ace-key-groupcomm}} for provisioning and renewing keying material in group communication scenarios.
 
@@ -116,9 +116,9 @@ This document refers also to the following terminology.
 
 * Join process: the process through which a joining node becomes a member of an OSCORE group. The join process is enforced and assisted by the Group Manager responsible for that group.
 
-* Join resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A join resource is identifiable with the Group Identifier (Gid) of the respective group. A joining node accesses a join resource to start the join process and become a member of that group. The URI path of a join resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group.
+* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the Group Identifier (Gid) of the respective group. A joining node accesses a group-membership resource to start the join process and become a member of that group. The URI path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group.
 
-* Join endpoint: an endpoint at the Group Manager associated to a join resource.
+* Group-membership endpoint: an endpoint at the Group Manager associated to a group-membership resource.
 
 * Requester: member of an OSCORE group that sends request messages to other members of the group.
 
@@ -169,7 +169,7 @@ This specification describes how to use the ACE framework for authentication and
 
 With reference to the ACE framework and the terminology defined in OAuth 2.0 {{RFC6749}}:
 
-* The Group Manager acts as Resource Server (RS), and hosts one join resource for each OSCORE group it manages. Each join resource is exported by a distinct join endpoint. During the join process, the Group Manager provides joining nodes with the parameters and keying material for taking part to secure communications in the OSCORE group. The Group Manager also maintains the group keying material and performs the group rekeying process to distribute updated keying material to the group members.
+* The Group Manager acts as Resource Server (RS), and hosts one group-membership resource for each OSCORE group it manages. Each group-membership resource is exported by a distinct join endpoint. During the join process, the Group Manager provides joining nodes with the parameters and keying material for taking part to secure communications in the OSCORE group. The Group Manager also maintains the group keying material and performs the group rekeying process to distribute updated keying material to the group members.
 
 * The joining node acts as Client (C), and requests to join an OSCORE group by accessing the related join endpoint at the Group Manager.
 
@@ -185,11 +185,11 @@ With reference to the AS, communications between the joining node and the AS (/t
 
 A node performs the following steps in order to join an OSCORE group. Messages exchanged among the participants follow the formats defined in {{I-D.ietf-ace-key-groupcomm}}, and are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document. The Group Manager acts as the Key Distribution Center (KDC) defined in {{I-D.ietf-ace-key-groupcomm}}.
 
-1. The joining node requests an Access Token from the AS, in order to access a join resource on the Group Manager and hence join the associated OSCORE group (see {{sec-joining-node-to-AS}}). The joining node will start or continue using a secure communication association with the Group Manager, according to the response from the AS.
+1. The joining node requests an Access Token from the AS, in order to access a group-membership resource on the Group Manager and hence join the associated OSCORE group (see {{sec-joining-node-to-AS}}). The joining node will start or continue using a secure communication association with the Group Manager, according to the response from the AS.
 
 2. The joining node transfers authentication and authorization information to the Group Manager, by posting the obtained Access Token to the /authz-info endpoint at the Group Manager (see {{sec-joining-node-to-GM}}). After that, a joining node must have a secure communication association established with the Group Manager, before starting to join an OSCORE group under that Group Manager (see {{sec-joining-node-to-GM}}). Possible ways to provide a secure communication association are DTLS {{RFC6347}} and OSCORE {{RFC8613}}.
 
-3. The joining node starts the join process to become a member of the OSCORE group, by accessing the related join resource hosted by the Group Manager (see {{sec-joining-node-to-GM}}).
+3. The joining node starts the join process to become a member of the OSCORE group, by accessing the related group-membership resource hosted by the Group Manager (see {{sec-joining-node-to-GM}}).
 
 4. At the end of the join process, the joining node has received from the Group Manager the parameters and keying material to securely communicate with the other members of the OSCORE group.
 
@@ -217,7 +217,7 @@ In case the specific AS associated to the Group Manager is unknown to the joinin
 
 ## Authorization Request {#ssec-auth-req}
 
-The joining node contacts the AS, in order to request an Access Token for accessing the join resource hosted by the Group Manager and associated to the OSCORE group. The Access Token request sent to the /token endpoint follows the format of the Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
+The joining node contacts the AS, in order to request an Access Token for accessing the group-membership resource hosted by the Group Manager and associated to the OSCORE group. The Access Token request sent to the /token endpoint follows the format of the Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
 * The 'scope' parameter MUST be present and MUST include:
 
@@ -286,7 +286,7 @@ Finally, the joining node establishes a secure channel with the Group Manager, a
 
 ## Join Request {#ssec-join-req}
 
-Once a secure communication channel with the Group Manager has been established, the joining node requests to join the OSCORE group, by accessing the related join resource at the Group Manager.
+Once a secure communication channel with the Group Manager has been established, the joining node requests to join the OSCORE group, by accessing the related group-membership resource at the Group Manager.
 
 In particular, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that group. This Join Request follows the format and processing of the Key Distribution Request message defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
@@ -362,9 +362,9 @@ Finally, the joining node uses the information received in the Join Response to 
 
 If the application requires backward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to all the current group members (see {{sec-group-rekeying-process}}).
 
-When the OSCORE Security Context expires, as specified by the 'exp' parameter of the Join Response, the node considers it invalid and to be renewed. Then, the node retrieves updated security parameters and keying material, by exchanging with the Group Manager a shortened Join Request sent to the same Join Resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}. Finally, the node uses the updated security parameters and keying material to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+When the OSCORE Security Context expires, as specified by the 'exp' parameter of the Join Response, the node considers it invalid and to be renewed. Then, the node retrieves updated security parameters and keying material, by exchanging with the Group Manager a shortened Join Request sent to the same group-membership resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}. Finally, the node uses the updated security parameters and keying material to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-Furthermore, as discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, the node may at some point experience a wrap-around of its own Sender Sequence Number in the group. When this happens, the node MUST send to the Group Manager a shortened Join Request message to the same Join Resource, with the 'type' parameter set to 4 ("new"). Upon receiving this request message, the Group Manager either rekeys the whole OSCORE group as discussed in {{sec-group-rekeying-process}}, or generates a new Sender ID for that node and replies with a shortened Join Response message where:
+Furthermore, as discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, the node may at some point experience a wrap-around of its own Sender Sequence Number in the group. When this happens, the node MUST send to the Group Manager a shortened Join Request message to the same group-membership resource, with the 'type' parameter set to 4 ("new"). Upon receiving this request message, the Group Manager either rekeys the whole OSCORE group as discussed in {{sec-group-rekeying-process}}, or generates a new Sender ID for that node and replies with a shortened Join Response message where:
 
 * Only the parameters 'type', 'kty', 'key', 'profile' and 'exp' are present.
 
@@ -376,7 +376,7 @@ A node may be removed from the OSCORE group, due to expired or revoked authoriza
 
 If the application requires forward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). The leaving node must not be able to acquire the new security parameters and group keying material distributed after its leaving.
 
-Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC. In particular, a node requests to leave the OSCORE group as described in Section 5.2 of {{I-D.ietf-ace-key-groupcomm}}, i.e. by sending to the Group Manager a request to the same Join Resource with the 'type' parameter set to 2 ("leave").
+Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC. In particular, a node requests to leave the OSCORE group as described in Section 5.2 of {{I-D.ietf-ace-key-groupcomm}}, i.e. by sending to the Group Manager a request to the same group-membership resource with the 'type' parameter set to 2 ("leave").
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
@@ -400,7 +400,7 @@ In particular, one of the following four cases can occur when a new node joins a
 
 Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. by including the 'get_pub_keys' parameter in the Join Request. In this case, the Group Manager includes also such public keys in the 'pub_keys' parameter of the Join Response (see {{ssec-join-resp}}).
 
-Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging with the Group Manager a shortened Join Request sent to the same Join Resource with the 'type' parameter set to 5 ("pub keys") and a shortened Join Response, according to the approach defined in Section 7 of {{I-D.ietf-ace-key-groupcomm}}.
+Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging with the Group Manager a shortened Join Request sent to the same group-membership resource with the 'type' parameter set to 5 ("pub keys") and a shortened Join Response, according to the approach defined in Section 7 of {{I-D.ietf-ace-key-groupcomm}}.
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
@@ -422,9 +422,9 @@ This approach requires group members to act (also) as servers, in order to corre
 
 Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}, and are based on the following rationale:
 
-* A group member queries the Group Manager for updated group keying material, by sending a dedicated request to the same Join Resource targeted when joining the group. Like for the case discussed in {{ssec-join-resp}} where the OSCORE Security Context expires, the group member exchanges with the Group Manager a shortened Join Request sent to the same Join Resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}.
+* A group member queries the Group Manager for updated group keying material, by sending a dedicated request to the same group-membership resource targeted when joining the group. Like for the case discussed in {{ssec-join-resp}} where the OSCORE Security Context expires, the group member exchanges with the Group Manager a shortened Join Request sent to the same group-membership resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}.
 
-* A group member subscribes for updates to the join resource and its associated group keying material on the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
+* A group member subscribes for updates to the group-membership resource and its associated group keying material on the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
 
 Either case, the Group Manager provides the (updated) group keying material as specified above in this section.
 
