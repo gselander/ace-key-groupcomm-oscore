@@ -63,6 +63,7 @@ normative:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-oscore-profile:
+  I-D.ietf-ace-cwt-proof-of-possession:
 
 informative:
   I-D.dijk-core-groupcomm-bis:
@@ -272,16 +273,7 @@ If present in the response:
 
 * 'sign_key_parameters', i.e. the third element of the 'sign_info' parameter, takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
 
-* 'pub_key_enc' takes value from {{fig-pub-key-enc-values}}, as a public key encoding in the "ACE Public Key Encoding" Registry (see Section 11.2 of {{I-D.ietf-ace-key-groupcomm}}).
-
-~~~~~~~~~~~
-+----------+-------+--------------------------------+-------------+
-| Name     | Value |          Description           |  Reference  |
-+----------+-------+--------------------------------+-------------+
-| COSE_Key |   1   | Public key encoded as COSE Key | {{RFC8152}} |
-+----------+-------+--------------------------------+-------------+
-~~~~~~~~~~~
-{: #fig-pub-key-enc-values title="ACE Public Key Encoding Values" artwork-align="center"}
+* 'pub_key_enc' takes value "COSE\_Key" (1) from the 'Name' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
 
 The CBOR map specified as payload of the 2.01 (Created) response may include further parameters, e.g. according to the signalled transport profile of ACE.
 
@@ -351,7 +343,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
    * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is taken from {{fig-pub-key-enc-values}}, as a public key encoding in the "ACE Public Key Encoding" Registry (see Section 11.2 of {{I-D.ietf-ace-key-groupcomm}}). If this parameter is not present, COSE_Key (1) MUST be assumed as default value.
+  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is "COSE\_Key" (1) taken from the 'Name' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter. If this parameter is not present, "COSE\_Key" (1) MUST be assumed as default value.
 
 * The 'profile' parameter MUST be present and has value coap_group_oscore_app (TBD), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
@@ -523,10 +515,6 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 *  Description: Challenge response using the Echo Option for CoAP from {{I-D.ietf-core-echo-request-tag}}.
 *  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.3).
 
-## ACE Public Key Encoding Registry {#ssec-iana-pub-key-enc}
-
-This specification registers the value defined in {{fig-pub-key-enc-values}} in the "ACE Public Key Encoding" IANA Registry.
-
 --- back
 
 # Profile Requirements # {#profile-req}
@@ -551,7 +539,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * (Optional) specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
 
-* (Optional) specify the acceptable values for parameters related to signature algorithm and signature keys: 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}; 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}); 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}); 'pub_key_enc' takes value from {{fig-pub-key-enc-values}} in {{ssec-token-post}}.
+* (Optional) specify the acceptable values for parameters related to signature algorithm and signature keys: 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}; 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}); 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}); 'pub_key_enc' takes value "COSE\_Key" (1) from the 'Name' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, while future specifications may define additional values for this parameter.
 
 * (Optional) specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' and 'pub_key_enc' are not used: pre-knowledge by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
