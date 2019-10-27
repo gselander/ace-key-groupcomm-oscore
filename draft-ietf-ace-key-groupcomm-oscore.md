@@ -359,22 +359,6 @@ Finally, the joining node uses the information received in the Join Response to 
 
 If the application requires backward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to all the current group members (see {{sec-group-rekeying-process}}).
 
-When the OSCORE Security Context expires, as specified by the 'exp' parameter of the Join Response, the node considers it invalid and to be renewed. Then, the node retrieves updated security parameters and keying material, by exchanging with the Group Manager a shortened Join Request sent to the same group-membership resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}. Finally, the node uses the updated security parameters and keying material to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
-
-Furthermore, as discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, the node may at some point experience a wrap-around of its own Sender Sequence Number in the group. When this happens, the node MUST send to the Group Manager a shortened Join Request message to the same group-membership resource, with the 'type' parameter set to 4 ("new"). Upon receiving this request message, the Group Manager either rekeys the whole OSCORE group as discussed in {{sec-group-rekeying-process}}, or generates a new Sender ID for that node and replies with a shortened Join Response message where:
-
-* Only the parameters 'type', 'kty', 'key', 'profile' and 'exp' are present.
-
-* The 'clientId' parameter of the 'key' parameter specifies the new Sender ID of the node.
-
-# Leaving of a Group Member # {#sec-leaving}
-
-A node may be removed from the OSCORE group, due to expired or revoked authorization, or after its own request to the Group Manager.
-
-If the application requires forward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). The leaving node must not be able to acquire the new security parameters and group keying material distributed after its leaving.
-
-Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC. In particular, a node requests to leave the OSCORE group as described in Section 5.2 of {{I-D.ietf-ace-key-groupcomm}}, i.e. by sending to the Group Manager a request to the same group-membership resource with the 'type' parameter set to 2 ("leave").
-
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
 Source authentication of OSCORE messages exchanged within the group is ensured by means of digital counter signatures (see Sections 2 and 3 of {{I-D.ietf-core-oscore-groupcomm}}). Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify source authenticity of incoming group messages.
@@ -395,9 +379,45 @@ In particular, one of the following four cases can occur when a new node joins a
 
 * The joining node and the Group Manager use a symmetric proof-of-possession key to establish a secure communication channel. In this case, upon performing a join process with that Group Manager for the first time, the joining node specifies its own public key in the 'client_cred' parameter of the Join Request targeting the join endpoint (see {{ssec-join-req}}).
 
-Furthermore, as described in {{ssec-join-req}}, the joining node may have explicitly requested the Group Manager to retrieve the public keys of the current group members, i.e. by including the 'get_pub_keys' parameter in the Join Request. In this case, the Group Manager includes also such public keys in the 'pub_keys' parameter of the Join Response (see {{ssec-join-resp}}).
+# Retrieval of Updated Keying Material # {#sec-updated-key}
 
-Later on as a group member, the node may need to retrieve the public keys of other group members. The node can do that by exchanging with the Group Manager a shortened Join Request sent to the same group-membership resource with the 'type' parameter set to 5 ("pub keys") and a shortened Join Response, according to the approach defined in Section 7 of {{I-D.ietf-ace-key-groupcomm}}.
+At some point, a group member considers the OSCORE Security Context invalid and to be renewed. This happens, for instance, after a number of unsuccessful security processing of incoming messages from other group members, or when the Security Context expires as specified by the 'exp' parameter of the Join Response. 
+
+When this happens, the group member retrieves updated security parameters and keying material. To this end, it sends a Key Re-Distribution Request, as defined in Section 4.3.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME at the Group Manager, with NAME the name of the OSCORE group.
+
+Upon receiving the Key Re-Distribution Response defines in Section 4.3.2 of {{I-D.ietf-ace-key-groupcomm}}, the group member retrieves the updated security parameters and keying material, and use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+
+# Retrieval of New Keying Material # {#sec-new-key}
+
+As discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point experience a wrap-around of its own Sender Sequence Number in the group.
+
+When this happens, the group member MUST obtain a new Sender ID from the Group Manager. To this end, the group member sends a Key Renewal Request, as defined in Section 4.3.3 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/node at the Group Manager, with NAME the name of the OSCORE group.
+
+Upon receiving this request message, the Group Manager performs one of the following actions.
+
+1. The Group Manager replies to the group member with a 4.06 (Not Acceptable) error response, and rekeys the whole OSCORE group as discussed in {{sec-group-rekeying-process}}
+
+2. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, as defined in Section 4.3.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR byte string conveyed in the payload of the response encodes the new Sender ID of the group member.
+
+# Retrieval of Public Keys of Group Members # {#sec-pub-keys}
+
+A group member may need to retrieve the public keys of other group members. To this end, the group member sends a Public Key Request, as defined in Section 4.4.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/pub-key at the Group Manager, with NAME the name of the OSCORE group.
+
+If the Public Key Request uses the method POST, each element of the 'get_pub_keys' parameter is a CBOR byte string, encoding the Sender ID of the group member for which the associated public key is requested.
+
+# Request to Leave the Group # {#sec-leave-req}
+
+A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as defined in Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/name at the Group Manager, with NAME the name of the OSCORE group to leave.
+
+The Group Leaving Request MUST have an empty payload.
+
+# Removal of a Group Member # {#sec-leaving}
+
+Other than after a spontaneous request to the Group Manager as described in {{sec-leave-req}}, a node may be forcibly removed from the OSCORE group, e.g. due to expired or revoked authorization.
+
+If the application requires forward security, the Group Manager SHALL generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). The leaving node must not be able to acquire the new security parameters and group keying material distributed after its leaving.
+
+Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC.
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
@@ -407,7 +427,7 @@ The Group Manager MUST support at least the following group rekeying scheme. Fut
 
 The Group Manager uses the same format of the Join Response message in {{ssec-join-resp}}. In particular:
 
-* Only the parameters 'type', 'kty', 'key', 'profile' and 'exp' are present.
+* Only the parameters 'kty', 'key', 'profile' and 'exp' are present.
 
 * The 'ms' parameter of the 'key' parameter specifies the new OSCORE Master Secret value.
 
@@ -417,13 +437,7 @@ The Group Manager separately sends a group rekeying message to each group member
 
 This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
-Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}, and are based on the following rationale:
-
-* A group member queries the Group Manager for updated group keying material, by sending a dedicated request to the same group-membership resource targeted when joining the group. Like for the case discussed in {{ssec-join-resp}} where the OSCORE Security Context expires, the group member exchanges with the Group Manager a shortened Join Request sent to the same group-membership resource with the 'type' parameter set to 3 ("update key") and a shortened Join Response message, according to the approach defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}}.
-
-* A group member subscribes for updates to the group-membership resource and its associated group keying material on the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
-
-Either case, the Group Manager provides the (updated) group keying material as specified above in this section.
+Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource and its associated group keying material on the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
 
 # Security Considerations {#sec-security-considerations}
 
@@ -533,7 +547,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * Acceptable values of 'kty': Group_OSCORE_Security_Context object
 
-* Specify the format of the identifiers of group members: see {{ssec-join-resp}}.
+* Specify the format of the identifiers of group members: see {{ssec-join-resp}} and {{sec-pub-keys}}.
 
 * Specify the format and content of 'group\_policies' entries: three values are defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
 
@@ -547,7 +561,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * (Optional) specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' and 'pub_key_enc' are not used: pre-knowledge by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
-* (Optional) specify the format of newly-generated individual keying material for group members, or of the information to derive it: TBD.
+* (Optional) specify the format of newly-generated individual keying material for group members, or of the information to derive it: see {{sec-new-key}}.
 
 * (Optional) specificy the format and content of the payload of the Group Leaving Request: no.
 
