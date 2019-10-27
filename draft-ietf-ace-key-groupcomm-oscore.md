@@ -596,7 +596,7 @@ TBD
 # Acknowledgments {#sec-acknowledgments}
 {: numbered="no"}
 
-The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Carsten Bormann, Martin Gunnarsson, Rikard Hoeglund, Jim Schaad, Ludwig Seitz, Goeran Selander and Peter van der Stok for their comments and feedback.
+The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Carsten Bormann, Martin Gunnarsson, Rikard Hoeglund, Daniel Migault, Jim Schaad, Ludwig Seitz, Goeran Selander and Peter van der Stok for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the EIT-Digital High Impact Initiative ACTIVE.
 
