@@ -533,6 +533,8 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * Acceptable values of 'kty': Group_OSCORE_Security_Context object
 
+* Specify the format of the identifiers of group members: TBD2
+
 * Specify the format and content of 'group\_policies' entries: three values are defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
 
 * (Optional) specify the format and content of 'mgt\_key\_material': no.
@@ -544,6 +546,10 @@ This appendix lists the specifications on this application profile of ACE, based
 * (Optional) specify the acceptable values for parameters related to signature algorithm and signature keys: 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}; 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}); 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}); 'pub_key_enc' takes value "COSE\_Key" (1) from the 'Name' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, while future specifications may define additional values for this parameter.
 
 * (Optional) specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' and 'pub_key_enc' are not used: pre-knowledge by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
+
+* (Optional) specify the format of newly-generated individual keying material for group members, or of the information to derive it: TBD.
+
+* (Optional) specificy the format and content of the payload of the Group Leaving Request: no.
 
 # Document Updates # {#sec-document-updates}
 
