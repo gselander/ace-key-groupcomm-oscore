@@ -405,6 +405,14 @@ A group member may need to retrieve the public keys of other group members. To t
 
 If the Public Key Request uses the method POST, each element of the 'get_pub_keys' parameter is a CBOR byte string, encoding the Sender ID of the group member for which the associated public key is requested.
 
+# Retrieval of Group Policies # {#sec-policies}
+
+A group member may request to current policies used in the OSCORE group. To this end, the group member sends a Policies Request, as defined in Section 4.5.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/policies at the Group Manager, with NAME the name of the OSCORE group.
+
+# Retrieval of Keying Material Version # {#sec-version}
+
+A group member may request to current version of the OSCORE Security Context used in the OSCORE group. To this end, the group member sends a Version Request, as defined in Section 4.6.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/ctx-num at the Group Manager, with NAME the name of the OSCORE group.
+
 # Request to Leave the Group # {#sec-leave-req}
 
 A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as defined in Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/name at the Group Manager, with NAME the name of the OSCORE group to leave.
