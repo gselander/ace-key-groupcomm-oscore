@@ -98,7 +98,7 @@ This specification builds on the ACE framework for Authentication and Authorizat
 
 A client node joins an OSCORE group through a resource server acting as Group Manager for that group. The join process relies on an Access Token, which is bound to a proof-of-possession key and authorizes the client to access a specific group-membership resource at the Group Manager.
 
-Messages exchanged among the participants follow the formats defined in {{I-D.ietf-ace-key-groupcomm}} for provisioning and renewing keying material in group communication scenarios.
+Message exchanges among the participants as well as message formats follow what specified in {{I-D.ietf-ace-key-groupcomm}} for provisioning and renewing keying material in group communication scenarios.
 
 In order to achieve communication security, proof-of-possession and server authentication, the client and the Group Manager leverage protocol-specific transport profiles of ACE. These include also possible forthcoming transport profiles that comply with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
@@ -165,9 +165,9 @@ Group communication for CoAP over IP multicast has been enabled in {{RFC7390}}{{
 
 This specification describes how to use the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}} to:
 
-* Enable a node to join an OSCORE group through the Group Manager and receive the security parameters and keying material to communicate with the other members of the gorup.
+* Enable a node to join an OSCORE group through the Group Manager and receive the security parameters and keying material to communicate with the other members of the group.
 
-* Enable members of OSCORE groups to retrieve updated group keying material from the Group Manager.
+* Enable members of OSCORE groups to retrieve updated group keying material and public key of other group members, from the Group Manager.
 
 * Enable the Group Manager to renew the security parameters and group keying material, and to (re-)distribute them to the members of the OSCORE group (rekeying).
 
@@ -175,7 +175,7 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 * The Group Manager acts as Resource Server (RS), and hosts one group-membership resource for each OSCORE group it manages. Each group-membership resource is exported by a distinct join endpoint. During the join process, the Group Manager provides joining nodes with the parameters and keying material for taking part to secure communications in the OSCORE group. The Group Manager also maintains the group keying material and performs the group rekeying process to distribute updated keying material to the group members.
 
-* The joining node acts as Client (C), and requests to join an OSCORE group by accessing the related join endpoint at the Group Manager.
+* The joining node acts as Client (C), and requests to join an OSCORE group by accessing the related group-membership endpoint at the Group Manager.
 
 * The Authorization Server (AS) authorizes joining nodes to join OSCORE groups under their respective Group Manager. Multiple Group Managers can be associated to the same AS. The AS MAY release Access Tokens for other purposes than joining OSCORE groups under registered Group Managers. For example, the AS may also release Access Tokens for accessing resources hosted by members of OSCORE groups.
 
