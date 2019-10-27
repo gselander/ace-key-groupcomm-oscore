@@ -571,7 +571,15 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -02 to -03 ## {#sec-02-03}
 
-TBD
+* Exchange of information on the countersignature algorithm and related parameters, during the Token POST (Section 4.1).
+
+* Nonce 'rsnonce' from the Group Manager to the Client (Section 4.1).
+
+* Client PoP signature in the Key Distribution Request upon joining (Section 4.2).
+
+* New sections, aligned with the interface of ace-key-groupcomm .
+
+* More fulfilled profile requirements (Appendix A).
 
 ## Version -01 to -02 ## {#sec-01-02}
 
