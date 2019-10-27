@@ -351,7 +351,7 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
 * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from the 'key' parameter is not valid anymore.
 
-* The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the Join Request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor.
+* The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the Join Request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding group member has in the group, thus used as member identifier.
 
 * The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, its field "Sequence Number Synchronization Method" can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as indicated by the corresponding value from the "Sequence Number Synchronization Method" Registry defined in Section 11.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -533,7 +533,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * Acceptable values of 'kty': Group_OSCORE_Security_Context object
 
-* Specify the format of the identifiers of group members: TBD2
+* Specify the format of the identifiers of group members: see {{ssec-join-resp}}.
 
 * Specify the format and content of 'group\_policies' entries: three values are defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
 
