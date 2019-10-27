@@ -225,7 +225,7 @@ The joining node contacts the AS, in order to request an Access Token for access
 
 * The 'scope' parameter MUST be present and MUST include:
 
-    - in the first element, the name of the OSCORE group to join under the Group Manager.
+    - in the first element, the name of the OSCORE group to join under the Group Manager, encoded as a CBOR text string.
 
     * in the second element, the role (encoded as a text string) or CBOR array of roles that the joining node intends to have in the group it intends to join. Accepted values of roles are: "requester", "responder", and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
 
