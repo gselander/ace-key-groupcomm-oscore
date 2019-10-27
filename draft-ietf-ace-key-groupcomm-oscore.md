@@ -120,7 +120,7 @@ This document refers also to the following terminology.
 
 * Group name: stable and invariant identifier of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
 
-* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the join process and become a member of that group. The URI path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group. This corresponds to /ace-group/gid as endpoint at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" as group identifier.
+* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the join process and become a member of that group. The URI path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group. This corresponds to /ace-group/gid as endpoint at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" as group identifier. Applications may define alternative path segments than "group-oscore".
 
 * Group-membership endpoint: an endpoint at the Group Manager associated to a group-membership resource.
 
@@ -283,7 +283,7 @@ Finally, the joining node establishes a secure channel with the Group Manager, a
 
 Once a secure communication channel with the Group Manager has been established, the joining node requests to join the OSCORE group, by accessing the related group-membership resource at the Group Manager.
 
-In particular, the joining node sends to the Group Manager a confirmable CoAP request, using the method POST and targeting the join endpoint associated to that group. This Join Request follows the format and processing of the Key Distribution Request message defined in Section 4.2.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
+In particular, the joining node sends a confirmable CoAP request using the method POST to the endpoint /group-oscore/NAME at the Group Manager, with NAME the name of the OSCORE group to join. This Join Request follows the format and processing of the Key Distribution Request message defined in Section 4.2.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
 * The 'scope' parameter MUST be present.
 
@@ -299,7 +299,7 @@ Furthermore, if the 'client_cred' parameter is present, the CBOR map specified a
 
 ## Join Response {#ssec-join-resp}
 
-The Group Manager processes the Join Request according to {{I-D.ietf-ace-oauth-authz}} and Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. Also, the Group Manager MUST return a 4.00 (Bad Request) response in case the Join Request includes the 'client_cred' parameter but does not include the 'cnonce' and 'client_cred_verify' parameters.
+The Group Manager processes the Join Request according to {{I-D.ietf-ace-oauth-authz}} and Section 4.2.2 of {{I-D.ietf-ace-key-groupcomm}}. Also, the Group Manager MUST return a 4.00 (Bad Request) response in case the Join Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
 
 If the request processing yields a positive outcome, the Group Manager performs the further following checks.
 
@@ -319,7 +319,7 @@ Upon receiving this response, the joining node SHOULD send a new Join Request to
 
 Otherwise, in case of success, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group.
 
-Then, the Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This Join Response follows the format and processing of the Key Distribution success Response message defined in Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
+Then, the Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This Join Response follows the format and processing of the Key Distribution success Response message defined in Section 4.2.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
 * The 'kty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
@@ -345,13 +345,13 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
    * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is "COSE\_Key" (1) taken from the 'Name' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter. If this parameter is not present, "COSE\_Key" (1) MUST be assumed as default value.
+  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
 
 * The 'profile' parameter MUST be present and has value coap_group_oscore_app (TBD), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from the 'key' parameter is not valid anymore.
 
-* The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the Join Request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding group member has in the group, thus used as member identifier.
+* The 'pub_keys' parameter is present only if the 'get_pub_keys' parameter was present in the Join Request. If present, this parameter includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
 
 * The 'group_policies' parameter SHOULD be present and includes a list of parameters indicating particular policies enforced in the group. For instance, its field "Sequence Number Synchronization Method" can indicate the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), as indicated by the corresponding value from the "Sequence Number Synchronization Method" Registry defined in Section 11.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
