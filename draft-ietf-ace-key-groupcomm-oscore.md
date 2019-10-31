@@ -207,7 +207,7 @@ If the application requires backward and forward security, the Group Manager MUS
 
 That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access communications in the group prior its joining, while a leaving node cannot access communications in the group after its leaving.
 
-Parameters and keying material include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
+Parameters and group keying material include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). Once completed a group rekeying, the GM MUST increment the version number of the group keying material.
 
 The Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}}. Future application profiles may define alternative message formats and distribution schemes to perform group rekeying.
 
@@ -347,6 +347,8 @@ Then, the Group Manager replies to the joining node providing the updated securi
 
   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
 
+* The 'num' parameter MUST be present and specifies the current version number of the group keying material.
+ 
 * The 'profile' parameter MUST be present and has value coap_group_oscore_app (TBD), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'exp' parameter MUST be present and specifies the expiration time in seconds after which the OSCORE Security Context derived from the 'key' parameter is not valid anymore.
@@ -383,9 +385,9 @@ In particular, one of the following four cases can occur when a new node joins a
 
 At some point, a group member considers the OSCORE Security Context invalid and to be renewed. This happens, for instance, after a number of unsuccessful security processing of incoming messages from other group members, or when the Security Context expires as specified by the 'exp' parameter of the Join Response. 
 
-When this happens, the group member retrieves updated security parameters and keying material. To this end, it sends a Key Re-Distribution Request, as defined in Section 4.3.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME at the Group Manager, with NAME the name of the OSCORE group.
+When this happens, the group member retrieves updated security parameters and group keying material. To this end, it sends a Key Re-Distribution Request, as defined in Section 4.3.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME at the Group Manager, with NAME the name of the OSCORE group.
 
-Upon receiving the Key Re-Distribution Response defines in Section 4.3.2 of {{I-D.ietf-ace-key-groupcomm}}, the group member retrieves the updated security parameters and keying material, and use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+Upon receiving the Key Re-Distribution Response defines in Section 4.3.2 of {{I-D.ietf-ace-key-groupcomm}}, the group member retrieves the updated security parameters and group keying material, and use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 # Retrieval of New Keying Material # {#sec-new-key}
 
@@ -411,7 +413,7 @@ A group member may request to current policies used in the OSCORE group. To this
 
 # Retrieval of Keying Material Version # {#sec-version}
 
-A group member may request to current version of the OSCORE Security Context used in the OSCORE group. To this end, the group member sends a Version Request, as defined in Section 4.6.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/ctx-num at the Group Manager, with NAME the name of the OSCORE group.
+A group member may request to current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as defined in Section 4.6.1 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/ctx-num at the Group Manager, with NAME the name of the OSCORE group.
 
 # Request to Leave the Group # {#sec-leave-req}
 
@@ -451,7 +453,7 @@ Group members and the Group Manager SHOULD additionally support alternative reke
 
 The method described in this document leverages the following management aspects related to OSCORE groups and discussed in the sections of {{I-D.ietf-core-oscore-groupcomm}} referred below.
 
-* Management of group keying material (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renewal and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
+* Management of group keying material (see Section 2.1 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renewal and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the group keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
 
 * Provisioning and retrieval of public keys (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager acts as key repository of public keys of group members, and provides them upon request.
 
