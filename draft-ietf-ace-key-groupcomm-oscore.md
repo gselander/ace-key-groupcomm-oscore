@@ -118,9 +118,9 @@ This document refers also to the following terminology.
 
 * Join process: the process through which a joining node becomes a member of an OSCORE group. The join process is enforced and assisted by the Group Manager responsible for that group.
 
-* Group name: stable and invariant identifier of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a URI path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
+* Group name: stable and invariant identifier of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a url-path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
 
-* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the join process and become a member of that group. The URI path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where NAME is the name of the associated OSCORE group. This corresponds to /ace-group/gid as endpoint at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" as group identifier. Applications may define alternative path segments than "group-oscore".
+* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the join process and become a member of that group. The url-path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where "NAME" is the name of the associated OSCORE group. This replaces the url-path /ace-group/gid at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" indicating the group identifier. The url-path /group-oscore/NAME is a default name: implementations are not required to use this name, and can define their own instead.
 
 * Group-membership endpoint: an endpoint at the Group Manager associated to a group-membership resource.
 
@@ -417,7 +417,7 @@ A group member may request to current version of the keying material used in the
 
 # Request to Leave the Group # {#sec-leave-req}
 
-A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as defined in Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/name at the Group Manager, with NAME the name of the OSCORE group to leave.
+A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as defined in Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}, to the endpoint /group-oscore/NAME/node at the Group Manager, with NAME the name of the OSCORE group to leave.
 
 The Group Leaving Request MUST have an empty payload.
 
