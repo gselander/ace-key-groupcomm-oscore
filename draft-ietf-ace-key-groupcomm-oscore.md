@@ -132,33 +132,6 @@ This document refers also to the following terminology.
 
 * Group rekeying process: the process through which the Group Manager renews the security parameters and group keying material, and (re-)distributes them to the OSCORE group members.
 
-## Relation to Other Documents
-
-{{fig-references}} overviews the main documents related to this specification. Arrows and asterisk-arrows denote normative references and informative refences, respectively.
-
-~~~~~~~~~~~
-                      +-----------------------------------------+
-                      |                                         |
-     +----------------|--------------+                          |
-     |                |              |                          |
-     |                v              v                   Key Management
-  Pub-sub ---> Key Groupcomm ---> ACE Framework <----- for OSCORE Groups
-  profile        *  [[WG]]           [[WG]]            [[This document]]
-     |           *    *              ^                 ^  |     |
-     |           *    *              *                 *  |     |
-     |           *    *              * *****************  |     |
-     | ***********    *              * *                  |     |
-     | *              *              * * +----------------+     |
-ACE  | *              *              * * |                      |
------|-*--------------*--------------*-*-|----------------------|-------
-CoRE | *              *              * * |                      |
-     v v              v              * * v                      v
-    CoRE             CoRE            Group   -------------->  OSCORE
-   Pubsub          Groupcomm  <***** OSCORE <************* [[RFC8613]]
-   [[WG]]         [[RFC7390]]        [[WG]]
-~~~~~~~~~~~
-{: #fig-references title="Related Documents" artwork-align="center"}
-
 # Protocol Overview {#sec-protocol-overview}
 
 Group communication for CoAP over IP multicast has been enabled in {{RFC7390}}{{I-D.dijk-core-groupcomm-bis}} and can be secured with Group Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
@@ -181,7 +154,7 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
 
-In particular, communications between the joining node and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS may signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}. Note that in the commonly referred base-case the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
+In particular, communications between the joining node and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS MAY signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}. Note that in the commonly referred base-case the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
 
 With reference to the AS, communications between the joining node and the AS (/token endpoint) as well as between the Group Manager and the AS (/introspect endpoint) can be secured by different means, for instance using DTLS {{RFC6347}} or OSCORE {{RFC8613}}. Further details on how the AS secures communications (with the joining node and the Group Manager) depend on the specifically used transport profile of ACE, and are out of the scope of this specification.
 
@@ -191,7 +164,7 @@ A node performs the following steps in order to join an OSCORE group. The format
 
 1. The joining node requests an Access Token from the AS, in order to access a group-membership resource on the Group Manager and hence join the associated OSCORE group (see {{sec-joining-node-to-AS}}). The joining node will start or continue using a secure communication association with the Group Manager, according to the response from the AS.
 
-2. The joining node transfers authentication and authorization information to the Group Manager, by posting the obtained Access Token to the /authz-info endpoint at the Group Manager (see {{sec-joining-node-to-GM}}). After that, a joining node must have a secure communication association established with the Group Manager, before starting to join an OSCORE group under that Group Manager (see {{sec-joining-node-to-GM}}). Possible ways to provide a secure communication association are DTLS {{RFC6347}} and OSCORE {{RFC8613}}.
+2. The joining node transfers authentication and authorization information to the Group Manager, by posting the obtained Access Token to the /authz-info endpoint at the Group Manager (see {{sec-joining-node-to-GM}}). After that, a joining node MUST have a secure communication association established with the Group Manager, before starting to join an OSCORE group under that Group Manager (see {{sec-joining-node-to-GM}}). Possible ways to provide a secure communication association are DTLS {{RFC6347}} and OSCORE {{RFC8613}}.
 
 3. The joining node starts the joining process to become a member of the OSCORE group, by accessing the related group-membership resource hosted by the Group Manager (see {{sec-joining-node-to-GM}}).
 
@@ -243,7 +216,7 @@ The AS MUST include the 'exp' parameter in the response to the joining node. Oth
 
 The AS must include the 'scope' parameter in the response to the joining node, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of 'scope' MUST be present and includes the role or CBOR array of roles that the joining node is actually authorized to take in the group, encoded as specified in {{ssec-auth-req}} of this document.
 
-The AS may also include the 'profile' parameter in the response to the joining node, in order to indicate the specific transport profile of ACE to use for securing communications between the joining node and the Group Manager (see Section 5.6.4.3 of {{I-D.ietf-ace-oauth-authz}}).
+The AS MAY also include the 'profile' parameter in the response to the joining node, in order to indicate the specific transport profile of ACE to use for securing communications between the joining node and the Group Manager (see Section 5.6.4.3 of {{I-D.ietf-ace-oauth-authz}}).
 
 In particular, if symmetric keys are used, the AS generates a proof-of-possession key, binds it to the Access Token, and provides it to the joining node in the 'cnf' parameter of the  Access Token response. Instead, if asymmetric keys are used, the joining node provides its own public key to the AS in the 'req_cnf' parameter of the Access Token request. Then, the AS uses it as proof-of-possession key bound to the Access Token, and provides the joining node with the Group Manager's public key in the 'rs_cnf' parameter of the Access Token response.
 
@@ -409,7 +382,7 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
 
 1. The Group Manager replies to the group member with a 4.06 (Not Acceptable) error response, and rekeys the whole OSCORE group as discussed in {{sec-group-rekeying-process}}.
 
-2. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'clientId', specifying the new Sender ID of the group member encoded as a CBOR byte string.
+2. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'clientId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
 
 # Retrieval of Public Keys of Group Members # {#sec-pub-keys}
 
@@ -429,7 +402,7 @@ Upon receiving the Policies Request, the Group Manager processes it as per Secti
 
 # Retrieval of Keying Material Version # {#sec-version}
 
-A group member may request to current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as per Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/NAME/ctx-num at the Group Manager, where NAME is the name of the OSCORE group.
+A group member may request the current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as per Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/NAME/ctx-num at the Group Manager, where NAME is the name of the OSCORE group.
 
 Upon receiving the Version Request, the Group Manager processes it as per Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Version Response is formatted as defined in Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -451,7 +424,7 @@ In either case, if the leaving node is not configured exclusively as monitor, th
 
 * The Group Manager cancels the association between, on one hand, the public key of the leaving node and, on the other hand, the Group Identifier (Gid) associated to the OSCORE group together with the freed OSCORE Sender ID value. The Group Manager deletes the public key of the leaving node, if that public key has no remaining association with any pair (Group ID, Sender ID).
 
-If the application requires forward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). The leaving node must not be able to acquire the new security parameters and group keying material distributed after its leaving.
+If the application requires forward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). As a consequence, the leaving node is not able to acquire the new security parameters and group keying material distributed after its leaving.
 
 Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC.
 
