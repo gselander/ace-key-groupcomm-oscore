@@ -299,7 +299,9 @@ Upon receiving this response, the joining node SHOULD send a new Joining Request
 
 * The 'client_cred_verify' parameter, including a signature computed as described in {{ssec-join-req}}, by using the public key indicated in the current 'client_cred' parameter, with the countersignature algorithm and possible associated parameters indicated by the Group Manager.
 
-Otherwise, in case of success, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group. If the joining node is not exclusively configured as monitor, the Group Manager performs also the following actions.
+Otherwise, in case of success, the Group Manager updates the group membership by registering the joining node as a new member of the OSCORE group, say with name GROUPNAME. In particular, the Group Manager generates a node name NODENAME associated to the joining node, ensuring that the name is unique within that OSCORE group. Then, the Group Manager creates a new node resource, as sub-resource of the group-membership resource associated to the OSCORE group, for instance at /group-oscore/GROUPNAME/NODENAME .
+
+If the joining node is not exclusively configured as monitor, the Group Manager performs also the following actions.
 
 * The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node.
 
@@ -309,7 +311,7 @@ Otherwise, in case of success, the Group Manager updates the group membership by
 
 * The Group Manager stores the association between i) the public key of the joining node; and ii) the Group Identifier (Gid) associated to the OSCORE group together with the OSCORE Sender ID assigned to the joining node in the group. The Group Manager MUST keep this association updated over time.
 
-Then, the Group Manager replies to the joining node providing the updated security parameters and keying meterial necessary to participate in the group communication. This success Joining Response is formatted as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
+Then, the Group Manager replies to the joining node, providing the updated security parameters and keying meterial necessary to participate in the group communication. This success Joining Response is formatted as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, and specifically includes the Location-Path options indicating the URI of the node resource associated to the joining node. In particular:
 
 * The 'kty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
