@@ -121,6 +121,8 @@ This document refers also to the following terminology.
 
 * Joining process: the process through which a joining node becomes a member of an OSCORE group. The joining process is enforced and assisted by the Group Manager responsible for that group.
 
+* Node name: stable and invariant identifier of a group member, assigned by the Group Manager upon joining. The group name MUST be individual and unique among the members of a same OSCORE group, and MUST include only characters that are valid for a url-path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
+
 * Group name: stable and invariant identifier of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a url-path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
 
 * Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the joining process and become a member of that group. The url-path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where "NAME" is the name of the associated OSCORE group. This replaces the url-path /ace-group/gid at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" indicating the group identifier. The url-path /group-oscore/NAME is a default name: implementations are not required to use this name, and can define their own instead.
