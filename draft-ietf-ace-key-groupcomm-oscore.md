@@ -229,7 +229,7 @@ The AS MAY also include the 'profile' parameter in the response to the joining n
 
 In particular, if symmetric keys are used, the AS generates a proof-of-possession key, binds it to the Access Token, and provides it to the joining node in the 'cnf' parameter of the  Access Token response. Instead, if asymmetric keys are used, the joining node provides its own public key to the AS in the 'req_cnf' parameter of the Access Token request. Then, the AS uses it as proof-of-possession key bound to the Access Token, and provides the joining node with the Group Manager's public key in the 'rs_cnf' parameter of the Access Token response.
 
-# Joining Node to Group Manager {#sec-joining-node-to-GM}
+# Joining a Group {#sec-joining-node-to-GM}
 
 The following subsections describe the interactions between the joining node and the Group Manager, i.e. the sending of the Access Token and the Request-Response exchange to join the OSCORE group.
 
