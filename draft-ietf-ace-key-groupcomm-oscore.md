@@ -121,13 +121,17 @@ This document refers also to the following terminology.
 
 * Joining process: the process through which a joining node becomes a member of an OSCORE group. The joining process is enforced and assisted by the Group Manager responsible for that group.
 
-* Node name: stable and invariant identifier of a group member, assigned by the Group Manager upon joining. The group name MUST be individual and unique among the members of a same OSCORE group, and MUST include only characters that are valid for a url-path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
+* Group name: stable and invariant name of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a url-path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
 
-* Group name: stable and invariant identifier of an OSCORE group. The group name MUST be unique under the same Group Manager, and MUST include only characters that are valid for a url-path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
+* Node name: stable and invariant name of a group member, assigned by the Group Manager upon joining. The group name MUST be individual and unique among the members of a same OSCORE group, and MUST include only characters that are valid for a url-path segment, namely unreserved and pct-encoded characters {{RFC3986}}.
 
-* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the joining process and become a member of that group. The url-path of a group-membership resource is fixed, and ends with the segments /group-oscore/NAME , where "NAME" is the name of the associated OSCORE group. This replaces the url-path /ace-group/gid at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" indicating the group identifier. The url-path /group-oscore/NAME is a default name: implementations are not required to use this name, and can define their own instead.
+* Group-membership resource: a resource hosted by the Group Manager, associated to an OSCORE group under that Group Manager. A group-membership resource is identifiable with the name of the respective OSCORE group. A joining node accesses a group-membership resource to start the joining process and become a member of that group. The url-path of a group-membership resource is fixed, and ends with the segments /group-oscore/GROUPNAME , where "GROUPNAME" is the name of the associated OSCORE group. This replaces the url-path /ace-group/gid at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" indicating the group name. The url-path /group-oscore/GROUPNAME is a default name: implementations are not required to use this name, and can define their own instead.
+
+* Node resource: a resource hosted by the Group Manager, associated to a specific group member of an OSCORE group under that Group Manager. A node resource is identifiable with the name of the respective group member, which can access it to issue individual requests to the Group Manager. The url-path of a node resource is fixed, and ends with the segments /group-oscore/GROUPNAME/NODENAME , where "GROUPNAME" is the name of the associated OSCORE group and "NODENAME" is the name of the associated group member in that group. This replaces the url-path /ace-group/gid/node at the KDC used in {{I-D.ietf-ace-key-groupcomm}}, with "gid" indicating the group name and "node" indicating the node name. The url-path /group-oscore/GROUPNAME/NODENAME is a default name: implementations are not required to use this name, and can define their own instead.
 
 * Group-membership endpoint: an endpoint at the Group Manager associated to a group-membership resource.
+
+* Node endpoint: an endpoint at the Group Manager associated to a node resource.
 
 * Requester: member of an OSCORE group that sends request messages to other members of the group.
 
@@ -261,7 +265,7 @@ Finally, the joining node establishes a secure channel with the Group Manager, a
 
 Once a secure communication channel with the Group Manager has been established, the joining node requests to join the OSCORE group, by sending a Joining Request message to the related group-membership resource at the Group Manager, as per Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
-In particular, the joining node sends a CoAP POST request to the endpoint /group-oscore/NAME at the Group Manager, where NAME is the name of the OSCORE group to join. This Joining Request is formatted as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. Specifically:
+In particular, the joining node sends a CoAP POST request to the endpoint /group-oscore/GROUPNAME at the Group Manager, where GROUPNAME is the name of the OSCORE group to join. This Joining Request is formatted as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. Specifically:
 
 * The 'scope' parameter MUST be present.
 
@@ -371,7 +375,7 @@ In particular, one of the following four cases can occur when a new node joins a
 
 At some point, a group member considers the OSCORE Security Context invalid and to be renewed. This happens, for instance, after a number of unsuccessful security processing of incoming messages from other group members, or when the Security Context expires as specified by the 'exp' parameter of the Joining Response. 
 
-When this happens, the group member retrieves updated security parameters and group keying material, by sending a Key Distribution Request message to the Group Manager, as per Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/NAME at the Group Manager, where NAME is the name of the OSCORE group. The Key Distribution Request is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}.
+When this happens, the group member retrieves updated security parameters and group keying material, by sending a Key Distribution Request message to the Group Manager, as per Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME at the Group Manager, where GROUPNAME is the name of the OSCORE group. The Key Distribution Request is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
 The Group Manager processes the Key Distribution Request according to Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -381,7 +385,7 @@ Upon receiving the Key Distribution Response, the group member retrieves the upd
 
 As discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point experience a wrap-around of its own Sender Sequence Number in the group.
 
-When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/NAME/node at the Group Manager, where NAME is the name of the OSCORE group.
+When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/node at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 Upon receiving the Key Renewal Request, the Group Manager processes it as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}, and performs one of the following actions.
 
@@ -391,7 +395,7 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
 
 # Retrieval of Public Keys of Group Members # {#sec-pub-keys}
 
-A group member may need to retrieve the public keys of other group members. To this end, the group member sends a Public Key Request message to the Group Manager, as per Section 4.5 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /group-oscore/NAME/pub-key at the Group Manager, where NAME is the name of the OSCORE group.
+A group member may need to retrieve the public keys of other group members. To this end, the group member sends a Public Key Request message to the Group Manager, as per Section 4.5 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /group-oscore/GROUPNAME/pub-key at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 If the Public Key Request uses the method POST, the Public Key Request is formatted as defined in Section 4.1.3.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, each element of the 'get_pub_keys' parameter is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested.
 
@@ -401,19 +405,19 @@ The success Public Key Response is formatted as defined in Section 4.1.3.1 of {{
 
 # Retrieval of Group Policies # {#sec-policies}
 
-A group member may request the current policies used in the OSCORE group. To this end, the group member sends a Policies Request, as per Section 4.6  of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/NAME/policies at the Group Manager, where NAME is the name of the OSCORE group.
+A group member may request the current policies used in the OSCORE group. To this end, the group member sends a Policies Request, as per Section 4.6  of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/policies at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 Upon receiving the Policies Request, the Group Manager processes it as per Section 4.1.4.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Policies Response is formatted as defined in Section 4.1.4.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
 # Retrieval of Keying Material Version # {#sec-version}
 
-A group member may request the current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as per Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/NAME/ctx-num at the Group Manager, where NAME is the name of the OSCORE group.
+A group member may request the current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as per Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/ctx-num at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 Upon receiving the Version Request, the Group Manager processes it as per Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Version Response is formatted as defined in Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
 # Request to Leave the Group # {#sec-leave-req}
 
-A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP POST request to the endpoint /group-oscore/NAME/node at the Group Manager, where NAME is the name of the OSCORE group to leave.
+A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP POST request to the endpoint /group-oscore/GROUPNAME/node at the Group Manager, where GROUPNAME is the name of the OSCORE group to leave.
 
 The Leaving Request is formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}, and MUST have an empty CBOR Map as payload.
 
@@ -451,7 +455,7 @@ The Group Manager separately sends a group rekeying message to each group member
 
 This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
-Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource of the group, at the endpoint /group-oscore/NAME of the Group Manager, where NAME is the name of the OSCORE group. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
+Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource of the group, at the endpoint /group-oscore/GROUPNAME of the Group Manager, where GROUPNAME is the name of the OSCORE group. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
 
 # Security Considerations {#sec-security-considerations}
 
