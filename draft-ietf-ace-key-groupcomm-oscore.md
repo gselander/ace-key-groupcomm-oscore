@@ -651,6 +651,24 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -03 to -04 ## {#sec-03-04}
+
+* New abstract.
+
+* Terminology: node name; node resource.
+
+* Creation and pointing at node resource.
+
+* Updated Group Manager API (REST methods and offered services).
+
+* Size of challenges 'cnonce' and 'rsnonce'.
+
+* Value of 'rsnonce' for reused or non-traditionally-posted tokens.
+
+* Removed reference to RFC 7390.
+
+* Editorial improvements.
+
 ## Version -02 to -03 ## {#sec-02-03}
 
 * New sections, aligned with the interface of ace-key-groupcomm .
