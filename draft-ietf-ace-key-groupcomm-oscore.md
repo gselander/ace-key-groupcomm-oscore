@@ -379,17 +379,33 @@ In particular, one of the following four cases can occur when a new node joins a
 
 At some point, a group member considers the OSCORE Security Context invalid and to be renewed. This happens, for instance, after a number of unsuccessful security processing of incoming messages from other group members, or when the Security Context expires as specified by the 'exp' parameter of the Joining Response. 
 
-When this happens, the group member retrieves updated security parameters and group keying material, by sending a Key Distribution Request message to the Group Manager, as per Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME at the Group Manager, where GROUPNAME is the name of the OSCORE group. The Key Distribution Request is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}.
+When this happens, the group member retrieves updated security parameters and group keying material. This can occur in the two different ways described below.
+
+## Retrieval of Group Keying Material ## {#ssec-updated-key-only}
+
+If the group member wants to retrieve only the latest group keying material, it sends a Key Distribution Request to the Group Manager, as per Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}.
+
+In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME at the Group Manager, where GROUPNAME is the name of the OSCORE group. The Key Distribution Request is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
 The Group Manager processes the Key Distribution Request according to Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
-Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters and group keying material, and use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters and group keying material, and, if they differ from the current ones, use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
+
+## Retrieval of Group Keying Material and Sender ID ## {#ssec-updated-and-individual-key}
+
+If the group member wants to retrieve the latest group keying material as well as the Sender ID that it has in the OSCORE group, it sends a Key Distribution Request to the Group Manager, as per Section TBD of {{I-D.ietf-ace-key-groupcomm}}.
+
+In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/NAME at the Group Manager, where GROUPNAME is the name of the OSCORE group and NAME is the name of the group member. The Key Distribution Request is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}.
+
+The Group Manager processes the Key Distribution Request according to Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section TBD of {{I-D.ietf-ace-key-groupcomm}}.
+
+Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters, group keying material and Sender ID, and, if they differ from the current ones, use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
 # Retrieval of New Keying Material # {#sec-new-key}
 
 As discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point experience a wrap-around of its own Sender Sequence Number in the group.
 
-When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/node at the Group Manager, where GROUPNAME is the name of the OSCORE group.
+When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP PUT request to the endpoint /group-oscore/GROUPNAME/NODENAME at the Group Manager, where GROUPNAME is the name of the OSCORE group and NODENAME is the name of the group member.
 
 Upon receiving the Key Renewal Request, the Group Manager processes it as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}, and performs one of the following actions.
 
@@ -401,9 +417,9 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
 
 A group member may need to retrieve the public keys of other group members. To this end, the group member sends a Public Key Request message to the Group Manager, as per Section 4.5 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /group-oscore/GROUPNAME/pub-key at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
-If the Public Key Request uses the method POST, the Public Key Request is formatted as defined in Section 4.1.3.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, each element of the 'get_pub_keys' parameter is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested.
+If the Public Key Request uses the method FETCH, the Public Key Request is formatted as defined in Section 4.1.3.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, each element of the 'get_pub_keys' parameter is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested.
 
-Upon receiving the Public Key Request, the Group Manager processes it as per Section 4.1.3.1 or 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being POST or GET, respectively. If the Public Key Request uses the method POST, the Group Manager silently ignores identifiers included in the ’get_pub_keys’ parameter of the request that are not associated to any current group member.
+Upon receiving the Public Key Request, the Group Manager processes it as per Section 4.1.3.1 or 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively. If the Public Key Request uses the method FETCH, the Group Manager silently ignores identifiers included in the ’get_pub_keys’ parameter of the request that are not associated to any current group member.
 
 The success Public Key Response is formatted as defined in Section 4.1.3.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -421,9 +437,7 @@ Upon receiving the Version Request, the Group Manager processes it as per Sectio
 
 # Request to Leave the Group # {#sec-leave-req}
 
-A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP POST request to the endpoint /group-oscore/GROUPNAME/node at the Group Manager, where GROUPNAME is the name of the OSCORE group to leave.
-
-The Leaving Request is formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}, and MUST have an empty CBOR Map as payload.
+A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /group-oscore/GROUPNAME/NODENAME at the Group Manager, where GROUPNAME is the name of the OSCORE group to leave and NODENAME is the name of the group member.
 
 Upon receiving the Leaving Request, the Group Manager processes it as per Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
