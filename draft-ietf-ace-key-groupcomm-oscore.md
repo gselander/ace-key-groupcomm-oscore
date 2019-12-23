@@ -73,7 +73,6 @@ informative:
   I-D.ietf-core-echo-request-tag:
   RFC6347:
   RFC6749:
-  RFC7390:
   RFC7641:
 
 --- abstract
@@ -86,7 +85,7 @@ This specification defines an application profile of the ACE framework for Authe
 
 Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{RFC8152}} and enabling end-to-end security of CoAP payload and options.
 
-As described in {{I-D.ietf-core-oscore-groupcomm}}, Group OSCORE is used to protect CoAP group communication over IP multicast {{RFC7390}}{{I-D.dijk-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group, where members exchange CoAP messages secured with Group OSCORE. The Group Manager can be responsible for multiple groups, coordinates the joining process of new group members, and is entrusted with the distribution and renewal of group keying material.
+As described in {{I-D.ietf-core-oscore-groupcomm}}, Group OSCORE is used to protect CoAP group communication over IP multicast {{I-D.dijk-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group, where members exchange CoAP messages secured with Group OSCORE. The Group Manager can be responsible for multiple groups, coordinates the joining process of new group members, and is entrusted with the distribution and renewal of group keying material.
 
 This specification builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}} and defines a method to:
 
@@ -108,13 +107,13 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Readers are expected to be familiar with the terms and concepts described in the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
-Readers are expected to be familiar with the terms and concepts related to the CoAP protocol described in {{RFC7252}}{{RFC7390}}{{I-D.dijk-core-groupcomm-bis}}. Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
+Readers are expected to be familiar with the terms and concepts related to the CoAP protocol described in {{RFC7252}}{{I-D.dijk-core-groupcomm-bis}}. Note that, unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
 Readers are expected to be familiar with the terms and concepts for protection and processing of CoAP messages through OSCORE {{RFC8613}} and through Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} in group communication scenarios. These include the concept of Group Manager, as the entity responsible for a set of groups where communications are secured with Group OSCORE. In this specification, the Group Manager acts as Resource Server.
 
 This document refers also to the following terminology.
 
-* Joining node: a network node intending to join an OSCORE group, where communication is based on CoAP {{RFC7390}}{{I-D.dijk-core-groupcomm-bis}} and secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}.
+* Joining node: a network node intending to join an OSCORE group, where communication is based on CoAP {{I-D.dijk-core-groupcomm-bis}} and secured with Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
 * Joining process: the process through which a joining node becomes a member of an OSCORE group. The joining process is enforced and assisted by the Group Manager responsible for that group.
 
@@ -134,7 +133,7 @@ This document refers also to the following terminology.
 
 # Protocol Overview {#sec-protocol-overview}
 
-Group communication for CoAP over IP multicast has been enabled in {{RFC7390}}{{I-D.dijk-core-groupcomm-bis}} and can be secured with Group Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
+Group communication for CoAP over IP multicast has been enabled in {{I-D.dijk-core-groupcomm-bis}} and can be secured with Group Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
 
 This specification describes how to use the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}} to:
 
