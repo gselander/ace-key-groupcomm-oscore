@@ -788,6 +788,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * New abstract.
 
+* Moved general content to draft-ietf-ace-key-groupcomm
+
 * Terminology: node name; node resource.
 
 * Creation and pointing at node resource.
