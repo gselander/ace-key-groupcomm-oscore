@@ -135,6 +135,12 @@ Additionally, this document makes use of the following terminology.
 
 * GROUPNAME and NODENAME are used to indicate the variants parts of the resource endpoint, i.e. "gid" and "node" URI path in {{I-D.ietf-ace-key-groupcomm}}.
 
+* Requester: member of an OSCORE group that sends request messages to other members of the group.
+
+* Responder: member of an OSCORE group that receives request messages from other members of the group. A responder may reply back, by sending a response message to the requester which has sent the request message.
+
+* Monitor: member of an OSCORE group that is configured as responder and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
+
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
 This document refers also to the following terminology.
@@ -154,12 +160,6 @@ This document refers also to the following terminology.
 * Group-membership endpoint: an endpoint at the Group Manager associated to a group-membership resource.
 
 * Node endpoint: an endpoint at the Group Manager associated to a node resource.
-
-* Requester: member of an OSCORE group that sends request messages to other members of the group.
-
-* Responder: member of an OSCORE group that receives request messages from other members of the group. A responder may reply back, by sending a response message to the requester which has sent the request message.
-
-* Monitor: member of an OSCORE group that is configured as responder and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
 * Group rekeying process: the process through which the Group Manager renews the security parameters and group keying material, and (re-)distributes them to the OSCORE group members.
 
@@ -189,7 +189,7 @@ With reference to {{I-D.ietf-ace-key-groupcomm}} :
 
 * The Authorization Server is the AS.
 
-* The Group Manager is the Key Distribution Center (KDC). 
+* The Group Manager is the Key Distribution Center (KDC).
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
@@ -215,7 +215,7 @@ With reference to the AS, communications between the joining node and the AS (/t
 
 ## Overview of the Joining Process {#ssec-overview-join-process}
 
-A node performs the steps described in Section 2 of {{I-D.ietf-ace-key-groupcomm}} in order to join an OSCORE group. The format and processing of messages exchanged among the participants are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document. 
+A node performs the steps described in Section 2 of {{I-D.ietf-ace-key-groupcomm}} in order to join an OSCORE group. The format and processing of messages exchanged among the participants are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document.
 
 <!-- 13-01-2020 FP: Moved to ace-key-groupcomm
 
@@ -317,7 +317,10 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
 
-<!-- 13-01-2020 FP: Covered in ace-key-groupcomm 
+Note that instead of using the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}},
+the joining node MAY retrieve this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+
+<!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
 At this point in time, the joining node might not have all the necessary information concerning the public keys in the OSCORE group, as well as concerning the algorithm and related parameters for computing countersignatures in the  OSCORE group. In such a case, the joining node MAY use the 'sign_info' and 'pub_key_enc' parameters defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}} to ask for such information.
 
@@ -353,7 +356,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * The string "group-oscore" is used instead of "ace-group" (see Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}) as the top level path. The url-path /group-oscore/ is a default name of this specifications: implementations are not required to use this name, and can define their own instead.
 
-<!-- 13-01-2020 FP: Covered in ace-key-groupcomm 
+<!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
 In particular, the joining node sends a CoAP POST request to the endpoint /group-oscore/GROUPNAME at the Group Manager, where GROUPNAME is the name of the OSCORE group to join. This Joining Request has content format application/ace-groupcomm+cbor defined in Section 8.1 of {{I-D.ietf-ace-key-groupcomm}}, and is formatted as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. Specifically:
 
@@ -364,7 +367,7 @@ In particular, the joining node sends a CoAP POST request to the endpoint /group
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the joining process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
 
-<!-- 13-01-2020 FP: Covered in ace-key-groupcomm 
+<!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 * The 'client_cred' parameter, if present, includes the public key of the joining node. In case the joining node knows the encoding of public keys in the OSCORE group, as well as the countersignature algorithm and possible associated parameters used in the OSCORE group, the included public key MUST be compatible with those criteria. That is, the public key MUST be encoded according to the encoding of public keys in the OSCORE group, and MUST be compatible with the countersignature algorithm and possible associated parameters used in the OSCORE group. This parameter MAY be omitted if: i) the joining node is asking to access the group exclusively as monitor; or ii) the Group Manager already acquired this information, for instance during a past joining process. In any other case, this parameter MUST be present.
 
 Furthermore, if the 'client_cred' parameter is present, the CBOR map specified as payload of the Joining Request MUST also include the following parameters.
@@ -384,22 +387,22 @@ The N\_S challenge takes one of the following values.
 3. If the joining node is in fact re-joining the group, without posting again the same and still valid Access Token:
 
    - If the joining node and the Group Manager communicates over DTLS, N\_S is an exporter value, computed as described in point (2) above.
-   
+
    - If the joining node and the Group Manager communicates over OSCORE, the
      N\_S is the output PRK of a HKDF-Extract step {{RFC5869}}, i.e. PRK = HMAC-Hash(salt, IKM).  In particular, 'salt' takes (x1 | x2), where x1 is the ID Context of the OSCORE Security Context between the joining node and the Group Manager, x2 is the Sender ID of the joining node in that Context, and | denotes byte string concatenation.  Also, 'IKM' is the OSCORE Master Secret of the OSCORE Security Context between the joining node and the Group Manager. The HKDF MUST be one of the HMAC-based HKDF {{RFC5869}} algorithms defined for COSE {{RFC8152}}. HKDF SHA-256 is mandatory to implement.
-     
+
 It is up to applications to define how N_S is computed in further alternative settings.
 
 ## Processing the Joining Request {#ssec-join-req-processing}
 
-The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. 
+The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}.
 Additionally, the following applies.
 
 * The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
 
 * In case the Joining Request does not include the 'client_cred' parameter, the joining process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
-* To compute the signature contained in 'client_cred_verify', the GM considers: i) as signed value, N_S concatenated with N_C, where N_S is determined as described in {{sssec-challenge-value}}, while N_C is the nonce provided in the 'cnonce' parameter of the Joining Request; ii) the countersignature algorithm used in the OSCORE group, and possible correponding parameters; and iii) the public key of the joining node, either retrieved from the 'client_cred' parameter, or already stored as acquired from previous interactions with the joining node. 
+* To compute the signature contained in 'client_cred_verify', the GM considers: i) as signed value, N_S concatenated with N_C, where N_S is determined as described in {{sssec-challenge-value}}, while N_C is the nonce provided in the 'cnonce' parameter of the Joining Request; ii) the countersignature algorithm used in the OSCORE group, and possible correponding parameters; and iii) the public key of the joining node, either retrieved from the 'client_cred' parameter, or already stored as acquired from previous interactions with the joining node.
 
 * The payload of a 4.00 Bad Request response from the GM to the Client MUST contain the 'sign_info' and the 'pub_key_enc' parameters.
 
@@ -410,7 +413,7 @@ Additionally, the following applies.
   * The 'client_cred_verify' parameter, including a signature computed as described in {{ssec-join-req-sending}}, by using the public key indicated in the current 'client_cred' parameter, with the countersignature algorithm and possible associated parameters indicated by the Group Manager.
 
 
-<!-- 13-01-2020 FP: Covered in ace-key-groupcomm - added this text in ace key groupcomm, was definitely missing 
+<!-- 13-01-2020 FP: Covered in ace-key-groupcomm - added this text in ace key groupcomm, was definitely missing
 
 * In case the Joining Request includes the 'client_cred' parameter, the Group Manager checks that the public key of the joining node has an accepted format. That is, the public key has to be encoded as expected in the OSCORE group, and has to be compatible with the counter signature algorithm and possible associated parameters used in the OSCORE group. The joining process fails if the public key of the joining node does not have an accepted format.
 
@@ -433,7 +436,7 @@ Upon receiving this response, the joining node SHOULD send a new Joining Request
 If the processing of the Joining Request described in {{ssec-join-req-processing}} is successful, the Group Manager updates the group membership by registering the joining node NODENAME as a new member of the OSCORE group GROUPNAME, as described in {{I-D.ietf-ace-key-groupcomm}}.
 
 
-<!-- 13-01-2020 FP: Covered in ace-key-groupcomm 
+<!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
 In particular, the Group Manager generates a node name NODENAME associated to the joining node, ensuring that the name is unique within that OSCORE group. Then, the Group Manager creates a new node resource, as sub-resource of the group-membership resource associated to the OSCORE group, for instance at /group-oscore/GROUPNAME/NODENAME .
 
@@ -446,7 +449,7 @@ If the joining node is not exclusively configured as monitor, the Group Manager 
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm -
 
-* If the 'client_cred' parameter was present in the request, the Group Manager adds the specified public key of the joining node to the list of public keys of the current group members. 
+* If the 'client_cred' parameter was present in the request, the Group Manager adds the specified public key of the joining node to the list of public keys of the current group members.
 
 * If the 'client_cred' parameter was not present in the request, the Group Manager retrieves the already stored public key of the joining node, as acquired from previous interactions (see also {{sec-public-keys-of-joining-nodes}}). Then, the Group Manager adds the retrieved public key to the list of public keys of the current group members.
 
@@ -483,7 +486,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
 
 * The 'num' parameter MUST be present.
- 
+
 * The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'exp' parameter MUST be present.
@@ -496,8 +499,9 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 and includes a list of parameters indicating particular policies enforced in the group. In particular, if the field "Sequence Number Synchronization Method" is present, it indicates the method to achieve synchronization of sequence numbers among group members (see Appendix E of {{I-D.ietf-core-oscore-groupcomm}}), by specifying the corresponding value from the "Sequence Number Synchronization Method" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
 
-Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}.
 -->
+
+Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}.
 
 The rekeying process in case backward security is needed is described in {{sec-group-rekeying-process}}.
 
@@ -523,7 +527,7 @@ In particular, one of the following four cases can occur when a new node joins a
 
 # Retrieval of Updated Keying Material # {#sec-updated-key}
 
-At some point, a group member considers the OSCORE Security Context invalid and to be renewed. This happens, for instance, after a number of unsuccessful security processing of incoming messages from other group members, or when the Security Context expires as specified by the 'exp' parameter of the Joining Response. 
+At some point, a group member considers the OSCORE Security Context invalid and to be renewed. This happens, for instance, after a number of unsuccessful security processing of incoming messages from other group members, or when the Security Context expires as specified by the 'exp' parameter of the Joining Response.
 
 When this happens, the group member retrieves updated security parameters and group keying material. This can occur in the two different ways described below.
 
