@@ -730,21 +730,19 @@ IANA is asked to register the following entry in the "ACE Groupcomm Parameters" 
 
 # Profile Requirements # {#profile-req}
 
-TODO: update
-
 This appendix lists the specifications on this application profile of ACE, based on the requiremens defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
 * REQ1 - Specify the encoding and value of the identifier of group of 'scope': see {{ssec-auth-req}}.
 
 * REQ2 - Specify the encoding and value of the identifier of roles of 'scope': see {{ssec-auth-req}}.
 
-* REQ3 (Optional) - Specify the acceptable values for 'sign\_alg': values from Tables 5 and 6 of {{RFC8152}}.
+* REQ3 - if used, specify the acceptable values for 'sign\_alg': values from Tables 5 and 6 of {{RFC8152}}.
 
-* REQ4 (Optional) - Specify the acceptable values for 'sign\_parameters': values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+* REQ4 - If used, specify the acceptable values for 'sign\_parameters': values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}).
 
-* REQ5 (Optional) - Specify the acceptable values for 'sign\_key\_parameters': values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}).
+* REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
-* REQ6 (Optional) - Specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}. Future specifications may define additional values for this parameter.
+* REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}. Future specifications may define additional values for this parameter.
 
 * REQ7 - Format of the 'key' value: see {{ssec-join-resp}}.
 
@@ -752,35 +750,35 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ9: Specify the format of the identifiers of group members: see {{ssec-join-resp}} and {{sec-pub-keys}}.
 
-* REQ10 (Optional) - Specify the format and content of 'group\_policies' entries: three values are defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
+* REQ10 - Specify the communication protocol that the members of the group must use: CoAP, possibly over IP multicast.
 
-* REQ11 - Communication protocol that the members of the group must use: CoAP, possibly over IP multicast.
+* REQ11 - Specify the security protocols that the group members must use to protect their communication: Group OSCORE.
 
-* REQ12 - Security protocols that the group members must use to protect their communication: Group OSCORE.
+* REQ12 - Specify and register the application profile identifier: coap_group_oscore_app (see {{ssec-iana-groupcomm-profile-registry}}).
 
-* REQ13 - Profile identifier: coap_group_oscore_app
+* REQ13 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
 
-* REQ14 (Optional) - Specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
+* REQ14 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}, and the three values defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
 
-* REQ15 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
+* REQ15 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
 
-* REQ16 - Specify the format and content of 'group\_policies': see {{ssec-join-resp}}.
+* REQ16 - Specify how the communication is secured between the Client and KDC: by means of any transport profile of ACE {{I-D.ietf-ace-oauth-authz}} between Client and Group Manager that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
-* REQ17 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
+* REQ17: Specify how the nonce N\_S is generated, if the token is not being posted (e.g. if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
 
-* REQ18 - Specify how the communication is secured between the Client and KDC: by means of any transport profile of ACE {{I-D.ietf-ace-oauth-authz}} between Client and Group Manager that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
-
-* REQ19: Specify how the nonce N\_S is generated, if the token is not being posted (e.g. if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
-
-* REQ20: Specify if 'mgt_key_material' used, and if yes specify its format and content: not used in this version of the profile.
+* REQ18: Specify if 'mgt_key_material' used, and if yes specify its format and content: not used in this version of the profile.
 
 * OPT1 (Optional) - Specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
 
 * OPT2 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' and 'pub_key_enc' are not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
-* OPT3 (Optional) - Specify the format and content of 'mgt\_key\_material', if the default is not used: no.
+* OPT3 (Optional) - Specify the encoding of 'pub_keys_repos' if the default is not used: no.
 
 * OPT4 (Optional) - Specify policies that instruct clients to retain unsuccessfully decrypted messages and for how long, so that they can be decrypted after getting updated keying material: no.
+
+* OPT5 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: no.
+
+* OPT6 (Optional) - Specify possible or required payload formats for specific error cases: no.
 
 # Document Updates # {#sec-document-updates}
 
