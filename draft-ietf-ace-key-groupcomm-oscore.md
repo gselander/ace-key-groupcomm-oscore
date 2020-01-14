@@ -133,7 +133,7 @@ Additionally, this document makes use of the following terminology.
 
 * Group name is used as a synonym for group identifier in {{I-D.ietf-ace-key-groupcomm}}.
 
-* GROUPNAME and NODENAME are used to indicate the variants parts of the resource endpoint, i.e. "gid" and "node" URI path in {{I-D.ietf-ace-key-groupcomm}}.
+* GROUPNAME and NODENAME are used to indicate the variant parts of the resource endpoint, i.e. "gid" and "node" URI path in {{I-D.ietf-ace-key-groupcomm}}.
 
 * Requester: member of an OSCORE group that sends request messages to other members of the group.
 
@@ -183,13 +183,13 @@ This specification describes how to use the ACE framework for authentication and
 
 -->
 
-With reference to {{I-D.ietf-ace-key-groupcomm}} :
+With reference to {{I-D.ietf-ace-key-groupcomm}}:
 
 * The node wishing to joing the OSCORE group is the Client.
 
-* The Authorization Server is the AS.
-
 * The Group Manager is the Key Distribution Center (KDC).
+
+* The Authorization Server associated to the Group Manager is the AS.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
@@ -215,7 +215,7 @@ With reference to the AS, communications between the joining node and the AS (/t
 
 ## Overview of the Joining Process {#ssec-overview-join-process}
 
-A node performs the steps described in Section 2 of {{I-D.ietf-ace-key-groupcomm}} in order to join an OSCORE group. The format and processing of messages exchanged among the participants are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document.
+A node performs the steps described in Section 4.2 of {{I-D.ietf-ace-key-groupcomm}} in order to join an OSCORE group. The format and processing of messages exchanged among the participants are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document.
 
 <!-- 13-01-2020 FP: Moved to ace-key-groupcomm
 
