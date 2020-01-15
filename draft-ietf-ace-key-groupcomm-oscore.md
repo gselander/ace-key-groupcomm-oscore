@@ -185,9 +185,9 @@ This specification describes how to use the ACE framework for authentication and
 
 With reference to {{I-D.ietf-ace-key-groupcomm}}:
 
-* The node wishing to joing the OSCORE group is the Client.
+* The node wishing to joining the OSCORE group, i.e. the joining node, is the Client.
 
-* The Group Manager is the Key Distribution Center (KDC).
+* The Group Manager is the Key Distribution Center (KDC), acting as a Resource Server.
 
 * The Authorization Server associated to the Group Manager is the AS.
 
@@ -205,7 +205,7 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 All communications between the involved entities rely on the CoAP protocol and MUST be secured.
 
-In particular, communications between the joining node and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. Note that it is expected that in the commonly referred base-case of this specification, the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
+In particular, communications between the Client and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. Note that it is expected that in the commonly referred base-case of this specification, the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 In particular, communications between the joining node and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. To this end, the AS MAY signal the specific transport profile to use, consistently with requirements and assumptions defined in the ACE framework {{I-D.ietf-ace-oauth-authz}}. Note that in the commonly referred base-case the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
@@ -264,9 +264,9 @@ The Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-g
 
 * The 'scope' parameter MUST be present.
 
-* The identifier of the OSCORE group to join under the Group Manager is encoded as a CBOR text string.
+* The group name of the OSCORE group to join under the Group Manager is encoded as a CBOR text string.
 
-* The role is encoded as a text string. Accepted values of roles are: "requester", "responder", and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
+* The role in the OSCORE group to join is encoded as a text string. Accepted values of roles are: "requester", "responder", and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
 
 * The 'audience' parameter MUST be present.
 
@@ -284,7 +284,7 @@ The Authorization Response message defined in Section 3.2 of {{I-D.ietf-ace-key-
 
 * The AS MUST include the 'exp' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
 
-* The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of 'scope' MUST be present and includes the role or CBOR array of roles that the joining node is actually authorized to take in the group, encoded as specified in {{ssec-auth-req}} of this document.
+* The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of 'scope' MUST be present and includes the role or CBOR array of roles that the joining node is actually authorized to take in the OSCORE group, encoded as specified in {{ssec-auth-req}} of this document.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm and ace
 
@@ -296,18 +296,18 @@ In particular, if symmetric keys are used, the AS generates a proof-of-possessio
 
 # Joining a Group {#sec-joining-node-to-GM}
 
-The following subsections describe the interactions between the joining node and the Group Manager, i.e. the sending of the Access Token and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the KDC consists of the messages defined in Section 3.3 and 4 of {{I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
+The following subsections describe the interactions between the joining node and the Group Manager, i.e. the sending of the Access Token and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the KDC consists of the messages defined in Section 3.3 and 4.2 of {{I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
 
 
 ## Token Post {#ssec-token-post}
 
-The Token post exchange is defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}. Additionally, if allowed by the used transport profile of ACE, the joining node may instead provide the Access Token to the Group Manager by other means, e.g. during a secure session establishment (see Section 3.3.1 of {{I-D.ietf-ace-dtls-authorize}}).
+The Token post exchange is defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
 Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following applies.
 
 * The 'rsnonce' parameter contains a dedicated 8-byte nonce N_S generated by the Group Manager. The joining node may use this nonce in order to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
 
-* If present in the response:
+* If 'sign_info' is present in the response:
 
   * 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}.
 
@@ -317,8 +317,9 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
 
-Note that instead of using the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}},
-the joining node MAY retrieve this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+  Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+
+Additionally, if allowed by the used transport profile of ACE, the joining node may instead provide the Access Token to the Group Manager by other means, e.g. during a secure session establishment (see Section 3.3.1 of {{I-D.ietf-ace-dtls-authorize}}).
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
@@ -354,7 +355,7 @@ The joining node requests to join the OSCORE group, by sending a Joining Request
 
 Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following applies.
 
-* The string "group-oscore" is used instead of "ace-group" (see Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}) as the top level path. The url-path /group-oscore/ is a default name of this specifications: implementations are not required to use this name, and can define their own instead.
+* The string "group-oscore" is used instead of "ace-group" (see Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}) as the top level path to the group-membership resource. The url-path /group-oscore/ is a default name of this specifications: implementations are not required to use this name, and can define their own instead.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
@@ -372,9 +373,9 @@ In particular, the joining node sends a CoAP POST request to the endpoint /group
 
 Furthermore, if the 'client_cred' parameter is present, the CBOR map specified as payload of the Joining Request MUST also include the following parameters.
 -->
-* 'cnonce' contains a dedicated 8-byte nonce N_C generated by the Client.
+* 'cnonce' contains a dedicated 8-byte nonce N_C generated by the joining node.
 
-* The signature encoded in the 'client_cred_verify' parameter is computed by the joining node by using the same private key and countersignature algorithm it intends to use for signing messages in the OSCORE group. Moreover, N_S is defined as defined in {{sssec-challenge-value}}.
+* The signature encoded in the 'client_cred_verify' parameter is computed by the joining node by using the same private key and countersignature algorithm it intends to use for signing messages in the OSCORE group. Moreover, N_S is as defined in {{sssec-challenge-value}}.
 
 ### Value of the N\_S Challenge {#sssec-challenge-value}
 
@@ -382,29 +383,27 @@ The N\_S challenge takes one of the following values.
 
 1. If the joining node has posted the Access Token to the /authz-info endpoint of the Group Manager as in {{ssec-token-post}}, N\_S takes the same value of the 'rsnonce' parameter in the 2.01 (Created) response to the Token POST.
 
-2. If the Token POST in {{ssec-token-post}} has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} and the joining node included the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in Section 7.5 of {{RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge" defined in Section 7 of {{I-D.ietf-ace-mqtt-tls-profile}}.
+2. If the Token posting has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} and the joining node included the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in Section 7.5 of {{RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge" defined in Section 7 of {{I-D.ietf-ace-mqtt-tls-profile}}.
 
 3. If the joining node is in fact re-joining the group, without posting again the same and still valid Access Token:
 
-   - If the joining node and the Group Manager communicates over DTLS, N\_S is an exporter value, computed as described in point (2) above.
+   - If the joining node and the Group Manager communicates using DTLS, N\_S is an exporter value, computed as described in point (2) above.
 
-   - If the joining node and the Group Manager communicates over OSCORE, the
-     N\_S is the output PRK of a HKDF-Extract step {{RFC5869}}, i.e. PRK = HMAC-Hash(salt, IKM).  In particular, 'salt' takes (x1 | x2), where x1 is the ID Context of the OSCORE Security Context between the joining node and the Group Manager, x2 is the Sender ID of the joining node in that Context, and | denotes byte string concatenation.  Also, 'IKM' is the OSCORE Master Secret of the OSCORE Security Context between the joining node and the Group Manager. The HKDF MUST be one of the HMAC-based HKDF {{RFC5869}} algorithms defined for COSE {{RFC8152}}. HKDF SHA-256 is mandatory to implement.
+   - If the joining node and the Group Manager communicates using OSCORE {{RFC8613}}, the N\_S is the output PRK of a HKDF-Extract step {{RFC5869}}, i.e. PRK = HMAC-Hash(salt, IKM). In particular, 'salt' takes (x1 \| x2), where x1 is the ID Context of the OSCORE Security Context between the joining node and the Group Manager, x2 is the Sender ID of the joining node in that Context, and \| denotes byte string concatenation. Also, 'IKM' is the OSCORE Master Secret of the OSCORE Security Context between the joining node and the Group Manager. The HKDF MUST be one of the HMAC-based HKDF {{RFC5869}} algorithms defined for COSE {{RFC8152}}. HKDF SHA-256 is mandatory to implement.
 
 It is up to applications to define how N_S is computed in further alternative settings.
 
 ## Processing the Joining Request {#ssec-join-req-processing}
 
-The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}.
-Additionally, the following applies.
-
-* The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
+The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. Additionally, the following applies.
 
 * In case the Joining Request does not include the 'client_cred' parameter, the joining process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
 * To compute the signature contained in 'client_cred_verify', the GM considers: i) as signed value, N_S concatenated with N_C, where N_S is determined as described in {{sssec-challenge-value}}, while N_C is the nonce provided in the 'cnonce' parameter of the Joining Request; ii) the countersignature algorithm used in the OSCORE group, and possible correponding parameters; and iii) the public key of the joining node, either retrieved from the 'client_cred' parameter, or already stored as acquired from previous interactions with the joining node.
 
-* The payload of a 4.00 Bad Request response from the GM to the Client MUST contain the 'sign_info' and the 'pub_key_enc' parameters.
+* A 4.00 Bad Request response from the Group Manager to the joining node MUST have content format application/ace-group+cbor. The response payload is a CBOR map which MUST contain the 'sign_info' as well as the 'pub_key_enc' parameters.
+
+* The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
 
 * When receiving a 4.00 Bad Request response, the joining node SHOULD send a new Joining Request to the Group Manager, containing:
 
@@ -433,7 +432,7 @@ Upon receiving this response, the joining node SHOULD send a new Joining Request
 
 ## Joining Response {#ssec-join-resp}
 
-If the processing of the Joining Request described in {{ssec-join-req-processing}} is successful, the Group Manager updates the group membership by registering the joining node NODENAME as a new member of the OSCORE group GROUPNAME, as described in {{I-D.ietf-ace-key-groupcomm}}.
+If the processing of the Joining Request described in {{ssec-join-req-processing}} is successful, the Group Manager updates the group membership by registering the joining node NODENAME as a new member of the OSCORE group GROUPNAME, as described in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
@@ -455,13 +454,13 @@ If the joining node is not exclusively configured as monitor, the Group Manager 
 
 -->
 
-* The Group Manager stores the association between i) the public key of the joining node; and ii) the Group Identifier (Gid) associated to the OSCORE group together with the OSCORE Sender ID assigned to the joining node in the group. The Group Manager MUST keep this association updated over time.
+* The Group Manager stores the association between i) the public key of the joining node; and ii) the Group Identifier (Gid), i.e. the OSCORE ID Context, associated to the OSCORE group together with the OSCORE Sender ID assigned to the joining node in the group. The Group Manager MUST keep this association updated over time.
 
 Then, the Group Manager replies to the joining node, providing the updated security parameters and keying meterial necessary to participate in the group communication. This success Joining Response is formatted as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions:
 
 * The 'gkty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg', 'cs_params',  'cs_key_params' and 'cs_key_enc' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg', 'cs_params', 'cs_key_params' and 'cs_key_enc' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
@@ -473,7 +472,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'salt' parameter, if present, has as value the OSCORE Master Salt.
 
-   * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid) associated to the OSCORE group.
+   * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group.
 
    * The 'rpl' parameter, if present, specifies the OSCORE Replay Window Size and Type value.
 
@@ -491,9 +490,9 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'exp' parameter MUST be present.
 
-* The 'pub_keys', if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
+* The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
 
-* The 'group_policies' parameter SHOULD be present.
+* The 'group_policies' parameter SHOULD be present, and SHOULD include the elements "Sequence Number Synchronization Method" and "Key Update Check Interval" defined in Section 4.1.2. of {{I-D.ietf-ace-key-groupcomm}}.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm -
 
@@ -503,7 +502,7 @@ and includes a list of parameters indicating particular policies enforced in the
 
 Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}.
 
-The rekeying process in case backward security is needed is described in {{sec-group-rekeying-process}}.
+In case the application requires backward security, the Group Manager rekeys the group upon the new node's joining {{sec-group-rekeying-process}}.
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
@@ -778,7 +777,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT5 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: no.
 
-* OPT6 (Optional) - Specify possible or required payload formats for specific error cases: no.
+* OPT6 (Optional) - Specify possible or required payload formats for specific error cases: see {{ssec-join-req-processing}} as a 4.00 Bad Request response to a Joining Request.
 
 # Document Updates # {#sec-document-updates}
 
