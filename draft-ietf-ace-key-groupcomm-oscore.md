@@ -54,12 +54,13 @@ author:
 
 normative:
   RFC2119:
-  RFC3986:
+  RFC5705:
   RFC5869:
   RFC7252:
   RFC8152:
   RFC8174:
   RFC8446:
+  RFC8447:
   RFC8613:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm:
@@ -73,7 +74,6 @@ informative:
   I-D.ietf-core-coap-pubsub:
   I-D.tiloca-core-oscore-discovery:
   I-D.ietf-core-echo-request-tag:
-  I-D.ietf-ace-mqtt-tls-profile:
   I-D.ietf-ace-dtls-authorize:
   RFC6347:
   RFC6749:
@@ -383,7 +383,7 @@ The N\_S challenge takes one of the following values.
 
 1. If the joining node has posted the Access Token to the /authz-info endpoint of the Group Manager as in {{ssec-token-post}}, N\_S takes the same value of the 'rsnonce' parameter in the 2.01 (Created) response to the Token POST.
 
-2. If the Token posting has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} and the joining node included the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in Section 7.5 of {{RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge" defined in Section 7 of {{I-D.ietf-ace-mqtt-tls-profile}}.
+2. If the Token posting has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} and the joining node included the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in Section 7.5 of {{RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app" defined in {{ssec-iana-tls-esporter-label-registry}} of this specification.
 
 3. If the joining node is in fact re-joining the group, without posting again the same and still valid Access Token:
 
@@ -488,7 +488,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'num' parameter MUST be present.
 
-* The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
+* The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'exp' parameter MUST be present.
 
@@ -648,56 +648,68 @@ Note to RFC Editor: Please replace all occurrences of "\[\[This specification\]\
 
 This document has the following actions for IANA.
 
-## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
-
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 8.4 of {{I-D.ietf-ace-key-groupcomm}}.
-
-*  Name: Group_OSCORE_Security_Context object
-*  Key Type Value: TBD
-*  Profile: "coap_group_oscore_app", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
-*  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
-*  Reference: \[\[This specification\]\]
-
-## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
-
-IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.2 of {{I-D.ietf-ace-oscore-profile}}.
-
-*  Name: cs_alg
-*  CBOR Label: TBD
-*  CBOR Type: tstr / int
-*  Registry: COSE Algorithm Values (ECDSA, EdDSA)
-*  Description: OSCORE Counter Signature Algorithm Value
-*  Reference: \[\[This specification\]\]
-
-*  Name: cs_params
-*  CBOR Label: TBD
-*  CBOR Type: map
-*  Registry: Counter Signatures Parameters
-*  Description: OSCORE Counter Signature Algorithm Additional Parameters
-*  Reference: \[\[This specification\]\]
-
-*  Name: cs_key_params
-*  CBOR Label: TBD
-*  CBOR Type: map
-*  Registry: Counter Signatures Key Parameters
-*  Description: OSCORE Counter Signature Key Additional Parameters
-*  Reference: \[\[This specification\]\]
-
-*  Name: cs_key_enc
-*  CBOR Label: TBD
-*  CBOR Type: integer
-*  Registry: ACE Public Key Encoding
-*  Description: Encoding of Public Keys to be used with the OSCORE Counter Signature Algorithm
-*  Reference: \[\[This specification\]\]
-
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
 IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
-*  CBOR Value: TBD
-*  Reference: \[\[This specification\]\]
+*  CBOR Value: TBD1
+*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+
+## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
+
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 8.4 of {{I-D.ietf-ace-key-groupcomm}}.
+
+*  Name: Group_OSCORE_Security_Context object
+*  Key Type Value: TBD2
+*  Profile: "coap_group_oscore_app", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
+*  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
+*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+
+## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
+
+IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.2 of {{I-D.ietf-ace-oscore-profile}}.
+
+*  Name: cs_alg
+*  CBOR Label: TBD3
+*  CBOR Type: tstr / int
+*  Registry: COSE Algorithm Values (ECDSA, EdDSA)
+*  Description: OSCORE Counter Signature Algorithm Value
+*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
+
+*  Name: cs_params
+*  CBOR Label: TBD4
+*  CBOR Type: map
+*  Registry: Counter Signatures Parameters
+*  Description: OSCORE Counter Signature Algorithm Additional Parameters
+*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
+
+*  Name: cs_key_params
+*  CBOR Label: TBD5
+*  CBOR Type: map
+*  Registry: Counter Signatures Key Parameters
+*  Description: OSCORE Counter Signature Key Additional Parameters
+*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
+
+*  Name: cs_key_enc
+*  CBOR Label: TBD6
+*  CBOR Type: integer
+*  Registry: ACE Public Key Encoding
+*  Description: Encoding of Public Keys to be used with the OSCORE Counter Signature Algorithm
+*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
 ## Sequence Number Synchronization Method Registry {#ssec-iana-sn-synch-method-registry}
 
@@ -706,26 +718,43 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 *  Name: Best effort
 *  Value: 1
 *  Description: No action is taken.
-*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.1).
+*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.1)
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
 
 *  Name: Baseline
 *  Value: 2
 *  Description: The first received request sets the baseline reference point, and is discarded with no delivery to the application.
-*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.2).
+*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.2)
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
 
 *  Name: Echo challenge-response
 *  Value: 3
 *  Description: Challenge response using the Echo Option for CoAP from {{I-D.ietf-core-echo-request-tag}}.
-*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.3).
+*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.3)
 
-##  ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
+## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
 
 IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 8.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: clientId
-* CBOR Key: TBD
+* CBOR Key: TBD7
 * CBOR Type: Byte string
-* Reference: \[\[This document\]\] ({{sec-new-key}}).
+* Reference: \[\[This specification\]\] ({{sec-new-key}})
+
+## TLS Exporter Label Registry {#ssec-iana-tls-esporter-label-registry}
+
+IANA is asked to register the following entry in the "TLS Exporter Label" Registry defined in Section 6 of {{RFC5705}} and updated in Section 12 of {{RFC8447}}.
+
+* Value: EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app
+* DTLS-OK: Y
+* Recommended: N
+* Reference: \[\[This specification\]\] ({{sssec-challenge-value}})
 
 --- back
 
