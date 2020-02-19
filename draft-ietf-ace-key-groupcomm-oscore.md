@@ -133,7 +133,7 @@ Additionally, this document makes use of the following terminology.
 
 * Group name is used as a synonym for group identifier in {{I-D.ietf-ace-key-groupcomm}}.
 
-* GROUPNAME and NODENAME are used to indicate the variant parts of the resource endpoint, i.e. "gid" and "node" URI path in {{I-D.ietf-ace-key-groupcomm}}.
+* GROUPNAME and NODENAME are used to indicate the variant parts of the resource endpoint, i.e. the "GID" and "NODE" URI segments in {{I-D.ietf-ace-key-groupcomm}}.
 
 * Requester: member of an OSCORE group that sends request messages to other members of the group.
 
@@ -550,7 +550,7 @@ Upon receiving the Key Distribution Response, the group member retrieves the upd
 
 If the group member wants to retrieve the latest group keying material as well as the Sender ID that it has in the OSCORE group, it sends a Key Distribution Request to the Group Manager.
 
-In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/NODENAME at the Group Manager.
+In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
 
 The Group Manager processes the Key Distribution Request according to Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -562,7 +562,7 @@ Upon receiving the Key Distribution Response, the group member retrieves the upd
 
 As discussed in Section 2.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point experience a wrap-around of its own Sender Sequence Number in the group.
 
-When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP PUT request to the endpoint /group-oscore/GROUPNAME/NODENAME at the Group Manager.
+When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP PUT request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
 
 Upon receiving the Key Renewal Request, the Group Manager processes it as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}, and performs one of the following actions.
 
@@ -596,7 +596,7 @@ Upon receiving the Version Request, the Group Manager processes it as per Sectio
 
 # Request to Leave the Group # {#sec-leave-req}
 
-A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /group-oscore/GROUPNAME/NODENAME at the Group Manager.
+A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
 
 Upon receiving the Group Leaving Request, the Group Manager processes it as per Section 4.1.6.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -636,7 +636,7 @@ In case the rekeying terminates and some group members have not received the new
 
 This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
-Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource of the group, at the endpoint /group-oscore/GROUPNAME/NODENAME of the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
+Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource of the group, at the endpoint /group-oscore/GROUPNAME/nodes/NODENAME of the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
 
 # Security Considerations {#sec-security-considerations}
 
