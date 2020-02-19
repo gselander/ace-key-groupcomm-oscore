@@ -237,13 +237,13 @@ All further communications between the joining node and the Group Manager MUST b
 
 ## Overview of the Group Rekeying Process {#ssec-overview-group-rekeying-process}
 
-If the application requires backward and forward security, the Group Manager MUST generate new security parameters and group keying material, and distribute them to the group (rekeying) upon membership changes.
+If the application requires backward and forward security, the Group Manager MUST generate new keying material and distribute it to the group (rekeying) upon membership changes.
 
 That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access communications in the group prior its joining, while a leaving node cannot access communications in the group after its leaving.
 
-Parameters and group keying material include a new Group Identifier (Gid) for the group and a new Master Secret for the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
+The keying material distributed through a group rekeying MUST include a new Group Identifier (Gid) for the group and a new value for the Master Secret parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). Also, it MAY include a new value for the Master Salt parameter of the OSCORE Common Security Context of that group.
 
-Upon generating the new group keying material and before starting its distribution, the Group Manager MUST increment the version number of the group keying material.
+Upon generating the new group keying material and before starting its distribution, the Group Manager MUST increment the version number of the group keying material. When rekeying a group, the Group Manager MUST preserve the current value of the Sender ID of each member in that group.
 
 The Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}}. Future application profiles may define alternative message formats and distribution schemes to perform group rekeying.
 
@@ -616,7 +616,7 @@ Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
-In order to rekey the OSCORE group, the Group Manager distributes a new Group Identifier (Gid), i.e. a new OSCORE ID Context, and a new OSCORE Master Secret for that group. When doing so, the Group Manager MUST increment the version number of the group keying material, before starting its distribution.
+In order to rekey the OSCORE group, the Group Manager distributes a new Group Identifier (Gid), i.e. a new OSCORE ID Context; a new OSCORE Master Secret; and, optionally, a new OSCORE Master Salt for that group. When doing so, the Group Manager MUST increment the version number of the group keying material, before starting its distribution.
 
 Furthermore, the Group Manager MUST preserve the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of message countersignatures.
 
