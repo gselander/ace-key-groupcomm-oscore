@@ -852,6 +852,22 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -04 to -05 ## {#sec-04-05}
+
+* Nonce N\_S also in error responses to the Joining Requests.
+
+* Registered and used dedicated label for TLS Exporter.
+
+* Fixed inconsistency in retrieving group keying material only.
+
+* Clarified retrieval of keying material for monitor-only members.
+
+* Clarification on incrementing version number when rekeying the group.
+
+* Clarification on what is re-distributed with the group rekeying.
+
+* Security considerations on the size of the nonces used for the signature challenge.
+
 ## Version -03 to -04 ## {#sec-03-04}
 
 * New abstract.
