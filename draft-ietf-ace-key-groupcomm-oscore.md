@@ -664,11 +664,11 @@ With reference to the Joining Request message in {{ssec-join-req-sending}}, the 
 
 For the N\_C value, it is RECOMMENDED to use a 8-byte long random nonce. Furthermore, N\_C is always conveyed in the 'cnonce' parameter of the Joining Request, which is always sent over the secure communication channel  between the joining node and the Group Manager.
 
-As defined in {{sssec-challenge-value}}, the way the N\_S value is computed in depends on the particular interaction between the joining node and the Group Manager.
+As defined in {{sssec-challenge-value}}, the way the N\_S value is computed depends on the particular interaction between the joining node and the Group Manager.
 
 * If the Access Token is not explicitly posted to the /authz-info endpoint of the Group Manager, or if the joining node re-joins without re-posting the same still valid Access Token, then N\_S is computed as a 32-byte long nonce (see points (2) and (3) of {{sssec-challenge-value}}).
 
-* If the Access Token has been explicitly posted to the /authz-info endpoint of the Group Manager, N\_S takes the value conveyed in the 'rsnonce' parameter of the 2.01 response to the Token Post (see point (1) of {{sssec-challenge-value}}). In such a case, it is RECOMMENDED to use a 8-byte long random nonce as value for N\_S.
+* If the Access Token has been explicitly posted to the /authz-info endpoint of the Group Manager, N\_S takes the value conveyed in the 'rsnonce' parameter of the 2.01 response to the Token Post (see {{ssec-token-post}}). Similarly, if a Joining Request is not successfully processed by the Group Manager, the returned error response should also include the 'rsnonce' parameter specifying a new nonce N\_S (see {{ssec-join-req-processing}}). In either case, it is RECOMMENDED to use a 8-byte long random nonce as value for N\_S.
 
 If we consider both N\_C and N\_S to be 8-byte long nonces, the following considerations hold.
 
