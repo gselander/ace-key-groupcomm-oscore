@@ -630,7 +630,11 @@ The Group Manager uses the same format of the Joining Response message in {{ssec
 
 * The 'contextId' parameter of the 'key' parameter specifies the new Group ID.
 
-The Group Manager separately sends a group rekeying message to each group member to be rekeyed. Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the joining process. It is RECOMMENDED that the Group Manager gets confirmation of successful distribution from the group members, and admits a maximum number of individual retransmissions to non-confirming group members.
+The Group Manager separately sends a group rekeying message to each group member to be rekeyed.
+
+Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the joining process. In particular, each rekeying message can target the URI path possibly provided by the intended recipient upon joining the group (see {{ssec-join-req-sending}}), as specified in the Joining Request with the 'control_path' parameter defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}.
+
+It is RECOMMENDED that the Group Manager gets confirmation of successful distribution from the group members, and admits a maximum number of individual retransmissions to non-confirming group members.
 
 In case the rekeying terminates and some group members have not received the new keying material, they will not be able to correctly process following secured messages exchanged in the group. These group members will eventually contact the Group Manager, in order to retrieve the current keying material and its version.
 
