@@ -582,21 +582,35 @@ Upon receiving the Public Key Request, the Group Manager processes it as per Sec
 
 The success Public Key Response is formatted as defined in Section 4.1.3.1 or 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively.
 
+# Update of Public Key # {#sec-update-pub-key}
+
+A group member may need to provide the Group Manager with its new public key to use in the group from then on, hence replacing the current one. This can be the case, for instance, if the countersignature algorithm and possible associated parameters used in the OSCORE group have been changed, and the current public key is not compatible with them.
+
+To this end, the group member sends a Public Key Update Request message to the Group Manager, as per Section 4.6 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP POST request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME/pub-key at the Group Manager.
+
+Upon receiving the Group Leaving Request, the Group Manager processes it as per Section 4.1.7.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions.
+
+* If the requesting group member is configured exclusively as monitor, the Group Manager replies with a 4.06 (Not Acceptable) error response.
+
+* The N\_S signature challenge is computed as per point (3) in {{sssec-challenge-value}} (REQ17).
+
+* If the request is successfully processed, the Group Manager stores the association between i) the new public key of the group member; and ii) the Group Identifier (Gid), i.e. the OSCORE ID Context, associated to the OSCORE group together with the OSCORE Sender ID assigned to the group member in the group. The Group Manager MUST keep this association updated over time.
+
 # Retrieval of Group Policies # {#sec-policies}
 
-A group member may request the current policies used in the OSCORE group. To this end, the group member sends a Policies Request, as per Section 4.6  of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/policies at the Group Manager, where GROUPNAME is the name of the OSCORE group.
+A group member may request the current policies used in the OSCORE group. To this end, the group member sends a Policies Request, as per Section 4.7  of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/policies at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 Upon receiving the Policies Request, the Group Manager processes it as per Section 4.1.4.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Policies Response is formatted as defined in Section 4.1.4.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
 # Retrieval of Keying Material Version # {#sec-version}
 
-A group member may request the current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as per Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/ctx-num at the Group Manager, where GROUPNAME is the name of the OSCORE group.
+A group member may request the current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/ctx-num at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 Upon receiving the Version Request, the Group Manager processes it as per Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Version Response is formatted as defined in Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
 # Request to Leave the Group # {#sec-leave-req}
 
-A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.8 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
+A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.9 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
 
 Upon receiving the Group Leaving Request, the Group Manager processes it as per Section 4.1.6.3 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -861,6 +875,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Nonce N\_S also in error responses to the Joining Requests.
 
 * Registered and used dedicated label for TLS Exporter.
+
+* Added method for uploading a new public key to the Group Manager.
 
 * Fixed inconsistency in retrieving group keying material only.
 
