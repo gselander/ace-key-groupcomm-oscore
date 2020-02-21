@@ -75,6 +75,7 @@ informative:
   I-D.tiloca-core-oscore-discovery:
   I-D.ietf-core-echo-request-tag:
   I-D.ietf-ace-dtls-authorize:
+  I-D.tiloca-ace-oscore-gm-admin:
   RFC6347:
   RFC6749:
   RFC7641:
@@ -295,6 +296,22 @@ The Authorization Response message defined in Section 3.2 of {{I-D.ietf-ace-key-
 In particular, if symmetric keys are used, the AS generates a proof-of-possession key, binds it to the Access Token, and provides it to the joining node in the 'cnf' parameter of the  Access Token response. Instead, if asymmetric keys are used, the joining node provides its own public key to the AS in the 'req_cnf' parameter of the Access Token request. Then, the AS uses it as proof-of-possession key bound to the Access Token, and provides the joining node with the Group Manager's public key in the 'rs_cnf' parameter of the Access Token response.
 
 -->
+
+# Interface at the Group Manager {#sec-interface-GM}
+
+The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additional resource:
+
+* /group-manager/GROUPNAME/active: this sub-resource is fixed and supports the GET method, whose handler is defined in {{active-get}}.
+
+## GET Handler {#active-get}
+
+The handler expects a GET request.
+
+The handler verifies that the group identifier of the /group-manager/GROUPNAME/active path is a subset of the 'scope' stored in the Access Token associated to the requesting client. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
+
+If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise.
+
+The method to set the current group status, i.e. active or inactive, is out of the scope of this specification, and is defined for the administrator interface of the Group Manager specified in {{I-D.tiloca-ace-oscore-gm-admin}}.
 
 # Joining a Group {#sec-joining-node-to-GM}
 
@@ -608,6 +625,29 @@ A group member may request the current version of the keying material used in th
 
 Upon receiving the Version Request, the Group Manager processes it as per Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Version Response is formatted as defined in Section 4.1.5.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
+# Retrieval of Group Status # {#sec-status}
+
+A group member may request the current status of the the OSCORE group, i.e. active or inactive. To this end, the group member sends a Group Status Request to the Group Manager.
+
+In particular, the group member sends a CoAP GET request to the endpoint /group-oscore/GROUPNAME/active at the Group Manager defined in {{sec-interface-GM}} of this specification, where GROUPNAME is the name of the OSCORE group. The success Group Version Response is formatted as defined in {{sec-interface-GM}} of this specification.
+
+Upon learning from a 2.05 (Content) response that the group is currently inactive, the group member SHOULD stop taking part in communications within the group, until it becomes active again.
+
+Upon learning from a 2.05 (Content) response that the group has become active again, the group member can resume taking part in communications within the group.
+
+{{fig-key-status-req-resp}} gives an overview of the exchange described above.
+
+~~~~~~~~~~~
+ Group                                                         Group
+ Member                                                       Manager
+   |                                                             |
+   |------ Group Status Request: GET ace-group/GID/active ------>|
+   |                                                             |
+   |<---------- Group Status Response: 2.05 (Content) -----------|
+   |                                                             |
+~~~~~~~~~~~
+{: #fig-key-status-req-resp title="Message Flow of Group Status Request-Response" artwork-align="center"}
+
 # Request to Leave the Group # {#sec-leave-req}
 
 A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per Section 4.9 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
@@ -877,6 +917,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Registered and used dedicated label for TLS Exporter.
 
 * Added method for uploading a new public key to the Group Manager.
+
+* Added resource and method for retrieving the current group status.
 
 * Fixed inconsistency in retrieving group keying material only.
 
