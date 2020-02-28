@@ -497,8 +497,6 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group.
 
-   * The 'rpl' parameter, if present, specifies the OSCORE Replay Window Size and Type value.
-
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from Tables 5 and 6 of {{RFC8152}}.
 
    * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}.
