@@ -328,15 +328,19 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * If 'sign_info' is present in the response:
 
+  TODO: have 'sign_info' as an array of arrays, if 'scope' in the Access Token covers multiple groups/topics.
+
   * 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}.
 
   * 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 9.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified, 'sign_parameters' MUST be encoding the CBOR simple value Null.
 
   * 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
 
-  * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
+TODO: have 'pub_key_enc' as an array of arrays, if 'scope' in the Access Token covers multiple groups/topics.
+  
+* If 'pub_key_enc' is present in the response, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
 
-  Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
 Additionally, if allowed by the used transport profile of ACE, the joining node may instead provide the Access Token to the Group Manager by other means, e.g. during a secure session establishment (see Section 3.3.1 of {{I-D.ietf-ace-dtls-authorize}}).
 
