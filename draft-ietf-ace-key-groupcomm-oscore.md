@@ -287,7 +287,7 @@ The Authorization Response message defined in Section 3.2 of {{I-D.ietf-ace-key-
 
 * The AS MUST include the 'exp' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
 
-* The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of 'scope' MUST be present and includes the role or CBOR array of roles that the joining node is actually authorized to take in the OSCORE group, encoded as specified in {{ssec-auth-req}} of this document.
+* The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and includes the role or CBOR array of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in {{ssec-auth-req}} of this document.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm and ace
 
@@ -856,9 +856,9 @@ IANA is asked to register the following entry in the "TLS Exporter Label" Regist
 
 This appendix lists the specifications on this application profile of ACE, based on the requiremens defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
-* REQ1 - Specify the encoding and value of the identifier of group of 'scope': see {{ssec-auth-req}}.
+* REQ1 - Specify the encoding and value of the identifier of group, for scope entries of 'scope': see {{ssec-auth-req}}.
 
-* REQ2 - Specify the encoding and value of the identifier of roles of 'scope': see {{ssec-auth-req}}.
+* REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{ssec-auth-req}}.
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from Tables 5 and 6 of {{RFC8152}}.
 
