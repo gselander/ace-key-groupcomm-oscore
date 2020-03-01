@@ -517,6 +517,8 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
 
+* The 'peer_roles' parameter MUST be present if 'pub\_keys' is present.
+
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the elements "Sequence Number Synchronization Method" and "Key Update Check Interval" defined in Section 4.1.2. of {{I-D.ietf-ace-key-groupcomm}}.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm -
@@ -525,7 +527,13 @@ and includes a list of parameters indicating particular policies enforced in the
 
 -->
 
-Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}.
+Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the group.
+
+From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}. When doing so:
+
+* The joining node MUST NOT process an incoming request message, if signed by a group member whose public key is not associated to the role "Requester".
+
+* The joining node MUST NOT process an incoming response message, if signed by a group member whose public key is not associated to the role "Responder".
 
 If the application requires backward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the current group members upon the new node's joining (see {{sec-group-rekeying-process}}). As a consequence, the joining node is not able to access secure communication in the group occurred prior its joining.
 
@@ -600,6 +608,8 @@ If the Public Key Request uses the method FETCH, the Public Key Request is forma
 Upon receiving the Public Key Request, the Group Manager processes it as per Section 4.1.3.1 or 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively. Additionally, if the Public Key Request uses the method FETCH, the Group Manager silently ignores identifiers included in the ’get_pub_keys’ parameter of the request that are not associated to any current group member.
 
 The success Public Key Response is formatted as defined in Section 4.1.3.1 or 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively.
+
+Upon receiving a success Public Key Response, the requesting group member updates the association between public keys and roles of corresponding group members. This especially considers each (new) public key specified in the 'pub_keys' parameter and the role(s) that the corresponding group member has in the group, as specified in the 'peer_roles' parameter.
 
 # Update of Public Key # {#sec-update-pub-key}
 
