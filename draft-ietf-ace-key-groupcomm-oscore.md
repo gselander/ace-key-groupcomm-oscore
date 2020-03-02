@@ -963,6 +963,10 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Nonce N\_S also in error responses to the Joining Requests.
 
+* Supporting single Access Token for multiple groups/topics.
+
+* Supporting legal requesters/responders using the 'peer_roles' parameter.
+
 * Registered and used dedicated label for TLS Exporter.
 
 * Added method for uploading a new public key to the Group Manager.
@@ -978,6 +982,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Clarification on what is re-distributed with the group rekeying.
 
 * Security considerations on the size of the nonces used for the signature challenge.
+
+* Registered CBOR values to abbreviate role identifiers in the group.
 
 ## Version -03 to -04 ## {#sec-03-04}
 
