@@ -267,10 +267,21 @@ The Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-g
 
 * The 'scope' parameter MUST be present.
 
-* The group name of the OSCORE group to join under the Group Manager is encoded as a CBOR text string.
+   - The group name of the OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
-* The role in the OSCORE group to join is encoded as a text string. Accepted values of roles are: "requester", "responder", and "monitor". Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\].
+   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\]. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} and registered in {{ssec-iana-ace-groupcomm-role-cbor}} of this specification (OPT7).
 
+~~~~~~~~~~~
++-----------+------------+
+| Name      | CBOR Value |
++-----------+------------+
+| requester |    TBD8    |
+| responder |    TBD9    |
+| monitor   |    TBD10   |
++-----------+------------+
+~~~~~~~~~~~
+{: #fig-role-cbor-values title="CBOR Abbreviations for Role Identifiers in the Group" artwork-align="center"}
+   
 * The 'audience' parameter MUST be present.
 
 ## Authorization Response {#ssec-auth-resp}
@@ -758,7 +769,7 @@ This document has the following actions for IANA.
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -767,7 +778,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 8.4 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD2
@@ -821,7 +832,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 ## Sequence Number Synchronization Method Registry {#ssec-iana-sn-synch-method-registry}
 
-IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 9.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Best effort
 *  Value: 1
@@ -848,7 +859,7 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 
 ## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 8.3 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 9.4 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: clientId
 * CBOR Key: TBD7
@@ -863,6 +874,30 @@ IANA is asked to register the following entry in the "TLS Exporter Label" Regist
 * DTLS-OK: Y
 * Recommended: N
 * Reference: \[\[This specification\]\] ({{sssec-challenge-value}})
+
+## ACE Groupcomm Role CBOR Mappings Registry {#ssec-iana-ace-groupcomm-role-cbor}
+
+IANA is asked to register the following entries in the "ACE Groupcomm Role CBOR Mappings" Registry defined in Section 9.9 of {{I-D.ietf-ace-key-groupcomm}}.
+
+* Name: "requester"
+* CBOR Value: TBD8
+* Reference: \[\[This specification\]\] ({{ssec-auth-req}})
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
+
+* Name: "responder"
+* CBOR Value: TBD9
+* Reference: \[\[This specification\]\] ({{ssec-auth-req}})
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
+
+* Name: "monitor"
+* CBOR Value: TBD10
+* Reference: \[\[This specification\]\] ({{ssec-auth-req}})
 
 --- back
 
@@ -917,6 +952,8 @@ This appendix lists the specifications on this application profile of ACE, based
 * OPT5 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: send a 4.00 Bad Request response to a Joining Request (see {{ssec-join-req-processing}}).
 
 * OPT6 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 Bad Request response to a Joining Request (see {{ssec-join-req-processing}}).
+
+* OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic (see {{ssec-auth-req}}).
 
 # Document Updates # {#sec-document-updates}
 
