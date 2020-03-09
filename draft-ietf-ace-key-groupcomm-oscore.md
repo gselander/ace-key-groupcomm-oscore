@@ -784,7 +784,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Key" Registr
 
 ## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
 
-IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.2 of {{I-D.ietf-ace-oscore-profile}}.
+IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.4 of {{I-D.ietf-ace-oscore-profile}}.
 
 *  Name: cs_alg
 *  CBOR Label: TBD3
