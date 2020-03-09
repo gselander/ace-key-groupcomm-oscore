@@ -947,7 +947,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Security considerations on the size of the nonces used for the signature challenge.
 
-* Registered CBOR values to abbreviate role identifiers in the group.
+* Added CBOR values to abbreviate role identifiers in the group.
 
 ## Version -03 to -04 ## {#sec-03-04}
 
