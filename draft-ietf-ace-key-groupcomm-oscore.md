@@ -691,7 +691,7 @@ Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as
 
 In order to rekey the OSCORE group, the Group Manager distributes a new Group Identifier (Gid), i.e. a new OSCORE ID Context; a new OSCORE Master Secret; and, optionally, a new OSCORE Master Salt for that group. When doing so, the Group Manager MUST increment the version number of the group keying material, before starting its distribution.
 
-Furthermore, the Group Manager MUST preserve the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of message countersignatures.
+Furthermore, it is RECOMMENDED that the Group Manager preserves the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of message countersignatures.
 
 The Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
 
@@ -705,7 +705,7 @@ The Group Manager uses the same format of the Joining Response message in {{ssec
 
 The Group Manager separately sends a group rekeying message to each group member to be rekeyed.
 
-Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the joining process. In particular, each rekeying message can target the URI path possibly provided by the intended recipient upon joining the group (see {{ssec-join-req-sending}}), as specified in the Joining Request with the 'control_path' parameter defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}.
+Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the joining process. In particular, each rekeying message can target the 'control_path' URI path defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, if provided by the intended recipient upon joining the group (see {{ssec-join-req-sending}}).
 
 It is RECOMMENDED that the Group Manager gets confirmation of successful distribution from the group members, and admits a maximum number of individual retransmissions to non-confirming group members.
 
