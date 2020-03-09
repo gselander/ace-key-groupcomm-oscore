@@ -917,6 +917,8 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic (see {{ssec-auth-req}}).
 
+* OPT8 (Optional) - Specify policies for the KDC to perform group rekeying after receiving a Key Renewal Request: no.
+
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
