@@ -267,7 +267,7 @@ The Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-g
 
    - The group name of the OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
-   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\]. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} and registered in {{ssec-iana-ace-groupcomm-role-cbor}} of this specification (OPT7).
+   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\]. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
 
 ~~~~~~~~~~~
 +-----------+------------+
@@ -294,7 +294,7 @@ In case of successful authorization, the AS releases an Access Token bound to a 
 
 The Authorization Response message defined in Section 3.2 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions:
 
-* The AS MUST include the 'exp' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
+* The AS MUST include the 'expires_in' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
 
 * The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and includes the role or CBOR array of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in {{ssec-auth-req}} of this document.
 
@@ -862,26 +862,6 @@ IANA is asked to register the following entry in the "TLS Exporter Label" Regist
 * DTLS-OK: Y
 * Recommended: N
 * Reference: \[\[This specification\]\] ({{sssec-challenge-value}})
-
-## ACE Groupcomm Role CBOR Mappings Registry {#ssec-iana-ace-groupcomm-role-cbor}
-
-IANA is asked to register the following entries in the "ACE Groupcomm Role CBOR Mappings" Registry defined in Section 9.9 of {{I-D.ietf-ace-key-groupcomm}}.
-
-* Name: "requester"
-* CBOR Value: TBD8
-* Reference: \[\[This specification\]\] ({{ssec-auth-req}})
-
-<t></t>
-
-* Name: "responder"
-* CBOR Value: TBD9
-* Reference: \[\[This specification\]\] ({{ssec-auth-req}})
-
-<t></t>
-
-* Name: "monitor"
-* CBOR Value: TBD10
-* Reference: \[\[This specification\]\] ({{ssec-auth-req}})
 
 --- back
 
