@@ -281,7 +281,7 @@ The Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-g
 +-----------+------------+
 ~~~~~~~~~~~
 {: #fig-role-cbor-values title="CBOR Abbreviations for Role Identifiers in the Group" artwork-align="center"}
-   
+
 * The 'audience' parameter MUST be present.
 
 ## Authorization Response {#ssec-auth-resp}
@@ -348,7 +348,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
   * 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 9.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
 
 TODO: have 'pub_key_enc' as an array of arrays, if 'scope' in the Access Token covers multiple groups/topics.
-  
+
 * If 'pub_key_enc' is present in the response, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{I-D.ietf-ace-cwt-proof-of-possession}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
 
 Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
@@ -755,7 +755,7 @@ If we consider both N\_C and N\_S to be 8-byte long nonces, the following consid
 
 * If both N\_C and N\_S are random nonces, the average collision for each nonce will happen after 2^32 messages, as per the birthday paradox and as also discussed in Section 7 of {{I-D.ietf-ace-oscore-profile}}. This amounts to considerably more token provisionings than the expected new joinings of OSCORE groups under a same Group Manager.
 
-* If N\_C and N\_S are not generated randomly, e.g. by using a counter, the joining node and the Group Manager need to guarantee that reboot and loss of state on either node does not provoke re-use. If that is not guaranteed, a joining node may repeatedly post a valid Access Token to the /authz-info endpoint of the Group Manager, until it gets back an exact, re-used value N\_S* to use as nonce. Then, the joining node can send a Joining Request, conveying a reused N\_C* nonce in 'cnonce' and an old stored signature in 'client\_cred\_verify', computed over N\_C* \| N\_S*. By verifying the signature, the Group Manager would falsely believe that the joining node possesses its own private key at that point in time.
+* If N\_C and N\_S are not generated randomly, e.g. by using a counter, the joining node and the Group Manager need to guarantee that reboot and loss of state on either node does not provoke re-use. If that is not guaranteed, a joining node may repeatedly post a valid Access Token to the /authz-info endpoint of the Group Manager, until it gets back an exact, re-used value N\_S* to use as nonce. Then, the joining node can send a Joining Request, conveying a reused N\_C* nonce in 'cnonce' and an old stored signature in 'client\_cred\_verify', computed over N\_C\* \| N\_S\*. By verifying the signature, the Group Manager would falsely believe that the joining node possesses its own private key at that point in time.
 
 * Since N\_C is always conveyed in a secured Joining Request, it is practically infeasible for an on-path attacker to replay Joining Requests from a joining node to the Group Manager, in order to cause that joining node to use an arbitrary nonce N\_S.
 
@@ -797,9 +797,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Value
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+<t></t>
 
 *  Name: cs_params
 *  CBOR Label: TBD4
@@ -808,9 +806,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+<t></t>
 
 *  Name: cs_key_params
 *  CBOR Label: TBD5
@@ -819,9 +815,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Key Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+<t></t>
 
 *  Name: cs_key_enc
 *  CBOR Label: TBD6
@@ -839,18 +833,14 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 *  Description: No action is taken.
 *  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.1)
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+<t></t>
 
 *  Name: Baseline
 *  Value: 2
 *  Description: The first received request sets the baseline reference point, and is discarded with no delivery to the application.
 *  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.2)
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+<t></t>
 
 *  Name: Echo challenge-response
 *  Value: 3
@@ -883,17 +873,13 @@ IANA is asked to register the following entries in the "ACE Groupcomm Role CBOR 
 * CBOR Value: TBD8
 * Reference: \[\[This specification\]\] ({{ssec-auth-req}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+<t></t>
 
 * Name: "responder"
 * CBOR Value: TBD9
 * Reference: \[\[This specification\]\] ({{ssec-auth-req}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+<t></t>
 
 * Name: "monitor"
 * CBOR Value: TBD10
