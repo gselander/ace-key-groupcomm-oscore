@@ -618,8 +618,6 @@ Upon receiving the Public Key Request, the Group Manager processes it as per Sec
 
 The success Public Key Response is formatted as defined in Section 4.1.3.1 or 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively.
 
-Upon receiving a success Public Key Response, the requesting group member updates the association between public keys and roles of corresponding group members. This especially considers each (new) public key specified in the 'pub_keys' parameter and the role(s) that the corresponding group member has in the group, as specified in the 'peer_roles' parameter.
-
 # Update of Public Key # {#sec-update-pub-key}
 
 A group member may need to provide the Group Manager with its new public key to use in the group from then on, hence replacing the current one. This can be the case, for instance, if the countersignature algorithm and possible associated parameters used in the OSCORE group have been changed, and the current public key is not compatible with them.
