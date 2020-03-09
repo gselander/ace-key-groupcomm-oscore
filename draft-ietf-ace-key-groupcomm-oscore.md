@@ -134,8 +134,6 @@ Additionally, this document makes use of the following terminology.
 
 * Group name is used as a synonym for group identifier in {{I-D.ietf-ace-key-groupcomm}}.
 
-* GROUPNAME and NODENAME are used to indicate the variant parts of the resource endpoint, i.e. the "GID" and "NODE" URI segments in {{I-D.ietf-ace-key-groupcomm}}.
-
 * Requester: member of an OSCORE group that sends request messages to other members of the group.
 
 * Responder: member of an OSCORE group that receives request messages from other members of the group. A responder may reply back, by sending a response message to the requester which has sent the request message.
