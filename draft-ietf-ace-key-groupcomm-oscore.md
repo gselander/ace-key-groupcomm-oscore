@@ -526,8 +526,6 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
 
-* The 'peer_roles' parameter MUST be present if 'pub\_keys' is present.
-
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the elements "Sequence Number Synchronization Method" and "Key Update Check Interval" defined in Section 4.1.2. of {{I-D.ietf-ace-key-groupcomm}}.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm -
