@@ -90,7 +90,7 @@ This specification defines an application profile of the ACE framework for Authe
 
 Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{RFC8152}} and enabling end-to-end security of CoAP payload and options.
 
-As described in {{I-D.ietf-core-oscore-groupcomm}}, Group OSCORE is used to protect CoAP group communication over IP multicast {{I-D.dijk-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group, where members exchange CoAP messages secured with Group OSCORE. The Group Manager can be responsible for multiple groups, coordinates the joining process of new group members, and is entrusted with the distribution and renewal of group keying material.
+As described in {{I-D.ietf-core-oscore-groupcomm}}, Group OSCORE is used to protect CoAP group communication over IP multicast {{I-D.dijk-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group and enables the group members to exchange CoAP messages secured with Group OSCORE. The Group Manager can be responsible for multiple groups, coordinates the joining process of new group members, and is entrusted with the distribution and renewal of group keying material.
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
 
