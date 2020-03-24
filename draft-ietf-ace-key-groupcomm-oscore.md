@@ -273,7 +273,7 @@ The Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-g
 
    - The group name of the OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
-   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]; \["requester" , "monitor"\]. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
+   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
 
 ~~~~~~~~~~~
 +-----------+------------+
