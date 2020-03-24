@@ -202,7 +202,7 @@ With reference to the ACE framework and the terminology defined in OAuth 2.0 {{R
 
 -->
 
-All communications between the involved entities rely on the CoAP protocol and MUST be secured.
+All communications between the involved entities MUST be secured.
 
 In particular, communications between the Client and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. Note that it is expected that in the commonly referred base-case of this specification, the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
 
