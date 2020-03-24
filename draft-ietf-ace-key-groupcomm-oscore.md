@@ -399,8 +399,6 @@ In particular, the joining node sends a CoAP POST request to the endpoint /group
 
 -->
 
-* The 'scope' parameter MUST be present.
-
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the joining process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
 
