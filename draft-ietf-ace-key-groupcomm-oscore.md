@@ -427,6 +427,8 @@ The N\_S challenge takes one of the following values.
 
 It is up to applications to define how N_S is computed in further alternative settings.
 
+{{ssec-security-considerations-reusage-nonces}} provides security considerations on the reusage of the N_S challenge.
+
 ## Processing the Joining Request {#ssec-join-req-processing}
 
 The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. Additionally, the following applies.
@@ -753,11 +755,15 @@ If we consider both N\_C and N\_S to be 8-byte long nonces, the following consid
 
 * If both N\_C and N\_S are random nonces, the average collision for each nonce will happen after 2^32 messages, as per the birthday paradox and as also discussed in Section 7 of {{I-D.ietf-ace-oscore-profile}}. This amounts to considerably more token provisionings than the expected new joinings of OSCORE groups under a same Group Manager.
 
-* If N\_C and N\_S are not generated randomly, e.g. by using a counter, the joining node and the Group Manager need to guarantee that reboot and loss of state on either node does not provoke re-use. If that is not guaranteed, a joining node may repeatedly post a valid Access Token to the /authz-info endpoint of the Group Manager, until it gets back an exact, re-used value N\_S* to use as nonce. Then, the joining node can send a Joining Request, conveying a reused N\_C* nonce in 'cnonce' and an old stored signature in 'client\_cred\_verify', computed over N\_C\* \| N\_S\*. By verifying the signature, the Group Manager would falsely believe that the joining node possesses its own private key at that point in time.
-
-* Since N\_C is always conveyed in a secured Joining Request, it is practically infeasible for an on-path attacker to replay Joining Requests from a joining node to the Group Manager, in order to cause that joining node to use an arbitrary nonce N\_S.
-
 * Section 7 of {{I-D.ietf-ace-oscore-profile}} as well Appendix B.2 of {{RFC8613}} recommend the use of 8-byte random nonces as well. Unlike in those cases, the nonces N\_C and N\_S considered in this specification are not used for as sensitive operations as the derivation of a Security Context, with possible implications in the security of AEAD ciphers.
+
+## Reusage of Nonces for Signature Challenge {#ssec-security-considerations-reusage-nonces}
+
+If N\_C and N\_S are not generated randomly, e.g. by using a counter, the joining node and the Group Manager need to guarantee that reboot and loss of state on either node does not provoke re-use.
+
+If that is not guaranteed, a joining node may repeatedly post a valid Access Token to the /authz-info endpoint of the Group Manager, until it gets back an exact, re-used value N\_S* to use as nonce. Then, the joining node can send a Joining Request, conveying a reused N\_C* nonce in 'cnonce' and an old stored signature in 'client\_cred\_verify', computed over N\_C\* \| N\_S\*. By verifying the signature, the Group Manager would falsely believe that the joining node possesses its own private key at that point in time.
+
+Furthermore, since N\_C is always conveyed in a secured Joining Request, it is practically infeasible for an on-path attacker to replay Joining Requests from a joining node to the Group Manager, in order to cause that joining node to use an arbitrary nonce N\_S.
 
 # IANA Considerations {#sec-iana}
 
