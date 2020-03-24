@@ -604,11 +604,11 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
 
 1. If the requesting group member is configured exclusively as monitor, the Group Manager replies with a 4.00 (Bad Request) error response.
 
-2. Otherwise, depending on the policies configured (OPT8):
+2. Otherwise, depending on the configured policies (OPT8), the Group Manager takes one of the following actions.
 
-    a. Either the Group Manager replies to the group member with a 4.00 (Bad Request) error response, and rekeys the whole OSCORE group as discussed in {{sec-group-rekeying-process}};
+    a. The Group Manager rekeys the OSCORE group. That is, the Group Manager generates new group keying material for that group (see {{sec-group-rekeying-process}}), and replies to the group member with a group rekeying message as defined in {{sec-group-rekeying-process}}, providing the new group keying material. Then, the Group Manager rekeys the rest of the OSCORE group, as discussed in {{sec-group-rekeying-process}}.
 
-    b. Or the Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'clientId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
+    b. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'clientId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
 
 # Retrieval of Public Keys of Group Members # {#sec-pub-keys}
 
@@ -697,7 +697,7 @@ Furthermore, the Group Manager MUST preserve the same unchanged Sender IDs for a
 
 The Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
 
-The Group Manager uses the same format of the Joining Response message in {{ssec-join-resp}}. In particular:
+As group rekeying message, the Group Manager uses the same format of the Joining Response message in {{ssec-join-resp}}. In particular:
 
 * Only the parameters 'gkty', 'key', 'num', 'ace-groupcomm-profile' and 'exp' are present.
 
