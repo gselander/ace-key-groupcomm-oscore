@@ -240,7 +240,13 @@ If the application requires backward and forward security, the Group Manager MUS
 
 That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access communications in the group prior its joining, while a leaving node cannot access communications in the group after its leaving.
 
-The keying material distributed through a group rekeying MUST include a new Group Identifier (Gid) for the group and a new value for the Master Secret parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). Also, it MAY include a new value for the Master Salt parameter of the OSCORE Common Security Context of that group.
+The keying material distributed through a group rekeying MUST include:
+
+* a new Group Identifier (Gid) for the group, used as ID Context parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). Note that the Gid differs from the plain group name introduced in {{ssec-terminology}}, which is a plain, stable and invariant identifier, with no cryptographic relevance and meaning.
+
+* a new value for the Master Secret parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
+
+Also, the distributed keying material MAY include a new value for the Master Salt parameter of the OSCORE Common Security Context of that group.
 
 Upon generating the new group keying material and before starting its distribution, the Group Manager MUST increment the version number of the group keying material. When rekeying a group, the Group Manager MUST preserve the current value of the Sender ID of each member in that group.
 
