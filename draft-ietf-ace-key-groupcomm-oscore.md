@@ -314,13 +314,13 @@ In particular, if symmetric keys are used, the AS generates a proof-of-possessio
 
 The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additional resource:
 
-* /group-manager/GROUPNAME/active: this sub-resource is fixed and supports the GET method, whose handler is defined in {{active-get}}.
+* /group-oscore/GROUPNAME/active: this sub-resource is fixed and supports the GET method, whose handler is defined in {{active-get}}.
 
 ## GET Handler {#active-get}
 
 The handler expects a GET request.
 
-The handler verifies that the group identifier of the /group-manager/GROUPNAME/active path is a subset of the 'scope' stored in the Access Token associated to the requesting client. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
+The handler verifies that the group identifier of the /group-oscore/GROUPNAME/active path is a subset of the 'scope' stored in the Access Token associated to the requesting client. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
 
 If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is expected.
 
