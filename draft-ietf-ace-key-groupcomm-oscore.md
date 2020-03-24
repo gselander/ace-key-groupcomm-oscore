@@ -267,11 +267,11 @@ In case the specific AS associated to the Group Manager is unknown to the joinin
 
 ## Authorization Request {#ssec-auth-req}
 
-The Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions:
+The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions.
 
-* The 'scope' parameter MUST be present.
+* If the 'scope' parameter is present:
 
-   - The group name of the OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
+   - The group name of each OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
    - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
 
@@ -286,8 +286,6 @@ The Authorization Request message defined in Section 3.1 of {{I-D.ietf-ace-key-g
 ~~~~~~~~~~~
 {: #fig-role-cbor-values title="CBOR Abbreviations for Role Identifiers in the Group" artwork-align="center"}
 
-* The 'audience' parameter MUST be present.
-
 ## Authorization Response {#ssec-auth-resp}
 
 <!-- 13-01-2020 FP: Covered in ace-key-groupcomm
@@ -298,7 +296,7 @@ In case of successful authorization, the AS releases an Access Token bound to a 
 
 -->
 
-The Authorization Response message defined in Section 3.2 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions:
+The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions:
 
 * The AS MUST include the 'expires_in' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
 
