@@ -805,7 +805,9 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Value
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-<t></t>
+~~~~~~~~~~~
+
+~~~~~~~~~~~
 
 *  Name: cs_params
 *  CBOR Label: TBD4
@@ -814,7 +816,9 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-<t></t>
+~~~~~~~~~~~
+
+~~~~~~~~~~~
 
 *  Name: cs_key_params
 *  CBOR Label: TBD5
@@ -823,7 +827,9 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Key Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-<t></t>
+~~~~~~~~~~~
+
+~~~~~~~~~~~
 
 *  Name: cs_key_enc
 *  CBOR Label: TBD6
@@ -841,14 +847,18 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 *  Description: No action is taken.
 *  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.1)
 
-<t></t>
+~~~~~~~~~~~
+
+~~~~~~~~~~~
 
 *  Name: Baseline
 *  Value: 2
 *  Description: The first received request sets the baseline reference point, and is discarded with no delivery to the application.
 *  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.2)
 
-<t></t>
+~~~~~~~~~~~
+
+~~~~~~~~~~~
 
 *  Name: Echo challenge-response
 *  Value: 3
