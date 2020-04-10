@@ -947,6 +947,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Admit implicit scope and audience in the Authorization Request.
 
+* New format for the 'sign_info' parameter.
+
 * Scope not mandatory to include in the Joining Request.
 
 * Possible individual rekeying of a single requesting node combined with a group rekeying.
