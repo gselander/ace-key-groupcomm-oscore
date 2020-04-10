@@ -685,7 +685,9 @@ Upon receiving the Group Leaving Request, the Group Manager processes it as per 
 
 Other than after a spontaneous request to the Group Manager as described in {{sec-leave-req}}, a node may be forcibly removed from the OSCORE group, e.g. due to expired or revoked authorization.
 
-In either case, if the leaving node is not configured exclusively as monitor, the Group Manager performs the following actions.
+If, upon joining the group (see {{ssec-join-req-sending}}), the leaving node specified a URI in the 'control_path' parameter defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, the Group Manager MUST inform the leaving node of its eviction, by sending a DELETE request targeting the URI specified in the 'control_path' parameter.
+
+If the leaving node is not configured exclusively as monitor, the Group Manager performs the following actions.
 
 * The Group Manager frees the OSCORE Sender ID value of the leaving node, which becomes available for possible upcoming joining nodes.
 
