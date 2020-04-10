@@ -939,9 +939,27 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-## Version -04 to -05 ## {#sec-04-05}
+## Version -05 to -06 ## {#sec-05-06}
 
 * Parameter 'rsnonce' renamed to 'kdcnonce'.
+
+* Clarified difference between group name and OSCORE Gid.
+
+* Removed the role combination ["requester", "monitor"].
+
+* Admit implicit scope and audience in the Authorization Request.
+
+* Scope not mandatory to include in the Joining Request.
+
+* Possible individual rekeying of a single requesting node combined with a group rekeying.
+
+* Security considerations on reusage of signature challenges.
+
+* Addressing optional requirement OPT9 from draft-ietf-ace-key-groupcomm
+
+* Editorial improvements.
+
+## Version -04 to -05 ## {#sec-04-05}
 
 * Nonce N\_S also in error responses to the Joining Requests.
 
