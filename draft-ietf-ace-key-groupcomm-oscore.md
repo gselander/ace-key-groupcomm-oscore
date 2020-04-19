@@ -789,6 +789,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -05 to -06 ## {#sec-05-06}
 
+* Added role of external signature verifier.
+
 * Parameter 'rsnonce' renamed to 'kdcchallenge'.
 
 * Clarified difference between group name and OSCORE Gid.
