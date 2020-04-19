@@ -118,6 +118,8 @@ Additionally, this document makes use of the following terminology.
 
 * Monitor: member of an OSCORE group that is configured as responder and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
+* Signature verifier: entity external to the OSCORE group and intended to verify the countersignature of messages exchanged in the group. An authorized signature verifier does not join the OSCORE group as an actual member, yet it can retrieve the public keys of the current group members from the Group Manager.
+
 # Protocol Overview {#sec-protocol-overview}
 
 Group communication for CoAP over IP multicast has been enabled in {{I-D.ietf-core-groupcomm-bis}} and can be secured with Group Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
@@ -172,7 +174,7 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
 
    - The group name of each OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
-   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
+   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
 
 ~~~~~~~~~~~
 +-----------+------------+
@@ -181,6 +183,7 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
 | requester |    TBD8    |
 | responder |    TBD9    |
 | monitor   |    TBD10   |
+| verifier  |    TBD11   |
 +-----------+------------+
 ~~~~~~~~~~~
 {: #fig-role-cbor-values title="CBOR Abbreviations for Role Identifiers in the Group" artwork-align="center"}
@@ -209,9 +212,11 @@ If verification succeeds, the handler returns a 2.05 (Content) message containin
 
 The method to set the current group status, i.e. active or inactive, is out of the scope of this specification, and is defined for the administrator interface of the Group Manager specified in {{I-D.tiloca-ace-oscore-gm-admin}}.
 
-# Joining a Group {#sec-joining-node-to-GM}
+# Token POST and Group Joining {#sec-joining-node-to-GM}
 
 The following subsections describe the interactions between the joining node and the Group Manager, i.e. the sending of the Access Token and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the KDC consists of the messages defined in Section 3.3 and 4.2 of {{I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
+
+A signature verifier provides the Group Manager with an Access Token, as described in {{ssec-token-post}}, just as any another joining node does. However, unlike candidate group members, it does not join any OSCORE group, i.e. it does not perform the joining process defined in {{ssec-join-req-sending}}. After a successful token posting, a signature verifier is authorized to perform only the operations specified in {{sec-pub-keys}}, to retrieve the public keys of group members, and only for the OSCORE groups specified in the validated Access Token. The Group Manager MUST respond with a 4.01 (Unauthorized) error message, in case a signature verifier attempts to access any other endpoint than /group-oscore/GROUPNAME/pub-key at the Group Manager.
 
 ## Token Post {#ssec-token-post}
 
@@ -431,7 +436,7 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
 
 # Retrieval of Public Keys of Group Members # {#sec-pub-keys}
 
-A group member may need to retrieve the public keys of other group members. To this end, the group member sends a Public Key Request message to the Group Manager, as per Section 4.5 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /group-oscore/GROUPNAME/pub-key at the Group Manager.
+A group member or a signature verifier may need to retrieve the public keys of (other) group members. To this end, the group member or signature verifier sends a Public Key Request message to the Group Manager, as per Section 4.5 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /group-oscore/GROUPNAME/pub-key at the Group Manager.
 
 If the Public Key Request uses the method FETCH, the Public Key Request is formatted as defined in Section 4.1.3.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, each element of the 'get_pub_keys' parameter is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested.
 
