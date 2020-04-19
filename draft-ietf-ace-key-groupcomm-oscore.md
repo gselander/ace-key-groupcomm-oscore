@@ -358,7 +358,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
 
-* The 'group_policies' parameter SHOULD be present, and SHOULD include the elements "Sequence Number Synchronization Method" and "Key Update Check Interval" defined in Section 4.1.2. of {{I-D.ietf-ace-key-groupcomm}}.
+* The 'group_policies' parameter SHOULD be present, and SHOULD include the elements "Sequence Number Synchronization Method" and "Key Update Check Interval" defined in Section 4.1.2 of {{I-D.ietf-ace-key-groupcomm}}, as well as the element "Group OSCORE Pairwise Mode Support" defined in {{ssec-pairwise-mode-policy}} of this specification.
 
 Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the group.
 
@@ -369,6 +369,12 @@ From then on, the joining node can exchange group messages secured with Group OS
 * The joining node MUST NOT process an incoming response message, if signed by a group member whose public key is not associated to the role "Responder".
 
 If the application requires backward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the current group members upon the new node's joining (see {{sec-group-rekeying-process}}). As a consequence, the joining node is not able to access secure communication in the group occurred prior its joining.
+
+## ACE Groupcomm Policy for Group OSCORE Pairwise Mode Support ## {#ssec-pairwise-mode-policy}
+
+This specifications defines the group policy "Group OSCORE Pairwise Mode Support", for which it registers an entry in the "ACE Groupcomm Policy" IANA Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+
+The corresponding element in the 'group_policies' parameter of the Joining Response (see {{ssec-join-resp}}) encodes the CBOR simple value True, if the OSCORE group supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or the CBOR simple value False otherwise (REQ14).
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
@@ -714,6 +720,16 @@ IANA is asked to register the following entry in the "ACE Groupcomm Parameters" 
 * CBOR Type: Byte string
 * Reference: \[\[This specification\]\] ({{sec-new-key}})
 
+## ACE Groupcomm Policy Registry {#ssec-iana-ace-groupcomm-policy-registry}
+
+IANA is asked to register the following entry in the "ACE Groupcomm Policy" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+
+* Name: Group OSCORE Pairwise Mode Support
+* CBOR Key: TBD8
+* CBOR Type: Simple value
+* Description: True if the OSCORE group supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, False otherwise.
+* Reference: \[\[This specification\]\] ({{ssec-pairwise-mode-policy}})
+
 ## TLS Exporter Label Registry {#ssec-iana-tls-esporter-label-registry}
 
 IANA is asked to register the following entry in the "TLS Exporter Label" Registry defined in Section 6 of {{RFC5705}} and updated in Section 12 of {{RFC8447}}.
@@ -755,7 +771,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ13 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
 
-* REQ14 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}, and the three values defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
+* REQ14 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}; the three values defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}); the defined and registered encoding of the entry "Group OSCORE Pairwise Mode Support" (see {{ssec-iana-ace-groupcomm-policy-registry}}).
 
 * REQ15 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
 
