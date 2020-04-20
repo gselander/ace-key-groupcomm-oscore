@@ -819,6 +819,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Scope not mandatory to include in the Joining Request.
 
+* Group policy about supporting Group OSCORE in pairwise mode.
+
 * Possible individual rekeying of a single requesting node combined with a group rekeying.
 
 * Security considerations on reusage of signature challenges.
