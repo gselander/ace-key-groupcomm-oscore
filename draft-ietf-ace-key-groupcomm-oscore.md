@@ -799,6 +799,8 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT9 (Optional) - Specify the functionalities implemented at the 'control_path' resource hosted at the Client, including message exchange encoding and other details (see Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}): see {{sec-leaving}} for the eviction of a group member; see {{sec-group-rekeying-process}} for the group rekeying process.
 
+* OPT10 (Optional) - Specify how the identifier of the sender's public key is included in the group request: no.
+
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
