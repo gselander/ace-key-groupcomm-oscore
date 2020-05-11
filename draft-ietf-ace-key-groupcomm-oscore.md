@@ -813,6 +813,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Parameter 'rsnonce' renamed to 'kdcchallenge'.
 
+* Parameter 'kdcchallenge' may be omitted in some cases.
+
 * Clarified difference between group name and OSCORE Gid.
 
 * Removed the role combination ["requester", "monitor"].
