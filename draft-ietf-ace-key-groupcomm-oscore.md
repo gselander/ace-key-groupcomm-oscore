@@ -55,7 +55,6 @@ author:
 normative:
   RFC2119:
   RFC5705:
-  RFC5869:
   RFC7252:
   RFC8152:
   RFC8174:
@@ -269,30 +268,6 @@ The value of the N\_S challenge is determined as follows.
 It is up to applications to define how N_S is computed in further alternative settings.
 
 {{ssec-security-considerations-reusage-nonces}} provides security considerations on the reusage of the N_S challenge.
-
-<!-- OLD TEXT
-### Value of the N\_S Challenge {#sssec-challenge-value}
-
-The value of the N\_S challenge is determined as follows.
-
-1. If the joining node has posted the Access Token to the /authz-info endpoint of the Group Manager as in {{ssec-token-post}}, and it is joining the first group at that Group Manager since that Token posting, N\_S takes one of the following values.
-
-    - For the first Joining Request attempt immediately following the Token posting, N\_S takes the same value of the 'kdcchallenge' parameter in the 2.01 (Created) response to the Token POST.
-    
-    - For any Joining Request attempts to join the same group, after the first one above and following a 4.00 Bad Request response from the Group Manager (see {{ssec-join-req-processing}}), N\_S takes the same value of the 'kdcchallenge' parameter in that 4.00 Bad Request response. 
-
-2. If the Token posting has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} with the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, and the joining node is joining the first group at that Group Manager since that Token posting, N\_S is an exporter value computed as defined in Section 7.5 of {{RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app" defined in {{ssec-iana-tls-esporter-label-registry}} of this specification.
-
-3. If the joining node, without posting again the same and still valid Access Token, is in fact re-joining a group or joining a different group than the one joined immediately after posting the current Token, N\_S takes one of the following values.
-
-   - If the joining node and the Group Manager communicates using DTLS, N\_S is an exporter value, computed as described in point (2) above.
-
-   - If the joining node and the Group Manager communicates using OSCORE {{RFC8613}}, the N\_S is the output PRK of a HKDF-Extract step {{RFC5869}}, i.e. PRK = HMAC-Hash(salt, IKM). In particular, 'salt' takes (x1 \| x2), where x1 is the ID Context of the OSCORE Security Context between the joining node and the Group Manager, x2 is the Sender ID of the joining node in that Context, and \| denotes byte string concatenation. Also, 'IKM' is the OSCORE Master Secret of the OSCORE Security Context between the joining node and the Group Manager. The HKDF MUST be one of the HMAC-based HKDF {{RFC5869}} algorithms defined for COSE {{RFC8152}}. HKDF SHA-256 is mandatory to implement.
-
-It is up to applications to define how N_S is computed in further alternative settings.
-
-{{ssec-security-considerations-reusage-nonces}} provides security considerations on the reusage of the N_S challenge.
--->
 
 ## Processing the Joining Request {#ssec-join-req-processing}
 
@@ -589,18 +564,6 @@ If we consider both N\_C and N\_S to take 8-byte long values, the following cons
 
 * Section 7 of {{I-D.ietf-ace-oscore-profile}} as well Appendix B.2 of {{RFC8613}} recommend the use of 8-byte random values as well. Unlike in those cases, the values of N\_C and N\_S considered in this specification are not used for as sensitive operations as the derivation of a Security Context, with possible implications in the security of AEAD ciphers.
 
-<!-- OLD TEXT
-* If the Access Token is not explicitly posted to the /authz-info endpoint of the Group Manager, or if the joining node re-joins without re-posting the same still valid Access Token, then N\_S is computed as a 32-byte long nonce (see points (2) and (3) of {{sssec-challenge-value}}).
-
-* If the Access Token has been explicitly posted to the /authz-info endpoint of the Group Manager, N\_S takes the value conveyed in the 'kdcchallenge' parameter of the 2.01 response to the Token Post (see {{ssec-token-post}}). Similarly, if a Joining Request is not successfully processed by the Group Manager, the returned error response should also include the 'kdcchallenge' parameter specifying a new nonce N\_S (see {{ssec-join-req-processing}}). In either case, it is RECOMMENDED to use a 8-byte long random nonce as value for N\_S.
-
-If we consider both N\_C and N\_S to be 8-byte long nonces, the following considerations hold.
-
-* If both N\_C and N\_S are random nonces, the average collision for each nonce will happen after 2^32 messages, as per the birthday paradox and as also discussed in Section 7 of {{I-D.ietf-ace-oscore-profile}}. This amounts to considerably more token provisionings than the expected new joinings of OSCORE groups under a same Group Manager.
-
-* Section 7 of {{I-D.ietf-ace-oscore-profile}} as well Appendix B.2 of {{RFC8613}} recommend the use of 8-byte random nonces as well. Unlike in those cases, the nonces N\_C and N\_S considered in this specification are not used for as sensitive operations as the derivation of a Security Context, with possible implications in the security of AEAD ciphers.
--->
-
 ## Reusage of Nonces for Signature Challenge {#ssec-security-considerations-reusage-nonces}
 
 As long as the Group Manager preserves the same N\_S value currently associated to an Access Token, i.e. the latest value provided to a Client in a 'kdcchallenge' parameter, the Client is able to successfully reuse the same signature challenge for multiple Joining Requests to that Group Manager.
@@ -608,14 +571,6 @@ As long as the Group Manager preserves the same N\_S value currently associated 
 In particular, the client can reuse the same N\_C value for every Joining Request to the Group Manager, and combine it with the same unchanged N\_S value. This results in reusing the same signature challenge for producing the signature to include in the 'client_cred_verify' parameter of the Joining Requests.
 
 Unless the Group Manager maintains a list of N\_C values already used by that Client since the latest update to the N\_S value associated to the Access Token, the Group Manager can be forced to falsely believe that the Client possesses its own private key at that point in time, upon verifying the signature in the 'client_cred_verify' parameter.
-
-<!-- OLD TEXT
-If N\_C and N\_S are not generated randomly, e.g. by using a counter, the joining node and the Group Manager need to guarantee that reboot and loss of state on either node does not provoke re-use.
-
-If that is not guaranteed, a joining node may repeatedly post a valid Access Token to the /authz-info endpoint of the Group Manager, until it gets back an exact, re-used value N\_S* to use as nonce. Then, the joining node can send a Joining Request, conveying a reused N\_C* nonce in 'cnonce' and an old stored signature in 'client\_cred\_verify', computed over N\_C\* \| N\_S\*. By verifying the signature, the Group Manager would falsely believe that the joining node possesses its own private key at that point in time.
-
-Furthermore, since N\_C is always conveyed in a secured Joining Request, it is practically infeasible for an on-path attacker to replay Joining Requests from a joining node to the Group Manager, in order to cause that joining node to use an arbitrary nonce N\_S.
--->
 
 # IANA Considerations {#sec-iana}
 
