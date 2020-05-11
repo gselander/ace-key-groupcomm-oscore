@@ -230,11 +230,11 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * In the 'id' element, every group name is encoded as a CBOR text string (REQ1).
 
-  * 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}.
+  * 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}, if not encoding the CBOR simple value Null.
 
-  * 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified, 'sign_parameters' MUST be encoding the CBOR simple value Null.
+  * 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_parameters' MUST be encoding the CBOR simple value Null.
 
-  * 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
+  * 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
 
   * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
 
