@@ -56,16 +56,29 @@ normative:
   RFC2119:
   RFC5705:
   RFC7252:
-  RFC8152:
   RFC8174:
   RFC8446:
   RFC8447:
   RFC8613:
   RFC8747:
+  I-D.ietf-cose-rfc8152bis-struct:
+  I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-oscore-profile:
+  COSE.Algorithms:
+    author: 
+      org: IANA
+    date: false
+    title: COSE Algorithms
+    target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+  COSE.Key.Types:
+    author: 
+      org: IANA
+    date: false
+    title: COSE Key Types
+    target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
 
 informative:
   I-D.ietf-core-groupcomm-bis:
@@ -87,7 +100,7 @@ This specification defines an application profile of the ACE framework for Authe
 
 # Introduction {#sec-introduction}
 
-Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{RFC8152}} and enabling end-to-end security of CoAP payload and options.
+Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}} and enabling end-to-end security of CoAP payload and options.
 
 As described in {{I-D.ietf-core-oscore-groupcomm}}, Group OSCORE is used to protect CoAP group communication over IP multicast {{I-D.ietf-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group and enables the group members to exchange CoAP messages secured with Group OSCORE. The Group Manager can be responsible for multiple groups, coordinates the joining process of new group members, and is entrusted with the distribution and renewal of group keying material.
 
@@ -231,13 +244,13 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * In the 'id' element, every group name is encoded as a CBOR text string (REQ1).
 
-  * 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}, if not encoding the CBOR simple value Null.
+  * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, if not encoding the CBOR simple value Null.
 
   * 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_parameters' MUST be encoding the CBOR simple value Null.
 
   * 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
 
-  * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
+  * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
 Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -319,13 +332,13 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group.
 
-   * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from the "COSE Algorithms" Registry, defined in Section 16.4 of {{RFC8152}}.
+   * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
    * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}.
 
    * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
+  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
 
 * The 'num' parameter MUST be present.
 
@@ -706,7 +719,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{ssec-auth-req}}.
 
-* REQ3 - if used, specify the acceptable values for 'sign\_alg': values from Tables 5 and 6 of {{RFC8152}}.
+* REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
 * REQ4 - If used, specify the acceptable values for 'sign\_parameters': values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}).
 
