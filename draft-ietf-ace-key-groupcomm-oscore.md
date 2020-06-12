@@ -338,12 +338,16 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}.
-
-   * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}.
+   * The 'cs_params' parameter MAY be present and specifies the parameters for the counter signature algorithm. This parameter is a CBOR array, which includes the following two elements:
+   
+     - 'sign_alg_capab', encoded as a CBOR array. Its elements are the COSE capabilities for the counter signature algorithm indicated in 'cs_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (see Section 8.2 of {{I-D.ietf-cose-rfc8152bis-algs}}).
+     
+     - 'sign_key_type_capab', encoded as a CBOR array. Its elements are the COSE capabilities for the COSE key type used by the counter signature algorithm indicated in 'cs_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see Section 8.1 of {{I-D.ietf-cose-rfc8152bis-algs}}).
+   
+   * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the counter signature algorithm. This parameter is a CBOR array. Its elements are the COSE capabilities for the COSE key type used by the counter signature algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see Section 8.1 of {{I-D.ietf-cose-rfc8152bis-algs}}).
 
   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
-
+  
 * The 'num' parameter MUST be present.
 
 * The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
@@ -633,7 +637,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 *  Name: cs_params
 *  CBOR Label: TBD4
-*  CBOR Type: map
+*  CBOR Type: array
 *  Registry: Counter Signatures Parameters
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
@@ -644,7 +648,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 *  Name: cs_key_params
 *  CBOR Label: TBD5
-*  CBOR Type: map
+*  CBOR Type: array
 *  Registry: Counter Signatures Key Parameters
 *  Description: OSCORE Counter Signature Key Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
