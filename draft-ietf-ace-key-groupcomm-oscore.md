@@ -368,7 +368,9 @@ The corresponding element in the 'group_policies' parameter of the Joining Respo
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
-Source authentication of OSCORE messages exchanged within the group is ensured by means of digital counter signatures (see Sections 2 and 4 of {{I-D.ietf-core-oscore-groupcomm}}). Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify source authenticity of incoming group messages.
+Source authentication of a message sent within the group and protected with Group OSCORE is ensured by means of a digital counter signature embedded in the message (in group mode), or by integrity-protecting the message with pairwise keying material derived from the asymmetric keys of sender and recipient (in pairwise mode).
+
+Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify source authenticity of incoming group messages.
 
 As also discussed in {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager acts as trusted repository of the public keys of the group members, and provides those public keys to group members if requested to. Upon joining an OSCORE group, a joining node is thus expected to provide its own public key to the Group Manager.
 
@@ -416,7 +418,7 @@ Upon receiving the Key Distribution Response, the group member retrieves the upd
 
 # Retrieval of New Keying Material # {#sec-new-key}
 
-As discussed in Section 2.5 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point experience a wrap-around of its own Sender Sequence Number in the group.
+As discussed in Section 2.4.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point exhaust its Sender Sequence Numbers in the group.
 
 When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP PUT request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
 
@@ -549,7 +551,7 @@ The following security considerations also apply for this profile.
 
 This profile leverages the following management aspects related to OSCORE groups and discussed in the sections of {{I-D.ietf-core-oscore-groupcomm}} referred below.
 
-* Management of group keying material (see Section 2.4 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renewal and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the group keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
+* Management of group keying material (see Section 3.1 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renewal and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the group keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
 
 * Provisioning and retrieval of public keys (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager acts as key repository of public keys of group members, and provides them upon request.
 
