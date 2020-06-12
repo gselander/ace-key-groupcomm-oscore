@@ -246,9 +246,13 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, if not encoding the CBOR simple value Null.
 
-  * 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_parameters' MUST be encoding the CBOR simple value Null.
+  * If not encoding the CBOR simple value Null, 'sign_parameters' is a CBOR array including the following two elements:
+  
+     - 'sign_alg_capab', encoded as a CBOR array. Its elements are the COSE capabilities for the countersignature algorithm indicated in 'sign_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (see Section 8.2 of {{I-D.ietf-cose-rfc8152bis-algs}}) (REQ4).
+     
+     - 'sign_key_type_capab', encoded as a CBOR array. Its elements are the COSE capabilities for the COSE key type used by the countersignature algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see Section 8.1 of {{I-D.ietf-cose-rfc8152bis-algs}}) (REQ4).
 
-  * 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
+  * If not encoding the CBOR simple value Null, 'sign_key_parameters' is a CBOR array. Its elements are the COSE capabilities for the COSE key type used by the countersignature algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see Section 8.1 of {{I-D.ietf-cose-rfc8152bis-algs}})  (REQ5).
 
   * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
@@ -723,9 +727,9 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-* REQ4 - If used, specify the acceptable values for 'sign\_parameters': values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+* REQ4 - If used, specify the acceptable values for 'sign\_parameters': values from the COSE capabilities in the "COSE Algorithms" Registry {{COSE.Algorithms}} and from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-* REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the "Counter Signature Key Parameters" Registry (see Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}).
+* REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
 * REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}. Future specifications may define additional values for this parameter.
 
