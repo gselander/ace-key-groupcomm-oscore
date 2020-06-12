@@ -785,6 +785,16 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -06 to -07 ## {#sec-06-07}
+
+* Alignments with draft-ietf-core-oscore-groupcomm
+
+* New format of 'sign_info', using the COSE capabilities.
+
+* New format of Joining Response parameters, using the COSE capabilities.
+
+* Editorial revision.
+
 ## Version -05 to -06 ## {#sec-05-06}
 
 * Added role of external signature verifier.
