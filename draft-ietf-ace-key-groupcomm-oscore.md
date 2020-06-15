@@ -136,7 +136,7 @@ Additionally, this document makes use of the following terminology.
 
 Group communication for CoAP over IP multicast has been enabled in {{I-D.ietf-core-groupcomm-bis}} and can be secured with Group Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
 
-This specification describes how to use {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-oauth-authz}} to perform a number of authentication, authorization and key distribution actions, as defined in Section 2. of {{I-D.ietf-ace-key-groupcomm}}, for an OSCORE group.
+This specification describes how to use {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-oauth-authz}} to perform a number of authentication, authorization and key distribution actions, as defined in Section 2 of {{I-D.ietf-ace-key-groupcomm}}, for an OSCORE group.
 
 With reference to {{I-D.ietf-ace-key-groupcomm}}:
 
@@ -186,7 +186,7 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
 
    - The group name of each OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
-   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
+   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7) (see {{profile-req}}).
 
 ~~~~~~~~~~~
 +-----------+------------+
@@ -242,7 +242,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * If the 'sign_info' parameter is present in the response, the following applies for each element 'sign_info_entry'.
 
-  * In the 'id' element, every group name is encoded as a CBOR text string (REQ1).
+  * In the 'id' element, every group name is encoded as a CBOR text string (REQ1) (see {{profile-req}}).
 
   * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, if not encoding the CBOR simple value Null.
 
@@ -370,7 +370,7 @@ If the application requires backward security, the Group Manager MUST generate u
 
 ## ACE Groupcomm Policy for Group OSCORE Pairwise Mode Support ## {#ssec-pairwise-mode-policy}
 
-This specifications defines the group policy "Group OSCORE Pairwise Mode Support", for which it registers an entry in the "ACE Groupcomm Policy" IANA Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+This specifications defines the group policy "Group OSCORE Pairwise Mode Support", for which it registers an entry in the "ACE Groupcomm Policy" IANA Registry defined in Section 8.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
 The corresponding element in the 'group_policies' parameter of the Joining Response (see {{ssec-join-resp}}) encodes the CBOR simple value True, if the OSCORE group supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or the CBOR simple value False otherwise (REQ14).
 
@@ -603,7 +603,7 @@ This document has the following actions for IANA.
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.6 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -612,7 +612,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 8.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD2
@@ -666,7 +666,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 ## Sequence Number Synchronization Method Registry {#ssec-iana-sn-synch-method-registry}
 
-IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 9.8 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 8.9 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Best effort
 *  Value: 1
@@ -693,7 +693,7 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 
 ## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 9.4 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: clientId
 * CBOR Key: TBD7
@@ -702,7 +702,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Parameters" 
 
 ## ACE Groupcomm Policy Registry {#ssec-iana-ace-groupcomm-policy-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Policy" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Policy" Registry defined in Section 8.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: Group OSCORE Pairwise Mode Support
 * CBOR Key: TBD8
