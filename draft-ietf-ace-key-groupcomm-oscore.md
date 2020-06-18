@@ -549,7 +549,7 @@ Group members and the Group Manager SHOULD additionally support alternative reke
 
 In case the rekeying terminates and some group members have not received the new keying material, they will not be able to correctly process following secured messages exchanged in the group. These group members will eventually contact the Group Manager, in order to retrieve the current keying material and its version.
 
-Some of these group members may be in multiple groups, each associated with a different Group Manager. When failing to correctly process messages secured with the new keying material, these group members may not have sufficient information to determine which exact Group Manager they should contact, in order to retrieve the current keying material they are missing.
+Some of these group members may be in multiple groups, each associated to a different Group Manager. When failing to correctly process messages secured with the new keying material, these group members may not have sufficient information to determine which exact Group Manager they should contact, in order to retrieve the current keying material they are missing.
 
 If the Gid is formatted as described in Appendix C of {{I-D.ietf-core-oscore-groupcomm}}, the Group Prefix can be used as a hint to determine the right Group Manager, as long as no collisions among Group Prefixes are experienced. Otherwise, a group member needs to contact the Group Manager of each group, e.g. by first requesting only the version of the current group keying material (see {{sec-version}}) and then possibly requesting the current keying material (see {{ssec-updated-key-only}}).
 
@@ -793,11 +793,13 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -06 to -07 ## {#sec-06-07}
 
-* Alignments with draft-ietf-core-oscore-groupcomm
+* Alignments with draft-ietf-core-oscore-groupcomm.
 
 * New format of 'sign_info', using the COSE capabilities.
 
 * New format of Joining Response parameters, using the COSE capabilities.
+
+* Considerations on group rekeying.
 
 * Editorial revision.
 
