@@ -56,16 +56,29 @@ normative:
   RFC2119:
   RFC5705:
   RFC7252:
-  RFC8152:
   RFC8174:
   RFC8446:
   RFC8447:
   RFC8613:
   RFC8747:
+  I-D.ietf-cose-rfc8152bis-struct:
+  I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-oscore-profile:
+  COSE.Algorithms:
+    author: 
+      org: IANA
+    date: false
+    title: COSE Algorithms
+    target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+  COSE.Key.Types:
+    author: 
+      org: IANA
+    date: false
+    title: COSE Key Types
+    target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
 
 informative:
   I-D.ietf-core-groupcomm-bis:
@@ -87,7 +100,7 @@ This specification defines an application profile of the ACE framework for Authe
 
 # Introduction {#sec-introduction}
 
-Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{RFC8152}} and enabling end-to-end security of CoAP payload and options.
+Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a method for application-layer protection of the Constrained Application Protocol (CoAP) {{RFC7252}}, using CBOR Object Signing and Encryption (COSE) {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}} and enabling end-to-end security of CoAP payload and options.
 
 As described in {{I-D.ietf-core-oscore-groupcomm}}, Group OSCORE is used to protect CoAP group communication over IP multicast {{I-D.ietf-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group and enables the group members to exchange CoAP messages secured with Group OSCORE. The Group Manager can be responsible for multiple groups, coordinates the joining process of new group members, and is entrusted with the distribution and renewal of group keying material.
 
@@ -123,7 +136,7 @@ Additionally, this document makes use of the following terminology.
 
 Group communication for CoAP over IP multicast has been enabled in {{I-D.ietf-core-groupcomm-bis}} and can be secured with Group Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
 
-This specification describes how to use {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-oauth-authz}} to perform a number of authentication, authorization and key distribution actions, as defined in Section 2. of {{I-D.ietf-ace-key-groupcomm}}, for an OSCORE group.
+This specification describes how to use {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-oauth-authz}} to perform a number of authentication, authorization and key distribution actions, as defined in Section 2 of {{I-D.ietf-ace-key-groupcomm}}, for an OSCORE group.
 
 With reference to {{I-D.ietf-ace-key-groupcomm}}:
 
@@ -173,7 +186,7 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
 
    - The group name of each OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
-   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7).
+   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7) (see {{profile-req}}).
 
 ~~~~~~~~~~~
 +-----------+------------+
@@ -229,15 +242,19 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * If the 'sign_info' parameter is present in the response, the following applies for each element 'sign_info_entry'.
 
-  * In the 'id' element, every group name is encoded as a CBOR text string (REQ1).
+  * In the 'id' element, every group name is encoded as a CBOR text string (REQ1) (see {{profile-req}}).
 
-  * 'sign_alg' takes value from Tables 5 and 6 of {{RFC8152}}, if not encoding the CBOR simple value Null.
+  * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, if not encoding the CBOR simple value Null.
 
-  * 'sign_parameters' takes values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_parameters' MUST be encoding the CBOR simple value Null.
+  * If not encoding the CBOR simple value Null, 'sign_parameters' is a CBOR array including the following two elements:
+  
+     - 'sign_alg_capab', encoded as a CBOR array. Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, for the algorithm indicated in 'sign_alg' (REQ4).
+     
+     - 'sign_key_type_capab', encoded as a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ4).
 
-  * 'sign_key_parameters' takes values from the "Counter Signature Key Parameters" Registry (see Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}). Its structure depends on the value of 'sign_alg'. If no parameters of the key used with the counter signature algorithm are specified or if 'sign_alg' encodes the CBOR simple value Null, 'sign_key_parameters' MUST be encoding the CBOR simple value Null.
+  * If not encoding the CBOR simple value Null, 'sign_key_parameters' is a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
 
-  * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter.
+  * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
 Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -319,14 +336,18 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group.
 
-   * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from the "COSE Algorithms" Registry, defined in Section 16.4 of {{RFC8152}}.
+   * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * The 'cs_params' parameter MAY be present and specifies the additional parameters for the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}.
+   * The 'cs_params' parameter MAY be present and specifies the parameters for the counter signature algorithm. This parameter is a CBOR array, which includes the following two elements:
+   
+     - 'sign_alg_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null. 
+     
+     - 'sign_key_type_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null. 
+   
+   * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the counter signature algorithm. This parameter is a CBOR array, with the same non-null encoding and value as 'sign_key_parameters' of the {{ssec-token-post}}.
 
-   * The 'cs_key_params' parameter MAY be present and specifies the additional parameters for the key used with the counter signature algorithm. This parameter is a CBOR map whose content depends on the counter signature algorithm, as specified in Section 2 and Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}.
-
-  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{RFC8152}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
-
+  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
+  
 * The 'num' parameter MUST be present.
 
 * The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
@@ -349,13 +370,15 @@ If the application requires backward security, the Group Manager MUST generate u
 
 ## ACE Groupcomm Policy for Group OSCORE Pairwise Mode Support ## {#ssec-pairwise-mode-policy}
 
-This specifications defines the group policy "Group OSCORE Pairwise Mode Support", for which it registers an entry in the "ACE Groupcomm Policy" IANA Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+This specifications defines the group policy "Group OSCORE Pairwise Mode Support", for which it registers an entry in the "ACE Groupcomm Policy" IANA Registry defined in Section 8.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
 The corresponding element in the 'group_policies' parameter of the Joining Response (see {{ssec-join-resp}}) encodes the CBOR simple value True, if the OSCORE group supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}, or the CBOR simple value False otherwise (REQ14).
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
-Source authentication of OSCORE messages exchanged within the group is ensured by means of digital counter signatures (see Sections 2 and 4 of {{I-D.ietf-core-oscore-groupcomm}}). Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify source authenticity of incoming group messages.
+Source authentication of a message sent within the group and protected with Group OSCORE is ensured by means of a digital counter signature embedded in the message (in group mode), or by integrity-protecting the message with pairwise keying material derived from the asymmetric keys of sender and recipient (in pairwise mode).
+
+Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify source authenticity of incoming group messages.
 
 As also discussed in {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager acts as trusted repository of the public keys of the group members, and provides those public keys to group members if requested to. Upon joining an OSCORE group, a joining node is thus expected to provide its own public key to the Group Manager.
 
@@ -403,7 +426,7 @@ Upon receiving the Key Distribution Response, the group member retrieves the upd
 
 # Retrieval of New Keying Material # {#sec-new-key}
 
-As discussed in Section 2.5 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point experience a wrap-around of its own Sender Sequence Number in the group.
+As discussed in Section 2.4.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point exhaust its Sender Sequence Numbers in the group.
 
 When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.4 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP PUT request to the endpoint /group-oscore/GROUPNAME/nodes/NODENAME at the Group Manager.
 
@@ -520,11 +543,17 @@ Each rekeying message MUST be secured with the pairwise secure communication cha
 
 It is RECOMMENDED that the Group Manager gets confirmation of successful distribution from the group members, and admits a maximum number of individual retransmissions to non-confirming group members.
 
-In case the rekeying terminates and some group members have not received the new keying material, they will not be able to correctly process following secured messages exchanged in the group. These group members will eventually contact the Group Manager, in order to retrieve the current keying material and its version.
-
 This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
 Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in Section 4.3 of {{I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource of the group, at the endpoint /group-oscore/GROUPNAME/nodes/NODENAME of the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
+
+In case the rekeying terminates and some group members have not received the new keying material, they will not be able to correctly process following secured messages exchanged in the group. These group members will eventually contact the Group Manager, in order to retrieve the current keying material and its version.
+
+Some of these group members may be in multiple groups, each associated to a different Group Manager. When failing to correctly process messages secured with the new keying material, these group members may not have sufficient information to determine which exact Group Manager they should contact, in order to retrieve the current keying material they are missing.
+
+If the Gid is formatted as described in Appendix C of {{I-D.ietf-core-oscore-groupcomm}}, the Group Prefix can be used as a hint to determine the right Group Manager, as long as no collisions among Group Prefixes are experienced. Otherwise, a group member needs to contact the Group Manager of each group, e.g. by first requesting only the version of the current group keying material (see {{sec-version}}) and then possibly requesting the current keying material (see {{ssec-updated-key-only}}).
+
+Furthermore, some of these group members can be in multiple groups, all of which associated to the same Group Manager. In this case, these group members may also not have sufficient information to determine which exact group they should refer to, when contacting the right Group Manager. Hence, they need to contact a Group Manager multiple times, i.e. separately for each group they belong to and associated to that Group Manager.
 
 # Security Considerations {#sec-security-considerations}
 
@@ -536,7 +565,7 @@ The following security considerations also apply for this profile.
 
 This profile leverages the following management aspects related to OSCORE groups and discussed in the sections of {{I-D.ietf-core-oscore-groupcomm}} referred below.
 
-* Management of group keying material (see Section 2.4 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renewal and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the group keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
+* Management of group keying material (see Section 3.1 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager is responsible for the renewal and re-distribution of the keying material in the groups of its competence (rekeying). According to the specific application requirements, this can include rekeying the group upon changes in its membership. In particular, renewing the group keying material is required upon a new node's joining or a current node's leaving, in case backward security and forward security have to be preserved, respectively.
 
 * Provisioning and retrieval of public keys (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). The Group Manager acts as key repository of public keys of group members, and provides them upon request.
 
@@ -580,7 +609,7 @@ This document has the following actions for IANA.
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 9.6 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -589,7 +618,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 9.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 8.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD2
@@ -614,7 +643,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 *  Name: cs_params
 *  CBOR Label: TBD4
-*  CBOR Type: map
+*  CBOR Type: array
 *  Registry: Counter Signatures Parameters
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
@@ -625,7 +654,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 *  Name: cs_key_params
 *  CBOR Label: TBD5
-*  CBOR Type: map
+*  CBOR Type: array
 *  Registry: Counter Signatures Key Parameters
 *  Description: OSCORE Counter Signature Key Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
@@ -643,7 +672,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 ## Sequence Number Synchronization Method Registry {#ssec-iana-sn-synch-method-registry}
 
-IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 9.8 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 8.9 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Best effort
 *  Value: 1
@@ -670,7 +699,7 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 
 ## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 9.4 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: clientId
 * CBOR Key: TBD7
@@ -679,7 +708,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Parameters" 
 
 ## ACE Groupcomm Policy Registry {#ssec-iana-ace-groupcomm-policy-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Policy" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Policy" Registry defined in Section 8.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: Group OSCORE Pairwise Mode Support
 * CBOR Key: TBD8
@@ -706,11 +735,11 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{ssec-auth-req}}.
 
-* REQ3 - if used, specify the acceptable values for 'sign\_alg': values from Tables 5 and 6 of {{RFC8152}}.
+* REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-* REQ4 - If used, specify the acceptable values for 'sign\_parameters': values from the "Counter Signature Parameters" Registry (see Section 11.1 of {{I-D.ietf-core-oscore-groupcomm}}).
+* REQ4 - If used, specify the acceptable values for 'sign\_parameters': values from the COSE capabilities in the "COSE Algorithms" Registry {{COSE.Algorithms}} and from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-* REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the "Counter Signature Key Parameters" Registry (see Section 11.2 of {{I-D.ietf-core-oscore-groupcomm}}).
+* REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
 * REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}. Future specifications may define additional values for this parameter.
 
@@ -761,6 +790,18 @@ This appendix lists the specifications on this application profile of ACE, based
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -06 to -07 ## {#sec-06-07}
+
+* Alignments with draft-ietf-core-oscore-groupcomm.
+
+* New format of 'sign_info', using the COSE capabilities.
+
+* New format of Joining Response parameters, using the COSE capabilities.
+
+* Considerations on group rekeying.
+
+* Editorial revision.
 
 ## Version -05 to -06 ## {#sec-05-06}
 
