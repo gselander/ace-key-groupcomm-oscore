@@ -55,12 +55,14 @@ author:
 normative:
   RFC2119:
   RFC5705:
+  RFC6979:
   RFC7252:
+  RFC8017:
+  RFC8032:
   RFC8174:
   RFC8446:
   RFC8447:
   RFC8613:
-  RFC8747:
   I-D.ietf-cose-rfc8152bis-struct:
   I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-core-oscore-groupcomm:
@@ -79,6 +81,18 @@ normative:
     date: false
     title: COSE Key Types
     target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
+  COSE.Elliptic.Curves:
+    author: 
+      org: IANA
+    date: false
+    title: COSE Elliptic Curves
+    target: https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
+  CWT.Confirmation.Methods:
+    author: 
+      org: IANA
+    date: false
+    title: COSE Elliptic Curves
+    target: https://www.iana.org/assignments/cwt/cwt.xhtml#confirmation-methods
 
 informative:
   I-D.ietf-core-groupcomm-bis:
@@ -254,7 +268,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * If not encoding the CBOR simple value Null, 'sign_key_parameters' is a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
 
-  * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
+  * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
 Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -346,7 +360,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    
    * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the counter signature algorithm. This parameter is a CBOR array, with the same non-null encoding and value as 'sign_key_parameters' of the {{ssec-token-post}}.
 
-  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
+  * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
   
 * The 'num' parameter MUST be present.
 
@@ -555,6 +569,44 @@ If the Gid is formatted as described in Appendix C of {{I-D.ietf-core-oscore-gro
 
 Furthermore, some of these group members can be in multiple groups, all of which associated to the same Group Manager. In this case, these group members may also not have sufficient information to determine which exact group they should refer to, when contacting the right Group Manager. Hence, they need to contact a Group Manager multiple times, i.e. separately for each group they belong to and associated to that Group Manager.
 
+# Default Values for Group Configuration Parameters
+
+This section defines the default values that the Group Manager assumes for the configuration parameters of an OSCORE group, unless differently specified when creating and configuring the group. This can be achieved as specified in {{I-D.tiloca-ace-oscore-gm-admin}}.
+
+The Group Manager SHOULD use the same default values defined in Section 3.2 of {{RFC8613}} for both the HKDF algorithm and the AEAD algorithm used in the group.
+
+The Group Manager SHOULD use the following default values for the algorithm, algorithm parameters and key parameters used to countersign messages in the group, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
+
+* For the algorithm 'cs_alg' used to countersign messages in the group, the signature algorithm EdDSA {{RFC8032}}.
+
+* For the parameters 'cs_params' of the counter signature algorithm:
+
+    - The array \[\[OKP\], \[OKP, Ed25519\]\], indicating the elliptic curve Ed25519 {{RFC8032}}, in case EdDSA is assumed or specified for 'cs_alg'.
+    
+    - The array \[\[EC2\], \[EC2, P-256\]\], indicating the elliptic curve P-256, in case ES256 {{RFC6979}} is specified for 'cs_alg'.
+    
+    - The array \[\[EC2\], \[EC2, P-384\]\], indicating the elliptic curve P-384, in case ES384 {{RFC6979}} is specified for 'cs_alg'.
+    
+    - The array \[\[EC2\], \[EC2, P-521\]\], indicating the elliptic curve P-521, in case ES512 {{RFC6979}} is specified for 'cs_alg'.
+    
+    - The array \[\[\], \[RSA\]\], in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'cs_alg'.
+
+* For the parameters 'cs_key_params' of the key used with the counter signature algorithm:
+
+    - The array \[OKP, Ed25519\] as pair (key type, elliptic curve), in case EdDSA is assumed or specified for 'cs_alg' and Ed25519 is assumed or specified within the second array of 'cs_params'.
+    
+    - The array \[OKP, Ed448\] as pair (key type, elliptic curve), in case EdDSA is assumed or specified for 'cs_alg' and the elliptic curve Ed448 {{RFC8032}} is specified within the second array of 'cs_params'.
+    
+    - The array \[EC2, P-256\] as pair (key type, elliptic curve), in case ES256 {{RFC6979}} is specified for 'cs_alg' and the elliptic curve P-256 is assumed or specified within the second array of 'cs_params'.
+    
+    - The array \[EC2, P-384\] as pair (key type, elliptic curve), in case ES384 {{RFC6979}} is specified for 'cs_alg' and the elliptic curve P-384 is specified within the second array of 'cs_params'.
+    
+    - The array \[EC2, P-521\] as pair (key type, elliptic curve), in case ES512 {{RFC6979}} is specified for 'cs_alg' and the elliptic curve P-521 is specified within the second array of 'cs_params'.
+    
+    - The array \[RSA\] indicating RSA as key type, in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'cs_alg'.
+
+* For the 'cs_key_enc' encoding of the public keys of the group members, COSE_Key from the "CWT Confirmation Methods" Registry {{CWT.Confirmation.Methods}}.
+    
 # Security Considerations {#sec-security-considerations}
 
 Security considerations for this profile are inherited from {{I-D.ietf-ace-key-groupcomm}}, the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, and the specific transport profile of ACE signalled by the AS, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
@@ -741,7 +793,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-* REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry defined in {{RFC8747}}. Future specifications may define additional values for this parameter.
+* REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}. Future specifications may define additional values for this parameter.
 
 * REQ7 - Format of the 'key' value: see {{ssec-join-resp}}.
 
@@ -791,6 +843,10 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -07 to -08 ## {#sec-07-08}
+
+* Default values for group configuration parameters.
+
 ## Version -06 to -07 ## {#sec-06-07}
 
 * Alignments with draft-ietf-core-oscore-groupcomm.
@@ -813,7 +869,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Clarified difference between group name and OSCORE Gid.
 
-* Removed the role combination ["requester", "monitor"].
+* Removed the role combination \["requester", "monitor"\].
 
 * Admit implicit scope and audience in the Authorization Request.
 
