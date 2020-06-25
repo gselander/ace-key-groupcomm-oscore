@@ -62,7 +62,9 @@ normative:
   RFC8174:
   RFC8446:
   RFC8447:
+  RFC8610:
   RFC8613:
+  I-D.bormann-core-ace-aif:
   I-D.ietf-cose-rfc8152bis-struct:
   I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-core-oscore-groupcomm:
@@ -186,6 +188,57 @@ Upon generating the new group keying material and before starting its distributi
 
 The Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}}. Future application profiles may define alternative message formats and distribution schemes to perform group rekeying.
 
+# Format of Scope {#sec-format-scope}
+
+Building on Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}, this section defines the exact format and encoding of scope to use.
+
+To this end, this profile uses the Authorization Information Format (AIF) {{I-D.bormann-core-ace-aif}}, and defines the following AIF specific data model AIF-OSCORE-GROUPCOMM.
+
+With reference to the generic AIF model
+
+~~~~~~~~~~~
+   AIF-Generic<Toid, Tperm> = [* [Toid, Tperm]]
+~~~~~~~~~~~
+
+the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toid, Tperm\]\], where each \[Toid, Tperm\] element corresponds to one scope entry.
+
+Then, for each scope entry:
+
+* the object identifier ("Toid") is specialized as a CBOR text string, specifying the group name for the scope entry (REQ1);
+
+* the permission set ("Tperm") is specialized to a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ2). The value R is computed as follows:
+
+   - each role in the permission set is converted into to the corresponding number X from {{fig-role-values}}.
+   
+   - the set of N numbers is converted into the single value R, by taking each number X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
+
+~~~~~~~~~~~
++-----------+-------------+
+|   Name    | Role Number |
++-----------+-------------+
+| requester |      1      |
+| responder |      2      |
+| monitor   |      3      |
+| verifier  |      4      |
++-----------+-------------+
+~~~~~~~~~~~
+{: #fig-role-values title="Role Numbers in the Group" artwork-align="center"}
+
+The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM data model is as follows:
+
+~~~~~~~~~~~
+   AIF-OSCORE-GROUPCOMM = AIF_Generic<path, permissions>
+
+   path = tstr  ; Group name
+   permissions = uint . bits roles
+   roles = &(
+      requester: 1,
+      responder: 2,
+      monitor: 3,
+      verifier: 4
+   )
+~~~~~~~~~~~
+
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
 This section describes how the joining node interacts with the AS in order to be authorized to join an OSCORE group under a given Group Manager. In particular, it considers a joining node that intends to contact that Group Manager for the first time.
@@ -198,21 +251,11 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
 
 * If the 'scope' parameter is present:
 
+   - The value of the CBOR byte string encodes a CBOR array whose format MUST follow the data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}}.
+
    - The group name of each OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
 
-   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-cbor-values}} (OPT7) (see {{profile-req}}).
-
-~~~~~~~~~~~
-+-----------+------------+
-| Name      | CBOR Value |
-+-----------+------------+
-| requester |    TBD8    |
-| responder |    TBD9    |
-| monitor   |    TBD10   |
-| verifier  |    TBD11   |
-+-----------+------------+
-~~~~~~~~~~~
-{: #fig-role-cbor-values title="CBOR Abbreviations for Role Identifiers in the Group" artwork-align="center"}
+   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-values}} (OPT7) (see {{profile-req}}).
 
 ## Authorization Response {#ssec-auth-resp}
 
