@@ -60,6 +60,7 @@ normative:
   RFC7252:
   RFC8017:
   RFC8032:
+  RFC8126:
   RFC8174:
   RFC8446:
   RFC8447:
@@ -209,21 +210,26 @@ Then, for each scope entry:
 
 * the permission set ("Tperm") is specialized to a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ2). The value R is computed as follows:
 
-   - each role in the permission set is converted into to the corresponding number X from {{fig-role-values}}.
+   - each role in the permission set is converted into to the corresponding numeric identifier X from the "Value" column of the table in {{fig-role-values}}.
    
-   - the set of N numbers is converted into the single value R, by taking each number X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
+   - the set of N numbers is converted into the single value R, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
 
 ~~~~~~~~~~~
-+-----------+-------------+
-|   Name    | Role Number |
-+-----------+-------------+
-| requester |      1      |
-| responder |      2      |
-| monitor   |      3      |
-| verifier  |      4      |
-+-----------+-------------+
++-----------+-------+-------------------------------------------------+
+| Name      | Value | Description                                     |
++===========+=======+=================================================+
+| Reserved  | 0     | This value is reserved                          |
+|-----------+-------+-------------------------------------------------+
+| Requester | 1     | Send requests; receive responses                |
+|-----------+-------+-------------------------------------------------+
+| Responder | 2     | Send responses; receive requests                |
++-----------+-------+-------------------------------------------------+
+| Monitor   | 3     | Receive requests; never send requests/responses |
+|-----------+-------+-------------------------------------------------|
+| Verifier  | 4     | Verify countersignature of intercepted messages |
++-----------+-------+-------------------------------------------------+
 ~~~~~~~~~~~
-{: #fig-role-values title="Role Numbers in the Group" artwork-align="center"}
+{: #fig-role-values title="Numeric identifier of roles in the OSCORE group" artwork-align="center"}
 
 The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM data model is as follows:
 
@@ -233,12 +239,14 @@ The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM data model is as fol
    path = tstr  ; Group name
    permissions = uint . bits roles
    roles = &(
-      requester: 1,
-      responder: 2,
-      monitor: 3,
-      verifier: 4
+      Requester: 1,
+      Responder: 2,
+      Monitor: 3,
+      Verifier: 4
    )
 ~~~~~~~~~~~
+
+Future specification that defines new roles MUST register a corresponding numeric identifier in the "Group OSCORE Roles" Registry defined in {{ssec-iana-group-oscore-roles-registry}} of this specification.
 
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
@@ -886,6 +894,30 @@ Encoding: -
 ID: TBD9
 
 Reference: \[\[This specification\]\]
+
+## Group OSCORE Roles Registry {#ssec-iana-group-oscore-roles-registry}
+
+This specification establishes the IANA "Group OSCORE Roles" Registry. The Registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
+
+This registry includes the possible roles that nodes can take in an OSCORE group, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about joining OSCORE groups, as specified in {{sec-format-scope}} of \[\[This specification\]\].
+
+The columns of this registry are:
+
+* Name: A value that can be used in documents for easier comprehension, to identify a possible role that nodes can take in an OSCORE group.
+
+* Value: The numeric identifier for this role. Integer values less than -65536 are marked as "Private Use", all other values use the registration policy "Expert Review" {{RFC8126}}.
+
+* Description: This field contains a brief description of the role.
+
+* Reference: This contains a pointer to the public specification for the role.
+
+This registry will be initially populated by the values in {{fig-role-values}}.
+
+The Reference column for all of these entries will be \[\[This specification\]\].
+
+## Expert Review Instructions {#ssec-iana-expert-review}
+
+TBD
 
 --- back
 
