@@ -55,6 +55,7 @@ author:
 normative:
   RFC2119:
   RFC5705:
+  RFC6838:
   RFC6979:
   RFC7252:
   RFC8017:
@@ -704,7 +705,7 @@ This document has the following actions for IANA.
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Profile" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Profile" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -713,7 +714,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Profile" Reg
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Key" Registry defined in Section 8.6 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Key" Registry defined in Section 8.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Security_Context object
 *  Key Type Value: TBD2
@@ -794,7 +795,7 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 
 ## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: clientId
 * CBOR Key: TBD7
@@ -803,7 +804,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Parameters" 
 
 ## ACE Groupcomm Policy Registry {#ssec-iana-ace-groupcomm-policy-registry}
 
-IANA is asked to register the following entry in the "ACE Groupcomm Policy" Registry defined in Section 8.8 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Policy" Registry defined in Section 8.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: Group OSCORE Pairwise Mode Support
 * CBOR Key: TBD8
@@ -813,12 +814,78 @@ IANA is asked to register the following entry in the "ACE Groupcomm Policy" Regi
 
 ## TLS Exporter Label Registry {#ssec-iana-tls-esporter-label-registry}
 
-IANA is asked to register the following entry in the "TLS Exporter Label" Registry defined in Section 6 of {{RFC5705}} and updated in Section 12 of {{RFC8447}}.
+IANA is asked to register the following entry to the "TLS Exporter Label" Registry defined in Section 6 of {{RFC5705}} and updated in Section 12 of {{RFC8447}}.
 
 * Value: EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app
 * DTLS-OK: Y
 * Recommended: N
 * Reference: \[\[This specification\]\] ({{sssec-challenge-value}})
+
+## AIF Registry {#ssec-iana-AIF-registry}
+
+IANA is asked to register the following entry to the "Toid" sub-registry of the "AIF" Registry defined in Section 5.2 of {{I-D.bormann-core-ace-aif}}.
+
+* Name: oscore-group-name
+* Description/Specification: group name of the OSCORE group, as specified in \[\[This specification\]\].
+
+IANA is asked to register the following entry to the "Tperm" sub-Registry of the "AIF" Registry defined in Section 5.2 of {{I-D.bormann-core-ace-aif}}.
+
+* Name: oscore-group-roles
+* Description/Specification: role(s) of the member of the OSCORE group, as specified in \[\[This specification\]\].
+
+## Media Type Registrations {#ssec-iana-media-types}
+
+This specification registers the 'application/aif-groupcomm-oscore+cbor' media type for the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}} of \[\[This specification\]\]. This registration follows the procedures specified in {{RFC6838}}.
+
+These media type has parameters for specifying the object identifier ("Toid") and set of permissions ("Tperm") defined for the AIF-generic model in {{I-D.bormann-core-ace-aif}}; default values are the values "oscore-group-name" for "Toid" and "oscore-group-roles" for "Tperm".
+
+Type name: application
+
+Subtype name: aif-groupcomm-oscore+cbor
+
+Required parameters: "Toid", "Tperm"
+
+Optional parameters: none
+
+Encoding considerations: Must be encoded as a CBOR array, each element of which is a an array \[Toid, Tperm\] as defined in {{sec-format-scope}} of \[\[This specification\]\].
+
+Security considerations: See {{sec-security-considerations}} of \[\[This specification\]\].
+
+Interoperability considerations: n/a
+
+Published specification: \[\[This specification\]\]
+
+Applications that use this media type: The type is used by applications that want to express authorization information about joining OSCORE groups, as specified in \[\[This specification\]\].
+
+Additional information:
+
+Magic number(s): n/a
+
+File extension(s): .aif-groupcomm-oscore
+
+Macintosh file type code(s): n/a
+
+Person & email address to contact for further information: <iesg@ietf.org>
+
+Intended usage: COMMON
+
+Restrictions on usage: None
+
+Author: Marco Tiloca <marco.tiloca@ri.se>
+
+Change controller: IESG
+
+## CoAP Content-Format Registry {#ssec-iana-coap-content-format-registry}
+
+IANA is asked to register the following entry to the "CoAP Content-Formats" registry, within the "CoRE Parameters" registry:
+
+Media Type: application/aif-groupcomm-oscore+cbor;Toid="oscore-group-name",Tperm"oscore-group-roles"
+
+Encoding: -
+
+ID: TBD9
+
+Reference: \[\[This specification\]\]
 
 --- back
 
