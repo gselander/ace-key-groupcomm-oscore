@@ -987,7 +987,11 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -07 to -08 ## {#sec-07-08}
 
+* AIF specific data model to express scope entries.
+
 * Default values for group configuration parameters.
+
+* IANA registrations to support the AIF specific data model.
 
 ## Version -06 to -07 ## {#sec-06-07}
 
