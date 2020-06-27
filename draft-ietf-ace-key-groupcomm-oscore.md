@@ -130,7 +130,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Readers are expected to be familiar with:
 
-* The terms and concepts described in the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}}. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
+* The terms and concepts described in the ACE framework for authentication and authorization {{I-D.ietf-ace-oauth-authz}} and in the Authorization Information Format (AIF) {{I-D.bormann-core-ace-aif}} to express authorization information. The terminology for entities in the considered architecture is defined in OAuth 2.0 {{RFC6749}}. In particular, this includes Client (C), Resource Server (RS), and Authorization Server (AS).
 
 * The terms and concepts related to the CoAP protocol described in {{RFC7252}}{{I-D.ietf-core-groupcomm-bis}}. Unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
@@ -206,7 +206,7 @@ the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toi
 
 Then, for each scope entry:
 
-* the object identifier ("Toid") is specialized as a CBOR text string, specifying the group name for the scope entry (REQ1);
+* the object identifier ("Toid") is specialized as a CBOR text string, specifying the group name for the scope entry (REQ1) (see {{profile-req}});
 
 * the permission set ("Tperm") is specialized to a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ2). The value R is computed as follows:
 
@@ -246,7 +246,7 @@ The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM data model is as fol
    )
 ~~~~~~~~~~~
 
-Future specification that defines new roles MUST register a corresponding numeric identifier in the "Group OSCORE Roles" Registry defined in {{ssec-iana-group-oscore-roles-registry}} of this specification.
+Future specifications that define new roles MUST register a corresponding numeric identifier in the "Group OSCORE Roles" Registry defined in {{ssec-iana-group-oscore-roles-registry}} of this specification.
 
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
@@ -260,11 +260,11 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
 
 * If the 'scope' parameter is present:
 
-   - The value of the CBOR byte string encodes a CBOR array whose format MUST follow the data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}}.
+   - The value of the CBOR byte string encodes a CBOR array, whose format MUST follow the data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}}. In particular, for each OSCORE group to join:
 
-   - The group name of each OSCORE group to join under the Group Manager is encoded as a CBOR text string (REQ1).
-
-   - Accepted values for role identifiers in the OSCORE group to join are: "requester", "responder", and "monitor" (REQ2). Possible combinations are: \["requester" , "responder"\]. An additional role identifier is "verifier", denoting an external signature verifier that does not join the OSCORE group. Each role identifier MUST be encoded as a CBOR integer (REQ2), by using for abbreviation the values specified in {{fig-role-values}} (OPT7) (see {{profile-req}}).
+      - The group name is encoded as a CBOR text string (REQ1).
+   
+      - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} (REQ2) from the numerical abbreviations defined in {{fig-role-values}} for each requested role (OPT7).
 
 ## Authorization Response {#ssec-auth-resp}
 
@@ -272,7 +272,7 @@ The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ac
 
 * The AS MUST include the 'expires_in' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
 
-* The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and includes the role or CBOR array of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in {{ssec-auth-req}} of this document.
+* The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and specifies the set of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in {{ssec-auth-req}}.
 
 # Interface at the Group Manager {#sec-interface-GM}
 
@@ -304,7 +304,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * The 'kdcchallenge' parameter contains a dedicated nonce N_S generated by the Group Manager. For the N\_S value, it is RECOMMENDED to use a 8-byte long random nonce. The joining node may use this nonce in order to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
 
-    The 'kdcchallenge' parameter MAY be omitted from the 2.01 (Created) response, if the 'scope' of the Access Token includes only the role "monitor" or only the role "verifier", for each of the specified groups.
+    The 'kdcchallenge' parameter MAY be omitted from the 2.01 (Created) response, if the 'scope' of the Access Token specifies only the role "monitor" or only the role "verifier", for each of the specified groups.
 
 * If the 'sign_info' parameter is present in the response, the following applies for each element 'sign_info_entry'.
 
@@ -360,7 +360,9 @@ The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of
 
 * To compute the signature contained in 'client_cred_verify', the GM considers: i) as signed value, N_S concatenated with N_C, where N_S is determined as described in {{sssec-challenge-value}}, while N_C is the nonce provided in the 'cnonce' parameter of the Joining Request; ii) the countersignature algorithm used in the OSCORE group, and possible correponding parameters; and iii) the public key of the joining node, either retrieved from the 'client_cred' parameter, or already stored as acquired from previous interactions with the joining node.
 
-* A 4.00 Bad Request response from the Group Manager to the joining node MUST have content format application/ace+cbor. The response payload is a CBOR map which MUST contain the 'sign_info' parameter, including a single element 'sign_info_entry' pertaining the OSCORE group that the joining node tried to join with the Joining Request.
+* A 4.00 Bad Request response from the Group Manager to the joining node MUST have content format application/ace+cbor. The response payload is a CBOR map which MUST contain the 'sign_info' parameter, including a single element 'sign_info_entry' pertaining to the OSCORE group that the joining node tried to join with the Joining Request.
+
+* The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'scope' parameter specifying any set of roles not included in the following list: "requester", "responder", "monitor", ("requester", "responder"). Future specifications that define a new role MUST define possible sets of roles including the new one and existing ones, that are acceptable to specify in the 'scope' parameter of a Joining Request.
 
 * The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
 
@@ -378,7 +380,7 @@ The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of
 
 If the processing of the Joining Request described in {{ssec-join-req-processing}} is successful, the Group Manager updates the group membership by registering the joining node NODENAME as a new member of the OSCORE group GROUPNAME, as described in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}.
 
-If the joining node is not exclusively configured as monitor, the Group Manager performs also the following actions.
+If the joining node has not taken exclusively the role of monitor, the Group Manager performs also the following actions.
 
 * The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node.
 
@@ -392,7 +394,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
-   * The 'clientId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the group exclusively as monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
+   * The 'clientId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
 
    * The 'hkdf' parameter, if present, has as value the KDF algorithm used in the group.
 
@@ -486,7 +488,7 @@ In particular, it sends a CoAP GET request to the endpoint /group-oscore/GROUPNA
 
 The Group Manager processes the Key Distribution Request according to Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
-In particular, the 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that if the requesting group member is configured exclusively as monitor, no 'clientId' is specified within the 'key' parameter. Note that, in any other case, the current Sender ID of the group member is not specified as a separate parameter, but rather specified as 'clientId' within the 'key' parameter.
+In particular, the 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that if the requesting group member has exclusively the role of monitor, no 'clientId' is specified within the 'key' parameter. Note that, in any other case, the current Sender ID of the group member is not specified as a separate parameter, but rather specified as 'clientId' within the 'key' parameter.
 
 Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters, group keying material and Sender ID, and, if they differ from the current ones, use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
@@ -498,7 +500,7 @@ When this happens, the group member MUST send a Key Renewal Request message to t
 
 Upon receiving the Key Renewal Request, the Group Manager processes it as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}, and performs one of the following actions.
 
-1. If the requesting group member is configured exclusively as monitor, the Group Manager replies with a 4.00 (Bad Request) error response.
+1. If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Bad Request) error response.
 
 2. Otherwise, depending on the configured policies (OPT8), the Group Manager takes one of the following actions.
 
@@ -524,7 +526,7 @@ To this end, the group member sends a Public Key Update Request message to the G
 
 Upon receiving the Group Leaving Request, the Group Manager processes it as per Section 4.1.7.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions.
 
-* If the requesting group member is configured exclusively as monitor, the Group Manager replies with a 4.00 (Bad request) error response.
+* If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Bad request) error response.
 
 * The N\_S signature challenge is computed as per point (3) in {{sssec-challenge-value}} (REQ17).
 
@@ -577,7 +579,7 @@ Other than after a spontaneous request to the Group Manager as described in {{se
 
 If, upon joining the group (see {{ssec-join-req-sending}}), the leaving node specified a URI in the 'control_path' parameter defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, the Group Manager MUST inform the leaving node of its eviction, by sending a DELETE request targeting the URI specified in the 'control_path' parameter (OPT9).
 
-If the leaving node is not configured exclusively as monitor, the Group Manager performs the following actions.
+If the leaving node has not exclusively the role of monitor, the Group Manager performs the following actions.
 
 * The Group Manager frees the OSCORE Sender ID value of the leaving node, which becomes available for possible upcoming joining nodes.
 
@@ -935,11 +937,11 @@ Expert reviewers should take into consideration the following points:
 
 # Profile Requirements # {#profile-req}
 
-This appendix lists the specifications on this application profile of ACE, based on the requiremens defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
+This appendix lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
-* REQ1 - Specify the encoding and value of the identifier of group, for scope entries of 'scope': see {{ssec-auth-req}} and {{ssec-token-post}}.
+* REQ1 - Specify the encoding and value of the identifier of group, for scope entries of 'scope': see {{sec-format-scope}}, {{ssec-auth-req}} and {{ssec-token-post}}.
 
-* REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{ssec-auth-req}}.
+* REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{sec-format-scope}} and {{ssec-auth-req}}.
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -1000,6 +1002,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -07 to -08 ## {#sec-07-08}
 
 * AIF specific data model to express scope entries.
+
+* A set of roles is checked as valid when processing the Joining Request.
 
 * Default values for group configuration parameters.
 
