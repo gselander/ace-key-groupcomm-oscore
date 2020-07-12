@@ -857,7 +857,7 @@ Required parameters: "Toid", "Tperm"
 
 Optional parameters: none
 
-Encoding considerations: Must be encoded as a CBOR array, each element of which is a an array \[Toid, Tperm\] as defined in {{sec-format-scope}} of \[\[This specification\]\].
+Encoding considerations: Must be encoded as a CBOR array, each element of which is an array \[Toid, Tperm\] as defined in {{sec-format-scope}} of \[\[This specification\]\].
 
 Security considerations: See {{sec-security-considerations}} of \[\[This specification\]\].
 
