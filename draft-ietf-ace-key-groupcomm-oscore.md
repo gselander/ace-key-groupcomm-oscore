@@ -977,9 +977,11 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ16 - Specify how the communication is secured between the Client and KDC: by means of any transport profile of ACE {{I-D.ietf-ace-oauth-authz}} between Client and Group Manager that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
-* REQ17: Specify how the nonce N\_S is generated, if the token is not being posted (e.g. if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
+* REQ17 - Specify how the nonce N\_S is generated, if the token is not being posted (e.g. if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
 
-* REQ18: Specify if 'mgt_key_material' used, and if yes specify its format and content: not used in this version of the profile.
+* REQ18 - Specify if 'mgt_key_material' used, and if yes specify its format and content: not used in this version of the profile.
+
+* REQ19 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g. as in {{I-D.tiloca-ace-oscore-gm-admin}}.
 
 * OPT1 (Optional) - Specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
 
