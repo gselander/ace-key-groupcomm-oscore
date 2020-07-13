@@ -522,7 +522,7 @@ A group member or a signature verifier may need to retrieve the public keys of (
 
 If the Public Key Request uses the method FETCH, the Public Key Request is formatted as defined in Section 4.1.3.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular:
 
-* Each element (if any) of the first CBOR array is formatted as in the 'get_pub_keys' parameter of the Joining Request (see {{ssec-join-req-sending}}).
+* Each element (if any) of the first CBOR array is formatted as in the first CBOR array of the 'get_pub_keys' parameter of the Joining Request (see {{ssec-join-req-sending}}).
 
 * Each element (if any) of the second CBOR array is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested.
 
