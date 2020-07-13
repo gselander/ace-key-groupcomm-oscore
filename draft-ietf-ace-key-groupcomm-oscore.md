@@ -316,7 +316,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
      - 'sign_key_type_capab', encoded as a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ4).
 
-  * 'sign_key_parameters', encoded as a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
+  * 'sign_key_parameters' is a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
 
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
