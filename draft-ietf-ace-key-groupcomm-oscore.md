@@ -308,15 +308,15 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * In the 'id' element, every group name is encoded as a CBOR text string (REQ1) (see {{profile-req}}).
 
-  * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, if not encoding the CBOR simple value Null.
+  * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-  * If not encoding the CBOR simple value Null, 'sign_parameters' is a CBOR array including the following two elements:
+  * 'sign_parameters' is a CBOR array including the following two elements:
 
      - 'sign_alg_capab', encoded as a CBOR array. Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, for the algorithm indicated in 'sign_alg' (REQ4).
 
      - 'sign_key_type_capab', encoded as a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ4).
 
-  * If not encoding the CBOR simple value Null, 'sign_key_parameters' is a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
+  * 'sign_key_parameters', encoded as a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
 
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
