@@ -320,7 +320,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * If not encoding the CBOR simple value Null, 'sign_key_parameters' is a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
 
-  * If 'pub_key_enc_res' is present, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
+  * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
 Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -977,7 +977,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT1 (Optional) - Specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
 
-* OPT2 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' and 'pub_key_enc' are not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
+* OPT2 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
 * OPT3 (Optional) - Specify the encoding of 'pub_keys_repos' if the default is not used: no.
 
