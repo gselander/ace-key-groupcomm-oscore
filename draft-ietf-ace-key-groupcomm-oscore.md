@@ -417,16 +417,22 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the counter signature algorithm. This parameter is a CBOR array, with the same non-null encoding and value as 'sign_key_parameters' of the {{ssec-token-post}}.
 
   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
-  
-* The 'num' parameter MUST be present.
-
-* The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'exp' parameter MUST be present.
+  
+* The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
 
-* The 'group_policies' parameter SHOULD be present, and SHOULD include the elements "Sequence Number Synchronization Method" and "Key Update Check Interval" defined in Section 4.1.2 of {{I-D.ietf-ace-key-groupcomm}}, as well as the element "Group OSCORE Pairwise Mode Support" defined in {{ssec-pairwise-mode-policy}} of this specification.
+* The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
+
+   * "Sequence Number Synchronization Method" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 1 ("Best effort");
+   
+   * "Key Update Check Interval" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 3600;
+   
+   * "Expiration Delta" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 0.
+   
+   * "Group OSCORE Pairwise Mode Support" defined in {{ssec-pairwise-mode-policy}} of this specification, with default value False.
 
 Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the group.
 
@@ -971,7 +977,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ13 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
 
-* REQ14 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}; the three values defined and registered, as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}); the defined and registered encoding of the entry "Group OSCORE Pairwise Mode Support" (see {{ssec-iana-ace-groupcomm-policy-registry}}).
+* REQ14 - If used, specify the content format and default value of 'group\_policies' and its entries: see {{ssec-join-resp}}; the three values defined and registered as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}); the defined and registered encoding of the entry "Group OSCORE Pairwise Mode Support" (see {{ssec-iana-ace-groupcomm-policy-registry}}).
 
 * REQ15 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
 
@@ -1014,6 +1020,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * A set of roles is checked as valid when processing the Joining Request.
 
 * Updated format of 'get_pub_keys' in the Joining Request.
+
+* Payload format and default values of group policies in the Joining Response.
 
 * Updated payload format of the FETCH request to retrieve public keys.
 
