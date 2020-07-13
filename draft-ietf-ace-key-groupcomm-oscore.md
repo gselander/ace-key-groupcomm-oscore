@@ -74,25 +74,25 @@ normative:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-ace-oscore-profile:
   COSE.Algorithms:
-    author: 
+    author:
       org: IANA
     date: false
     title: COSE Algorithms
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
   COSE.Key.Types:
-    author: 
+    author:
       org: IANA
     date: false
     title: COSE Key Types
     target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
   COSE.Elliptic.Curves:
-    author: 
+    author:
       org: IANA
     date: false
     title: COSE Elliptic Curves
     target: https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
   CWT.Confirmation.Methods:
-    author: 
+    author:
       org: IANA
     date: false
     title: COSE Elliptic Curves
@@ -140,8 +140,6 @@ Readers are expected to be familiar with:
 
 Additionally, this document makes use of the following terminology.
 
-* Group name is used as a synonym for group identifier in {{I-D.ietf-ace-key-groupcomm}}.
-
 * Requester: member of an OSCORE group that sends request messages to other members of the group.
 
 * Responder: member of an OSCORE group that receives request messages from other members of the group. A responder may reply back, by sending a response message to the requester which has sent the request message.
@@ -158,7 +156,7 @@ This specification describes how to use {{I-D.ietf-ace-key-groupcomm}} and {{I-D
 
 With reference to {{I-D.ietf-ace-key-groupcomm}}:
 
-* The node wishing to joining the OSCORE group, i.e. the joining node, is the Client.
+* The node wishing to join the OSCORE group, i.e. the joining node, is the Client.
 
 * The Group Manager is the Key Distribution Center (KDC), acting as a Resource Server.
 
@@ -180,7 +178,7 @@ That is, the group is rekeyed when a node joins the group as a new member, or af
 
 The keying material distributed through a group rekeying MUST include:
 
-* a new Group Identifier (Gid) for the group, used as ID Context parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). Note that the Gid differs from the plain group name introduced in {{ssec-terminology}}, which is a plain, stable and invariant identifier, with no cryptographic relevance and meaning.
+* a new Group Identifier (Gid) for the group, used as ID Context parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). Note that the Gid differs from the plain group name introduced in {{I-D.ietf-ace-key-groupcomm}}, which is a plain, stable and invariant identifier, with no cryptographic relevance and meaning.
 
 * a new value for the Master Secret parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
@@ -210,8 +208,8 @@ Then, for each scope entry:
 
 * the permission set ("Tperm") is specialized to a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ2). The value R is computed as follows:
 
-   - each role in the permission set is converted into to the corresponding numeric identifier X from the "Value" column of the table in {{fig-role-values}}.
-   
+   - each role in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the table in {{fig-role-values}}.
+
    - the set of N numbers is converted into the single value R, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
 
 ~~~~~~~~~~~
@@ -263,7 +261,7 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
    - The value of the CBOR byte string encodes a CBOR array, whose format MUST follow the data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}}. In particular, for each OSCORE group to join:
 
       - The group name is encoded as a CBOR text string (REQ1).
-   
+
       - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} (REQ2) from the numerical abbreviations defined in {{fig-role-values}} for each requested role (OPT7).
 
 ## Authorization Response {#ssec-auth-resp}
@@ -278,7 +276,7 @@ The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ac
 
 The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additional resource:
 
-* /group-oscore/GROUPNAME/active: this sub-resource is fixed and supports the GET method, whose handler is defined in {{active-get}}.
+* /group-oscore/GROUPNAME/active: this sub-resource supports the GET method, whose handler is defined in {{active-get}}.
 
 ## GET Handler {#active-get}
 
@@ -294,7 +292,7 @@ The method to set the current group status, i.e. active or inactive, is out of t
 
 The following subsections describe the interactions between the joining node and the Group Manager, i.e. the sending of the Access Token and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the KDC consists of the messages defined in Section 3.3 and 4.2 of {{I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
 
-A signature verifier provides the Group Manager with an Access Token, as described in {{ssec-token-post}}, just as any another joining node does. However, unlike candidate group members, it does not join any OSCORE group, i.e. it does not perform the joining process defined in {{ssec-join-req-sending}}. After a successful token posting, a signature verifier is authorized to perform only the operations specified in {{sec-pub-keys}}, to retrieve the public keys of group members, and only for the OSCORE groups specified in the validated Access Token. The Group Manager MUST respond with a 4.01 (Unauthorized) error message, in case a signature verifier attempts to access any other endpoint than /group-oscore/GROUPNAME/pub-key at the Group Manager.
+A signature verifier provides the Group Manager with an Access Token, as described in {{ssec-token-post}}, just as any another joining node does. However, unlike candidate group members, it does not join any OSCORE group, i.e. it does not perform the joining process defined in {{ssec-join-req-sending}}. After successfully posting a token, a signature verifier is authorized to perform only the operations specified in {{sec-pub-keys}}, to retrieve the public keys of group members, and only for the OSCORE groups specified in the validated Access Token. The Group Manager MUST respond with a 4.01 (Unauthorized) error message, in case a signature verifier attempts to access any other endpoint than /group-oscore/GROUPNAME/pub-key at the Group Manager.
 
 ## Token Post {#ssec-token-post}
 
@@ -313,9 +311,9 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
   * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, if not encoding the CBOR simple value Null.
 
   * If not encoding the CBOR simple value Null, 'sign_parameters' is a CBOR array including the following two elements:
-  
+
      - 'sign_alg_capab', encoded as a CBOR array. Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, for the algorithm indicated in 'sign_alg' (REQ4).
-     
+
      - 'sign_key_type_capab', encoded as a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ4).
 
   * If not encoding the CBOR simple value Null, 'sign_key_parameters' is a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
@@ -409,17 +407,17 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
    * The 'cs_params' parameter MAY be present and specifies the parameters for the counter signature algorithm. This parameter is a CBOR array, which includes the following two elements:
-   
-     - 'sign_alg_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null. 
-     
-     - 'sign_key_type_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null. 
-   
+
+     - 'sign_alg_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null.
+
+     - 'sign_key_type_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null.
+
    * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the counter signature algorithm. This parameter is a CBOR array, with the same non-null encoding and value as 'sign_key_parameters' of the {{ssec-token-post}}.
 
   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
 
 * The 'exp' parameter MUST be present.
-  
+
 * The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
 * The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
@@ -427,11 +425,11 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
 
    * "Sequence Number Synchronization Method" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 1 ("Best effort");
-   
+
    * "Key Update Check Interval" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 3600;
-   
+
    * "Expiration Delta" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 0.
-   
+
    * "Group OSCORE Pairwise Mode Support" defined in {{ssec-pairwise-mode-policy}} of this specification, with default value False.
 
 Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the group.
@@ -648,31 +646,31 @@ The Group Manager SHOULD use the following default values for the algorithm, alg
 * For the parameters 'cs_params' of the counter signature algorithm:
 
     - The array \[\[OKP\], \[OKP, Ed25519\]\], indicating the elliptic curve Ed25519 {{RFC8032}}, in case EdDSA is assumed or specified for 'cs_alg'.
-    
+
     - The array \[\[EC2\], \[EC2, P-256\]\], indicating the elliptic curve P-256, in case ES256 {{RFC6979}} is specified for 'cs_alg'.
-    
+
     - The array \[\[EC2\], \[EC2, P-384\]\], indicating the elliptic curve P-384, in case ES384 {{RFC6979}} is specified for 'cs_alg'.
-    
+
     - The array \[\[EC2\], \[EC2, P-521\]\], indicating the elliptic curve P-521, in case ES512 {{RFC6979}} is specified for 'cs_alg'.
-    
+
     - The array \[\[\], \[RSA\]\], in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'cs_alg'.
 
 * For the parameters 'cs_key_params' of the key used with the counter signature algorithm:
 
     - The array \[OKP, Ed25519\] as pair (key type, elliptic curve), in case EdDSA is assumed or specified for 'cs_alg' and Ed25519 is assumed or specified within the second array of 'cs_params'.
-    
+
     - The array \[OKP, Ed448\] as pair (key type, elliptic curve), in case EdDSA is assumed or specified for 'cs_alg' and the elliptic curve Ed448 {{RFC8032}} is specified within the second array of 'cs_params'.
-    
+
     - The array \[EC2, P-256\] as pair (key type, elliptic curve), in case ES256 {{RFC6979}} is specified for 'cs_alg' and the elliptic curve P-256 is assumed or specified within the second array of 'cs_params'.
-    
+
     - The array \[EC2, P-384\] as pair (key type, elliptic curve), in case ES384 {{RFC6979}} is specified for 'cs_alg' and the elliptic curve P-384 is specified within the second array of 'cs_params'.
-    
+
     - The array \[EC2, P-521\] as pair (key type, elliptic curve), in case ES512 {{RFC6979}} is specified for 'cs_alg' and the elliptic curve P-521 is specified within the second array of 'cs_params'.
-    
+
     - The array \[RSA\] indicating RSA as key type, in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'cs_alg'.
 
 * For the 'cs_key_enc' encoding of the public keys of the group members, COSE_Key from the "CWT Confirmation Methods" Registry {{CWT.Confirmation.Methods}}.
-    
+
 # Security Considerations {#sec-security-considerations}
 
 Security considerations for this profile are inherited from {{I-D.ietf-ace-key-groupcomm}}, the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, and the specific transport profile of ACE signalled by the AS, such as {{I-D.ietf-ace-dtls-authorize}} and {{I-D.ietf-ace-oscore-profile}}.
@@ -938,7 +936,7 @@ Expert reviewers should take into consideration the following points:
 * Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts should inspect the entry for the considered role, to verify the correctness of its description against the role as intended in the specification that defined it. Expert should consider requesting an opinion on the correctness of registered parameters from the Authentication and Authorization for Constrained Environments (ACE) Working Group and the Constrained RESTful Environments (CoRE) Working Group.
 
      Entries that do not meet these objective of clarity and completeness should not be registered.
-     
+
 * Duplicated registration and point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments.
 
 * Experts should take into account the expected usage of roles when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.
