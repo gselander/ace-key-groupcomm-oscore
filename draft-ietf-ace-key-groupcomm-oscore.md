@@ -1034,6 +1034,16 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -08 to -09 ## {#sec-08-09}
+
+* The url-path "ace-group" is used.
+
+* The signed value for 'client_cred_verify' includes also the scope.
+
+* Clarified non intended meanings of 'clientId'.
+
+* Registration of the resource type rt="core.osc.gm".
+
 ## Version -07 to -08 ## {#sec-07-08}
 
 * AIF specific data model to express scope entries.
