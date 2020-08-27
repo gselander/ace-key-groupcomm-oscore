@@ -401,6 +401,8 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
 
    * The 'clientId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
+   
+      Note that this parameter and its value have no relation with the CoAP role that the joining node is going to take in the group. That is, it is not indicative of whether the joining node is going to act (also) as CoAP client once in the group.
 
    * The 'hkdf' parameter, if present, has as value the KDF algorithm used in the group.
 
