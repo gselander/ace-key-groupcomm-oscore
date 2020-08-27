@@ -332,6 +332,8 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * The string "group-oscore" is used instead of "ace-group" (see Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}) as the top level path to the group-membership resource. The url-path /group-oscore/ is a default name of this specifications: implementations are not required to use this name, and can define their own instead.
 
+* The 'scope' parameter MUST be included. Its value encodes one scope entry with the format defined in {{sec-format-scope}}, indicating the group name and the role(s) that the joining node wants to take in the group.
+
 * The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the public keys of the group members from the Group Manager during the joining process (see {{sec-public-keys-of-joining-nodes}}). Otherwise, this parameter MUST NOT be present.
 
    If this parameter is present, each element (if any) of the first CBOR array is encoded as a CBOR integer, with the same value of a permission set ("Tperm") indicating that role or combination of roles in a scope entry, as defined in {{sec-format-scope}}.
@@ -358,11 +360,17 @@ The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of
 
 * In case the Joining Request does not include the 'client_cred' parameter, the joining process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
-* To compute the signature contained in 'client_cred_verify', the GM considers: i) as signed value, N_S concatenated with N_C, where N_S is determined as described in {{sssec-challenge-value}}, while N_C is the nonce provided in the 'cnonce' parameter of the Joining Request; ii) the countersignature algorithm used in the OSCORE group, and possible correponding parameters; and iii) the public key of the joining node, either retrieved from the 'client_cred' parameter, or already stored as acquired from previous interactions with the joining node.
+* To compute the signature contained in 'client_cred_verify', the GM considers:*
+
+   - as signed value, the value of the 'scope' parameter from the Joining Request concatenated with N_S concatenated with N_C, where N_S is determined as described in {{sssec-challenge-value}}, while N_C is the nonce provided in the 'cnonce' parameter of the Joining Request;
+   
+   - the countersignature algorithm used in the OSCORE group, and possible correponding parameters;
+   
+   - the public key of the joining node, either retrieved from the 'client_cred' parameter, or already stored as acquired from previous interactions with the joining node.
 
 * A 4.00 Bad Request response from the Group Manager to the joining node MUST have content format application/ace+cbor. The response payload is a CBOR map which MUST contain the 'sign_info' parameter, including a single element 'sign_info_entry' pertaining to the OSCORE group that the joining node tried to join with the Joining Request.
 
-* The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'scope' parameter specifying any set of roles not included in the following list: "requester", "responder", "monitor", ("requester", "responder"). Future specifications that define a new role MUST define possible sets of roles including the new one and existing ones, that are acceptable to specify in the 'scope' parameter of a Joining Request.
+* The Group Manager MUST return a 4.00 (Bad Request) response in case the 'scope' parameter is not present in the Joining Request, or if it is present and specifies any set of roles not included in the following list: "requester", "responder", "monitor", ("requester", "responder"). Future specifications that define a new role MUST define possible sets of roles including the new one and existing ones, that are acceptable to specify in the 'scope' parameter of a Joining Request.
 
 * The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
 
