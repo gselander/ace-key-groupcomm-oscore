@@ -97,7 +97,13 @@ normative:
     date: false
     title: COSE Elliptic Curves
     target: https://www.iana.org/assignments/cwt/cwt.xhtml#confirmation-methods
-
+  CORE.Parameters:
+    author:
+        org: IANA
+    date: false
+    title: Constrained RESTful Environments (CoRE) Parameters
+    target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml
+       
 informative:
   I-D.ietf-core-groupcomm-bis:
   I-D.ietf-ace-dtls-authorize:
@@ -107,6 +113,7 @@ informative:
   I-D.ietf-ace-dtls-authorize:
   I-D.tiloca-ace-oscore-gm-admin:
   RFC6347:
+  RFC6690:
   RFC6749:
   RFC7641:
 
@@ -278,6 +285,10 @@ The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ac
 
 * /ace-group/GROUPNAME/active: this sub-resource supports the GET method, whose handler is defined in {{active-get}}.
 
+The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}, and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. using a link-format document {{RFC6690}}.
+
+Applications can use this common resource type to discover links to group-membership resources for joining OSCORE groups, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+
 ## GET Handler {#active-get}
 
 The handler expects a GET request.
@@ -320,7 +331,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
-Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
+Note that, other than through the above parameters as defined in Section 3.3 of {{I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}} to discover the OSCORE group and the link to the associated group-membership resource at the Group Manager.
 
 Additionally, if allowed by the used transport profile of ACE, the joining node may instead provide the Access Token to the Group Manager by other means, e.g. during a secure session establishment (see Section 3.3.1 of {{I-D.ietf-ace-dtls-authorize}}).
 
@@ -934,6 +945,16 @@ The columns of this registry are:
 This registry will be initially populated by the values in {{fig-role-values}}.
 
 The Reference column for all of these entries will be \[\[This specification\]\].
+
+## CoRE Resource Type Registry # {#iana-rt}
+
+IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the  "Resource Type (rt=) Link Target Attribute Values" subregistry under the "Constrained Restful Environments (CoRE) Parameters" {{CORE.Parameters}} registry.
+
+* Value: "core.osc.gm"
+
+* Description: Group-membership resource of an OSCORE Group Manager.
+
+* Reference: \[\[This specification\]\]
 
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
