@@ -896,13 +896,7 @@ Published specification: \[\[This specification\]\]
 
 Applications that use this media type: The type is used by applications that want to express authorization information about joining OSCORE groups, as specified in \[\[This specification\]\].
 
-Additional information:
-
-Magic number(s): n/a
-
-File extension(s): .aif-groupcomm-oscore
-
-Macintosh file type code(s): n/a
+Additional information: n/a
 
 Person & email address to contact for further information: <iesg@ietf.org>
 
