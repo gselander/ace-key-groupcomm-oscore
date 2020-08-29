@@ -517,7 +517,7 @@ In particular, the 'key' parameter is formatted as defined in {{ssec-join-resp}}
 
 Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters, group keying material and Sender ID, and, if they differ from the current ones, use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
-# Retrieval of New Keying Material # {#sec-new-key}
+# Requesting a Change of Keying Material # {#sec-new-key}
 
 As discussed in Section 2.4.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group member may at some point exhaust its Sender Sequence Numbers in the group.
 
@@ -533,7 +533,7 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
 
     b. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'clientId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
 
-# Retrieval of Public Keys of Group Members # {#sec-pub-keys}
+# Retrieval of Public Keys and Roles for Group Members # {#sec-pub-keys}
 
 A group member or a signature verifier may need to retrieve the public keys of (other) group members. To this end, the group member or signature verifier sends a Public Key Request message to the Group Manager, as per Section 4.5 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /ace-group/GROUPNAME/pub-key at the Group Manager.
 
