@@ -1083,9 +1083,13 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Clarified non intended meanings of 'clientId'.
 
+* Added message exchange for Group Names request-response.
+
 * Updates on group rekeying contextual with request of new Sender ID.
 
 * Registration of the resource type rt="core.osc.gm".
+
+* Update list of requirements.
 
 ## Version -07 to -08 ## {#sec-07-08}
 
