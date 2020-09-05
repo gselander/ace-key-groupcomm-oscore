@@ -443,7 +443,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
-* The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier.
+* The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier encoded as a CBOR byte string (REQ9).
 
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
 
@@ -547,7 +547,7 @@ If the Public Key Request uses the method FETCH, the Public Key Request is forma
 
 * Each element (if any) of the first CBOR array is formatted as in the first CBOR array of the 'get_pub_keys' parameter of the Joining Request (see {{ssec-join-req-sending}}).
 
-* Each element (if any) of the second CBOR array is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested.
+* Each element (if any) of the second CBOR array is a CBOR byte string (REQ9), which encodes the Sender ID of the group member for which the associated public key is requested.
 
 Upon receiving the Public Key Request, the Group Manager processes it as per Section 4.1.3.1 or 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively. Additionally, if the Public Key Request uses the method FETCH, the Group Manager silently ignores identifiers included in the ’get_pub_keys’ parameter of the request that are not associated to any current group member.
 
@@ -601,6 +601,35 @@ Upon learning from a 2.05 (Content) response that the group has become active ag
    |                                                             |
 ~~~~~~~~~~~
 {: #fig-key-status-req-resp title="Message Flow of Group Status Request-Response" artwork-align="center"}
+
+# Retrieval of Group Names and URIs {#sec-retrieve-gnames}
+
+A node may want to retrieve from the Group Manager the group name and the URI of the group-membership resource of a group. This is relevant in the following cases.
+
+* Before joining a group, a joining node may know only the current Group Identifier (Gid) of that group, but not the group name and the URI to the group-membership resource.
+
+* As current group member in several groups, the node has missed a previous group rekeying in one of them (see {{sec-group-rekeying-process}}). Hence, it retains stale keying material and fails to decrypt received messages exchanged in that group.
+
+   Such messages do not provide a direct hint to the correct group name, that the node would need in order to retrieve the latest keying material from the Group Manager (see {{ssec-updated-key-only}} and {{ssec-updated-and-individual-key}}). However, such messages may specify the current Gid of the group, as value of the 'kid_context' field of the OSCORE CoAP option (see Section 6.1 of {{RFC8613}} and Section 4.2 of {{I-D.ietf-core-oscore-groupcomm}}).
+
+In either case, the node only knows the current Gid of the group. As detailed below, the node can contact the Group Manager, and request the group name and URI to the group-membership resource corresponding to that Gid, before using that information to join the group or to get the latest keying material. To this end, the node sends a Group Name and URI Retrieval Request, as per Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}.
+
+In particular, the node sends a CoAP FETCH request to the endpoint /ace-group at the Group Manager formatted as defined in Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}. Each element of the CBOR array 'gid' is a CBOR byte string (REQ7b), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are requested.
+
+Upon receiving the Group Name and URI Retrieval Request, the Group Manager processes it as per Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Version Response is formatted as defined in Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, each element of the CBOR array 'gid' is a CBOR byte string (REQ7b), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are provided.
+
+{{fig-group-names-req-resp}} gives an overview of the exchanges described above.
+
+~~~~~~~~~~~
+                                                                  Group
+  Node                                                           Manager
+   |                                                                |
+   |---- Group Name and URI Retrieval Request: FETCH ace-group/ --->|
+   |                                                                |
+   |<--- Group Name and URI Retrieval Response: 2.05 (Content) -----|
+   |                                                                |
+~~~~~~~~~~~
+{: #fig-group-names-req-resp title="Message Flow of Group Name and URI Retrieval Request-Response" artwork-align="center"}
 
 # Request to Leave the Group # {#sec-leave-req}
 
@@ -990,13 +1019,15 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}. Future specifications may define additional values for this parameter.
 
-* REQ7a - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC: the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
+* REQ7a - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
+
+* REQ7b - Specify the exact encoding of group identifier (see Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}): CBOR byte string (see {{sec-retrieve-gnames}}).
 
 * REQ7 - Format of the 'key' value: see {{ssec-join-resp}}.
 
 * REQ8 - Acceptable values of 'gkty': Group_OSCORE_Security_Context object (see {{ssec-join-resp}}).
 
-* REQ9: Specify the format of the identifiers of group members: see {{ssec-join-resp}} and {{sec-pub-keys}}.
+* REQ9 - Specify the format of the identifiers of group members: CBOR byte string (see {{ssec-join-resp}} and {{sec-pub-keys}}).
 
 * REQ10 - Specify the communication protocol that the members of the group must use: CoAP, possibly over IP multicast.
 
