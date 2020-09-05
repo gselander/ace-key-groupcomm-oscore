@@ -618,6 +618,8 @@ In particular, the node sends a CoAP FETCH request to the endpoint /ace-group at
 
 Upon receiving the Group Name and URI Retrieval Request, the Group Manager processes it as per Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}. The success Version Response is formatted as defined in Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, each element of the CBOR array 'gid' is a CBOR byte string (REQ7b), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are provided.
 
+For each of its groups, the Group Manager maintains an association between the group name and the URI to the group-membership resource on one hand, and only the current Gid for that group on the other hand. That is, the Group Manager MUST NOT maintain an association between the former pair and any other Gid for that group than the current, most recent one.
+
 {{fig-group-names-req-resp}} gives an overview of the exchanges described above.
 
 ~~~~~~~~~~~
