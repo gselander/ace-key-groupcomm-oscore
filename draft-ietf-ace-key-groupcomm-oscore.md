@@ -285,7 +285,7 @@ The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ac
 
 * /ace-group/GROUPNAME/active: this sub-resource supports the GET method, whose handler is defined in {{active-get}}.
 
-The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}, and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. using a link-format document {{RFC6690}}.
+The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ7a), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. using a link-format document {{RFC6690}}.
 
 Applications can use this common resource type to discover links to group-membership resources for joining OSCORE groups, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -985,6 +985,8 @@ This appendix lists the specifications on this application profile of ACE, based
 * REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
 * REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}. Future specifications may define additional values for this parameter.
+
+* REQ7a - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC: the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
 
 * REQ7 - Format of the 'key' value: see {{ssec-join-resp}}.
 
