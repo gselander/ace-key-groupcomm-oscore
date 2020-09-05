@@ -111,7 +111,7 @@ informative:
   I-D.tiloca-core-oscore-discovery:
   I-D.ietf-core-echo-request-tag:
   I-D.ietf-ace-dtls-authorize:
-  I-D.tiloca-ace-oscore-gm-admin:
+  I-D.ietf-ace-oscore-gm-admin:
   RFC6347:
   RFC6690:
   RFC6749:
@@ -119,7 +119,7 @@ informative:
 
 --- abstract
 
-This specification defines an application profile of the ACE framework for Authentication and Authorization, to request and provision keying material in group communication scenarios that are based on CoAP and secured with Group Object Security for Constrained RESTful Environments (OSCORE). This application profile delegates the authentication and authorization of Clients that join an OSCORE group through a Resource Server acting as Group Manager for that group. This application profile leverages protocol-specific transport profiles of ACE to achieve communication security, server authentication and proof-of-possession for a key owned by the Client and bound to an OAuth 2.0 access token.
+This specification defines an application profile of the ACE framework for Authentication and Authorization, to request and provision keying material in group communication scenarios that are based on CoAP and secured with Group Object Security for Constrained RESTful Environments (OSCORE). This application profile delegates the authentication and authorization of Clients that join an OSCORE group through a Resource Server acting as Group Manager for that group. This application profile leverages protocol-specific transport profiles of ACE to achieve communication security, server authentication and proof-of-possession for a key owned by the Client and bound to an OAuth 2.0 Access Token.
 
 --- middle
 
@@ -303,7 +303,7 @@ The handler verifies that the group identifier of the /ace-group/GROUPNAME/activ
 
 If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is expected.
 
-The method to set the current group status, i.e. active or inactive, is out of the scope of this specification, and is defined for the administrator interface of the Group Manager specified in {{I-D.tiloca-ace-oscore-gm-admin}}.
+The method to set the current group status, i.e. active or inactive, is out of the scope of this specification, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
 
 # Token POST and Group Joining {#sec-joining-node-to-GM}
 
@@ -660,7 +660,7 @@ Furthermore, some of these group members can be in multiple groups, all of which
 
 # Default Values for Group Configuration Parameters
 
-This section defines the default values that the Group Manager assumes for the configuration parameters of an OSCORE group, unless differently specified when creating and configuring the group. This can be achieved as specified in {{I-D.tiloca-ace-oscore-gm-admin}}.
+This section defines the default values that the Group Manager assumes for the configuration parameters of an OSCORE group, unless differently specified when creating and configuring the group. This can be achieved as specified in {{I-D.ietf-ace-oscore-gm-admin}}.
 
 The Group Manager SHOULD use the same default values defined in Section 3.2 of {{RFC8613}} for both the HKDF algorithm and the AEAD algorithm used in the group.
 
@@ -1016,7 +1016,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ18 - Specify if 'mgt_key_material' used, and if yes specify its format and content: not used in this version of the profile.
 
-* REQ19 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g. as in {{I-D.tiloca-ace-oscore-gm-admin}}.
+* REQ19 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g. as in {{I-D.ietf-ace-oscore-gm-admin}}.
 
 * OPT1 (Optional) - Specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
 
