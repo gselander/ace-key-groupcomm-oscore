@@ -173,6 +173,8 @@ All communications between the involved entities MUST be secured.
 
 In particular, communications between the Client and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. Note that it is expected that in the commonly referred base-case of this specification, the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
 
+{{profile-req}} lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
+
 ## Overview of the Joining Process {#ssec-overview-join-process}
 
 A node performs the steps described in Section 4.2 of {{I-D.ietf-ace-key-groupcomm}} in order to join an OSCORE group. The format and processing of messages exchanged among the participants are further specified in {{sec-joining-node-to-AS}} and {{sec-joining-node-to-GM}} of this document.
@@ -185,7 +187,9 @@ That is, the group is rekeyed when a node joins the group as a new member, or af
 
 The keying material distributed through a group rekeying MUST include:
 
-* a new Group Identifier (Gid) for the group, used as ID Context parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}). Note that the Gid differs from the plain group name introduced in {{I-D.ietf-ace-key-groupcomm}}, which is a plain, stable and invariant identifier, with no cryptographic relevance and meaning.
+* a new Group Identifier (Gid) for the group as introduced in {{I-D.ietf-ace-key-groupcomm}}, used as ID Context parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
+
+   Note that the Gid differs from the plain group name also introduced in {{I-D.ietf-ace-key-groupcomm}}, which is a plain, stable and invariant identifier, with no cryptographic relevance and meaning.
 
 * a new value for the Master Secret parameter of the OSCORE Common Security Context of that group (see Section 2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
@@ -211,7 +215,7 @@ the value of the CBOR byte string used as scope encodes the CBOR array \[* \[Toi
 
 Then, for each scope entry:
 
-* the object identifier ("Toid") is specialized as a CBOR text string, specifying the group name for the scope entry (REQ1) (see {{profile-req}});
+* the object identifier ("Toid") is specialized as a CBOR text string, specifying the group name for the scope entry;
 
 * the permission set ("Tperm") is specialized to a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ2). The value R is computed as follows:
 
@@ -267,7 +271,7 @@ The Authorization Request message is as defined in Section 3.1 of {{I-D.ietf-ace
 
    - The value of the CBOR byte string encodes a CBOR array, whose format MUST follow the data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}}. In particular, for each OSCORE group to join:
 
-      - The group name is encoded as a CBOR text string (REQ1).
+      - The group name is encoded as a CBOR text string.
 
       - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} (REQ2) from the numerical abbreviations defined in {{fig-role-values}} for each requested role (OPT7).
 
@@ -284,6 +288,8 @@ The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ac
 The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additional resource:
 
 * /ace-group/GROUPNAME/active: this sub-resource supports the GET method, whose handler is defined in {{active-get}}.
+
+The GROUPNAME segment of the URI path and the group name specified in the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) MUST match (REQ1).
 
 The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ7a), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. using a link-format document {{RFC6690}}.
 
@@ -316,8 +322,6 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
     The 'kdcchallenge' parameter MAY be omitted from the 2.01 (Created) response, if the 'scope' of the Access Token specifies only the role "monitor" or only the role "verifier", for each of the specified groups.
 
 * If the 'sign_info' parameter is present in the response, the following applies for each element 'sign_info_entry'.
-
-  * In the 'id' element, every group name is encoded as a CBOR text string (REQ1) (see {{profile-req}}).
 
   * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -974,7 +978,7 @@ Expert reviewers should take into consideration the following points:
 
 This appendix lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
-* REQ1 - Specify the encoding and value of the identifier of group, for scope entries of 'scope': see {{sec-format-scope}}, {{ssec-auth-req}} and {{ssec-token-post}}.
+* REQ1 - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
 
 * REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{sec-format-scope}} and {{ssec-auth-req}}.
 
