@@ -505,7 +505,13 @@ If the group member wants to retrieve only the latest group keying material, it 
 
 In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME at the Group Manager.
 
-The Group Manager processes the Key Distribution Request according to Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that it does not include the 'clientId' parameter.
+The Group Manager processes the Key Distribution Request according to Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. In addition:
+
+* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that it does not include the 'clientId' parameter.
+
+* The 'exp' parameter MUST be present.
+
+* The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app.
 
 Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters and group keying material, and, if they differ from the current ones, use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
@@ -515,9 +521,13 @@ If the group member wants to retrieve the latest group keying material as well a
 
 In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/nodes/NODENAME at the Group Manager.
 
-The Group Manager processes the Key Distribution Request according to Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}.
+The Group Manager processes the Key Distribution Request according to Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. In addition:
 
-In particular, the 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that if the requesting group member has exclusively the role of monitor, no 'clientId' is specified within the 'key' parameter. Note that, in any other case, the current Sender ID of the group member is not specified as a separate parameter, but rather specified as 'clientId' within the 'key' parameter.
+* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that if the requesting group member has exclusively the role of monitor, no 'clientId' is specified within the 'key' parameter.
+
+   Note that, in any other case, the current Sender ID of the group member is not specified as a separate parameter, but rather specified as 'clientId' within the 'key' parameter.
+   
+* The 'exp' parameter MUST be present.
 
 Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters, group keying material and Sender ID, and, if they differ from the current ones, use them to set up the new OSCORE Security Context as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}.
 
