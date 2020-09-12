@@ -285,17 +285,19 @@ The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ac
 
 # Interface at the Group Manager {#sec-interface-GM}
 
-The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additional resource:
+The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with one additional sub-resource defined in {{ssec-resource-active}}.
 
-* /ace-group/GROUPNAME/active: this sub-resource supports the GET method, whose handler is defined in {{active-get}}.
+The GROUPNAME segment of the URI path and the group name specified in the scope entry of the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) MUST match (REQ1).
 
-The GROUPNAME segment of the URI path and the group name specified in the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) MUST match (REQ1).
-
-The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ7a), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. using a link-format document {{RFC6690}}.
+The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ7a), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. by using a link-format document {{RFC6690}}.
 
 Applications can use this common resource type to discover links to group-membership resources for joining OSCORE groups, e.g. by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
-## GET Handler {#active-get}
+## ace-group/GROUPNAME/active {#ssec-resource-active}
+
+This resource implements a GET handler.
+
+### GET Handler {#active-get}
 
 The handler expects a GET request.
 
@@ -593,7 +595,7 @@ Upon receiving the Version Request, the Group Manager processes it as per Sectio
 
 A group member may request the current status of the the OSCORE group, i.e. active or inactive. To this end, the group member sends a Group Status Request to the Group Manager.
 
-In particular, the group member sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/active at the Group Manager defined in {{sec-interface-GM}} of this specification, where GROUPNAME is the name of the OSCORE group. The success Group Version Response is formatted as defined in {{sec-interface-GM}} of this specification.
+In particular, the group member sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/active at the Group Manager defined in {{ssec-resource-active}} of this specification, where GROUPNAME is the name of the OSCORE group. The success Group Version Response is formatted as defined in {{ssec-resource-active}} of this specification.
 
 Upon learning from a 2.05 (Content) response that the group is currently inactive, the group member SHOULD stop taking part in communications within the group, until it becomes active again.
 
