@@ -373,6 +373,8 @@ It is up to applications to define how N_S is computed in further alternative se
 
 The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. Additionally, the following applies.
 
+* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group that the joining node tried to join is currently inactive (see {{ssec-resource-active}}).
+
 * In case the Joining Request does not include the 'client_cred' parameter, the joining process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
 * To compute the signature contained in 'client_cred_verify', the GM considers:*
@@ -382,8 +384,8 @@ The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of
    - the countersignature algorithm used in the OSCORE group, and possible correponding parameters;
    
    - the public key of the joining node, either retrieved from the 'client_cred' parameter, or already stored as acquired from previous interactions with the joining node.
-
-* A 4.00 Bad Request response from the Group Manager to the joining node MUST have content format application/ace+cbor. The response payload is a CBOR map which MUST contain the 'sign_info' parameter, including a single element 'sign_info_entry' pertaining to the OSCORE group that the joining node tried to join with the Joining Request.
+  
+* A 4.00 (Bad Request) response from the Group Manager to the joining node MUST have content format application/ace+cbor. The response payload is a CBOR map which MUST contain the 'sign_info' parameter, including a single element 'sign_info_entry' pertaining to the OSCORE group that the joining node tried to join with the Joining Request.
 
 * The Group Manager MUST return a 4.00 (Bad Request) response in case the 'scope' parameter is not present in the Joining Request, or if it is present and specifies any set of roles not included in the following list: "requester", "responder", "monitor", ("requester", "responder"). Future specifications that define a new role MUST define possible sets of roles including the new one and existing ones, that are acceptable to specify in the 'scope' parameter of a Joining Request.
 
