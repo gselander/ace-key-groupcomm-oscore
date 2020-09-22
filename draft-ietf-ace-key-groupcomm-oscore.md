@@ -413,25 +413,25 @@ If the joining node has not taken exclusively the role of monitor, the Group Man
 
 Then, the Group Manager replies to the joining node, providing the updated security parameters and keying meterial necessary to participate in the group communication. This success Joining Response is formatted as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions:
 
-* The 'gkty' parameter identifies a key of type "Group_OSCORE_Security_Context object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
+* The 'gkty' parameter identifies a key of type "Group_OSCORE_Input_Material object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Security_Context object, which is defined in this specification and extends the OSCORE_Security_Context object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg', 'cs_params', 'cs_key_params' and 'cs_key_enc' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this specification and extends the OSCORE_Input_Material object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg', 'cs_params', 'cs_key_params' and 'cs_key_enc' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
 
-   * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value.
+   * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value used in the OSCORE group.
 
    * The 'clientId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
    
-      Note that this parameter and its value have no relation with the CoAP role that the joining node is going to take in the group. That is, it is not indicative of whether the joining node is going to act (also) as CoAP client once in the group.
+      Note that this parameter and its value have no relation with the CoAP role that the joining node is going to take in the OSCORE group. That is, it is not indicative of whether the joining node is going to act (also) as CoAP client once in the OSCORE group.
 
-   * The 'hkdf' parameter, if present, has as value the KDF algorithm used in the group.
+   * The 'hkdf' parameter, if present, has as value the KDF algorithm used in the OSCORE group.
 
-   * The 'alg' parameter, if present, has as value the AEAD algorithm used in the group.
+   * The 'alg' parameter, if present, has as value the AEAD algorithm used in the OSCORE group.
 
-   * The 'salt' parameter, if present, has as value the OSCORE Master Salt.
+   * The 'salt' parameter, if present, has as value the OSCORE Master Salt used in the OSCORE group.
 
    * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group.
 
-   * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+   * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
    * The 'cs_params' parameter MAY be present and specifies the parameters for the counter signature algorithm. This parameter is a CBOR array, which includes the following two elements:
 
@@ -447,7 +447,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD1), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
 
-* The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the group, thus used as group member identifier encoded as a CBOR byte string (REQ9).
+* The 'pub_keys' parameter, if present, includes the public keys of the group members that are relevant to the joining node. That is, it includes: i) the public keys of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the OSCORE group, thus used as group member identifier encoded as a CBOR byte string (REQ9).
 
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
 
@@ -459,7 +459,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * "Group OSCORE Pairwise Mode Support" defined in {{ssec-pairwise-mode-policy}} of this specification, with default value False.
 
-Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the group.
+Finally, the joining node uses the information received in the Joining Response to set up the OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the OSCORE group.
 
 From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}. When doing so:
 
@@ -467,7 +467,7 @@ From then on, the joining node can exchange group messages secured with Group OS
 
 * The joining node MUST NOT process an incoming response message, if signed by a group member whose public key is not associated to the role "Responder".
 
-If the application requires backward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the current group members upon the new node's joining (see {{sec-group-rekeying-process}}). As a consequence, the joining node is not able to access secure communication in the group occurred prior its joining.
+If the application requires backward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the current group members upon the new node's joining (see {{sec-group-rekeying-process}}). As a consequence, the joining node is not able to access secure communication in the OSCORE group occurred prior its joining.
 
 ## ACE Groupcomm Policy for Group OSCORE Pairwise Mode Support ## {#ssec-pairwise-mode-policy}
 
@@ -806,10 +806,10 @@ IANA is asked to register the following entry to the "ACE Groupcomm Profile" Reg
 
 IANA is asked to register the following entry to the "ACE Groupcomm Key" Registry defined in Section 8.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
-*  Name: Group_OSCORE_Security_Context object
+*  Name: Group_OSCORE_Input_Material object
 *  Key Type Value: TBD2
 *  Profile: "coap_group_oscore_app", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
-*  Description: A Group_OSCORE_Security_Context object encoded as described in {{ssec-join-resp}} of this specification.
+*  Description: A Group_OSCORE_Input_Material object encoded as described in {{ssec-join-resp}} of this specification.
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
 ## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
@@ -1041,7 +1041,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ7 - Format of the 'key' value: see {{ssec-join-resp}}.
 
-* REQ8 - Acceptable values of 'gkty': Group_OSCORE_Security_Context object (see {{ssec-join-resp}}).
+* REQ8 - Acceptable values of 'gkty': Group_OSCORE_Input_Material object (see {{ssec-join-resp}}).
 
 * REQ9 - Specify the format of the identifiers of group members: CBOR byte string (see {{ssec-join-resp}} and {{sec-pub-keys}}).
 
@@ -1094,6 +1094,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * The url-path "ace-group" is used.
 
 * The signed value for 'client_cred_verify' includes also the scope.
+
+* Renamed the key material object as Group_OSCORE_Input_Material object.
 
 * Clarified non intended meanings of 'clientId'.
 
