@@ -329,11 +329,11 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * 'sign_parameters' is a CBOR array including the following two elements:
 
-     - 'sign_alg_capab', encoded as a CBOR array. Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, for the algorithm indicated in 'sign_alg' (REQ4).
+     - 'sign_alg_capab', encoded as a CBOR array. Its format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}, for the algorithm indicated in 'sign_alg' (REQ4).
 
-     - 'sign_key_type_capab', encoded as a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ4).
+     - 'sign_key_type_capab', encoded as a CBOR array. Its format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the COSE key type associated to the algorithm indicated in 'sign_alg' (REQ4).
 
-  * 'sign_key_parameters' is a CBOR array.  Its precise format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the algorithm indicated in 'sign_alg' (REQ5).
+  * 'sign_key_parameters' is a CBOR array.  Its format and value is the same as the COSE capabilities entry in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}, for the COSE key type of the keys used with the algorithm indicated in 'sign_alg' (REQ5).
 
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
@@ -1029,9 +1029,9 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-* REQ4 - If used, specify the acceptable values for 'sign\_parameters': values from the COSE capabilities in the "COSE Algorithms" Registry {{COSE.Algorithms}} and from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
+* REQ4 - If used, specify the acceptable values for 'sign\_parameters': format and values from the COSE capabilities in the "COSE Algorithms" Registry {{COSE.Algorithms}} and from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-* REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': values from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
+* REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': format and values from the COSE capabilities in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
 * REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}. Future specifications may define additional values for this parameter.
 
@@ -1274,6 +1274,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 The authors sincerely thank Santiago Arag&oacute;n, Stefan Beck, Carsten Bormann, Martin Gunnarsson, Rikard Hoeglund, Daniel Migault, Jim Schaad, Ludwig Seitz, Goeran Selander and Peter van der Stok for their comments and feedback.
 
-The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the EIT-Digital High Impact Initiative ACTIVE.
+The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; by the H2020 project SIFIS-Home (Grant agreement 952652); and by the EIT-Digital High Impact Initiative ACTIVE.
 
 --- fluff
