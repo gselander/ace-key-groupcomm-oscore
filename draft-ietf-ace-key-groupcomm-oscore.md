@@ -485,7 +485,7 @@ If the processing of the Joining Request described in {{ssec-join-req-processing
 
 If the joining node has not taken exclusively the role of monitor, the Group Manager performs also the following actions.
 
-* The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node.
+* The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node. Consistently with Section 3 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Sender ID that has never been assigned before in the OSCORE group. The Group Manager MUST NOT assign a Sender ID to the joining node if this joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}).
 
 * The Group Manager stores the association between i) the public key of the joining node; and ii) the Group Identifier (Gid), i.e. the OSCORE ID Context, associated to the OSCORE group together with the OSCORE Sender ID assigned to the joining node in the group. The Group Manager MUST keep this association updated over time.
 
@@ -640,6 +640,8 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
     The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g. according to an application-dependent rekeying period, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT8).
 
     b. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'clientId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
+    
+    Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has never been assigned before in the OSCORE group.
 
 # Retrieval of Public Keys and Roles for Group Members # {#sec-pub-keys}
 
@@ -760,6 +762,8 @@ Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as
 # Group Rekeying Process {#sec-group-rekeying-process}
 
 In order to rekey the OSCORE group, the Group Manager distributes a new Group Identifier (Gid), i.e. a new OSCORE ID Context; a new OSCORE Master Secret; and, optionally, a new OSCORE Master Salt for that group. When doing so, the Group Manager MUST increment the version number of the group keying material, before starting its distribution.
+
+Consistently with Section 2.3 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Gid that has never been assigned before to the OSCORE group.
 
 Furthermore, the Group Manager MUST preserve the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of message countersignatures.
 
@@ -1248,6 +1252,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Clarified non intended meanings of 'clientId'.
 
 * Added message exchange for Group Names request-response.
+
+* No reassignment of Sender ID and Gid in the same OSCORE group.
 
 * Updates on group rekeying contextual with request of new Sender ID.
 
