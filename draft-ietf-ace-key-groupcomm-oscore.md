@@ -383,23 +383,23 @@ The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the r
    ecdh_info_req = nil
 ~~~~~~~~~~~
 
-The 'ecdh_info' parameter of the 2.01 (Created) response is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join. Each element contains information about ECDH parameters and public keys for one or more OSCORE groups, and is formatted as follows.
+The 'ecdh_info' parameter of the 2.01 (Created) response is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
 
-* The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which this information applies.
+Each element contains information about ECDH parameters and public keys, for one or more OSCORE groups that support the pairwise mode of Group OSCORE and that the client has been authorized to join. Each element is formatted as follows.
 
-* The second element 'ecdh_alg' is an integer or a text string indicating the ECDH algorithm used in the OSCORE group identified by 'gname', or instead the CBOR simple value Null if the OSCORE group does not support the pairwise mode of Group OSCORE. Values are taken from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+* The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies.
 
-* The third element 'ecdh_parameters' is a CBOR array indicating the parameters of the ECDH algorithm used in the OSCORE group identified by 'gname', or instead the CBOR simple value Null if the group does not support the pairwise mode of Group OSCORE.
+* The second element 'ecdh_alg' is an integer or a text string indicating the ECDH algorithm used in the OSCORE group identified by 'gname'. Values are taken from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   In the former case, its content depends on the value of 'ecdh_alg'. In particular, the CBOR array includes the following two elements.
+* The third element 'ecdh_parameters' is a CBOR array indicating the parameters of the ECDH algorithm used in the OSCORE group identified by 'gname'. The CBOR array includes the following two elements, and its exact content depends on the value of the 'ecdh_alg' element.
 
    - 'ecdh_alg_capab', encoded as a CBOR array. Its format and value are the same of the COSE capabilities for the algorithm indicated in 'ecdh_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
    - 'ecdh_key_type_capab', encoded as a CBOR array. Its format and value are the same of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-* The fourth element 'ecdh_key_parameters' is a CBOR array indicating the parameters of the keys used with the ECDH algorithm in the OSCORE group identified by 'gname', or instead the CBOR simple value Null if the group does not support the pairwise mode of Group OSCORE. Its content depends on the value of 'ecdh_alg'. In particular, its format and value are the same of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}. 
+* The fourth element 'ecdh_key_parameters' is a CBOR array indicating the parameters of the keys used with the ECDH algorithm in the OSCORE group identified by 'gname'. Its content depends on the value of 'ecdh_alg'. In particular, its format and value are the same of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}. 
 
-* The fifth element 'pub_key_enc' parameter is CBOR integer indicating the encoding of public keys used in the OSCORE group identified by 'gname', or instead the CBOR simple value Null if the group does not support the pairwise mode of Group OSCORE. In the former case, it takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
+* The fifth element 'pub_key_enc' parameter is CBOR integer indicating the encoding of public keys used in the OSCORE group identified by 'gname'. It takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
 The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the response is given below.
 
@@ -409,10 +409,10 @@ The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the r
    ecdh_info_entry =
    [
      id : gname / [ + gname ],
-     ecdh_alg : int / tstr / nil,
-     ecdh_parameters : [ any ] / nil,
-     ecdh_key_parameters : [ any ] / nil,
-     pub_key_enc = int / nil
+     ecdh_alg : int / tstr,
+     ecdh_parameters : [ any ],
+     ecdh_key_parameters : [ any ],
+     pub_key_enc = int
    ]
 
    gname = tstr
@@ -521,15 +521,15 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
    
-   * The 'ecdh_alg' parameter, if present, specifies the ECDH algorithm used in the OSCORE group, if this supports the pairwise mode of Group OSCORE. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}. This parameter MUST be present if the OSCORE group supports the pairwise mode of Group OSCORE.
+   * The 'ecdh_alg' parameter, if present, specifies the ECDH algorithm used in the OSCORE group, if this supports the pairwise mode of Group OSCORE. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}. This parameter MUST be present if the OSCORE group supports the pairwise mode of Group OSCORE, and MUST NOT be present otherwise.
 
-   * The 'ecdh_params' parameter MAY be present and specifies the parameters for the ECDH algorithm. This parameter is a CBOR array, which includes the following two elements:
+   * The 'ecdh_params' parameter, if present, specifies the parameters for the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, which includes the following two elements:
 
      - 'ecdh_alg_capab', with the same encoding as defined in {{ecdh-info}}. The value is the same as in the Token Post response where the ecdh_parameters' value is non-null.
 
      - 'ecdh_key_type_capab', with the same encoding as defined in {{ecdh-info}}. The value is the same as in the Token Post response where the 'ecdh_parameters' value is non-null.
 
-   * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the ECDH algorithm. This parameter is a CBOR array, with the same non-null encoding and value of 'ecdh_key_parameters' defined in {{ecdh-info}}.
+   * The 'cs_key_params' parameter, if present, specifies the parameters for the key used with the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, with the same non-null encoding and value of 'ecdh_key_parameters' defined in {{ecdh-info}}.
 
 * The 'exp' parameter MUST be present.
 
@@ -833,7 +833,9 @@ The Group Manager SHOULD use the following default values for the algorithm, alg
 
 * For the 'cs_key_enc' encoding of the public keys of the group members, COSE_Key from the "CWT Confirmation Methods" Registry {{CWT.Confirmation.Methods}}.
 
-* For the algorithm 'ecdh_alg' used to compute static-static Diffie-Hellman shared secrets in the group, the ECDH algorithm ECDH-SS + HKDF-256 algorithm specified in Section 6.3.1 of {{I-D.ietf-cose-rfc8152bis-algs}}.
+If the group supports the pairwise mode of Group OSCORE, the Group Manager SHOULD use the following default values for the algorithm, algorithm parameters and key parameters used to compute static-static Diffie-Hellman shared secrets, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
+
+* For the algorithm 'ecdh_alg' used to compute static-static Diffie-Hellman shared secrets, the ECDH algorithm ECDH-SS + HKDF-256 specified in Section 6.3.1 of {{I-D.ietf-cose-rfc8152bis-algs}}.
 
 * For the parameters 'ecdh_params' of the ECDH algorithm:
 
