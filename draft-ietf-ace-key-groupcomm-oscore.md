@@ -339,7 +339,7 @@ The table {{method-table}} summarizes the methods admitted to access different r
 +------------------------------+--------+-------+-------+-------+
 | ace-group/                   | F      | F     | F     | -     |
 +------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/         | G Po   | G Po  | -     | Po    |
+| ace-group/GROUPNAME/         | G Po   | G Po  | Po *  | Po    |
 +------------------------------+--------+-------+-------+-------+
 | ace-group/GROUPNAME/active   | G      | G     | -     | -     |
 +------------------------------+--------+-------+-------+-------+
@@ -359,8 +359,8 @@ The table {{method-table}} summarizes the methods admitted to access different r
 Type1 = Member as Requester and/or Responder       |  G  = GET
 Type2 = Member as Monitor                          |  F  = FETCH
 Type3 = Non-member; authorized to be Verifier      |  Po = POST
-Type4 = Non-member; not authorized to be Verifier  |  Pu = PUT
-                                                   |  D  = DELETE
+        (*) = cannot join the group as Verifier    |  Pu = PUT
+Type4 = Non-member; not authorized to be Verifier  |  D  = DELETE
 ~~~~~~~~~~~
 {: #method-table title="Admitted Methods on the Group Manager Resources" artwork-align="center"}
 
