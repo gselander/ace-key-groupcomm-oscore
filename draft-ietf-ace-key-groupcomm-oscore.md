@@ -307,7 +307,9 @@ The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ac
 
 The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with one additional sub-resource defined in {{ssec-resource-active}}.
 
-The GROUPNAME segment of the URI path and the group name specified in the scope entry of the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) MUST match (REQ1).
+{{ssec-admitted-methods}} provides a summary of the methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ1a).
+
+The GROUPNAME segment of the URI path and the group name specified in the scope entry of the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) MUST match (REQ1b).
 
 The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ7a), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. by using a link-format document {{RFC6690}}.
 
@@ -326,6 +328,41 @@ The handler verifies that the group identifier of the /ace-group/GROUPNAME/activ
 If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is expected.
 
 The method to set the current group status, i.e. active or inactive, is out of the scope of this specification, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
+
+## Admitted Methods {#ssec-admitted-methods}
+
+The table {{method-table}} summarizes the methods admitted to access different resources at the Group Manager, for (non-)members of a group with group name GROUPNAME, and considering different roles. The last two rows of the table apply to a node with node node NODENAME.
+
+~~~~~~~~~~~
++------------------------------+--------+-------+-------+-------+
+| Resource                     | Type1  | Type2 | Type3 | Type4 |
++------------------------------+--------+-------+-------+-------+
+| ace-group/                   | F      | F     | F     | -     |
++------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/         | G Po   | G Po  | -     | Po    |
++------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/active   | G      | G     | -     | -     |
++------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/pub-key  | G F    | G F   | G F   | -     |
++------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/policies | G      | G     | -     | -     |
++------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/num      | G      | G     | -     | -     |
++------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/nodes/   | G Pu D | G D   | -     | -     |
+|           NODENAME           |        |       |       |       |
++------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/nodes/   | Po     | -     | -     | -     |
+|           NODENAME/pub-key   |        |       |       |       |
++------------------------------+--------+-------+-------+-------+
+
+Type1 = Member as Requester and/or Responder       |  G  = GET
+Type2 = Member as Monitor                          |  F  = FETCH
+Type3 = Non-member; authorized to be Verifier      |  Po = POST
+Type4 = Non-member; not authorized to be Verifier  |  Pu = PUT
+                                                   |  D  = DELETE
+~~~~~~~~~~~
+{: #method-table title="Admitted Methods on the Group Manager Resources" artwork-align="center"}
 
 # Token POST and Group Joining {#sec-joining-node-to-GM}
 
@@ -1230,6 +1267,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -08 to -09 ## {#sec-08-09}
 
 * The url-path "ace-group" is used.
+
+* Added overview of admitted methods on the Group Manager resources.
 
 * Added exchange of parameters relevant for the pairwise mode of Group OSCORE.
 
