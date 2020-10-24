@@ -566,7 +566,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
      - 'ecdh_key_type_capab', with the same encoding as defined in {{ecdh-info}}. The value is the same as in the Token Post response where the 'ecdh_parameters' value is non-null.
 
-   * The 'cs_key_params' parameter, if present, specifies the parameters for the key used with the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, with the same non-null encoding and value of 'ecdh_key_parameters' defined in {{ecdh-info}}.
+   * The 'ecdh_key_params' parameter, if present, specifies the parameters for the key used with the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, with the same non-null encoding and value of 'ecdh_key_parameters' defined in {{ecdh-info}}.
 
 * The 'exp' parameter MUST be present.
 
