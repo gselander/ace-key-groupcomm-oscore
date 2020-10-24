@@ -590,6 +590,8 @@ From then on, the joining node can exchange group messages secured with Group OS
 
 * The joining node MUST NOT process an incoming response message, if signed by a group member whose public key is not associated to the role "Responder".
 
+* The joining node MUST NOT use the pairwise mode of Group OSCORE to process messages in the group, if the Joining Response did not include the 'ecdh_alg' parameter.
+
 If the application requires backward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the current group members upon the new node's joining (see {{sec-group-rekeying-process}}). As a consequence, the joining node is not able to access secure communication in the OSCORE group occurred prior its joining.
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
