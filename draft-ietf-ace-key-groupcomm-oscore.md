@@ -530,13 +530,9 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'gkty' parameter identifies a key of type "Group_OSCORE_Input_Material object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
 
-* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this specification and extends the OSCORE_Input_Material object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'cs_alg', 'cs_params', 'cs_key_params', 'cs_key_enc', 'ecdh_alg', 'ecdh_params' and 'ecdh_key_params' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
+* The 'key' parameter includes what the joining node needs in order to set up the OSCORE Security Context as per Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this specification and extends the OSCORE_Input_Material object encoded in CBOR as defined in Section 3.2.1 of {{I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId' 'cs_alg', 'cs_params', 'cs_key_params', 'cs_key_enc', 'ecdh_alg', 'ecdh_params' and 'ecdh_key_params' defined in {{ssec-iana-security-context-parameter-registry}} of this specification. More specifically, the 'key' parameter is composed as follows.
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value used in the OSCORE group.
-
-   * The 'clientId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
-   
-      Note that this parameter and its value have no relation with the CoAP role that the joining node is going to take in the OSCORE group. That is, it is not indicative of whether the joining node is going to act (also) as CoAP client once in the OSCORE group.
 
    * The 'hkdf' parameter, if present, has as value the KDF algorithm used in the OSCORE group.
 
@@ -545,6 +541,8 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    * The 'salt' parameter, if present, has as value the OSCORE Master Salt used in the OSCORE group.
 
    * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group.
+   
+   * The 'group_senderId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -630,7 +628,7 @@ In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME 
 
 The Group Manager processes the Key Distribution Request according to Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.2.2 of {{I-D.ietf-ace-key-groupcomm}}. In addition:
 
-* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that it does not include the 'clientId' parameter.
+* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that it does not include the 'group_SenderId' parameter.
 
 * The 'exp' parameter MUST be present.
 
@@ -646,9 +644,9 @@ In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/
 
 The Group Manager processes the Key Distribution Request according to Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in Section 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}. In addition:
 
-* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that if the requesting group member has exclusively the role of monitor, no 'clientId' is specified within the 'key' parameter.
+* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that if the requesting group member has exclusively the role of monitor, no 'group_SenderId' is specified within the 'key' parameter.
 
-   Note that, in any other case, the current Sender ID of the group member is not specified as a separate parameter, but rather specified as 'clientId' within the 'key' parameter.
+   Note that, in any other case, the current Sender ID of the group member is not specified as a separate parameter, but rather specified as 'group_SenderId' within the 'key' parameter.
    
 * The 'exp' parameter MUST be present.
 
@@ -670,7 +668,7 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
     
     The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g. according to an application-dependent rekeying period, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT8).
 
-    b. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'clientId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
+    b. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
     
     Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has never been assigned before in the OSCORE group.
 
@@ -965,8 +963,19 @@ IANA is asked to register the following entry to the "ACE Groupcomm Key" Registr
 
 IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.4 of {{I-D.ietf-ace-oscore-profile}}.
 
-*  Name: cs_alg
+*  Name: group_SenderId
 *  CBOR Label: TBD3
+*  CBOR Type: bstr
+*  Registry: -
+*  Description: OSCORE Sender ID assigned to a member of an OSCORE group
+*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
+
+*  Name: cs_alg
+*  CBOR Label: TBD4
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithms
 *  Description: OSCORE Counter Signature Algorithm Value
@@ -977,7 +986,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 ~~~~~~~~~~~
 
 *  Name: cs_params
-*  CBOR Label: TBD4
+*  CBOR Label: TBD5
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
@@ -988,7 +997,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 ~~~~~~~~~~~
 
 *  Name: cs_key_params
-*  CBOR Label: TBD5
+*  CBOR Label: TBD6
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
 *  Description: OSCORE Counter Signature Key Additional Parameters
@@ -999,7 +1008,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 ~~~~~~~~~~~
 
 *  Name: cs_key_enc
-*  CBOR Label: TBD6
+*  CBOR Label: TBD7
 *  CBOR Type: integer
 *  Registry: CWT Confirmation Methods
 *  Description: Encoding of Public Keys to be used with the OSCORE Counter Signature Algorithm
@@ -1010,7 +1019,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 ~~~~~~~~~~~
 
 *  Name: ecdh_alg
-*  CBOR Label: TBD7
+*  CBOR Label: TBD8
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithms
 *  Description: OSCORE ECDH Algorithm Value
@@ -1021,7 +1030,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 ~~~~~~~~~~~
 
 *  Name: ecdh_params
-*  CBOR Label: TBD8
+*  CBOR Label: TBD9
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
 *  Description: OSCORE ECDH Algorithm Additional Parameters
@@ -1032,7 +1041,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 ~~~~~~~~~~~
 
 *  Name: ecdh_key_params
-*  CBOR Label: TBD9
+*  CBOR Label: TBD10
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
 *  Description: OSCORE ECDH Key Additional Parameters
@@ -1070,8 +1079,8 @@ IANA is asked to register the following entries in the "Sequence Number Synchron
 
 IANA is asked to register the following entry to the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
-* Name: clientId
-* CBOR Key: TBD7
+* Name: group_senderId
+* CBOR Key: TBD11
 * CBOR Type: Byte string
 * Reference: \[\[This specification\]\] ({{sec-new-key}})
 
@@ -1140,7 +1149,7 @@ Media Type: application/aif-groupcomm-oscore+cbor;Toid="oscore-group-name",Tperm
 
 Encoding: -
 
-ID: TBD9
+ID: TBD12
 
 Reference: \[\[This specification\]\]
 
@@ -1278,7 +1287,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Renamed the key material object as Group_OSCORE_Input_Material object.
 
-* Clarified non intended meanings of 'clientId'.
+* Replaced 'clientId' with 'group_SenderId'.
 
 * Added message exchange for Group Names request-response.
 
