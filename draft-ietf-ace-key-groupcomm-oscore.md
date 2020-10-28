@@ -1209,7 +1209,7 @@ Expert reviewers should take into consideration the following points:
 
 This appendix lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
-* REQ1a - Specify which roles a group member requires to access each resource at the KDC.
+* REQ1a - Specify which roles a group member requires to access each resource at the KDC: see {{ssec-admitted-methods}}.
 
 * REQ1b - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
 
@@ -1233,15 +1233,15 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ9 - Specify the format of the identifiers of group members: CBOR byte string (see {{ssec-join-resp}} and {{sec-pub-keys}}).
 
-* REQ10 - Specify the communication protocol that the members of the group must use: CoAP, possibly over IP multicast.
+* REQ10 - Specify the communication protocol that the members of the group must use: CoAP {{RFC7252}}, possibly over IP multicast {{I-D.ietf-core-groupcomm-bis}}.
 
-* REQ11 - Specify the security protocols that the group members must use to protect their communication: Group OSCORE.
+* REQ11 - Specify the security protocols that the group members must use to protect their communication: Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
 * REQ12 - Specify and register the application profile identifier: coap_group_oscore_app (see {{ssec-iana-groupcomm-profile-registry}}).
 
 * REQ13 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
 
-* REQ14 - If used, specify the content format and default value of 'group\_policies' and its entries: see {{ssec-join-resp}}; the three values defined and registered as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
+* REQ14 - If used, specify the content format and default value of 'group\_policies' and its entries: see {{ssec-join-resp}}; see the three values defined and registered as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
 
 * REQ15 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
 
@@ -1257,7 +1257,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT2a (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
-* OPT2b (Optional) - Specify the negotiation of parameter values other than signature algorithm and signature keys: 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE.
+* OPT2b (Optional) - Specify additional parameters used in the Token Post exchange: 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE.
 
 * OPT3 (Optional) - Specify the encoding of 'pub_keys_repos' if the default is not used: no.
 
@@ -1267,7 +1267,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT6 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 Bad Request response to a Joining Request (see {{ssec-join-req-processing}}).
 
-* OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic (see {{ssec-auth-req}}).
+* OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic: see {{ssec-auth-req}}.
 
 * OPT8 (Optional) - Specify for the KDC to perform group rekeying (together or instead of renewing individual keying material) when receiving a Key Renewal Request: the Group Manager SHOULD NOT perform a group rekeying, unless already scheduled to occur shortly (see {{sec-new-key}}).
 
