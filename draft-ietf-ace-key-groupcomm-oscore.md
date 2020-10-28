@@ -743,9 +743,13 @@ A node may want to retrieve from the Group Manager the group name and the URI of
 
 * As current group member in several groups, the node has missed a previous group rekeying in one of them (see {{sec-group-rekeying-process}}). Hence, it retains stale keying material and fails to decrypt received messages exchanged in that group.
 
-   Such messages do not provide a direct hint to the correct group name, that the node would need in order to retrieve the latest keying material from the Group Manager (see {{ssec-updated-key-only}} and {{ssec-updated-and-individual-key}}). However, such messages may specify the current Gid of the group, as value of the 'kid_context' field of the OSCORE CoAP option (see Section 6.1 of {{RFC8613}} and Section 4.2 of {{I-D.ietf-core-oscore-groupcomm}}).
+   Such messages do not provide a direct hint to the correct group name, that the node would need in order to retrieve the latest keying material and public keys from the Group Manager (see {{ssec-updated-key-only}}, {{ssec-updated-and-individual-key}} and {{sec-pub-keys}}). However, such messages may specify the current Gid of the group, as value of the 'kid_context' field of the OSCORE CoAP option (see Section 6.1 of {{RFC8613}} and Section 4.2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
-In either case, the node only knows the current Gid of the group. As detailed below, the node can contact the Group Manager, and request the group name and URI to the group-membership resource corresponding to that Gid, before using that information to join the group or to get the latest keying material. To this end, the node sends a Group Name and URI Retrieval Request, as per Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}.
+* As signature verifier, the node also refers to a group name, in order to identify the correct public keys to use, and to possibly retrieve the required ones from the Group Manager (see {{sec-pub-keys}}). In particular, the node requires to correctly map the Gid currently used in the group with the invariant group name. As discussed above, intercepted messages in the group do not provide a direct hint to the correct group name, while they may specify the current Gid of the group, as value of the 'kid_context' field of the OSCORE CoAP option.
+
+   Furthermore, since it is not a group member, the node does not take part to a possible group rekeying. Thus, following a group rekeying and the consequent change of Gid in a group, the node would retain the old Gid value and cannot correctly associate intercepted messages to the right group, especially if acting as signature verifier in several groups. This in turn prevents the efficient verification of counter signatures, and especially the retrieval of required, new public keys from the Group Manager.
+   
+In either case, the node only knows the current Gid of the group, as learnt from received or intercepted messages exchanged in the group. As detailed below, the node can contact the Group Manager, and request the group name and URI to the group-membership resource corresponding to that Gid. Then, it can use that information to either join the group as a candidate group member, get the latest keying material as a current group member, or retrieve public keys used in the group as a signature verifier. To this end, the node sends a Group Name and URI Retrieval Request, as per Section 4.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
 In particular, the node sends a CoAP FETCH request to the endpoint /ace-group at the Group Manager formatted as defined in Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}. Each element of the CBOR array 'gid' is a CBOR byte string (REQ7b), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are requested.
 
@@ -1294,6 +1298,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * No reassignment of Sender ID and Gid in the same OSCORE group.
 
 * Updates on group rekeying contextual with request of new Sender ID.
+
+* Signature verifiers can also retrieve Group Names and URIs.
 
 * Removed group policy about supporting Group OSCORE in pairwise mode.
 
