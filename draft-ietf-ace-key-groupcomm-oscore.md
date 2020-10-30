@@ -308,9 +308,9 @@ The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ac
 
 The Group Manager provides the interface defined in Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}, with one additional sub-resource defined in {{ssec-resource-active}}.
 
-{{ssec-admitted-methods}} provides a summary of the methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ1a).
+{{ssec-admitted-methods}} provides a summary of the methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ7aa).
 
-The GROUPNAME segment of the URI path and the group name specified in the scope entry of the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) MUST match (REQ1b).
+The GROUPNAME segment of the URI path and the group name specified in the scope entry of the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) MUST match (REQ1).
 
 The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ7a), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g. by using a link-format document {{RFC6690}}.
 
