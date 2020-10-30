@@ -324,7 +324,11 @@ This resource implements a GET handler.
 
 The handler expects a GET request.
 
-The handler verifies that the group identifier of the /ace-group/GROUPNAME/active path is a subset of the 'scope' stored in the Access Token associated to the requesting client. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
+The Group Manager verifies that the group name in the /ace-group/GROUPNAME/active path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
+
+The Group Manager also verifies that the roles granted to the requesting client in the group allow it to perform this operation on this resource (REQ7aa). If either verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
+
+Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
 
 If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is expected.
 
