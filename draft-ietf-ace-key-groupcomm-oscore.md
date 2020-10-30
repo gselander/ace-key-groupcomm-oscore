@@ -1210,9 +1210,7 @@ Expert reviewers should take into consideration the following points:
 
 This appendix lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
-* REQ1a - Specify which roles a group member requires to access each resource at the KDC: see {{ssec-admitted-methods}}.
-
-* REQ1b - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
+* REQ1 - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in Section 3.1 of {{I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
 
 * REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{sec-format-scope}} and {{ssec-auth-req}}.
 
@@ -1225,6 +1223,8 @@ This appendix lists the specifications on this application profile of ACE, based
 * REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}. Future specifications may define additional values for this parameter.
 
 * REQ7a - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
+
+* REQ7aa - Define what operations (i.e. CoAP methods) are allowed on each resource, for each role defined in REQ2: see {{ssec-admitted-methods}}.
 
 * REQ7b - Specify the exact encoding of group identifier (see Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}): CBOR byte string (see {{sec-retrieve-gnames}}).
 
