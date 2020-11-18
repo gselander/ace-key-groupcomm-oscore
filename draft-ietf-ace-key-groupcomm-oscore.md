@@ -1295,6 +1295,10 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -09 to -10 ## {#sec-09-10}
+
+* Updated non-recycling policy of Sender IDs.
+
 ## Version -08 to -09 ## {#sec-08-09}
 
 * The url-path "ace-group" is used.
