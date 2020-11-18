@@ -529,7 +529,11 @@ If the processing of the Joining Request described in {{ssec-join-req-processing
 
 If the joining node has not taken exclusively the role of monitor, the Group Manager performs also the following actions.
 
-* The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node. Consistently with Section 3 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Sender ID that has never been assigned before in the OSCORE group. The Group Manager MUST NOT assign a Sender ID to the joining node if this joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}).
+* The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node. If the joining node is recognized as a current group member, e.g. through the ongoing secure communication association, the Group Manager MUST assign a new Sender ID different than the one currently used by the joining node in the OSCORE group.
+
+   Consistently with Section 3 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Sender ID that has never been assigned before in the OSCORE group under the current Gid value.
+
+   The Group Manager MUST NOT assign a Sender ID to the joining node if this joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}).
 
 * The Group Manager stores the association between i) the public key of the joining node; and ii) the Group Identifier (Gid), i.e. the OSCORE ID Context, associated to the OSCORE group together with the OSCORE Sender ID assigned to the joining node in the group. The Group Manager MUST keep this association updated over time.
 
