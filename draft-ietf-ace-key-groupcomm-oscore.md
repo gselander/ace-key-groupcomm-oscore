@@ -591,8 +591,6 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
 
-   * "Sequence Number Synchronization Method" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 1 ("Best effort");
-
    * "Key Update Check Interval" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 3600;
 
    * "Expiration Delta" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 0.
@@ -989,33 +987,6 @@ IANA is asked to register the following entry to the "ACE Groupcomm Profile" Reg
 *  CBOR Value: TBD3
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-## Sequence Number Synchronization Method Registry {#ssec-iana-sn-synch-method-registry}
-
-IANA is asked to register the following entries in the "Sequence Number Synchronization Method" Registry defined in Section 8.9 of {{I-D.ietf-ace-key-groupcomm}}.
-
-*  Name: Best effort
-*  Value: 1
-*  Description: No action is taken.
-*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.1)
-
-~~~~~~~~~~~
-
-~~~~~~~~~~~
-
-*  Name: Baseline
-*  Value: 2
-*  Description: The first received request sets the baseline reference point, and is discarded with no delivery to the application.
-*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.2)
-
-~~~~~~~~~~~
-
-~~~~~~~~~~~
-
-*  Name: Echo challenge-response
-*  Value: 3
-*  Description: Challenge response using the Echo Option for CoAP from {{I-D.ietf-core-echo-request-tag}}.
-*  Reference: {{I-D.ietf-core-oscore-groupcomm}} (Appendix E.3)
-
 ## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
 
 IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in Section 9.4 of {{I-D.ietf-ace-oscore-profile}}.
@@ -1257,7 +1228,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ13 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
 
-* REQ14 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}; see the three values defined and registered as content of the entry "Sequence Number Synchronization Method" (see {{ssec-iana-sn-synch-method-registry}}).
+* REQ14 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}.
 
 * REQ15 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
 
@@ -1298,6 +1269,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -09 to -10 ## {#sec-09-10}
 
 * Updated non-recycling policy of Sender IDs.
+
+* Removed policies about Sender Sequence Number synchronization.
 
 ## Version -08 to -09 ## {#sec-08-09}
 
