@@ -1210,7 +1210,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ7a - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see Section 4.1 of {{I-D.ietf-ace-key-groupcomm}}): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
 
-* REQ7aa - Define what operations (i.e. CoAP methods) are allowed on each resource, for each role defined in REQ2: see {{ssec-admitted-methods}}.
+* REQ7aa - Define what operations (e.g. CoAP methods) are allowed on each resource, for each role defined in REQ2: see {{ssec-admitted-methods}}.
 
 * REQ7b - Specify the exact encoding of group identifier (see Section 4.1.1.1 of {{I-D.ietf-ace-key-groupcomm}}): CBOR byte string (see {{sec-retrieve-gnames}}).
 
