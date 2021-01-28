@@ -685,7 +685,7 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
 
     b. The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
     
-    Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has never been assigned before in the OSCORE group.
+    Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has never been assigned before in the OSCORE group under the current Gid value.
 
 # Retrieval of Public Keys and Roles for Group Members # {#sec-pub-keys}
 
@@ -827,7 +827,7 @@ As group rekeying message, the Group Manager uses the same format of the Joining
 
 * The 'ms' parameter of the 'key' parameter specifies the new OSCORE Master Secret value.
 
-* The 'contextId' parameter of the 'key' parameter specifies the new Group ID used as OSCORE ID Context value.
+* The 'contextId' parameter of the 'key' parameter specifies the new Gid used as OSCORE ID Context value.
 
 The Group Manager separately sends a group rekeying message to each group member to be rekeyed.
 
