@@ -1276,6 +1276,10 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Removed policies about Sender Sequence Number synchronization.
 
+* 'control_path' renamed to 'control_uri'.
+
+* Additional way to inform of group eviction.
+
 ## Version -08 to -09 ## {#sec-08-09}
 
 * The url-path "ace-group" is used.
