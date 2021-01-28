@@ -707,7 +707,7 @@ A group member may need to provide the Group Manager with its new public key to 
 
 To this end, the group member sends a Public Key Update Request message to the Group Manager, as per Section 4.7 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP POST request to the endpoint /ace-group/GROUPNAME/nodes/NODENAME/pub-key at the Group Manager.
 
-Upon receiving the Group Leaving Request, the Group Manager processes it as per Section 4.1.7.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions.
+Upon receiving the Public Key Update Request, the Group Manager processes it as per Section 4.1.7.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions.
 
 * If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Bad request) error response.
 
