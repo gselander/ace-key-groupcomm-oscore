@@ -678,7 +678,7 @@ When this happens, the group member MUST send a Key Renewal Request message to t
 
 Upon receiving the Key Renewal Request, the Group Manager processes it as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}, and performs one of the following actions.
 
-1. If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Bad Request) error response.
+1. If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Unauthorized) error response.
 
 2. Otherwise, the Group Manager takes one of the following actions.
 
