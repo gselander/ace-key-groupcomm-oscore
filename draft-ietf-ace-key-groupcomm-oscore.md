@@ -690,7 +690,7 @@ Otherwise, the Group Manager performs one of the following actions.
     
        The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g. according to an application-dependent rekeying period, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT8).
 
-    * The Group Manager determines a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
+    * The Group Manager determines and assigns a new Sender ID for that group member, and replies with a Key Renewal Response formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
     
        Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has never been assigned before in the OSCORE group under the current Gid value.
        
