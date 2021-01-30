@@ -333,7 +333,7 @@ The Group Manager verifies that the group name in the /ace-group/GROUPNAME/activ
 
 The Group Manager also verifies that the roles granted to the requesting client in the group allow it to perform this operation on this resource (REQ7aa). If either verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
 
-Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
+Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
 
 If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is fine to happen.
 
@@ -498,7 +498,7 @@ It is up to applications to define how N_S is computed in further alternative se
 
 The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}. Additionally, the following applies.
 
-* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group that the joining node has been trying to join is currently inactive (see {{ssec-resource-active}}).
+* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group that the joining node has been trying to join is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("The group is currently not active").
 
 * In case the joining node is not going to join the group exclusively as monitor and the Joining Request does not include the 'client_cred' parameter, the joining process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
@@ -676,9 +676,13 @@ As discussed in Section 2.4.2 of {{I-D.ietf-core-oscore-groupcomm}}, a group mem
 
 When this happens, the group member MUST send a Key Renewal Request message to the Group Manager, as per Section 4.5 of {{I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP PUT request to the endpoint /ace-group/GROUPNAME/nodes/NODENAME at the Group Manager.
 
-Upon receiving the Key Renewal Request, the Group Manager processes it as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}, and performs one of the following actions.
+Upon receiving the Key Renewal Request, the Group Manager processes it as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions.
 
-1. If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Unauthorized) error response.
+The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group identified by GROUPNAME is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("The group is currently not active").
+
+Otherwise, the Group Manager performs one of the following actions.
+
+1. If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Unauthorized) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 1 ("Request inconsistent with the current roles").
 
 2. Otherwise, the Group Manager takes one of the following actions.
 
@@ -686,9 +690,11 @@ Upon receiving the Key Renewal Request, the Group Manager processes it as define
     
        The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g. according to an application-dependent rekeying period, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT8).
 
-    * The Group Manager generates a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
+    * The Group Manager determines a new Sender ID for that group member and replies with a Key Renewal Response, formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
     
        Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has never been assigned before in the OSCORE group under the current Gid value.
+       
+       The Group Manager MUST return a 5.03 (Service Unavailable) response in case there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 6 ("No available node identifiers").
 
 # Retrieval of Public Keys and Roles for Group Members # {#sec-pub-keys}
 
@@ -712,7 +718,9 @@ To this end, the group member sends a Public Key Update Request message to the G
 
 Upon receiving the Public Key Update Request, the Group Manager processes it as per Section 4.1.7.1 of {{I-D.ietf-ace-key-groupcomm}}, with the following additions.
 
-* If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Bad request) error response.
+* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group identified by GROUPNAME is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 5 ("The group is currently not active").
+
+* If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Bad request) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 1 ("Request inconsistent with the current roles").
 
 * The N\_S signature challenge is computed as per point (1) in {{sssec-challenge-value}} (REQ17).
 
@@ -968,7 +976,7 @@ This document has the following actions for IANA.
 
 ## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Parameters" Registry defined in Section 8.5 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Parameters" Registry defined in Section 10.5 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Name: group_senderId
 * CBOR Key: TBD1
@@ -977,7 +985,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Key" Registry defined in Section 8.6 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Key" Registry defined in Section 10.6 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Input_Material object
 *  Key Type Value: TBD2
@@ -987,7 +995,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Key" Registr
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Profile" Registry defined in Section 8.7 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Profile" Registry defined in Section 10.8 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -1183,11 +1191,31 @@ IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the
 
 ## ACE Scope Semantics Registry # {#iana-scope-semantics}
 
-IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in Section 9.12 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in Section 10.12 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Value: SEM_ID_TBD
 
 * Description: Access to OSCORE groups through the ACE Group Manager.
+
+* Reference: \[\[This specification\]\]
+
+## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
+
+IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in Section 10.12 of {{I-D.ietf-ace-key-groupcomm}}.
+
+* Value: 5
+
+* Description: The group is currently not active.
+
+* Reference: \[\[This specification\]\]
+
+~~~~~~~~~~~
+
+~~~~~~~~~~~
+
+* Value: 6
+
+* Description: No available node identifiers.
 
 * Reference: \[\[This specification\]\]
 
@@ -1281,6 +1309,8 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT10 (Optional) - Specify how the identifier of the sender's public key is included in the group request: no.
 
+* OPT11 (Optional) - Specify additional identifiers of error types, as values of the 'error' field in an error response from the KDC: see {{iana-ace-groupcomm-errors}}.
+
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
@@ -1298,6 +1328,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Additional way to inform of group eviction.
 
 * Registered semantics identifier for extended scope format.
+
+* Extended error handling, with error type specified in some error responses.
 
 ## Version -08 to -09 ## {#sec-08-09}
 
