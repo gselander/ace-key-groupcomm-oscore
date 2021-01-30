@@ -995,7 +995,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Key" Registr
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Profile" Registry defined in Section 10.8 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Profile" Registry defined in Section 10.7 of {{I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -1201,7 +1201,7 @@ IANA is asked to register the following entry in the  "ACE Scope Semantics" regi
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
-IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in Section 10.12 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in Section 10.13 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Value: 5
 
