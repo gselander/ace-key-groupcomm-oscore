@@ -66,7 +66,8 @@ normative:
   RFC8447:
   RFC8610:
   RFC8613:
-  I-D.ietf-cbor-7049bis:
+  RFC8742:
+  RFC8949:
   I-D.ietf-ace-aif:
   I-D.ietf-cose-rfc8152bis-struct:
   I-D.ietf-cose-rfc8152bis-algs:
@@ -162,7 +163,7 @@ Readers are expected to be familiar with:
 
 * The terms and concept related to the message formats and processing specified in {{I-D.ietf-ace-key-groupcomm}}, for provisioning and renewing keying material in group communication scenarios.
 
-* The terms and concepts described in CBOR {{I-D.ietf-cbor-7049bis}} and COSE {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}}.
+* The terms and concepts described in CBOR {{RFC8949}} and COSE {{I-D.ietf-cose-rfc8152bis-struct}}{{I-D.ietf-cose-rfc8152bis-algs}}.
 
 * The terms and concepts decribed in CoAP {{RFC7252}} and group communication for CoAP {{I-D.ietf-core-groupcomm-bis}}. Unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS, and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
@@ -305,6 +306,8 @@ The Authorization Response message is as defined in Section 3.2 of {{I-D.ietf-ac
 * The AS MUST include the 'expires_in' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
 
 * The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and specifies the set of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in {{ssec-auth-req}}.
+
+Furthermore, if the AS uses the extended format of scope defined in Section 6 of {{I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this specification (REQ20). This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined for this application profile in {{sec-format-scope}} of this specification.
 
 # Interface at the Group Manager {#sec-interface-GM}
 
@@ -1178,6 +1181,16 @@ IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the
 
 * Reference: \[\[This specification\]\]
 
+## ACE Scope Semantics Registry # {#iana-scope-semantics}
+
+IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in Section 9.12 of {{I-D.ietf-ace-key-groupcomm}}.
+
+* Value: SEM_ID_TBD
+
+* Description: Access to OSCORE groups through the ACE Group Manager.
+
+* Reference: \[\[This specification\]\]
+
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
 The IANA Registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
@@ -1244,6 +1257,8 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ19 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g. as in {{I-D.ietf-ace-oscore-gm-admin}}.
 
+* REQ20 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
+
 * OPT1 (Optional) - Specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
 
 * OPT2a (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
@@ -1281,6 +1296,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Format of 'get_pub_keys' aligned with draft-ietf-ace-key-groupcomm.
 
 * Additional way to inform of group eviction.
+
+* Registered semantics identifier for extended scope format.
 
 ## Version -08 to -09 ## {#sec-08-09}
 
