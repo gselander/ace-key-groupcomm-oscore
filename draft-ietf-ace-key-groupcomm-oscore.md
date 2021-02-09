@@ -1161,7 +1161,7 @@ Reference: \[\[This specification\]\]
 
 ## Group OSCORE Roles Registry {#ssec-iana-group-oscore-roles-registry}
 
-This specification establishes the IANA "Group OSCORE Roles" Registry. The Registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
+This specification establishes the IANA "Group OSCORE Roles" Registry. The Registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
 This registry includes the possible roles that nodes can take in an OSCORE group, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about joining OSCORE groups, as specified in {{sec-format-scope}} of \[\[This specification\]\].
 
