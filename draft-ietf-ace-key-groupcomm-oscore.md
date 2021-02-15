@@ -878,7 +878,7 @@ The Group Manager SHOULD use the following default values for the algorithm, alg
 
     - The array \[\[EC2\], \[EC2, P-521\]\], indicating the elliptic curve P-521, in case ES512 {{RFC6979}} is specified for 'cs_alg'.
 
-    - The array \[\[\], \[RSA\]\], in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'cs_alg'.
+    - The array \[\[RSA\], \[RSA\]\], in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'cs_alg'.
 
 * For the parameters 'cs_key_params' of the key used with the counter signature algorithm:
 
