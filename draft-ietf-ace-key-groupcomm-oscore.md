@@ -1123,19 +1123,21 @@ Subtype name: aif-groupcomm-oscore+cbor
 
 Required parameters: "Toid", "Tperm"
 
-Optional parameters: none
+Optional parameters: N/A
 
 Encoding considerations: Must be encoded as a CBOR array, each element of which is an array \[Toid, Tperm\] as defined in {{sec-format-scope}} of \[\[This specification\]\].
 
 Security considerations: See {{sec-security-considerations}} of \[\[This specification\]\].
 
-Interoperability considerations: n/a
+Interoperability considerations: N/A
 
 Published specification: \[\[This specification\]\]
 
 Applications that use this media type: The type is used by applications that want to express authorization information about joining OSCORE groups, as specified in \[\[This specification\]\].
 
-Additional information: n/a
+Fragment identifier considerations: N/A
+
+Additional information: N/A
 
 Person & email address to contact for further information: <iesg@ietf.org>
 
