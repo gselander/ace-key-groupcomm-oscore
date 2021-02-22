@@ -111,7 +111,6 @@ informative:
   I-D.ietf-ace-dtls-authorize:
   I-D.ietf-core-coap-pubsub:
   I-D.tiloca-core-oscore-discovery:
-  I-D.ietf-core-echo-request-tag:
   I-D.ietf-ace-dtls-authorize:
   I-D.ietf-ace-oscore-gm-admin:
   RFC6347:
