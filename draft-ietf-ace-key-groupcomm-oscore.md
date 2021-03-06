@@ -1308,6 +1308,10 @@ This appendix lists the specifications on this application profile of ACE, based
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
+## Version -10 to -11 ## {#sec-10-11}
+
+* Error handling in case of non available Sender IDs upon joining.
+
 ## Version -09 to -10 ## {#sec-09-10}
 
 * Updated non-recycling policy of Sender IDs.
