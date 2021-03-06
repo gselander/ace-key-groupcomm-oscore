@@ -499,6 +499,8 @@ The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of
 
 * The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group that the joining node has been trying to join is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Group currently not active").
 
+* In case the joining node is not going to join the group exclusively as monitor, the Group Manager MUST return a 5.03 (Service Unavailable) response if there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
+
 * In case the joining node is not going to join the group exclusively as monitor and the Joining Request does not include the 'client_cred' parameter, the joining process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
 * To compute the signature contained in 'client_cred_verify', the Group Manager considers:
