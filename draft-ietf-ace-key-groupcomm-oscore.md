@@ -1204,7 +1204,7 @@ IANA is asked to register the following entry in the  "ACE Scope Semantics" regi
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
-IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in Section 10.13 of {{I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the  "ACE Groupcomm Errors" registry defined in Section 10.13 of {{I-D.ietf-ace-key-groupcomm}}.
 
 * Value: 7
 
