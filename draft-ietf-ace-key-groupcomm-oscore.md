@@ -1085,6 +1085,8 @@ Author: Marco Tiloca <marco.tiloca@ri.se>
 
 Change controller: IESG
 
+Provisional registration?  No
+
 ## CoAP Content-Format Registry {#ssec-iana-coap-content-format-registry}
 
 IANA is asked to register the following entry to the "CoAP Content-Formats" registry, within the "CoRE Parameters" registry:
