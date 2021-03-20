@@ -399,13 +399,9 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
   * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-  * 'sign_parameters' is a CBOR array including the following two elements:
+  * 'sign_parameters' is a CBOR array. Its format and value are the same of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (REQ4).
 
-     - 'sign_alg_capab', encoded as a CBOR array. Its format and value are the same of the COSE capabilities for the algorithm indicated in 'sign_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (REQ4).
-
-     - 'sign_key_type_capab', encoded as a CBOR array. Its format and value are the same of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (REQ4).
-
-  * 'sign_key_parameters' is a CBOR array. Its format and value are the same of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (REQ5).
+  * 'sign_key_parameters' is a CBOR array. Its format and value are the same of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (REQ5).
   
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
@@ -437,13 +433,9 @@ Each element contains information about ECDH parameters and about public keys, f
 
 * The second element 'ecdh_alg' is an CBOR integer or a CBOR text string indicating the ECDH algorithm used in the OSCORE group identified by 'gname'. Values are taken from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-* The third element 'ecdh_parameters' is a CBOR array indicating the parameters of the ECDH algorithm used in the OSCORE group identified by 'gname'. The CBOR array includes the following two elements, and its exact content depends on the value of the 'ecdh_alg' element.
+* The third element 'ecdh_parameters' is a CBOR array indicating the parameters of the ECDH algorithm used in the OSCORE group identified by 'gname'. Its format and value are the same of the COSE capabilities array for the algorithm indicated in 'ecdh_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   - 'ecdh_alg_capab', encoded as a CBOR array. Its format and value are the same of the COSE capabilities for the algorithm indicated in 'ecdh_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
-
-   - 'ecdh_key_type_capab', encoded as a CBOR array. Its format and value are the same of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
-
-* The fourth element 'ecdh_key_parameters' is a CBOR array indicating the parameters of the keys used with the ECDH algorithm in the OSCORE group identified by 'gname'. Its content depends on the value of 'ecdh_alg'. In particular, its format and value are the same of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}. 
+* The fourth element 'ecdh_key_parameters' is a CBOR array indicating the parameters of the keys used with the ECDH algorithm in the OSCORE group identified by 'gname'. Its content depends on the value of 'ecdh_alg'. In particular, its format and value are the same of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}. 
 
 * The fifth element 'pub_key_enc' is CBOR integer indicating the encoding of public keys used in the OSCORE group identified by 'gname'. It takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
@@ -565,25 +557,17 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * The 'cs_params' parameter MAY be present and specifies the parameters for the counter signature algorithm. This parameter is a CBOR array, which includes the following two elements:
+   * The 'cs_params' parameter MAY be present and specifies the parameters for the counter signature algorithm. This parameter is a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'ecdh_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-     - 'sign_alg_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null.
-
-     - 'sign_key_type_capab', with the same encoding as defined in {{ssec-token-post}}. The value is the same as in the Token Post response where the 'sign_parameters' value was non-null.
-
-   * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the counter signature algorithm. This parameter is a CBOR array, with the same non-null encoding and value as 'sign_key_parameters' of the {{ssec-token-post}}.
+   * The 'cs_key_params' parameter MAY be present and specifies the parameters for the key used with the counter signature algorithm. This parameter is a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
    * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. This parameter is a CBOR integer, whose value is 1 ("COSE\_Key") taken from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter. If this parameter is not present, 1 ("COSE\_Key") MUST be assumed as default value.
    
    * The 'ecdh_alg' parameter, if present, specifies the ECDH algorithm used in the OSCORE group, if this supports the pairwise mode of Group OSCORE. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}. This parameter MUST be present if the OSCORE group supports the pairwise mode of Group OSCORE, and MUST NOT be present otherwise.
 
-   * The 'ecdh_params' parameter, if present, specifies the parameters for the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, which includes the following two elements:
+   * The 'ecdh_params' parameter, if present, specifies the parameters for the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, with the same format and value of the COSE capabilities for the algorithm indicated in 'ecdh_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-     - 'ecdh_alg_capab', with the same encoding as defined in {{ecdh-info}}. The value is the same as in the Token Post response where the ecdh_parameters' value is non-null.
-
-     - 'ecdh_key_type_capab', with the same encoding as defined in {{ecdh-info}}. The value is the same as in the Token Post response where the 'ecdh_parameters' value is non-null.
-
-   * The 'ecdh_key_params' parameter, if present, specifies the parameters for the key used with the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, with the same non-null encoding and value of 'ecdh_key_parameters' defined in {{ecdh-info}}.
+   * The 'ecdh_key_params' parameter, if present, specifies the parameters for the key used with the ECDH algorithm. It MUST be present if the 'ecdh_alg' parameter is present, and MUST NOT be present otherwise. This parameter is a CBOR array, with the same format and value of the COSE capabilities for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
 * The 'exp' parameter MUST be present.
 
@@ -752,13 +736,13 @@ Upon learning from a 2.05 (Content) response that the group has become active ag
 {{fig-key-status-req-resp}} gives an overview of the exchange described above.
 
 ~~~~~~~~~~~
- Group                                                         Group
- Member                                                       Manager
-   |                                                             |
-   |--- Group Status Request: GET ace-group/GROUPNAME/active --->|
-   |                                                             |
-   |<---------- Group Status Response: 2.05 (Content) -----------|
-   |                                                             |
+Group                                                         Group
+Member                                                       Manager
+  |                                                             |
+  |--- Group Status Request: GET ace-group/GROUPNAME/active --->|
+  |                                                             |
+  |<---------- Group Status Response: 2.05 (Content) -----------|
+  |                                                             |
 ~~~~~~~~~~~
 {: #fig-key-status-req-resp title="Message Flow of Group Status Request-Response" artwork-align="center"}
 
@@ -787,13 +771,13 @@ For each of its groups, the Group Manager maintains an association between the g
 {{fig-group-names-req-resp}} gives an overview of the exchanges described above.
 
 ~~~~~~~~~~~
-                                                                  Group
-  Node                                                           Manager
-   |                                                                |
-   |---- Group Name and URI Retrieval Request: FETCH ace-group/ --->|
-   |                                                                |
-   |<--- Group Name and URI Retrieval Response: 2.05 (Content) -----|
-   |                                                                |
+                                                                Group
+Node                                                           Manager
+ |                                                                |
+ |---- Group Name and URI Retrieval Request: FETCH ace-group/ --->|
+ |                                                                |
+ |<--- Group Name and URI Retrieval Response: 2.05 (Content) -----|
+ |                                                                |
 ~~~~~~~~~~~
 {: #fig-group-names-req-resp title="Message Flow of Group Name and URI Retrieval Request-Response" artwork-align="center"}
 
@@ -1014,9 +998,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Sender ID assigned to a member of an OSCORE group
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+&nbsp;
 
 *  Name: cs_alg
 *  CBOR Label: TBD5
@@ -1025,9 +1007,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Value
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+&nbsp;
 
 *  Name: cs_params
 *  CBOR Label: TBD6
@@ -1036,9 +1016,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Algorithm Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+&nbsp;
 
 *  Name: cs_key_params
 *  CBOR Label: TBD7
@@ -1047,9 +1025,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Counter Signature Key Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+&nbsp;
 
 *  Name: cs_key_enc
 *  CBOR Label: TBD8
@@ -1058,9 +1034,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: Encoding of Public Keys to be used with the OSCORE Counter Signature Algorithm
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+&nbsp;
 
 *  Name: ecdh_alg
 *  CBOR Label: TBD9
@@ -1069,9 +1043,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE ECDH Algorithm Value
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+&nbsp;
 
 *  Name: ecdh_params
 *  CBOR Label: TBD10
@@ -1080,9 +1052,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE ECDH Algorithm Additional Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
-~~~~~~~~~~~
-
-~~~~~~~~~~~
+&nbsp;
 
 *  Name: ecdh_key_params
 *  CBOR Label: TBD11
@@ -1240,7 +1210,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-* REQ4 - If used, specify the acceptable values for 'sign\_parameters': format and values from the COSE algorithm capabilities as specified in the "COSE Algorithms" Registry {{COSE.Algorithms}} and from the COSE key type capabilities as specified in the "COSE Key Types" Registry {{COSE.Key.Types}}.
+* REQ4 - If used, specify the acceptable values for 'sign\_parameters': format and values from the COSE algorithm capabilities as specified in the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
 * REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': format and values from the COSE key type capabilities as specified in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
@@ -1309,6 +1279,8 @@ This appendix lists the specifications on this application profile of ACE, based
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -10 to -11 ## {#sec-10-11}
+
+* Removed redundancy of key type capabilities, from 'sign_info', 'ecdh_info' and 'key'.
 
 * Error handling in case of non available Sender IDs upon joining.
 
