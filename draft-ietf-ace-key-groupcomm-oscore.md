@@ -530,7 +530,7 @@ If the joining node has not taken exclusively the role of monitor, the Group Man
 
 * The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node. If the joining node is recognized as a current group member, e.g. through the ongoing secure communication association, the Group Manager MUST assign a new Sender ID different than the one currently used by the joining node in the OSCORE group.
 
-   Consistently with Section 3 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Sender ID that has never been assigned before in the OSCORE group under the current Gid value.
+   Consistently with Section 3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Sender ID that has not been used in the OSCORE group since the latest time when the current Gid value was assigned to the group.
 
    The Group Manager MUST NOT assign a Sender ID to the joining node if this joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}).
 
@@ -592,6 +592,8 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * "Expiration Delta" defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, with default value 0.
 
+As a last action, the Group Manager MUST store the Gid specified in the 'contextId' parameter of the 'key' parameter, as the Birth Gid of the joining node in the joined group (see Section 3.1 of {{I-D.ietf-core-oscore-groupcomm}}). This applies also in case the node is in fact re-joining the group; in such a case, the newly determined Birth Gid overwrites the one currently stored.
+   
 Finally, the joining node uses the information received in the Joining Response to set up the Group OSCORE Security Context, as described in Section 2 of {{I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the OSCORE group.
 
 From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}. When doing so:
@@ -686,7 +688,7 @@ Otherwise, the Group Manager performs one of the following actions.
 
     * The Group Manager determines and assigns a new Sender ID for that group member, and replies with a Key Renewal Response formatted as defined in Section 4.1.6.1 of {{I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
     
-       Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has never been assigned before in the OSCORE group under the current Gid value.
+       Consistently with Section 2.4.3.1 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has not been used in the OSCORE group since the latest time when the current Gid value was assigned to the group.
        
        The Group Manager MUST return a 5.03 (Service Unavailable) response in case there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section 4 of {{I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
 
@@ -800,6 +802,8 @@ Upon receiving the Group Leaving Request, the Group Manager processes it as per 
 
 Other than after a spontaneous request to the Group Manager as described in {{sec-leave-req}}, a node may be forcibly removed from the OSCORE group, e.g. due to expired or revoked authorization.
 
+In either case, the Group Manager "forgets" the Birth Gid currently associated to the leaving node in the OSCORE group. This was stored following the Joining Response sent to that node, after its latest (re-)joining of the OSCORE group (see {{ssec-join-resp}}).
+
 If any of the two conditions below holds, the Group Manager MUST inform the leaving node of its eviction as follows. If both conditions hold, the Group Manager MUST inform the leaving node only once, using either of the corresponding methods.
 
 * If, upon joining the group (see {{ssec-join-req-sending}}), the leaving node specified a URI in the 'control_uri' parameter defined in Section 4.1.2.1 of {{I-D.ietf-ace-key-groupcomm}}, the Group Manager sends a DELETE request targeting the URI specified in the 'control_uri' parameter (OPT10).
@@ -820,9 +824,15 @@ Same considerations in Section 5 of {{I-D.ietf-ace-key-groupcomm}} apply here as
 
 In order to rekey the OSCORE group, the Group Manager distributes a new Group Identifier (Gid), i.e. a new OSCORE ID Context; a new OSCORE Master Secret; and, optionally, a new OSCORE Master Salt for that group. When doing so, the Group Manager MUST increment the version number of the group keying material, before starting its distribution.
 
-Consistently with Section 2.3 of {{I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Gid that has never been assigned before to the OSCORE group.
+Consistently with Section 3.1 of {{I-D.ietf-core-oscore-groupcomm}}:
 
-Furthermore, the Group Manager MUST preserve the same unchanged Sender IDs for all group members. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of group messages.
+* The Group Manager can reassign a Gid to the same group over that group's lifetime, e.g. once the whole space of Gid values has been used for the group in question.
+
+* Before rekeying the group, the Group Manager MUST check if the new Gid to be distributed coincides with the Birth Gid of any of the current group members (see {{ssec-join-resp}}). If any of such "elder members" is found in the group, the Group Manager MUST evict them from the group. That is, the Group Manager MUST terminate their membership and MUST rekey the group in such a way that the new key material is not provided to those evicted elder members.
+
+   Until a further following group rekeying, the Group Manager MUST store the list of those latest-evicted elder members. If any of those nodes re-joins the group before a further following group rekeying occurs, the Group Manager MUST NOT rekey the group upon their re-joining. When one of those nodes re-joins the group, the Group Manager can rely, e.g., on the ongoing secure communication association to recognize the node as included in the stored list.
+
+Across the rekeying execution, the Group Manager MUST preserve the same unchanged Sender IDs for all group members intended to remain in the group. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of group messages.
 
 The Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
 
@@ -1340,6 +1350,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Removed redundancy of key type capabilities, from 'sign_info', 'ecdh_info' and 'key'.
 
 * Improved alignment of the Joining Response payload with the Group OSCORE Security Context parameters.
+
+* Recycling Group IDs by tracking "Birth GIDs".
 
 * Error handling in case of non available Sender IDs upon joining.
 
