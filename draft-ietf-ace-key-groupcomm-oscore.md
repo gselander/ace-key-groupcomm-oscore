@@ -58,6 +58,7 @@ normative:
   RFC6838:
   RFC6979:
   RFC7252:
+  RFC7748:
   RFC8017:
   RFC8032:
   RFC8126:
@@ -513,6 +514,18 @@ The Group Manager processes the Joining Request as defined in Section 4.1.2.1 of
 * The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
 
 * The Group Manager MUST return a 4.00 (Bad Request) response in case it cannot retrieve a public key with an accepted format for the joining node, either from the 'client_cred' parameter or as already stored.
+
+* The Group Manager MUST return a 4.00 (Bad Request) response in case all the following conditions hold.
+
+   - The OSCORE group supports the pairwise mode of Group OSCORE.
+   
+   - The OSCORE group uses EdDSA public keys {{RFC8032}}.
+   
+   - The public key of the joining node from the 'client_cred' parameter:
+   
+      - Is for the elliptic curve Ed25519 and has its Y coordinate equal to -1 or 1 (mod p), with p = (2^255 - 19), see Section 4.1 of {{RFC7748}}; or
+      
+      - Is for the elliptic curve Ed448 and has its Y coordinate equal to -1 or 1 (mod p), with p =  (2^448 - 2^224 - 1), see Section 4.2 of {{RFC7748}}.
 
 * When receiving a 4.00 (Bad Request) response, the joining node SHOULD send a new Joining Request to the Group Manager, where:
 
@@ -1354,6 +1367,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Recycling Group IDs by tracking "Birth GIDs".
 
 * Error handling in case of non available Sender IDs upon joining.
+
+* Error handling in case EdDSA public keys with invalid Y coordinate when the pairwise mode of Group OSCORE is supported.
 
 * Improved and simplified set of default values for counter signature parameters and ECDH algorithm parameters.
 
