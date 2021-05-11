@@ -406,7 +406,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
   
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
-  This format is consistent with every counter signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
+  This format is consistent with every counter signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
   
 * If 'ecdh_info' is included in the request, the Group Manager MAY include the ’ecdh_info’ parameter defined in {{ecdh-info}}, with the same encoding. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'ecdh_info_entry' applies to.
 
@@ -459,7 +459,7 @@ The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the r
    gname = tstr
 ~~~~~~~~~~~
 
-This format is consistent with every ECDH algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} describes how the format of each 'ecdh_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
+This format is consistent with every ECDH algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} of this document describes how the format of each 'ecdh_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
 
 ## Sending the Joining Request {#ssec-join-req-sending}
 
@@ -591,7 +591,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
       - 'ecdh_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-   The format of 'key' defined above is consistent with every signature algorithm and ECDH algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} describes how the format of the 'key' parameter can be generalized for possible future registered algorithms having a different set of COSE capabilities.
+   The format of 'key' defined above is consistent with every signature algorithm and ECDH algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} of this document describes how the format of the 'key' parameter can be generalized for possible future registered algorithms having a different set of COSE capabilities.
    
 * The 'exp' parameter MUST be present.
 
@@ -1272,41 +1272,13 @@ As defined in Section 8.1 of {{I-D.ietf-cose-rfc8152bis-algs}}, future algorithm
 
 To enable the seamless use of such future registered algorithms, this section defines a general, agile format for:
 
-* Each 'sign_info_entry' of the 'sign_info' parameter in the Token Post response, see {{ssec-token-post}};
-
 * Each 'ecdh_info_entry' of the 'ecdh_info' parameter in the Token Post response, see {{ssec-token-post}} and {{ecdh-info}};
 
 * The 'cs_params' and 'ecdh_params' parameters within the 'key' parameter, see {{ssec-join-resp}}, as part of the response payloads used in {{ssec-join-resp}}, {{ssec-updated-key-only}}, {{ssec-updated-and-individual-key}} and {{sec-group-rekeying-process}}.
 
+Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes the analogous general format for 'sign_info_entry' of the 'sign_info' parameter in the Token Post response, see {{ssec-token-post}}.
+
 If any of the currently registered COSE algorithms is considered, using this general format yields the same structure defined in this document for the items above, thus ensuring retro-compatibility.
-
-## Format of 'sign_info_entry' ## {#sec-future-cose-algs-sign-info-entry}
-
-The format of each 'sign_info_entry' (see {{ssec-token-post}}) is generalized as follows. Given N the number of elements of the 'sign_parameters' array, i.e. the number of COSE capabilities of the signature algorithm, then:
-
-* 'sign_key_parameters' is replaced by N elements 'sign_capab_i', each of which is a CBOR array.
-
-* The i-th array following 'sign_parameters', i.e. 'sign_capab_i' (i = 0, ..., N-1), is the array of COSE capabilities for the algorithm capability specified in 'sign_parameters'\[i\].
-
-~~~~~~~~~~~ CDDL
-   sign_info_entry =
-   [
-     id : gname / [ + gname ],
-     sign_alg : int / tstr,
-     sign_parameters : [ alg_capab_1 : any,
-                         alg_capab_2 : any,
-                         ...,
-                         alg_capab_N : any],
-     sign_capab_1 : [ any ],
-     sign_capab_2 : [ any ],
-     ...,
-     sign_capab_N : [ any ],
-     pub_key_enc = int / nil
-   ]
-
-   gname = tstr
-~~~~~~~~~~~
-{: #fig-sign-info-entry-general title="'sign_info_entry' with general format"}
 
 ## Format of 'ecdh_info_entry' ## {#sec-future-cose-algs-ecdh-info-entry}
 
