@@ -402,6 +402,8 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * If the 'sign_info' parameter is present in the response, the following applies for each element 'sign_info_entry'.
 
+  * 'id' MUST NOT refer to OSCORE groups that are pairwise-only groups.
+
   * 'sign_alg' takes value from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
   * 'sign_parameters' is a CBOR array. Its format and value are the same of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (REQ4).
@@ -436,7 +438,7 @@ The 'ecdh_info' parameter of the 2.01 (Created) response is a CBOR array of one 
 
 Each element contains information about ECDH parameters and about public keys, for one or more OSCORE groups that support the pairwise mode of Group OSCORE and that the client has been authorized to join. Each element is formatted as follows.
 
-* The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies.
+* The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies. In particular 'id' MUST NOT refer to OSCORE groups that are signature-only groups.
 
 * The second element 'ecdh_alg' is an CBOR integer or a CBOR text string indicating the ECDH algorithm used in the OSCORE group identified by 'gname'. Values are taken from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
