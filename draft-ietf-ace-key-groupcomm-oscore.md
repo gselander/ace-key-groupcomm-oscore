@@ -414,7 +414,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
   
   * 'pub_key_enc' takes value 1 ("COSE\_Key") from the 'Confirmation Key' column of the "CWT Confirmation Method" Registry {{CWT.Confirmation.Methods}}, so indicating that public keys in the OSCORE group are encoded as COSE Keys {{I-D.ietf-cose-rfc8152bis-struct}}. Future specifications may define additional values for this parameter.
 
-  This format is consistent with every counter signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
+  This format is consistent with every signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e. with algorithms that have only the COSE key type as their COSE capability. Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
   
 * If 'ecdh_info' is included in the request, the Group Manager MAY include in the response the 'ecdh_info' parameter defined in {{ecdh-info}}, with the same encoding. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'ecdh_info_entry' applies to.
 
@@ -624,7 +624,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * The 'cs_params' parameter MUST be present and specifies the parameters of the counter signature algorithm. This parameter is a CBOR array, which includes the following two elements:
+   * The 'cs_params' parameter MUST be present and specifies the parameters of the signature algorithm. This parameter is a CBOR array, which includes the following two elements:
 
       - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'cs_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -686,9 +686,9 @@ In particular, one of the following four cases can occur when a new node joins a
 
 * The joining node and the Group Manager use an asymmetric proof-of-possession key to establish a secure communication association. Then, two cases can occur.
 
-   1. The proof-of-possession key is compatible with the encoding as well as with the counter signature algorithm and possible associated parameters used in the OSCORE group. Then, the Group Manager considers the proof-of-possession key as the public key associated to the joining node in the OSCORE group. If the joining node is aware that the proof-of-possession key is also valid for the OSCORE group, it MAY not provide it again as its own public key to the Group Manager. The joining node MUST provide its own public key again if it has provided the Group Manager with multiple public keys during past joining processes, intended for different OSCORE groups. If the joining node provides its own public key in the 'client_cred' parameter of the Joining Request (see {{ssec-join-req-sending}}), the Group Manager performs consistency checks as per {{ssec-join-req-processing}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
+   1. The proof-of-possession key is compatible with the encoding as well as with the signature algorithm and possible associated parameters used in the OSCORE group. Then, the Group Manager considers the proof-of-possession key as the public key associated to the joining node in the OSCORE group. If the joining node is aware that the proof-of-possession key is also valid for the OSCORE group, it MAY not provide it again as its own public key to the Group Manager. The joining node MUST provide its own public key again if it has provided the Group Manager with multiple public keys during past joining processes, intended for different OSCORE groups. If the joining node provides its own public key in the 'client_cred' parameter of the Joining Request (see {{ssec-join-req-sending}}), the Group Manager performs consistency checks as per {{ssec-join-req-processing}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
 
-   2. The proof-of-possession key is not compatible with the encoding or with the counter signature algorithm and possible associated parameters used in the OSCORE group. In this case, the joining node MUST provide a different compatible public key to the Group Manager in the 'client_cred' parameter of the Joining Request (see {{ssec-join-req-sending}}). Then, the Group Manager performs consistency checks on this latest provided public key as per {{ssec-join-req-processing}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
+   2. The proof-of-possession key is not compatible with the encoding or with the signature algorithm and possible associated parameters used in the OSCORE group. In this case, the joining node MUST provide a different compatible public key to the Group Manager in the 'client_cred' parameter of the Joining Request (see {{ssec-join-req-sending}}). Then, the Group Manager performs consistency checks on this latest provided public key as per {{ssec-join-req-processing}} and, in case of success, considers it as the public key associated to the joining node in the OSCORE group.
 
 * The joining node and the Group Manager use a symmetric proof-of-possession key to establish a secure communication association. In this case, upon performing a joining process with that Group Manager for the first time, the joining node specifies its own public key in the 'client_cred' parameter of the Joining Request targeting the group-membership endpoint (see {{ssec-join-req-sending}}).
 
@@ -936,7 +936,7 @@ The Group Manager SHOULD use the following default values for the algorithm, and
 
 * For the algorithm 'cs_alg' used to countersign messages in the group, the signature algorithm EdDSA {{RFC8032}}.
 
-* For the parameters 'cs_params' of the counter signature algorithm:
+* For the parameters 'cs_params' of the signature algorithm:
 
     - The array \[\[OKP\], \[OKP, Ed25519\]\], in case EdDSA is assumed or specified for 'cs_alg'. In particular, this indicates to use the COSE key type OKP and the elliptic curve Ed25519 {{RFC8032}}.
     
@@ -1061,7 +1061,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Label: TBD5
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithms
-*  Description: OSCORE Counter Signature Algorithm Value
+*  Description: OSCORE Signature Algorithm Value
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
 &nbsp;
@@ -1070,7 +1070,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Label: TBD6
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
-*  Description: OSCORE Counter Signature Algorithm Parameters
+*  Description: OSCORE Signature Algorithm Parameters
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
 &nbsp;
@@ -1079,7 +1079,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Label: TBD7
 *  CBOR Type: integer
 *  Registry: CWT Confirmation Methods
-*  Description: Encoding of Public Keys to be used with the OSCORE Counter Signature Algorithm
+*  Description: Encoding of Public Keys to be used with the OSCORE Signature Algorithm
 *  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
 
 &nbsp;
@@ -1361,13 +1361,13 @@ The format of each 'ecdh_info_entry' (see {{ssec-token-post}} and {{ecdh-info}})
 
 The format of 'key' (see {{ssec-join-resp}}) is generalized as follows.
 
-* The 'cs_params' array includes N+1 elements, whose exact structure and value depend on the value of the counter signature algorithm specified in 'cs_alg'.
+* The 'cs_params' array includes N+1 elements, whose exact structure and value depend on the value of the signature algorithm specified in 'cs_alg'.
 
-   - The first element, i.e. 'cs_params'\[0\], is the array of the N COSE capabilities for the counter signature algorithm, as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (see Section 8.1 of {{I-D.ietf-cose-rfc8152bis-algs}}).
+   - The first element, i.e. 'cs_params'\[0\], is the array of the N COSE capabilities for the signature algorithm, as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (see Section 8.1 of {{I-D.ietf-cose-rfc8152bis-algs}}).
 
    - Each following element 'cs_params'\[i\], i.e. with index i > 0, is the array of COSE capabilities for the algorithm capability specified in 'cs_params'\[0\]\[i-1\].
 
-   For example, if 'cs_params'\[0\]\[0\] specifies the key type as capability of the algorithm, then 'cs_params'\[1\] is the array of COSE capabilities for the COSE key type associated to the counter signature algorithm, as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see Section 8.2 of {{I-D.ietf-cose-rfc8152bis-algs}}).
+   For example, if 'cs_params'\[0\]\[0\] specifies the key type as capability of the algorithm, then 'cs_params'\[1\] is the array of COSE capabilities for the COSE key type associated to the signature algorithm, as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see Section 8.2 of {{I-D.ietf-cose-rfc8152bis-algs}}).
 
 * The 'ecdh_params' array includes M+1 elements, whose exact structure and value depend on the value of the ECDH algorithm specified in 'ecdh_alg'.
 
