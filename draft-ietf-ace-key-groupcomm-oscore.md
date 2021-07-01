@@ -1491,6 +1491,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Removed redundancy of key type capabilities, from 'sign_info', 'ecdh_info' and 'key'.
 
+* 'pub_key_enc' takes value from the COSE Header Parameters registry.
+
 * Improved alignment of the Joining Response payload with the Group OSCORE Security Context parameters.
 
 * Recycling Group IDs by tracking "Birth GIDs".
