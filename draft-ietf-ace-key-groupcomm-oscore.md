@@ -667,10 +667,12 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD3), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this document.
 
-* The 'pub_keys' parameter, if present, includes the public keys requested by the joining node by means of the 'get_pub_keys' parameter in the Joining Request. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the OSCORE group, thus used as group member identifier encoded as a CBOR byte string (REQ12).
+* The 'pub_keys' parameter, if present, includes the public keys requested by the joining node by means of the 'get_pub_keys' parameter in the Joining Request.
 
    If the joining node has asked for the public keys of all the group members, i.e. 'get_pub_keys' had value Null in the Joining Request, then the Group Manager provides only the public keys of the group members that are relevant to the joining node. That is, in such a case, 'pub_keys' includes only: i) the public keys of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor.
 
+* The 'peer_identifiers' parameter, if present, includes the Sender ID of each group member whose public key is specified in the 'pub_keys' parameter. That is, a group member's Sender ID is used as identifier for that group member (REQ12).
+   
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
 
    * "Key Update Check Interval" defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}, with default value 3600;
@@ -819,7 +821,7 @@ If the Public Key Request uses the method FETCH, the Public Key Request is forma
 
 * Each element (if any) of the inner CBOR array 'role_filter' is formatted as in the inner CBOR array 'role_filter' of the 'get_pub_keys' parameter of the Joining Request when the parameter value is non-null (see {{ssec-join-req-sending}}).
 
-* Each element (if any) of the inner CBOR array 'id_filter' is a CBOR byte string (REQ12), which encodes the Sender ID of the group member for which the associated public key is requested.
+* Each element (if any) of the inner CBOR array 'id_filter' is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested (REQ12).
 
 Upon receiving the Public Key Request, the Group Manager processes it as per Section 4.1.3.1 or Section 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively. Additionally, if the Public Key Request uses the method FETCH, the Group Manager silently ignores node identifiers included in the ’get_pub_keys’ parameter of the request that are not associated to any current group member.
 
@@ -1349,7 +1351,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ11 - Acceptable values of 'gkty': Group_OSCORE_Input_Material object (see {{ssec-join-resp}}).
 
-* REQ12 - Specify the format of the identifiers of group members: CBOR byte string (see {{ssec-join-resp}} and {{sec-pub-keys}}).
+* REQ12 - Specify the format of the identifiers of group members: the Sender ID used in the OSCORE group (see {{ssec-join-resp}} and {{sec-pub-keys}}).
 
 * REQ13 - Specify the communication protocol that the members of the group must use: CoAP {{RFC7252}}, possibly over IP multicast {{I-D.ietf-core-groupcomm-bis}}.
 
@@ -1480,6 +1482,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Generalized proof-of-possession (PoP) for the joining node's private key; defined Diffie-Hellman based PoP for OSCORE groups using only the pairwise mode.
 
 * Proof-of-possession of the Group Manager's private key in the Joining Response.
+
+* Always use 'peer_identifiers' to convey Sender IDs as node identifiers.
 
 * Improved and simplified set of default values for counter signature parameters and ECDH algorithm parameters.
 
