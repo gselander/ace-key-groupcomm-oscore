@@ -142,7 +142,7 @@ informative:
 
 --- abstract
 
-This specification defines an application profile of the ACE framework for Authentication and Authorization, to request and provision keying material in group communication scenarios that are based on CoAP and secured with Group Object Security for Constrained RESTful Environments (OSCORE). This application profile delegates the authentication and authorization of Clients that join an OSCORE group through a Resource Server acting as Group Manager for that group. This application profile leverages protocol-specific transport profiles of ACE to achieve communication security, server authentication and proof-of-possession for a key owned by the Client and bound to an OAuth 2.0 Access Token.
+This document defines an application profile of the ACE framework for Authentication and Authorization, to request and provision keying material in group communication scenarios that are based on CoAP and secured with Group Object Security for Constrained RESTful Environments (OSCORE). This application profile delegates the authentication and authorization of Clients that join an OSCORE group through a Resource Server acting as Group Manager for that group. This application profile leverages protocol-specific transport profiles of ACE to achieve communication security, server authentication and proof-of-possession for a key owned by the Client and bound to an OAuth 2.0 Access Token.
 
 --- middle
 
@@ -152,7 +152,7 @@ Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} is a m
 
 As described in {{I-D.ietf-core-oscore-groupcomm}}, Group OSCORE is used to protect CoAP group communication over IP multicast {{I-D.ietf-core-groupcomm-bis}}. This relies on a Group Manager, which is responsible for managing an OSCORE group and enables the group members to exchange CoAP messages secured with Group OSCORE. The Group Manager can be responsible for multiple groups, coordinates the joining process of new group members, and is entrusted with the distribution and renewal of group keying material.
 
-This specification is an application profile of {{I-D.ietf-ace-key-groupcomm}}, which itself builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}. Message exchanges among the participants as well as message formats and processing follow what specified in {{I-D.ietf-ace-key-groupcomm}} for provisioning and renewing keying material in group communication scenarios, where Group OSCORE is used to protect CoAP group communication over IP multicast.
+This document is an application profile of {{I-D.ietf-ace-key-groupcomm}}, which itself builds on the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}. Message exchanges among the participants as well as message formats and processing follow what specified in {{I-D.ietf-ace-key-groupcomm}} for provisioning and renewing keying material in group communication scenarios, where Group OSCORE is used to protect CoAP group communication over IP multicast.
 
 ## Terminology {#ssec-terminology}
 
@@ -168,7 +168,7 @@ Readers are expected to be familiar with:
 
 * The terms and concepts described in CoAP {{RFC7252}} and group communication for CoAP {{I-D.ietf-core-groupcomm-bis}}. Unless otherwise indicated, the term "endpoint" is used here following its OAuth definition, aimed at denoting resources such as /token and /introspect at the AS, and /authz-info at the RS. This document does not use the CoAP definition of "endpoint", which is "An entity participating in the CoAP protocol".
 
-* The terms and concepts for protection and processing of CoAP messages through OSCORE {{RFC8613}} and through Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} in group communication scenarios. These include the concept of Group Manager, as the entity responsible for a set of groups where communications are secured with Group OSCORE. In this specification, the Group Manager acts as Resource Server.
+* The terms and concepts for protection and processing of CoAP messages through OSCORE {{RFC8613}} and through Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} in group communication scenarios. These include the concept of Group Manager, as the entity responsible for a set of groups where communications are secured with Group OSCORE. In this document, the Group Manager acts as Resource Server.
 
 Additionally, this document makes use of the following terminology.
 
@@ -188,7 +188,7 @@ Additionally, this document makes use of the following terminology.
 
 Group communication for CoAP over IP multicast has been enabled in {{I-D.ietf-core-groupcomm-bis}} and can be secured with Group Object Security for Constrained RESTful Environments (OSCORE) {{RFC8613}} as described in {{I-D.ietf-core-oscore-groupcomm}}. A network node joins an OSCORE group by interacting with the responsible Group Manager. Once registered in the group, the new node can securely exchange messages with other group members.
 
-This specification describes how to use {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-oauth-authz}} to perform a number of authentication, authorization and key distribution actions, as defined in {{Section 2 of I-D.ietf-ace-key-groupcomm}}, for an OSCORE group.
+This document describes how to use {{I-D.ietf-ace-key-groupcomm}} and {{I-D.ietf-ace-oauth-authz}} to perform a number of authentication, authorization and key distribution actions, as defined in {{Section 2 of I-D.ietf-ace-key-groupcomm}}, for an OSCORE group.
 
 With reference to {{I-D.ietf-ace-key-groupcomm}}:
 
@@ -200,7 +200,7 @@ With reference to {{I-D.ietf-ace-key-groupcomm}}:
 
 All communications between the involved entities MUST be secured.
 
-In particular, communications between the Client and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. It is expected that, in the commonly referred base-case of this specification, the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
+In particular, communications between the Client and the Group Manager leverage protocol-specific transport profiles of ACE to achieve communication security, proof-of-possession and server authentication. It is expected that, in the commonly referred base-case of this document, the transport profile to use is pre-configured and well-known to nodes participating in constrained applications.
 
 {{profile-req}} lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -284,7 +284,7 @@ The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM data model is as fol
    )
 ~~~~~~~~~~~
 
-Future specifications that define new roles MUST register a corresponding numeric identifier in the "Group OSCORE Roles" Registry defined in {{ssec-iana-group-oscore-roles-registry}} of this specification.
+Future specifications that define new roles MUST register a corresponding numeric identifier in the "Group OSCORE Roles" Registry defined in {{ssec-iana-group-oscore-roles-registry}} of this document.
 
 # Joining Node to Authorization Server {#sec-joining-node-to-AS}
 
@@ -308,15 +308,15 @@ The Authorization Request message is as defined in {{Section 3.1 of I-D.ietf-ace
 
 The Authorization Response message is as defined in {{Section 3.2 of I-D.ietf-ace-key-groupcomm}}, with the following additions:
 
-* The AS MUST include the 'expires_in' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this specification.
+* The AS MUST include the 'expires_in' parameter. Other means for the AS to specify the lifetime of Access Tokens are out of the scope of this document.
 
 * The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and specifies the set of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in {{ssec-auth-req}}.
 
-Furthermore, if the AS uses the extended format of scope defined in {{Section 6 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this specification (REQ23). This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined for this application profile in {{sec-format-scope}} of this specification.
+Furthermore, if the AS uses the extended format of scope defined in {{Section 6 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this document (REQ23). This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined for this application profile in {{sec-format-scope}} of this document.
 
 # Interface at the Group Manager {#sec-interface-GM}
 
-The Group Manager provides the interface defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}, with one additional sub-resource defined in {{ssec-resource-active}} of this specification.
+The Group Manager provides the interface defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}, with one additional sub-resource defined in {{ssec-resource-active}} of this document.
 
 Furthermore, {{ssec-admitted-methods}} provides a summary of the CoAP methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ8).
 
@@ -342,7 +342,7 @@ Additionally, the handler verifies that the requesting client is a current membe
 
 If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is fine to happen.
 
-The method to set the current group status, i.e. active or inactive, is out of the scope of this specification, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
+The method to set the current group status, i.e. active or inactive, is out of the scope of this document, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
 
 ## Admitted Methods {#ssec-admitted-methods}
 
@@ -549,7 +549,7 @@ The value of the N\_S challenge is determined as follows.
 
 1. If the joining node has posted the Access Token to the /authz-info endpoint of the Group Manager as in {{ssec-token-post}}, N\_S takes the same value of the most recent 'kdcchallenge' parameter received by the joining node from the Group Manager. This can be either the one specified in the 2.01 (Created) response to the Token POST, or the one possibly specified in a 4.00 (Bad Request) response to a following Joining Request (see {{ssec-join-req-processing}}).
 
-2. If the Token posting has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} with the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in {{Section 7.5 of RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app" defined in {{ssec-iana-tls-esporter-label-registry}} of this specification.
+2. If the Token posting has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} with the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in {{Section 7.5 of RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app" defined in {{ssec-iana-tls-esporter-label-registry}} of this document.
 
 It is up to applications to define how N_S is computed in further alternative settings.
 
@@ -623,11 +623,11 @@ If the joining node has not taken exclusively the role of monitor, the Group Man
 
 Then, the Group Manager replies to the joining node, providing the updated security parameters and keying meterial necessary to participate in the group communication. This success Joining Response is formatted as defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}, with the following additions:
 
-* The 'gkty' parameter identifies a key of type "Group_OSCORE_Input_Material object", defined in {{ssec-iana-groupcomm-key-registry}} of this specification.
+* The 'gkty' parameter identifies a key of type "Group_OSCORE_Input_Material object", defined in {{ssec-iana-groupcomm-key-registry}} of this document.
 
 * The 'key' parameter includes what the joining node needs in order to set up the Group OSCORE Security Context as per {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
-   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this specification and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId' 'cs_alg', 'cs_params', 'cs_key_enc', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this specification.
+   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId' 'cs_alg', 'cs_params', 'cs_key_enc', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this document.
    
    More specifically, the 'key' parameter is composed as follows.
 
@@ -665,7 +665,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    
 * The 'exp' parameter MUST be present.
 
-* The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD3), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
+* The 'ace-groupcomm-profile' parameter MUST be present and has value coap_group_oscore_app (TBD3), which is defined in {{ssec-iana-groupcomm-profile-registry}} of this document.
 
 * The 'pub_keys' parameter, if present, includes the public keys requested by the joining node by means of the 'get_pub_keys' parameter in the Joining Request. If public keys are encoded as COSE\_Keys, each of them has as 'kid' the Sender ID that the corresponding owner has in the OSCORE group, thus used as group member identifier encoded as a CBOR byte string (REQ12).
 
@@ -761,7 +761,7 @@ In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME 
 
 The Group Manager processes the Key Distribution Request according to {{Section 4.1.2.2 of I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in {{Section 4.1.2.2 of I-D.ietf-ace-key-groupcomm}}. In addition:
 
-* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification, with the difference that it does not include the 'group_SenderId' parameter.
+* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this document, with the difference that it does not include the 'group_SenderId' parameter.
 
 * The 'exp' parameter MUST be present.
 
@@ -777,7 +777,7 @@ In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/
 
 The Group Manager processes the Key Distribution Request according to {{Section 4.1.6.2 of I-D.ietf-ace-key-groupcomm}}. The Key Distribution Response is formatted as defined in {{Section 4.1.6.2 of I-D.ietf-ace-key-groupcomm}}. In addition:
 
-* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this specification. In particular, if the requesting group member has exclusively the role of monitor, no 'group_SenderId' is specified within the 'key' parameter.
+* The 'key' parameter is formatted as defined in {{ssec-join-resp}} of this document. In particular, if the requesting group member has exclusively the role of monitor, no 'group_SenderId' is specified within the 'key' parameter.
 
    Note that, in any other case, the current Sender ID of the group member is not specified as a separate parameter, but rather specified as 'group_SenderId' within the 'key' parameter.
    
@@ -863,7 +863,7 @@ Upon receiving the Version Request, the Group Manager processes it as per {{Sect
 
 A group member may request the current status of the the OSCORE group, i.e. active or inactive. To this end, the group member sends a Group Status Request to the Group Manager.
 
-In particular, the group member sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/active at the Group Manager defined in {{ssec-resource-active}} of this specification, where GROUPNAME is the name of the OSCORE group. The success Group Version Response is formatted as defined in {{ssec-resource-active}} of this specification.
+In particular, the group member sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/active at the Group Manager defined in {{ssec-resource-active}} of this document, where GROUPNAME is the name of the OSCORE group. The success Group Version Response is formatted as defined in {{ssec-resource-active}} of this document.
 
 Upon learning from a 2.05 (Content) response that the group is currently inactive, the group member SHOULD stop taking part in communications within the group, until it becomes active again.
 
@@ -1061,7 +1061,7 @@ If we consider both N\_C and N\_S to take 8-byte long values, the following cons
 
 * Let us consider both N\_C and N\_S as taking random values, and the Group Manager to never change the value of the N\_S provided to a Client during the lifetime of an Access Token. Then, as per the birthday paradox, the average collision for N\_S will happen after 2^32 new posted Access Tokens, while the average collision for N\_C will happen after 2^32 new Joining Requests. This amounts to considerably more token provisionings than the expected new joinings of OSCORE groups under a same Group Manager, as well as to considerably more requests to join OSCORE groups from a same Client using a same Access Token under a same Group Manager.
 
-* {{Section 7 of I-D.ietf-ace-oscore-profile}} as well {{Section B.2 of RFC8613}} recommend the use of 8-byte random values as well. Unlike in those cases, the values of N\_C and N\_S considered in this specification are not used for as sensitive operations as the derivation of a Security Context, and thus do not have possible implications in the security of AEAD ciphers.
+* {{Section 7 of I-D.ietf-ace-oscore-profile}} as well {{Section B.2 of RFC8613}} recommend the use of 8-byte random values as well. Unlike in those cases, the values of N\_C and N\_S considered in this document are not used for as sensitive operations as the derivation of a Security Context, and thus do not have possible implications in the security of AEAD ciphers.
 
 ## Reusage of Nonces for Proof-of-Possession Input {#ssec-security-considerations-reusage-nonces}
 
@@ -1073,7 +1073,7 @@ Unless the Group Manager maintains a list of N\_C values already used by that Cl
 
 # IANA Considerations {#sec-iana}
 
-Note to RFC Editor: Please replace all occurrences of "\[\[This specification\]\]" with the RFC number of this specification and delete this paragraph.
+Note to RFC Editor: Please replace all occurrences of "\[\[This document\]\]" with the RFC number of this specification and delete this paragraph.
 
 This document has the following actions for IANA.
 
@@ -1084,28 +1084,28 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 * Name: group_senderId
 * CBOR Key: TBD1
 * CBOR Type: Byte string
-* Reference: \[\[This specification\]\] ({{sec-new-key}})
+* Reference: \[\[This document\]\] ({{sec-new-key}})
 
 &nbsp;
 
 * Name: kdc_nonce
 * CBOR Key: TBD10
 * CBOR Type: Byte string
-* Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+* Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
 
 * Name: kdc_cred
 * CBOR Key: TBD11
 * CBOR Type: Byte string
-* Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+* Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
 
 * Name: kdc_cred_verify
 * CBOR Key: TBD12
 * CBOR Type: Byte string
-* Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+* Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
@@ -1113,9 +1113,9 @@ IANA is asked to register the following entry to the "ACE Groupcomm Key" Registr
 
 *  Name: Group_OSCORE_Input_Material object
 *  Key Type Value: TBD2
-*  Profile: "coap_group_oscore_app", defined in {{ssec-iana-groupcomm-profile-registry}} of this specification.
-*  Description: A Group_OSCORE_Input_Material object encoded as described in {{ssec-join-resp}} of this specification.
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Profile: "coap_group_oscore_app", defined in {{ssec-iana-groupcomm-profile-registry}} of this document.
+*  Description: A Group_OSCORE_Input_Material object encoded as described in {{ssec-join-resp}} of this document.
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 ## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
 
@@ -1124,7 +1124,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Profile" Reg
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
 *  CBOR Value: TBD3
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 ## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
 
@@ -1135,7 +1135,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: bstr
 *  Registry: -
 *  Description: OSCORE Sender ID assigned to a member of an OSCORE group
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
 
@@ -1144,7 +1144,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithms
 *  Description: OSCORE Signature Algorithm Value
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
 
@@ -1153,7 +1153,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
 *  Description: OSCORE Signature Algorithm Parameters
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
 
@@ -1162,7 +1162,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: integer
 *  Registry: CWT Confirmation Methods
 *  Description: Encoding of Public Keys to be used with the OSCORE Signature Algorithm
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
 
@@ -1171,7 +1171,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithms
 *  Description: OSCORE ECDH Algorithm Value
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
 
@@ -1180,7 +1180,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
 *  Description: OSCORE ECDH Algorithm Parameters
-*  Reference: \[\[This specification\]\] ({{ssec-join-resp}})
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 ## TLS Exporter Label Registry {#ssec-iana-tls-esporter-label-registry}
 
@@ -1189,23 +1189,23 @@ IANA is asked to register the following entry to the "TLS Exporter Label" Regist
 * Value: EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app
 * DTLS-OK: Y
 * Recommended: N
-* Reference: \[\[This specification\]\] ({{sssec-challenge-value}})
+* Reference: \[\[This document\]\] ({{sssec-challenge-value}})
 
 ## AIF Registry {#ssec-iana-AIF-registry}
 
 IANA is asked to register the following entry to the "Toid" sub-registry of the "AIF" Registry defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
 
 * Name: oscore-group-name
-* Description/Specification: group name of the OSCORE group, as specified in \[\[This specification\]\].
+* Description/Specification: group name of the OSCORE group, as specified in \[\[This document\]\].
 
 IANA is asked to register the following entry to the "Tperm" sub-Registry of the "AIF" Registry defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
 
 * Name: oscore-group-roles
-* Description/Specification: role(s) of the member of the OSCORE group, as specified in \[\[This specification\]\].
+* Description/Specification: role(s) of the member of the OSCORE group, as specified in \[\[This document\]\].
 
 ## Media Type Registrations {#ssec-iana-media-types}
 
-This specification registers the 'application/aif-groupcomm-oscore+cbor' media type for the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}} of \[\[This specification\]\]. This registration follows the procedures specified in {{RFC6838}}.
+This document registers the 'application/aif-groupcomm-oscore+cbor' media type for the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}} of \[\[This document\]\]. This registration follows the procedures specified in {{RFC6838}}.
 
 These media type has parameters for specifying the object identifier ("Toid") and set of permissions ("Tperm") defined for the AIF-generic model in {{I-D.ietf-ace-aif}}; default values are the values "oscore-group-name" for "Toid" and "oscore-group-roles" for "Tperm".
 
@@ -1217,15 +1217,15 @@ Required parameters: "Toid", "Tperm"
 
 Optional parameters: N/A
 
-Encoding considerations: Must be encoded as a CBOR array, each element of which is an array \[Toid, Tperm\] as defined in {{sec-format-scope}} of \[\[This specification\]\].
+Encoding considerations: Must be encoded as a CBOR array, each element of which is an array \[Toid, Tperm\] as defined in {{sec-format-scope}} of \[\[This document\]\].
 
-Security considerations: See {{sec-security-considerations}} of \[\[This specification\]\].
+Security considerations: See {{sec-security-considerations}} of \[\[This document\]\].
 
 Interoperability considerations: N/A
 
-Published specification: \[\[This specification\]\]
+Published specification: \[\[This document\]\]
 
-Applications that use this media type: The type is used by applications that want to express authorization information about joining OSCORE groups, as specified in \[\[This specification\]\].
+Applications that use this media type: The type is used by applications that want to express authorization information about joining OSCORE groups, as specified in \[\[This document\]\].
 
 Fragment identifier considerations: N/A
 
@@ -1253,13 +1253,13 @@ Encoding: -
 
 ID: TBD10
 
-Reference: \[\[This specification\]\]
+Reference: \[\[This document\]\]
 
 ## Group OSCORE Roles Registry {#ssec-iana-group-oscore-roles-registry}
 
-This specification establishes the IANA "Group OSCORE Roles" Registry. The Registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
+This document establishes the IANA "Group OSCORE Roles" Registry. The Registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
-This registry includes the possible roles that nodes can take in an OSCORE group, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about joining OSCORE groups, as specified in {{sec-format-scope}} of \[\[This specification\]\].
+This registry includes the possible roles that nodes can take in an OSCORE group, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about joining OSCORE groups, as specified in {{sec-format-scope}} of \[\[This document\]\].
 
 The columns of this registry are:
 
@@ -1273,7 +1273,7 @@ The columns of this registry are:
 
 This registry will be initially populated by the values in {{fig-role-values}}.
 
-The Reference column for all of these entries will be \[\[This specification\]\].
+The Reference column for all of these entries will be \[\[This document\]\].
 
 ## CoRE Resource Type Registry # {#iana-rt}
 
@@ -1283,7 +1283,7 @@ IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the
 
 * Description: Group-membership resource of an OSCORE Group Manager.
 
-* Reference: \[\[This specification\]\]
+* Reference: \[\[This document\]\]
 
 ## ACE Scope Semantics Registry # {#iana-scope-semantics}
 
@@ -1293,7 +1293,7 @@ IANA is asked to register the following entry in the  "ACE Scope Semantics" regi
 
 * Description: Access to OSCORE groups through the ACE Group Manager.
 
-* Reference: \[\[This specification\]\]
+* Reference: \[\[This document\]\]
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
@@ -1303,7 +1303,7 @@ IANA is asked to register the following entry in the  "ACE Groupcomm Errors" reg
 
 * Description: Group currently not active.
 
-* Reference: \[\[This specification\]\]
+* Reference: \[\[This document\]\]
 
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
