@@ -665,7 +665,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
       - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'cs_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
    
-   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. It takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Acceptable values denote an encoding that explicitly conveys the public key algorithm.
+   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. It takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Acceptable values denote an encoding that explicitly conveys the public key algorithm (REQ6).
 
       At the time of writing this specification, acceptable public key encodings are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they explicitly convey the public key algorithm.
 
@@ -1370,7 +1370,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': format and values from the COSE key type capabilities as specified in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-* REQ6 - If used, specify the acceptable values for 'pub\_key\_enc': values are taken from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Acceptable values denote an encoding that explicitly conveys the public key algorithm (see {{ssec-token-post}}).
+* REQ6 - Specify the acceptable formats of public keys and, if used, the acceptable values for 'pub\_key\_enc': acceptable formats explicitly convey the public key algorithm (see {{ssec-token-post}} and {{ssec-join-resp}}). Consistent acceptable values for 'pub\_key\_enc' are taken from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}.
 
 * REQ7 - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
 
@@ -1407,8 +1407,6 @@ This appendix lists the specifications on this application profile of ACE, based
 * REQ22 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g. as in {{I-D.ietf-ace-oscore-gm-admin}}.
 
 * REQ23 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
-
-* OPT1 (Optional) - Specify the encoding of public keys, of 'client\_cred', and of 'pub\_keys' if COSE_Keys are not used: no.
 
 * OPT2 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
