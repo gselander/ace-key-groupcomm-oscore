@@ -1103,6 +1103,38 @@ Note to RFC Editor: Please replace all occurrences of "\[\[This document\]\]" wi
 
 This document has the following actions for IANA.
 
+## OAuth Parameters Registry {#iana-kinfo}
+
+The following registrations are done for the OAuth Parameters Registry following the procedure specified in {{Section 11.2 of RFC6749}}.
+
+*  Parameter name: ecdh_info
+*  Parameter usage location: client-rs request, rs-client response
+*  Change Controller: IESG
+*  Specification Document(s): \[\[This specification\]\]
+
+&nbsp;
+
+*  Parameter name: gm_pub_keys_info
+*  Parameter usage location: client-rs request, rs-client response
+*  Change Controller: IESG
+*  Specification Document(s): \[\[This specification\]\]
+
+## OAuth Parameters CBOR Mappings Registry {#iana-kinfo-map}
+
+The following registrations are done for the OAuth Parameters CBOR Mappings Registry following the procedure specified in {{Section 8.10 of I-D.ietf-ace-oauth-authz}}.
+
+* Name: ecdh_info
+* CBOR Key: TBD (range -256 to 255)
+* Value Type: array
+* Reference: \[\[This specification\]\]
+
+&nbsp;
+
+* Name: gm_pub_keys_info
+* CBOR Key: TBD (range -256 to 255)
+* Value Type: array
+* Reference: \[\[This specification\]\]
+
 ## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
 
 IANA is asked to register the following entry to the "ACE Groupcomm Parameters" Registry defined in {{Section 10.5 of I-D.ietf-ace-key-groupcomm}}.
@@ -1517,6 +1549,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Always use 'peer_identifiers' to convey Sender IDs as node identifiers.
 
 * Improved and simplified set of default values for counter signature parameters and ECDH algorithm parameters.
+
+* Fixes to IANA registrations.
 
 * General format of parameters related to COSE capabilities, supporting future registered COSE algorithms (new Appendix).
 
