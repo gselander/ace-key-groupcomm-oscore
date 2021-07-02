@@ -673,15 +673,15 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    
    More specifically, the 'key' parameter is composed as follows.
 
-   * The 'hkdf' parameter, if present, has as value the HKDF Algorithm used in the OSCORE group.
+   * The 'hkdf' parameter, if present, has as value the HKDF Algorithm used in the OSCORE group. This parameter MAY be present.
    
-   * The 'salt' parameter, if present, has as value the OSCORE Master Salt used in the OSCORE group.
+   * The 'salt' parameter, if present, has as value the OSCORE Master Salt used in the OSCORE group. This parameter MAY be present.
    
-   * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value used in the OSCORE group.
+   * The 'ms' parameter includes the OSCORE Master Secret value used in the OSCORE group. This parameter MUST be present.
    
-   * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group.
+   * The 'contextId' parameter MUST be present and has as value the Group Identifier (Gid), i.e. the OSCORE ID Context of the OSCORE group. This parameter MUST be present.
 
-   * The 'group_senderId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the OSCORE group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
+   * The 'group_senderId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter MUST NOT be present if the node joins the OSCORE group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
 
    * The 'pub_key_enc' parameter MUST be present and specifies the encoding of the public keys of the group members. It takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}} (REQ6). Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
@@ -691,21 +691,21 @@ Then, the Group Manager replies to the joining node, providing the updated secur
     
         \[ As to C509 certificates, there is a pending registration requested by draft-ietf-cose-cbor-encoded-cert. \]
    
-   * The 'sign_enc_alg' parameter MUST be present. If the OSCORE group is a pairwise-only group, this parameter MUST be set to the CBOR simple value Null. Otherwise, this parameter specifies the Signature Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode.
+   * The 'sign_enc_alg' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the Signature Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}. 
    
-   * The 'sign_alg' parameter MUST be present. If the OSCORE group is a pairwise-only group, this parameter MUST be set to the CBOR simple value Null. Otherwise, this parameter specifies the Signature Algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+   * The 'sign_alg' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the Signature Algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * The 'sign_params' parameter MUST be present if 'sign_alg' is not set to the CBOR simple value Null and MUST NOT be present otherwise. If present, it specifies the parameters of the Signature Algorithm. This parameter is a CBOR array, which includes the following two elements:
+   * The 'sign_params' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the parameters of the Signature Algorithm. This parameter is a CBOR array, which includes the following two elements:
 
       - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the Signature Algorithm indicated in 'sign_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
       - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the Signature Algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
-
-   * The 'alg' parameter MUST be present. If the OSCORE group is a signature-only group, this parameter MUST be set to the CBOR simple value Null. Otherwise, this parameter specifies the AEAD Algorithm used in the OSCORE group to encrypt messages protected with the pairwise mode.
+      
+   * The 'alg' parameter MUST NOT be present if the OSCORE group is a signature-only group. Otherwise, it MUST be present and specifies the AEAD Algorithm used in the OSCORE group to encrypt messages protected with the pairwise mode. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
      
-   * The 'ecdh_alg' parameter MUST be present. If the OSCORE group is a signature-only group, this parameter MUST be set to the CBOR simple value Null. Otherwise, this parameter specifies the Pairwise Key Agreement Algorithm used in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+   * The 'ecdh_alg' parameter MUST NOT be present if the OSCORE group is a signature-only group. Otherwise, it MUST be present and specifies the Pairwise Key Agreement Algorithm used in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * The 'ecdh_params' parameter parameter MUST be present if 'ecdh_alg' is not set to the CBOR simple value Null and MUST NOT be present otherwise. If present, it specifies the parameters of the Pairwise Key Agreement Algorithm. This parameter is a CBOR array, which includes the following two elements:
+   * The 'ecdh_params' parameter MUST NOT be present if the OSCORE group is a signature-only group. Otherwise, it MUST be present and specifies the parameters of the Pairwise Key Agreement Algorithm. This parameter is a CBOR array, which includes the following two elements:
    
       - 'ecdh_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'ecdh_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
