@@ -765,7 +765,13 @@ Upon receiving the Joining Response, the joining node retrieves the Group Manage
 
 In case of failed verification of the PoP evidence, the joining node MUST stop processing the Joining Response and MAY send a new Joining Request to the Group Manager (see {{ssec-join-req-sending}}).
 
-In case of successful verification of the PoP evidence, the joining node uses the information received in the Joining Response to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the OSCORE group.
+In case of successful verification of the PoP evidence, the joining node uses the information received in the Joining Response to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If the following parameters were not included in the 'key' parameter of the Joining Response, the joining node considers the following default values, consistently with {{Section 3.2 of RFC8613}}.
+
+* Absent the 'hkdf' parameter, the joining node considers HKDF SHA-256 (COSE algorithm encoding: -10) as HKDF Algorithm.
+
+* Absent the 'salt' parameter, the joining node considers the empty byte string as Master Salt.
+
+In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the OSCORE group.
 
 From then on, the joining node can exchange group messages secured with Group OSCORE as described in {{I-D.ietf-core-oscore-groupcomm}}. When doing so:
 
