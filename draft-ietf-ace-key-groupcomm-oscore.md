@@ -675,7 +675,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'ms' parameter MUST be present and includes the OSCORE Master Secret value used in the OSCORE group.
 
-   * The 'hkdf' parameter, if present, has as value the KDF algorithm used in the OSCORE group.
+   * The 'hkdf' parameter, if present, has as value the HKDF algorithm used in the OSCORE group.
 
    * The 'alg' parameter, if present, has as value the AEAD algorithm used in the OSCORE group.
 
@@ -1070,13 +1070,25 @@ Furthermore, some of these group members can be in multiple groups, all of which
 
 This section defines the default values that the Group Manager assumes for the configuration parameters of an OSCORE group, unless differently specified when creating and configuring the group. This can be achieved as specified in {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The Group Manager SHOULD use the same default values defined in {{Section 3.2 of RFC8613}} for both the HKDF algorithm and the AEAD algorithm used in the group.
+## General 
 
-The Group Manager SHOULD use the following default values for the algorithm, and algorithm parameters used to countersign messages in the group, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
+For the HKDF Algorithm 'hkdf', the Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}}, i.e., HKDF SHA-256 (COSE algorithm encoding: -10).
 
-* For the algorithm 'sign_alg' used to countersign messages in the group, the signature algorithm EdDSA {{RFC8032}}.
+For the format 'pub_key_enc' used to encode the public keys in the group, the Group Manager SHOULD use a CBOR Web Token (CWT){{RFC8392}} or an unprotected CWT Claim Set {{I-D.ietf-rats-uccs}}.
 
-* For the parameters 'sign_params' of the signature algorithm:
+   \[
+      This is a pending registration requested by draft-ietf-lake-edhoc.
+   \]
+
+## Group Mode
+
+This section applies if the group uses (also) the group mode of Group OSCORE.
+
+The Group Manager SHOULD use the following default values for the Signature Algorithm and related parameters, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
+
+* For the Signature Algorithm 'sign_alg' used to countersign messages protected with the group mode, the signature algorithm EdDSA {{RFC8032}}.
+
+* For the parameters 'sign_params' of the Signature Algorithm:
 
     - The array \[\[OKP\], \[OKP, Ed25519\]\], in case EdDSA is assumed or specified for 'sign_alg'. In particular, this indicates to use the COSE key type OKP and the elliptic curve Ed25519 {{RFC8032}}.
     
@@ -1088,17 +1100,17 @@ The Group Manager SHOULD use the following default values for the algorithm, and
     
     - The array \[\[RSA\], \[RSA\]\], in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type RSA.
 
-* For the 'pub_key_enc' encoding of the public keys of the group members, a CBOR Web Token (CWT){{RFC8392}} or an unprotected CWT Claim Set {{I-D.ietf-rats-uccs}}.
+## Pairwise Mode
 
-   \[
-      This is a pending registration requested by draft-ietf-lake-edhoc.
-   \]
+This section applies if the group uses (also) the pairwise mode of Group OSCORE.
 
-If the group supports the pairwise mode of Group OSCORE, the Group Manager SHOULD use the following default values for the algorithm and algorithm parameters used to compute static-static Diffie-Hellman shared secrets, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
+The Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}} for the AEAD Algorithm used to encrypt messages protected with the pairwise mode, i.e., AES-CCM-16-64-128 (COSE algorithm encoding: 10).
+    
+The Group Manager SHOULD use the following default values for the Pairwise Key Agreement Algorithm and related parameters, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
 
-* For the algorithm 'ecdh_alg' used to compute static-static Diffie-Hellman shared secrets, the ECDH algorithm ECDH-SS + HKDF-256 specified in {{Section 6.3.1 of I-D.ietf-cose-rfc8152bis-algs}}.
+* For the Pairwise Key Agreement Algorithm 'ecdh_alg' used to compute static-static Diffie-Hellman shared secrets, the ECDH algorithm ECDH-SS + HKDF-256 specified in {{Section 6.3.1 of I-D.ietf-cose-rfc8152bis-algs}}.
 
-* For the parameters 'ecdh_params' of the ECDH algorithm:
+* For the parameters 'ecdh_params' of the Pairwise Key Agreement Algorithm:
 
     - The array \[\[OKP\], \[OKP, X25519\]\], in case EdDSA is assumed or specified for 'sign_alg'. In particular, this indicates to use the COSE key type OKP and the elliptic curve X25519 {{RFC8032}}.
 
