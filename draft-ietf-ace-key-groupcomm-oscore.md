@@ -625,7 +625,7 @@ The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 
 
 * The Group Manager MUST return a 4.00 (Bad Request) response in case the Joining Request includes the 'client_cred' parameter but does not include both the 'cnonce' and 'client_cred_verify' parameters.
 
-* The Group Manager MUST return a 4.00 (Bad Request) response in case it cannot retrieve a public key with an accepted format for the joining node, either from the 'client_cred' parameter or as already stored.
+* The Group Manager MUST return a 4.00 (Bad Request) response in case an eligible public key for the joining node is neither present in the 'client_cred' parameter nor already stored.
 
 * The Group Manager MAY return a 4.00 (Bad Request) response in case all the following conditions hold.
 
@@ -1467,7 +1467,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ5 - If used, specify the acceptable values for 'sign\_key\_parameters': format and values from the COSE key type capabilities as specified in the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-* REQ6 - Specify the acceptable formats of public keys and, if used, the acceptable values for 'pub\_key\_enc': acceptable formats explicitly convey the public key algorithm (see {{ssec-token-post}} and {{ssec-join-resp}}). Consistent acceptable values for 'pub\_key\_enc' are taken from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}.
+* REQ6 - Specify the acceptable formats for encoding public keys and, if used, the acceptable values for 'pub\_key\_enc': acceptable formats explicitly convey the public key algorithm (see {{ssec-token-post}} and {{ssec-join-resp}}). Consistent acceptable values for 'pub\_key\_enc' are taken from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}.
 
 * REQ7 - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
 
@@ -1495,7 +1495,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ19 - Specify how the communication is secured between the Client and KDC: by means of any transport profile of ACE {{I-D.ietf-ace-oauth-authz}} between Client and Group Manager that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
-* REQ20a - Specify the exact approaches used to compute the PoP evidence to include in 'client_cred_verify', and which of those approaches is used in which case: see {{ssec-join-req-sending}} and {{ssec-join-req-processing}}.
+* REQ20a - Specify the exact approaches used to compute and verify the PoP evidence to include in 'client_cred_verify', and which of those approaches is used in which case: see {{ssec-join-req-sending}} and {{ssec-join-req-processing}}.
 
 * REQ20 - Specify how the nonce N\_S is generated, if the token is not being posted (e.g. if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
 
@@ -1513,9 +1513,9 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT5 (Optional) - Specify policies that instruct clients to retain unsuccessfully decrypted messages and for how long, so that they can be decrypted after getting updated keying material: no.
 
-* OPT6 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
+* OPT6 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
 
-* OPT7 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
+* OPT7 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
 
 * OPT8 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic: see {{ssec-auth-req}}.
 
