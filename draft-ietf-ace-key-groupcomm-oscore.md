@@ -669,7 +669,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'key' parameter includes what the joining node needs in order to set up the Group OSCORE Security Context as per {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
-   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId' 'cs_alg', 'cs_params', 'cs_key_enc', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this document.
+   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId' 'sign_alg', 'sign_params', 'pub_key_enc', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this document.
    
    More specifically, the 'key' parameter is composed as follows.
 
@@ -685,15 +685,15 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    
    * The 'group_senderId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter is not present if the node joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
 
-   * The 'cs_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+   * The 'sign_alg' parameter MUST be present and specifies the algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * The 'cs_params' parameter MUST be present and specifies the parameters of the signature algorithm. This parameter is a CBOR array, which includes the following two elements:
+   * The 'sign_params' parameter MUST be present and specifies the parameters of the signature algorithm. This parameter is a CBOR array, which includes the following two elements:
 
-      - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'cs_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+      - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-      - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'cs_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
+      - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
    
-   * The 'cs_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. It takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}} (REQ6). Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
+   * The 'pub_key_enc' parameter MAY be present and specifies the encoding of the public keys of the group members. It takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}} (REQ6). Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
       At the time of writing this specification, acceptable public key encodings are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
@@ -1074,21 +1074,21 @@ The Group Manager SHOULD use the same default values defined in {{Section 3.2 of
 
 The Group Manager SHOULD use the following default values for the algorithm, and algorithm parameters used to countersign messages in the group, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
 
-* For the algorithm 'cs_alg' used to countersign messages in the group, the signature algorithm EdDSA {{RFC8032}}.
+* For the algorithm 'sign_alg' used to countersign messages in the group, the signature algorithm EdDSA {{RFC8032}}.
 
-* For the parameters 'cs_params' of the signature algorithm:
+* For the parameters 'sign_params' of the signature algorithm:
 
-    - The array \[\[OKP\], \[OKP, Ed25519\]\], in case EdDSA is assumed or specified for 'cs_alg'. In particular, this indicates to use the COSE key type OKP and the elliptic curve Ed25519 {{RFC8032}}.
+    - The array \[\[OKP\], \[OKP, Ed25519\]\], in case EdDSA is assumed or specified for 'sign_alg'. In particular, this indicates to use the COSE key type OKP and the elliptic curve Ed25519 {{RFC8032}}.
     
-    - The array \[\[EC2\], \[EC2, P-256\]\], in case ES256 {{RFC6979}} is specified for 'cs_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-256.
+    - The array \[\[EC2\], \[EC2, P-256\]\], in case ES256 {{RFC6979}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-256.
     
-    - The array \[\[EC2\], \[EC2, P-384\]\], in case ES384 {{RFC6979}} is specified for 'cs_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-384.
+    - The array \[\[EC2\], \[EC2, P-384\]\], in case ES384 {{RFC6979}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-384.
 
-    - The array \[\[EC2\], \[EC2, P-521\]\], in case ES512 {{RFC6979}} is specified for 'cs_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-521. 
+    - The array \[\[EC2\], \[EC2, P-521\]\], in case ES512 {{RFC6979}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-521. 
     
-    - The array \[\[RSA\], \[RSA\]\], in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'cs_alg'. In particular, this indicates to use the COSE key type RSA.
+    - The array \[\[RSA\], \[RSA\]\], in case PS256, PS384 or PS512 {{RFC8017}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type RSA.
 
-* For the 'cs_key_enc' encoding of the public keys of the group members, a CBOR Web Token (CWT){{RFC8392}} or an unprotected CWT Claim Set {{I-D.ietf-rats-uccs}}.
+* For the 'pub_key_enc' encoding of the public keys of the group members, a CBOR Web Token (CWT){{RFC8392}} or an unprotected CWT Claim Set {{I-D.ietf-rats-uccs}}.
 
    \[
       This is a pending registration requested by draft-ietf-lake-edhoc.
@@ -1100,13 +1100,13 @@ If the group supports the pairwise mode of Group OSCORE, the Group Manager SHOUL
 
 * For the parameters 'ecdh_params' of the ECDH algorithm:
 
-    - The array \[\[OKP\], \[OKP, X25519\]\], in case EdDSA is assumed or specified for 'cs_alg'. In particular, this indicates to use the COSE key type OKP and the elliptic curve X25519 {{RFC8032}}.
+    - The array \[\[OKP\], \[OKP, X25519\]\], in case EdDSA is assumed or specified for 'sign_alg'. In particular, this indicates to use the COSE key type OKP and the elliptic curve X25519 {{RFC8032}}.
 
-    - The array \[\[EC2\], \[EC2, P-256\]\], in case ES256 {{RFC6979}} is specified for 'cs_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-256.
+    - The array \[\[EC2\], \[EC2, P-256\]\], in case ES256 {{RFC6979}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-256.
     
-    - The array \[\[EC2\], \[EC2, P-384\]\], in case ES384 {{RFC6979}} is specified for 'cs_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-384.
+    - The array \[\[EC2\], \[EC2, P-384\]\], in case ES384 {{RFC6979}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-384.
 
-    - The array \[\[EC2\], \[EC2, P-521\]\], in case ES512 {{RFC6979}} is specified for 'cs_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-521.
+    - The array \[\[EC2\], \[EC2, P-521\]\], in case ES512 {{RFC6979}} is specified for 'sign_alg'. In particular, this indicates to use the COSE key type EC2 and the elliptic curve P-521.
     
 # Security Considerations {#sec-security-considerations}
 
@@ -1261,7 +1261,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 &nbsp;
 
-*  Name: cs_alg
+*  Name: sign_alg
 *  CBOR Label: TBD5
 *  CBOR Type: tstr / int
 *  Registry: COSE Algorithms
@@ -1270,7 +1270,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 &nbsp;
 
-*  Name: cs_params
+*  Name: sign_params
 *  CBOR Label: TBD6
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
@@ -1279,7 +1279,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 &nbsp;
 
-*  Name: cs_key_enc
+*  Name: pub_key_enc
 *  CBOR Label: TBD7
 *  CBOR Type: integer
 *  Registry: COSE Header Parameters
@@ -1535,7 +1535,7 @@ To enable the seamless use of such future registered algorithms, this section de
 
 * Each 'ecdh_info_entry' of the 'ecdh_info' parameter in the Token Post response, see {{ssec-token-post}} and {{ecdh-info}};
 
-* The 'cs_params' and 'ecdh_params' parameters within the 'key' parameter, see {{ssec-join-resp}}, as part of the response payloads used in {{ssec-join-resp}}, {{ssec-updated-key-only}}, {{ssec-updated-and-individual-key}} and {{sec-group-rekeying-process}}.
+* The 'sign_params' and 'ecdh_params' parameters within the 'key' parameter, see {{ssec-join-resp}}, as part of the response payloads used in {{ssec-join-resp}}, {{ssec-updated-key-only}}, {{ssec-updated-and-individual-key}} and {{sec-group-rekeying-process}}.
 
 Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes the analogous general format for 'sign_info_entry' of the 'sign_info' parameter in the Token Post response, see {{ssec-token-post}}.
 
@@ -1573,13 +1573,13 @@ The format of each 'ecdh_info_entry' (see {{ssec-token-post}} and {{ecdh-info}})
 
 The format of 'key' (see {{ssec-join-resp}}) is generalized as follows.
 
-* The 'cs_params' array includes N+1 elements, whose exact structure and value depend on the value of the signature algorithm specified in 'cs_alg'.
+* The 'sign_params' array includes N+1 elements, whose exact structure and value depend on the value of the signature algorithm specified in 'sign_alg'.
 
-   - The first element, i.e. 'cs_params'\[0\], is the array of the N COSE capabilities for the signature algorithm, as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (see {{Section 8.1 of I-D.ietf-cose-rfc8152bis-algs}}).
+   - The first element, i.e. 'sign_params'\[0\], is the array of the N COSE capabilities for the signature algorithm, as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}} (see {{Section 8.1 of I-D.ietf-cose-rfc8152bis-algs}}).
 
-   - Each following element 'cs_params'\[i\], i.e. with index i > 0, is the array of COSE capabilities for the algorithm capability specified in 'cs_params'\[0\]\[i-1\].
+   - Each following element 'sign_params'\[i\], i.e. with index i > 0, is the array of COSE capabilities for the algorithm capability specified in 'sign_params'\[0\]\[i-1\].
 
-   For example, if 'cs_params'\[0\]\[0\] specifies the key type as capability of the algorithm, then 'cs_params'\[1\] is the array of COSE capabilities for the COSE key type associated to the signature algorithm, as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see {{Section 8.2 of I-D.ietf-cose-rfc8152bis-algs}}).
+   For example, if 'sign_params'\[0\]\[0\] specifies the key type as capability of the algorithm, then 'sign_params'\[1\] is the array of COSE capabilities for the COSE key type associated to the signature algorithm, as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}} (see {{Section 8.2 of I-D.ietf-cose-rfc8152bis-algs}}).
 
 * The 'ecdh_params' array includes M+1 elements, whose exact structure and value depend on the value of the ECDH algorithm specified in 'ecdh_alg'.
 
