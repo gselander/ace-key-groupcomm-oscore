@@ -252,7 +252,7 @@ The Group Manager MAY rekey the group for other reasons, e.g., according to an a
 
 Throughout the lifetime of every group, the Group Manager MUST maintain a collection of stale Sender IDs for that group.
 
-The collection associated to a group MUST include up to N ordered sets of stale OSCORE Sender IDs. The value of N is immutable throughout the lifetime of the group. It is up to the application to specify the value of N, possibly on a per-group basis.
+The collection associated to a group MUST include up to N ordered sets of stale OSCORE Sender IDs. It is up to the application to specify the value of N, possibly on a per-group basis.
 
 The N-th set includes the Sender IDs that have become "stale" under the current version V of the group keying material. The (N-1)-th set refers to the immediately previous version (V - 1) of the group keying material, and so on.
 
@@ -261,6 +261,8 @@ In the following cases, the Group Manager MUST add a new element to the most rec
 * When a current group member obtains a new Sender ID, its old Sender ID is added to X. This happens when the Group Manager assigns a new Sender ID upon request from the group member (see {{sec-new-key}}), or in case the group member re-joins the group (see {{ssec-join-req-sending}} and {{ssec-join-resp}}), thus also obtaining a new Sender ID.
 
 * When a current group member leaves the group, its current Sender ID is added to X. This happens when a group member requests to leave the group (see {{sec-leave-req}}) or is forcibly evicted from the group (see {{sec-leaving}}).
+
+The value of N can change throughout the lifetime of the group. If the new value N' is smaller than N, the Group Manager MUST preserve the N' most recent sets in the collection and MUST delete the (N - N') oldest sets.
 
 Finally, the Group Manager MUST perform the following actions, when the group is rekeyed and the group shifts to the next version V' = (V + 1) of the group keying material.
 
