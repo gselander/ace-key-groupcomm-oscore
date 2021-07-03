@@ -1308,6 +1308,8 @@ For the format 'pub_key_enc' used to encode the public keys in the group, the Gr
       This is a pending registration requested by draft-ietf-lake-edhoc.
    \]
 
+The Group Manager SHOULD store at most N = 3 sets of stale Sender IDs in the collection associated to the group (see {{sssec-stale-sender-ids}}).
+
 ## Group Mode
 
 This section applies if the group uses (also) the group mode of Group OSCORE.
