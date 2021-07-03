@@ -182,7 +182,7 @@ Additionally, this document makes use of the following terminology.
 
 * Monitor: member of an OSCORE group that is configured as responder and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
-* Signature verifier: entity external to the OSCORE group and intended to verify the countersignature of messages exchanged in the group. An authorized signature verifier does not join the OSCORE group as an actual member, yet it can retrieve the public keys of the current group members from the Group Manager.
+* Signature verifier: entity external to the OSCORE group and intended to verify the countersignature of messages exchanged in the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). An authorized signature verifier does not join the OSCORE group as an actual member, yet it can retrieve the public keys of the current group members from the Group Manager.
 
 * Signature-only group: an OSCORE group that uses only the group mode (see {{Section 8 of I-D.ietf-core-oscore-groupcomm}}).
 
@@ -320,7 +320,7 @@ Furthermore, if the AS uses the extended format of scope defined in {{Section 6 
 
 # Interface at the Group Manager {#sec-interface-GM}
 
-The Group Manager provides the interface defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}, with the additional sub-resources defined in {{ssec-resource-active}}-{{ssec-resource-gm-pub-key}} of this document.
+The Group Manager provides the interface defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}, with the additional sub-resources defined in {{ssec-resource-active}}-{{ssec-resource-verif-data}} of this document.
 
 Furthermore, {{ssec-admitted-methods}} provides a summary of the CoAP methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ8).
 
@@ -344,9 +344,9 @@ The Group Manager also verifies that the roles granted to the requesting client 
 
 Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
 
-If verification succeeds, the handler returns a 2.05 (Content) message containing the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is fine to happen.
+If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying the current status of the group, i.e., active or inactive. The payload of the response is formatted as defined in {{sec-status}}.
 
-The method to set the current group status, i.e. active or inactive, is out of the scope of this document, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
+The method to set the current group status is out of the scope of this document, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
 
 ## ace-group/GROUPNAME/gm-pub-key {#ssec-resource-gm-pub-key}
 
@@ -360,17 +360,27 @@ The Group Manager verifies that the group name in the /ace-group/GROUPNAME/gm-pu
 
 The Group Manager also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ8). If either verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
 
-If the requesting client is a signature verifier and GROUPNAME denotes a pairwise-only group, the Group Manager MUST respond with a 4.00 (Bad Request) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
+If the requesting client is not a current group member and GROUPNAME denotes a pairwise-only group, the Group Manager MUST respond with a 4.00 (Bad Request) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
 
-If verification succeeds, the handler returns a 2.05 (Content) message, which MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is formatted as a CBOR map, which MUST contain the following parameters defined in {{ssec-iana-ace-groupcomm-parameters-registry}}.
+If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying the Group Manager's public key together with a proof-of-possession evidence. The response MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is a CBOR map, which is formatted as defined in {{sec-gm-pub-key}}.
 
-* The 'kdc_nonce' parameter, specifying a nonce generated by the Group Manager. This parameter is encoded like the 'kdc_nonce' parameter in the Joining Response (see {{ssec-join-resp}}).
+## ace-group/GROUPNAME/verif-data {#ssec-resource-verif-data}
 
-* The 'kdc_cred' parameter, specifying the Group Manager's public key. This parameter is encoded like the 'kdc_cred' parameter in the Joining Response (see {{ssec-join-resp}}).
+This resource implements a GET handler.
 
-* The 'kdc_cred_verify' parameter, specifying a proof-of-possession (PoP) evidence computed by the Group Manager. This parameter is encoded like the 'kdc_cred_verify' parameter in the Joining Response (see {{ssec-join-resp}}).
+### GET Handler {#verif-data-get}
 
-   The PoP evidence is computed over the nonce specified in the 'kdc_nonce' parameter and taken as PoP input, by means of the same method used when preparing the Joining Response (see {{ssec-join-resp}}). In particular, if the group is a pairwise-only group, the Group Manager computes IKM by using its own Diffie-Hellman private key as well as the Diffie-Hellman public key of the requesting client.
+The handler expects a GET request.
+
+The Group Manager verifies that the group name in the /ace-group/GROUPNAME/verif-data path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
+
+The Group Manager also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ8). If either verification fails, the Group Manager MUST respond with a 4.01 (Unauthorized) error message.
+
+If the requesting client is a current group member, the Group Manager MUST respond with a 4.01 (Unauthorized) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 8 ("Operation permitted only to signature verifiers").
+
+If GROUPNAME denotes a pairwise-only group, the Group Manager MUST respond with a 4.00 (Bad Request) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
+
+If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying data that allows also a signature verifier to verify countersignatures of messages protected with the group mode and sent to the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is a CBOR map, which is formatted as defined in {{sec-verif-data}}.
 
 ## Admitted Methods {#ssec-admitted-methods}
 
@@ -386,9 +396,11 @@ The table in {{method-table}} summarizes the CoAP methods admitted to access dif
 +--------------------------------+--------+-------+-------+-------+
 | ace-group/GROUPNAME/active     | G      | G     | -     | -     |
 +--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/pub-key    | G F    | G F   | G F   | -     |
-+--------------------------------+--------+-------+-------+-------+
 | ace-group/GROUPNAME/gm-pub-key | G      | G     | G     | -     |
++--------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/verif-data | -      | -     | G     | -     |
++--------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/pub-key    | G F    | G F   | G F   | -     |
 +--------------------------------+--------+-------+-------+-------+
 | ace-group/GROUPNAME/policies   | G      | G     | -     | -     |
 +--------------------------------+--------+-------+-------+-------+
@@ -595,7 +607,7 @@ It is up to applications to define how N_S is computed in further alternative se
 
 The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}. Additionally, the following applies.
 
-* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group that the joining node has been trying to join is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 8 ("Group currently not active").
+* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group that the joining node has been trying to join is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 9 ("Group currently not active").
 
 * In case the joining node is not going to join the group exclusively as monitor, the Group Manager MUST return a 5.03 (Service Unavailable) response if there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
 
@@ -669,13 +681,13 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'key' parameter includes what the joining node needs in order to set up the Group OSCORE Security Context as per {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
-   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId', 'sign_enc_alg', 'sign_alg', 'sign_params', 'pub_key_enc', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this document.
+   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this document.
    
    More specifically, the 'key' parameter is composed as follows.
 
-   * The 'hkdf' parameter, if present, has as value the HKDF Algorithm used in the OSCORE group. This parameter MAY be present.
+   * The 'hkdf' parameter, if present, has as value the HKDF Algorithm used in the OSCORE group. This parameter MAY be omitted, if the HKDF Algorithm used in the group is HKDF SHA-256. Otherwise, this parameter MUST be present.
    
-   * The 'salt' parameter, if present, has as value the OSCORE Master Salt used in the OSCORE group. This parameter MAY be present.
+   * The 'salt' parameter, if present, has as value the OSCORE Master Salt used in the OSCORE group. This parameter MAY be omitted, if the Master Salt used in the group is the empty byte string. Otherwise, this parameter MUST be present.
    
    * The 'ms' parameter includes the OSCORE Master Secret value used in the OSCORE group. This parameter MUST be present.
    
@@ -701,7 +713,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
       - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the Signature Algorithm indicated in 'sign_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
       
-   * The 'alg' parameter MUST NOT be present if the OSCORE group is a signature-only group. Otherwise, it MUST be present and specifies the AEAD Algorithm used in the OSCORE group to encrypt messages protected with the pairwise mode. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+   * The 'alg' parameter MUST NOT be present if the OSCORE group is a signature-only group. Otherwise, it MUST be present and specifies the AEAD Algorithm used in the OSCORE group to encrypt messages protected with the pairwise mode.
      
    * The 'ecdh_alg' parameter MUST NOT be present if the OSCORE group is a signature-only group. Otherwise, it MUST be present and specifies the Pairwise Key Agreement Algorithm used in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -767,9 +779,9 @@ In case of failed verification of the PoP evidence, the joining node MUST stop p
 
 In case of successful verification of the PoP evidence, the joining node uses the information received in the Joining Response to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. If the following parameters were not included in the 'key' parameter of the Joining Response, the joining node considers the following default values, consistently with {{Section 3.2 of RFC8613}}.
 
-* Absent the 'hkdf' parameter, the joining node considers HKDF SHA-256 (COSE algorithm encoding: -10) as HKDF Algorithm.
+* Absent the 'hkdf' parameter, the joining node considers HKDF SHA-256 as HKDF Algorithm to use in the OSCORE group.
 
-* Absent the 'salt' parameter, the joining node considers the empty byte string as Master Salt.
+* Absent the 'salt' parameter, the joining node considers the empty byte string as Master Salt to use in the OSCORE group.
 
 In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the OSCORE group.
 
@@ -851,7 +863,7 @@ When this happens, the group member MUST send a Key Renewal Request message to t
 
 Upon receiving the Key Renewal Request, the Group Manager processes it as defined in {{Section 4.1.6.1 of I-D.ietf-ace-key-groupcomm}}, with the following additions.
 
-The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group identified by GROUPNAME is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Group currently not active").
+The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group identified by GROUPNAME is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 9 ("Group currently not active").
 
 Otherwise, the Group Manager performs one of the following actions.
 
@@ -869,7 +881,7 @@ Otherwise, the Group Manager performs one of the following actions.
        
        The Group Manager MUST return a 5.03 (Service Unavailable) response in case there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
 
-# Retrieval of Public Keys and Roles for Group Members # {#sec-pub-keys}
+# Retrieval of Public Keys and Roles of Group Members # {#sec-pub-keys}
 
 A group member or a signature verifier may need to retrieve the public keys of (other) group members. To this end, the group member or signature verifier sends a Public Key Request message to the Group Manager, as per {{Section 4.6 of I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /ace-group/GROUPNAME/pub-key at the Group Manager.
 
@@ -899,7 +911,7 @@ Upon receiving the Public Key Update Request, the Group Manager processes it as 
 
 * The Group Manager verifies the PoP challenge included in 'client_cred_verify' in the same way taken when processing a Joining Request for the OSCORE group in question, as defined in {{ssec-join-req-processing}} (REQ20).
 
-* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group identified by GROUPNAME is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Group currently not active").
+* The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group identified by GROUPNAME is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 9 ("Group currently not active").
 
 * If the requesting group member has exclusively the role of monitor, the Group Manager replies with a 4.00 (Bad request) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 1 ("Request inconsistent with the current roles").
 
@@ -909,9 +921,19 @@ Upon receiving the Public Key Update Request, the Group Manager processes it as 
 
 A group member or a signature verifier may need to retrieve the public key of the Group Manager. To this end, the group member or signature verifier sends a Group Manager Public Key Request message to the Group Manager.
 
-In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/gm-pub-key at the Group Manager defined in {{ssec-resource-gm-pub-key}} of this document, where GROUPNAME is the name of the OSCORE group. The success Group Manager Public Key Response is formatted as defined in {{ssec-resource-gm-pub-key}} of this document.
+In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/gm-pub-key at the Group Manager defined in {{ssec-resource-gm-pub-key}} of this document, where GROUPNAME is the name of the OSCORE group.
 
-Upon receiving a 2.05 (Content) response, the group member or signature verifier retrieves the Group Manager's public key from the 'kdc_cred' parameter, and MUST verify the proof-of-possession (PoP) evidence specified in the 'kdc_cred_verify' parameter. That is:
+The payload of the 2.05 (Content) Group Manager Public Key Response is a CBOR map, which MUST contain the following parameters defined in {{ssec-iana-ace-groupcomm-parameters-registry}}.
+
+* The 'kdc_nonce' parameter, specifying a nonce generated by the Group Manager. This parameter is encoded like the 'kdc_nonce' parameter in the Joining Response (see {{ssec-join-resp}}).
+
+* The 'kdc_cred' parameter, specifying the Group Manager's public key. This parameter is encoded like the 'kdc_cred' parameter in the Joining Response (see {{ssec-join-resp}}).
+
+* The 'kdc_cred_verify' parameter, specifying a proof-of-possession (PoP) evidence computed by the Group Manager. This parameter is encoded like the 'kdc_cred_verify' parameter in the Joining Response (see {{ssec-join-resp}}).
+
+   The PoP evidence is computed over the nonce specified in the 'kdc_nonce' parameter and taken as PoP input, by means of the same method used when preparing the Joining Response (see {{ssec-join-resp}}). In particular, if the group is a pairwise-only group, the Group Manager computes IKM by using its own Diffie-Hellman private key as well as the Diffie-Hellman public key of the requesting client.
+
+Upon receiving a 2.05 (Content) Group Manager Public Key Response, the group member or signature verifier retrieves the Group Manager's public key from the 'kdc_cred' parameter, and MUST verify the proof-of-possession (PoP) evidence specified in the 'kdc_cred_verify' parameter. That is:
 
 * A group member verifies the PoP evidence by means of the same method used when processing the Joining Response (see {{ssec-join-resp}}). In particular, if the group is a pairwise-only group, the group member computes IKM by using its own Diffie-Hellman private key as well as the Diffie-Hellman public key of the Group Manager.
 
@@ -934,6 +956,39 @@ Member                                                       Manager
 ~~~~~~~~~~~
 {: #fig-gm-pub-key-req-resp title="Message Flow of Group Manager Public Key Request-Response" artwork-align="center"}
 
+# Retrieval of Signature Verification Data # {#sec-verif-data}
+
+A signature verifier may need to retrieve data required to verify countersignatures of messages protected with the group mode and sent to a group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). To this end, the signature verifier sends a Signature Verification Data Request message to the Group Manager.
+
+In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/verif-data at the Group Manager defined in {{ssec-resource-verif-data}} of this document, where GROUPNAME is the name of the OSCORE group.
+
+The payload of the 2.05 (Content) Signature Verification Data Response is a CBOR map, which has the format used for the Joining Response message in {{ssec-join-resp}}, with the following differences.
+
+* From the Joining Response message, only the parameters 'gkty', 'key', 'num', 'exp' and 'ace-groupcomm-profile' are present. In particular, the 'key' parameter includes only the following data.
+
+   - The parameters 'hkdf', 'contextId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params'. These parameters MUST be present.
+   
+   - The parameters 'alg' and 'ecdh_alg'. These parameter MUST NOT be present if the group is a signature-only group. Otherwise, they MUST be present.
+
+* The parameter 'group_enc_key' is also included, with CBOR label defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter specifies the Group Encryption Key of the OSCORE Group, encoded as a CBOR byte string. The Group Manager derives the Group Encryption Key from the group keying material, as per {{Section 2.1.6 of I-D.ietf-core-oscore-groupcomm}}. This parameter MUST be present.
+
+In order to verify countersignatures in the group (see {{Section 8.5 of I-D.ietf-core-oscore-groupcomm}}), the signature verifier relies on: the data retrieved from the 2.05 (Content) Signature Verification Data Response; the public keys of the group members signing the messages to verify, that can be retrieved as defined in {{sec-pub-keys}}; and the public key of the Group Manager, which can be retrieved as defined in {{sec-gm-pub-key}}.
+
+{{fig-verif-data-req-resp}} gives an overview of the exchange described above.
+
+~~~~~~~~~~~
+Signature                                                     Group
+Verifier                                                     Manager
+  |                                                             |
+  |              Signature Verification Data Request            |
+  |------------------------------------------------------------>|
+  |              GET ace-group/GROUPNAME/verif-data             |
+  |                                                             |
+  |<--- Signature Verification Data Response: 2.05 (Content) ---|
+  |                                                             |
+~~~~~~~~~~~
+{: #fig-verif-data-req-resp title="Message Flow of Signature Verification Data Request-Response" artwork-align="center"}
+
 # Retrieval of Group Policies # {#sec-policies}
 
 A group member may request the current policies used in the OSCORE group. To this end, the group member sends a Policies Request, as per {{Section 4.8 of I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/policies at the Group Manager, where GROUPNAME is the name of the OSCORE group.
@@ -950,7 +1005,9 @@ Upon receiving the Version Request, the Group Manager processes it as per {{Sect
 
 A group member may request the current status of the the OSCORE group, i.e. active or inactive. To this end, the group member sends a Group Status Request to the Group Manager.
 
-In particular, the group member sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/active at the Group Manager defined in {{ssec-resource-active}} of this document, where GROUPNAME is the name of the OSCORE group. The success Group Status Response is formatted as defined in {{ssec-resource-active}} of this document.
+In particular, the group member sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/active at the Group Manager defined in {{ssec-resource-active}} of this document, where GROUPNAME is the name of the OSCORE group.
+
+The payload of the 2.05 (Content) Group Status Response includes the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is fine to happen.
 
 Upon learning from a 2.05 (Content) response that the group is currently inactive, the group member SHOULD stop taking part in communications within the group, until it becomes active again.
 
@@ -1048,9 +1105,9 @@ Across the rekeying execution, the Group Manager MUST preserve the same unchange
 
 The Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
 
-As group rekeying message, the Group Manager uses the same format of the Joining Response message in {{ssec-join-resp}}. In particular:
+As group rekeying message, the Group Manager uses the same format used for the Joining Response message in {{ssec-join-resp}}, with the following differences.
 
-* Only the parameters 'gkty', 'key', 'num', 'ace-groupcomm-profile' and 'exp' are present.
+* Only the parameters 'gkty', 'key', 'num', 'exp', and 'ace-groupcomm-profile' are present.
 
 * The 'ms' parameter of the 'key' parameter specifies the new OSCORE Master Secret value.
 
@@ -1251,6 +1308,13 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 * CBOR Type: Array
 * Reference: \[\[This document\]\] ({{ssec-join-req-processing}})
 
+&nbsp;
+
+* Name: group_enc_key
+* CBOR Key: TBD
+* CBOR Type: Byte String
+* Reference: \[\[This document\]\] ({{verif-data-get}})
+
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
 IANA is asked to register the following entry to the "ACE Groupcomm Key" Registry defined in {{Section 10.6 of I-D.ietf-ace-key-groupcomm}}.
@@ -1283,6 +1347,15 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 &nbsp;
 
+*  Name: pub_key_enc
+*  CBOR Label: TBD
+*  CBOR Type: integer
+*  Registry: COSE Header Parameters
+*  Description: Encoding of Public Keys to be used in the OSCORE group
+*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
+
+&nbsp;
+
 *  Name: sign_enc_alg
 *  CBOR Label: TBD
 *  CBOR Type: tstr / int
@@ -1306,15 +1379,6 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
 *  Description: OSCORE Signature Algorithm Parameters
-*  Reference: \[\[This document\]\] ({{ssec-join-resp}})
-
-&nbsp;
-
-*  Name: pub_key_enc
-*  CBOR Label: TBD
-*  CBOR Type: integer
-*  Registry: COSE Header Parameters
-*  Description: Encoding of Public Keys to be used in the OSCORE group
 *  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 &nbsp;
@@ -1461,6 +1525,14 @@ IANA is asked to register the following entry in the  "ACE Groupcomm Errors" reg
 &nbsp;
 
 * Value: 8
+
+* Description: Operation permitted only to signature verifiers.
+
+* Reference: \[\[This document\]\]
+
+&nbsp;
+
+* Value: 9
 
 * Description: Group currently not active.
 
@@ -1629,6 +1701,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Removed redundancy of key type capabilities, from 'sign_info', 'ecdh_info' and 'key'.
 
 * New resource to retrieve the Group Manager's public key.
+
+* New resource to retrieve material for Signature Verifiers.
 
 * New parameter 'sign_enc_alg' related to the group mode.
 
