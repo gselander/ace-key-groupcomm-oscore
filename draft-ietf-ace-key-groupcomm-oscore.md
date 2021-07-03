@@ -214,23 +214,63 @@ A node performs the steps described in {{Section 4.3 of I-D.ietf-ace-key-groupco
 
 ## Overview of the Group Rekeying Process {#ssec-overview-group-rekeying-process}
 
-If the application requires backward and forward security, the Group Manager MUST generate new keying material and distribute it to the group (rekeying) upon membership changes.
+In a number of cases, the Group Manager has to generate new keying material and distribute it to the group (rekeying), as also discussed in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
 
-That is, the group is rekeyed when a node joins the group as a new member, or after a current member leaves the group. By doing so, a joining node cannot access communications in the group prior its joining, while a leaving node cannot access communications in the group after its leaving.
+To this end the Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} of this document. Future application profiles may define alternative rekeying message formats and distribution schemes, which MUST comply with the functional steps defined in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
 
-The keying material distributed through a group rekeying MUST include:
+Upon generating the new group keying material and before starting its distribution, the Group Manager MUST increment the version number of the group keying material. When rekeying a group, the Group Manager MUST preserve the current value of the OSCORE Sender ID of each member in that group.
+
+The data distributed to a group through a rekeying MUST include:
+
+* The new version number of the group keying material for the group.
 
 * A new Group Identifier (Gid) for the group as introduced in {{I-D.ietf-ace-key-groupcomm}}, used as ID Context parameter of the Group OSCORE Common Security Context of that group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}).
 
    Note that the Gid differs from the group name also introduced in {{I-D.ietf-ace-key-groupcomm}}, which is a plain, stable and invariant identifier, with no cryptographic relevance and meaning.
 
-* A new value for the Master Secret parameter of the Group OSCORE Common Security Context of that group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}).
+* A new value for the Master Secret parameter of the Group OSCORE Common Security Context of the group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}).
 
-Also, the distributed keying material MAY include a new value for the Master Salt parameter of the Group OSCORE Common Security Context of that group.
+* A set of stale Sender IDs, so that each rekeyed node can delete the Recipient Contexts and public keys associated to former members of the group (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). More details on the maintenance of stale Sender IDs are provided in {{sssec-stale-sender-ids}}.
 
-Upon generating the new group keying material and before starting its distribution, the Group Manager MUST increment the version number of the group keying material. When rekeying a group, the Group Manager MUST preserve the current value of the Sender ID of each member in that group.
+   This allows every group member to rely on owned public keys to confidently assert the group membership of other sender nodes, when receiving protected messages in the group.
 
-The Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}}. Future application profiles may define alternative message formats and distribution schemes to perform group rekeying.
+Also, the data distributed through a group rekeying MAY include a new value for the Master Salt parameter of the Group OSCORE Common Security Context of that group.
+
+The Group Manager MUST rekeying the group in the following cases.
+
+* The application requires backward security - In this case, the group is rekeyed when a node joins the group as a new member. Therefore, a joining node cannot access communications in the group prior its joining.
+
+* One or more nodes leave the group - That is, the group is rekeyed when one or more current members spontaneously request to leave the group (see {{sec-leave-req}}), or when the Group Manager forcibly evicts them from the group, e.g., due to expired or revoked authorization (see {{sec-leaving}}). Therefore, a leaving node cannot access communications in the group after its leaving, thus ensuring forward security in the group.
+
+   Due to the set of stale Sender IDs distributed through the rekeying, this ensures that a node owning the latest group keying material does not store the public keys of former group members (see {{Sections 2 and 10.1 of I-D.ietf-core-oscore-groupcomm}}).
+
+* Extension of group lifetime - That is, the group is rekeyed when the expiration time for the group keying material approaches or has passed, if it is appropriate to extend the group operation beyond that.
+
+The Group Manager MAY rekey the group for other reasons, e.g., according to an application-dependent rekeying period or scheduling.
+
+### Stale OSCORE Sender IDs {#sssec-stale-sender-ids}
+
+Throughout the lifetime of every group, the Group Manager MUST maintain a collection of stale Sender IDs for that group.
+
+The collection associated to a group MUST include up to N ordered sets of stale OSCORE Sender IDs. The value of N is immutable throughout the lifetime of the group. It is up to the application to specify the value of N, possibly on a per-group basis.
+
+The N-th set includes the Sender IDs that have become "stale" under the current version V of the group keying material. The (N-1)-th set refers to the immediately previous version (V - 1) of the group keying material, and so on.
+
+In the following cases, the Group Manager MUST add a new element to the most recent set X, i.e.,  the set associated to the current version V of the group keying material.
+
+* When a current group member obtains a new Sender ID, its old Sender ID is added to X. This happens when the Group Manager assigns a new Sender ID upon request from the group member (see {{sec-new-key}}), or in case the group member re-joins the group (see {{ssec-join-req-sending}} and {{ssec-join-resp}}), thus also obtaining a new Sender ID.
+
+* When a current group member leaves the group, its current Sender ID is added to X. This happens when a group member requests to leave the group (see {{sec-leave-req}}) or is forcibly evicted from the group (see {{sec-leaving}}).
+
+Finally, the Group Manager MUST perform the following actions, when the group is rekeyed and the group shifts to the next version V' = (V + 1) of the group keying material.
+
+1. The Group Manager rekeys the group. This includes also distributing the set of stale Sender IDs X associated to the old group keying material with version V (see {{ssec-overview-group-rekeying-process}}).
+
+2. After completing the group rekeying, the Group Manager creates a new empty set X' associated to the new version V' of the newly established group keying material, i.e., V' = (V + 1).
+
+3. If the current collection of stale Sender IDs has size N, the Group Manager deletes the oldest set in the collection.
+
+4. The Group Manager adds the new set X' to the collection of stale Sender IDs, as the most recent set. 
 
 # Format of Scope {#sec-format-scope}
 
@@ -609,7 +649,7 @@ The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 
 
 * The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group that the joining node has been trying to join is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 9 ("Group currently not active").
 
-* In case the joining node is not going to join the group exclusively as monitor, the Group Manager MUST return a 5.03 (Service Unavailable) response if there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
+* In case the joining node is not going to join the group exclusively as monitor, the Group Manager MUST return a 5.03 (Service Unavailable) response if there are currently no OSCORE Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
 
 * In case the joining node is not going to join the group exclusively as monitor and the Joining Request does not include the 'client_cred' parameter, the joining process fails if the Group Manager either: i) does not store a public key with an accepted format for the joining node; or ii) stores multiple public keys with an accepted format for the joining node.
 
@@ -667,11 +707,15 @@ If the processing of the Joining Request described in {{ssec-join-req-processing
 
 If the joining node has not taken exclusively the role of monitor, the Group Manager performs also the following actions.
 
-* The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node. If the joining node is recognized as a current group member, e.g. through the ongoing secure communication association, the Group Manager MUST assign a new Sender ID different than the one currently used by the joining node in the OSCORE group.
+* The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node. The Group Manager MUST NOT assign an OSCORE Sender ID to the joining node if this joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}).
 
-   Consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a Sender ID that has not been used in the OSCORE group since the latest time when the current Gid value was assigned to the group.
+   Consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a OSCORE Sender ID that has not been used in the OSCORE group since the latest time when the current Gid value was assigned to the group.
 
-   The Group Manager MUST NOT assign a Sender ID to the joining node if this joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}).
+   If the joining node is recognized as a current group member, e.g. through the ongoing secure communication association, the following also applies.
+   
+     - The Group Manager MUST assign a new OSCORE Sender ID different than the one currently used by the joining node in the OSCORE group.
+     
+     - The Group Manager MUST add the old, relinquished OSCORE Sender ID of the joining node to the most recent set of stale Sender IDs, in the collection associated to the group (see {{sssec-stale-sender-ids}}).
 
 * The Group Manager stores the association between i) the public key of the joining node; and ii) the Group Identifier (Gid), i.e. the OSCORE ID Context, associated to the OSCORE group together with the OSCORE Sender ID assigned to the joining node in the group. The Group Manager MUST keep this association updated over time.
 
@@ -733,7 +777,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    If the joining node has asked for the public keys of all the group members, i.e. 'get_pub_keys' had value Null in the Joining Request, then the Group Manager provides only the public keys of the group members that are relevant to the joining node. That is, in such a case, 'pub_keys' includes only: i) the public keys of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor.
 
-* The 'peer_identifiers' parameter, if present, includes the Sender ID of each group member whose public key is specified in the 'pub_keys' parameter. That is, a group member's Sender ID is used as identifier for that group member (REQ12).
+* The 'peer_identifiers' parameter, if present, includes the OSCORE Sender ID of each group member whose public key is specified in the 'pub_keys' parameter. That is, a group member's Sender ID is used as identifier for that group member (REQ12).
    
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
 
@@ -839,9 +883,9 @@ The Group Manager processes the Key Distribution Request according to {{Section 
 
 Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters and group keying material, and, if they differ from the current ones, uses them to set up the new Group OSCORE Security Context as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
-## Retrieval of Group Keying Material and Sender ID ## {#ssec-updated-and-individual-key}
+## Retrieval of Group Keying Material and OSCORE Sender ID ## {#ssec-updated-and-individual-key}
 
-If the group member wants to retrieve the latest group keying material as well as the Sender ID that it has in the OSCORE group, it sends a Key Distribution Request to the Group Manager.
+If the group member wants to retrieve the latest group keying material as well as the OSCORE Sender ID that it has in the OSCORE group, it sends a Key Distribution Request to the Group Manager.
 
 In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/nodes/NODENAME at the Group Manager.
 
@@ -873,11 +917,13 @@ Otherwise, the Group Manager performs one of the following actions.
 
     * The Group Manager rekeys the OSCORE group. That is, the Group Manager generates new group keying material for that group (see {{sec-group-rekeying-process}}), and replies to the group member with a group rekeying message as defined in {{sec-group-rekeying-process}}, providing the new group keying material. Then, the Group Manager rekeys the rest of the OSCORE group, as discussed in {{sec-group-rekeying-process}}.
     
-       The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g. according to an application-dependent rekeying period, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT9).
+       The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g. according to an application-dependent rekeying period or scheduling, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT9).
 
-    * The Group Manager determines and assigns a new Sender ID for that group member, and replies with a Key Renewal Response formatted as defined in {{Section 4.1.6.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
+    * The Group Manager determines and assigns a new OSCORE Sender ID for that group member, and replies with a Key Renewal Response formatted as defined in {{Section 4.1.6.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
     
        Consistently with {{Section 2.4.3.1 of I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a new Sender ID that has not been used in the OSCORE group since the latest time when the current Gid value was assigned to the group.
+       
+       Furthermore, the Group Manager MUST add the old, relinquished Sender ID of the group member to the most recent set of stale Sender IDs, in the collection associated to the group (see {{sssec-stale-sender-ids}}).
        
        The Group Manager MUST return a 5.03 (Service Unavailable) response in case there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
 
@@ -889,7 +935,7 @@ If the Public Key Request uses the method FETCH, the Public Key Request is forma
 
 * Each element (if any) of the inner CBOR array 'role_filter' is formatted as in the inner CBOR array 'role_filter' of the 'get_pub_keys' parameter of the Joining Request when the parameter value is non-null (see {{ssec-join-req-sending}}).
 
-* Each element (if any) of the inner CBOR array 'id_filter' is a CBOR byte string, which encodes the Sender ID of the group member for which the associated public key is requested (REQ12).
+* Each element (if any) of the inner CBOR array 'id_filter' is a CBOR byte string, which encodes the OSCORE Sender ID of the group member for which the associated public key is requested (REQ12).
 
 Upon receiving the Public Key Request, the Group Manager processes it as per Section 4.1.3.1 or Section 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively. Additionally, if the Public Key Request uses the method FETCH, the Group Manager silently ignores node identifiers included in the ’get_pub_keys’ parameter of the request that are not associated to any current group member.
 
@@ -1183,11 +1229,13 @@ If any of the two conditions below holds, the Group Manager MUST inform the leav
 
 If the leaving node has not exclusively the role of monitor, the Group Manager performs the following actions.
 
-* The Group Manager frees the OSCORE Sender ID value of the leaving node. However, this value MUST NOT become available for possible upcoming joining nodes in the same group.
+* The Group Manager frees the OSCORE Sender ID value of the leaving node. This value MUST NOT become available for possible upcoming joining nodes in the same group, until the group has been rekeyed and assigned a new Group Identifier (Gid).
 
-* The Group Manager cancels the association between, on one hand, the public key of the leaving node and, on the other hand, the Group Identifier (Gid) associated to the OSCORE group together with the freed OSCORE Sender ID value. The Group Manager deletes the public key of the leaving node, if that public key has no remaining association with any pair (Gid, Sender ID).
+* The Group Manager MUST add the relinquished Sender ID of the leaving node to the most recent set of stale Sender IDs, in the collection associated to the group (see {{sssec-stale-sender-ids}}).
 
-If the application requires forward security, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). As a consequence, the leaving node is not able to acquire the new security parameters and group keying material distributed after its leaving.
+* The Group Manager cancels the association between, on one hand, the public key of the leaving node and, on the other hand, the Gid associated to the OSCORE group together with the freed Sender ID value. The Group Manager deletes the public key of the leaving node, if that public key has no remaining association with any pair (Gid, Sender ID).
+
+Then, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). As a consequence, the leaving node is not able to acquire the new security parameters and group keying material distributed after its leaving.
 
 Same considerations in {{Section 5 of I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC.
 
@@ -1203,17 +1251,23 @@ Consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}:
 
    Until a further following group rekeying, the Group Manager MUST store the list of those latest-evicted elder members. If any of those nodes re-joins the group before a further following group rekeying occurs, the Group Manager MUST NOT rekey the group upon their re-joining. When one of those nodes re-joins the group, the Group Manager can rely, e.g., on the ongoing secure communication association to recognize the node as included in the stored list.
 
-Across the rekeying execution, the Group Manager MUST preserve the same unchanged Sender IDs for all group members intended to remain in the group. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of group messages.
+Across the rekeying execution, the Group Manager MUST preserve the same unchanged OSCORE Sender IDs for all group members intended to remain in the group. This avoids affecting the retrieval of public keys from the Group Manager as well as the verification of group messages.
 
 The Group Manager MUST support at least the following group rekeying scheme. Future application profiles may define alternative message formats and distribution schemes.
 
-As group rekeying message, the Group Manager uses the same format used for the Joining Response message in {{ssec-join-resp}}, with the following differences.
+The group rekeying messages MUST have Content-Format set to application/ace-groupcomm+cbor and have the same format used for the Joining Response message in {{ssec-join-resp}}, with the following differences.
 
-* Only the parameters 'gkty', 'key', 'num', 'exp', and 'ace-groupcomm-profile' are present.
+* From the Joining Response, only the parameters 'gkty', 'key', 'num', 'exp', and 'ace-groupcomm-profile' are present. In particular, the 'key' parameter includes only the following data.
 
-* The 'ms' parameter of the 'key' parameter specifies the new OSCORE Master Secret value.
+   - The 'ms' parameter, specifying the new OSCORE Master Secret value.
 
-* The 'contextId' parameter of the 'key' parameter specifies the new Gid used as OSCORE ID Context value.
+   - The 'contextId' parameter, specifying the new Gid to use as OSCORE ID Context value.
+
+* The parameter 'stale_node_ids' MUST also be included, with CBOR label defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter is encoded as a CBOR array, where each element is encoded as a CBOR byte string. The CBOR array has to be intended as a set, i.e., the order of its elements is irrelevant. The CBOR array is populated as follows.
+
+   - The Group Manager considers the collection of stale Sender IDs associated to the group (see {{sssec-stale-sender-ids}}), and takes the most recent set X, i.e., the set associated to the current version of the group keying material about to be relinquished.
+   
+   - For each Sender ID in X, the Group Manager encodes it as a CBOR byte string and adds the result to the CBOR array.
 
 The Group Manager separately sends a group rekeying message to each group member to be rekeyed.
 
@@ -1221,7 +1275,12 @@ Each rekeying message MUST be secured with the pairwise secure communication cha
 
 It is RECOMMENDED that the Group Manager gets confirmation of successful distribution from the group members, and admits a maximum number of individual retransmissions to non-confirming group members.
 
-This approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
+Once completed the group rekeying process, the Group Manager creates a new empty set X' of stale Sender IDs associated to the version of the newly distributed group keying material. Then, the Group Manager MUST add the set X' to the collection of stale Sender IDs associated to the group (see {{sssec-stale-sender-ids}}).
+
+As per {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}, a group member that receives the new group keying material MUST delete all its Recipient Contexts whose corresponding Recipient ID is
+included in the set of stale Sender IDs specified by the 'stale_node_ids' parameter. After that, the group member installs the new keying material and derives the corresponding new Security Context.
+
+The distribution approach defined in this section requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g. by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
 Group members and the Group Manager SHOULD additionally support alternative rekeying approaches that do not require group members to act (also) as servers. A number of such approaches are defined in {{Section 4.4 of I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource of the group, at the endpoint /ace-group/GROUPNAME/ of the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
 
@@ -1416,6 +1475,13 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 * CBOR Key: TBD
 * CBOR Type: Byte String
 * Reference: \[\[This document\]\] ({{verif-data-get}})
+
+&nbsp;
+
+* Name: stale_node_ids
+* CBOR Key: TBD
+* CBOR Type: Array
+* Reference: \[\[This document\]\] ({{sec-group-rekeying-process}})
 
 ## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
 
@@ -1823,6 +1889,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Proof-of-possession of the Group Manager's private key in the Joining Response.
 
 * Always use 'peer_identifiers' to convey Sender IDs as node identifiers.
+
+* Stale Sender IDs provided when rekeying the group.
 
 * Added examples of message exchanges.
 
