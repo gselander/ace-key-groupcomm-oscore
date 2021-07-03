@@ -941,7 +941,7 @@ Upon receiving a 2.05 (Content) Group Manager Public Key Response, the group mem
 
 In case of successful verification of the PoP evidence, the group member or signature verifier MUST store the obtained Group Manager's public key, possibly replacing the currently stored one.
 
-{{fig-gm-pub-key-req-resp}} gives an overview of the exchange described above.
+{{fig-gm-pub-key-req-resp}} gives an overview of the exchange described above, while {{fig-gm-pub-key-req-resp-ex}} shows an example.
 
 ~~~~~~~~~~~
 Group                                                         Group
@@ -955,6 +955,30 @@ Member                                                       Manager
   |                                                             |
 ~~~~~~~~~~~
 {: #fig-gm-pub-key-req-resp title="Message Flow of Group Manager Public Key Request-Response" artwork-align="center"}
+
+~~~~~~~~~~~
+   Request:
+
+   Header: GET (Code=0.01)
+   Uri-Host: "kdc.example.com"
+   Uri-Path: "ace-group"
+   Uri-Path: "g1"
+   Uri-Path: "gm-pub-key"
+   Payload: -
+
+   Response:
+
+   Header: Content (Code=2.05)
+   Content-Format: "application/ace-groupcomm+cbor"
+   Payload (in CBOR diagnostic notation, with PUB_KEY_GM
+            and POP_EVIDENCE being CBOR byte strings):
+     {
+       "kdc_nonce": h'25a8991cd700ac01',
+       "kdc_cred": PUB_KEY_GM,
+       "kdc_cred_verify": POP_EVIDENCE
+     }
+~~~~~~~~~~~
+{: #fig-gm-pub-key-req-resp-ex title="Example of Group Manager Public Key Request-Response"}
 
 # Retrieval of Signature Verification Data # {#sec-verif-data}
 
@@ -974,7 +998,7 @@ The payload of the 2.05 (Content) Signature Verification Data Response is a CBOR
 
 In order to verify countersignatures in the group (see {{Section 8.5 of I-D.ietf-core-oscore-groupcomm}}), the signature verifier relies on: the data retrieved from the 2.05 (Content) Signature Verification Data Response; the public keys of the group members signing the messages to verify, that can be retrieved as defined in {{sec-pub-keys}}; and the public key of the Group Manager, which can be retrieved as defined in {{sec-gm-pub-key}}.
 
-{{fig-verif-data-req-resp}} gives an overview of the exchange described above.
+{{fig-verif-data-req-resp}} gives an overview of the exchange described above,  while {{fig-verif-data-req-resp-ex}} shows an example.
 
 ~~~~~~~~~~~
 Signature                                                     Group
@@ -988,6 +1012,41 @@ Verifier                                                     Manager
   |                                                             |
 ~~~~~~~~~~~
 {: #fig-verif-data-req-resp title="Message Flow of Signature Verification Data Request-Response" artwork-align="center"}
+
+~~~~~~~~~~~
+   Request:
+
+   Header: GET (Code=0.01)
+   Uri-Host: "kdc.example.com"
+   Uri-Path: "ace-group"
+   Uri-Path: "g1"
+   Uri-Path: "verif-data"
+   Payload: -
+
+   Response:
+
+   Header: Content (Code=2.05)
+   Content-Format: "application/ace-groupcomm+cbor"
+   Payload (in CBOR diagnostic notation, with GROUPCOMM_KEY_TBD
+            and PROFILE_TBD being CBOR integers, while GROUP_ENC_KEY
+            being a CBOR byte string):
+    {
+      "gkty": GROUPCOMM_KEY_TBD,
+      "key": {
+        'hkdf': -10,                   ; HKDF SHA-256
+        'contextId': h'37fc',
+        'pub_key_enc': 33,             ; x5chain
+        'sign_enc_alg': 10,            ; AES-CCM-16-64-128
+        'sign_alg': -8,                ; EdDSA
+        'sign_params': [[1], [1, 6]]   ; [[OKP], [OKP, Ed25519]]
+      },
+      "num": 12,
+      "exp": 1609459200,
+      "ace_groupcomm_profile": PROFILE_TBD,
+      "group_enc_key": GROUP_ENC_KEY
+    }
+~~~~~~~~~~~
+{: #fig-verif-data-req-resp-ex title="Example of Signature Verification Data Request-Response"}
 
 # Retrieval of Group Policies # {#sec-policies}
 
@@ -1013,7 +1072,7 @@ Upon learning from a 2.05 (Content) response that the group is currently inactiv
 
 Upon learning from a 2.05 (Content) response that the group has become active again, the group member can resume taking part in communications within the group.
 
-{{fig-key-status-req-resp}} gives an overview of the exchange described above.
+{{fig-key-status-req-resp}} gives an overview of the exchange described above, while {{fig-key-status-req-resp-ex}} shows an example.
 
 ~~~~~~~~~~~
 Group                                                         Group
@@ -1025,6 +1084,24 @@ Member                                                       Manager
   |                                                             |
 ~~~~~~~~~~~
 {: #fig-key-status-req-resp title="Message Flow of Group Status Request-Response" artwork-align="center"}
+
+~~~~~~~~~~~
+   Request:
+
+   Header: GET (Code=0.01)
+   Uri-Host: "kdc.example.com"
+   Uri-Path: "ace-group"
+   Uri-Path: "g1"
+   Uri-Path: "active"
+   Payload: -
+
+   Response:
+
+   Header: Content (Code=2.05)
+   Payload (in CBOR diagnostic notation):
+     true
+~~~~~~~~~~~
+{: #fig-key-status-req-resp-ex title="Example of Group Status Request-Response"}
 
 # Retrieval of Group Names and URIs {#sec-retrieve-gnames}
 
@@ -1048,7 +1125,7 @@ Upon receiving the Group Name and URI Retrieval Request, the Group Manager proce
 
 For each of its groups, the Group Manager maintains an association between the group name and the URI to the group-membership resource on one hand, and only the current Gid for that group on the other hand. That is, the Group Manager MUST NOT maintain an association between the former pair and any other Gid for that group than the current, most recent one.
 
-{{fig-group-names-req-resp}} gives an overview of the exchanges described above.
+{{fig-group-names-req-resp}} gives an overview of the exchanges described above, while {{fig-group-names-req-resp-ex}} shows an example.
 
 ~~~~~~~~~~~
                                                                 Group
@@ -1060,6 +1137,31 @@ Node                                                           Manager
  |                                                                |
 ~~~~~~~~~~~
 {: #fig-group-names-req-resp title="Message Flow of Group Name and URI Retrieval Request-Response" artwork-align="center"}
+
+~~~~~~~~~~~
+  Request:
+
+  Header: FETCH (Code=0.05)
+  Uri-Host: "kdc.example.com"
+  Uri-Path: "ace-group"
+  Content-Format: "application/ace-groupcomm+cbor"
+  Payload (in CBOR diagnostic notation):
+    {
+      "gid": [h'37fc', h'84bd']
+    }
+
+  Response:
+
+  Header: Content (Code=2.05)
+  Content-Format: "application/ace-groupcomm+cbor"
+  Payload (in CBOR diagnostic notation):
+    {
+      "gid": [h'37fc', h'84bd'],
+      "gname": ["g1", "g2"],
+      "guri": ["ace-group/g1", "ace-group/g2"]
+    }
+~~~~~~~~~~~
+{: #fig-group-names-req-resp-ex title="Example of Group Name and URI Retrieval Request-Response"}
 
 # Request to Leave the Group # {#sec-leave-req}
 
@@ -1320,7 +1422,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 IANA is asked to register the following entry to the "ACE Groupcomm Key" Registry defined in {{Section 10.6 of I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Input_Material object
-*  Key Type Value: TBD
+*  Key Type Value: GROUPCOMM_KEY_TBD
 *  Profile: "coap_group_oscore_app", defined in {{ssec-iana-groupcomm-profile-registry}} of this document.
 *  Description: A Group_OSCORE_Input_Material object encoded as described in {{ssec-join-resp}} of this document.
 *  Reference: \[\[This document\]\] ({{ssec-join-resp}})
@@ -1721,6 +1823,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Proof-of-possession of the Group Manager's private key in the Joining Response.
 
 * Always use 'peer_identifiers' to convey Sender IDs as node identifiers.
+
+* Added examples of message exchanges.
 
 * Revised default values of group configuration parameters.
 
