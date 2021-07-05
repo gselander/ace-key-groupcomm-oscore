@@ -12,7 +12,7 @@ keyword: Internet-Draft
 
 # stand_alone: yes
 
-coding: us-ascii
+coding: utf-8
 
 #pi:    # can use array (if all yes) or hash here
 pi: [toc, sortrefs, symrefs]
