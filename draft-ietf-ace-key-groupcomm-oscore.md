@@ -580,7 +580,7 @@ The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the r
 
 This format is consistent with every ECDH algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} of this document describes how the format of each 'ecdh_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
 
-### 'gm_pub_keys_info' Parameter {#gm-dh-info}
+### 'gm_dh_pub_keys' Parameter {#gm-dh-info}
 
 The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the Token Post response message defined in {{Section 5.10.1 of I-D.ietf-ace-oauth-authz}}.
 
@@ -591,7 +591,7 @@ When used in the request, the 'gm_dh_pub_keys' parameter encodes the CBOR simple
 The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter formatted as in the request is given below.
 
 ~~~~~~~~~~~ CDDL
-   gm_dh_pub_keys = nil
+   gm_dh_pub_keys_req = nil
 ~~~~~~~~~~~
 
 The 'gm_dh_pub_keys' parameter of the 2.01 (Created) response is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
@@ -607,7 +607,7 @@ Each element 'gm_dh_pub_keys_entry' contains information about the Group Manager
 The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter formatted as in the response is given below.
 
 ~~~~~~~~~~~ CDDL
-   gm_dh_pub_keys = [ + gm_dh_pub_keys_entry ]
+   gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ]
 
    gm_dh_pub_keys_entry =
    [
@@ -690,6 +690,8 @@ The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 
    - If the group uses (also) the group mode of Group OSCORE, the CBOR map MUST contain the 'sign_info' parameter, whose CBOR label is defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}. This parameter has the same format of 'sign_info_res' defined in {{Section 3.3.1 of I-D.ietf-ace-key-groupcomm}}. In particular, it includes a single element 'sign_info_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
    
    - If the group uses (also) the pairwise mode of Group OSCORE, the CBOR map MUST contain the 'ecdh_info' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'ecdh_info_res' defined in {{ecdh-info}}. In particular, it includes a single element 'ecdh_info_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
+   
+   - If the group uses (also) the pairwise mode of Group OSCORE, the CBOR map MUST contain the 'gm_dh_pub_keys' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'gm_dh_pub_keys_res' defined in {{gm-dh-info}}. In particular, it includes a single element 'gm_dh_pub_keys_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
    
    - The CBOR map MAY include the 'kdcchallenge' parameter, whose CBOR label is defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}. If present, this parameter is a CBOR byte string, which encodes a newly generated 'kdcchallenge' value that the Client can use when preparing a Joining Request (see {{ssec-join-req-sending}}). In such a case the Group Manager MUST store the newly generated value as the 'kdcchallenge' value associated to the joining node, possibly replacing the currently stored value.
 
@@ -1558,7 +1560,7 @@ The following registrations are done for the OAuth Parameters Registry following
 
 &nbsp;
 
-*  Parameter name: gm_pub_keys_info
+*  Parameter name: gm_dh_pub_keys
 *  Parameter usage location: client-rs request, rs-client response
 *  Change Controller: IESG
 *  Specification Document(s): \[\[This specification\]\]
@@ -1574,7 +1576,7 @@ The following registrations are done for the OAuth Parameters CBOR Mappings Regi
 
 &nbsp;
 
-* Name: gm_pub_keys_info
+* Name: gm_dh_pub_keys
 * CBOR Key: TBD (range -256 to 255)
 * Value Type: array
 * Reference: \[\[This specification\]\]
@@ -1612,6 +1614,13 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 &nbsp;
 
 * Name: ecdh_info
+* CBOR Key: TBD
+* CBOR Type: Array
+* Reference: \[\[This document\]\] ({{ssec-join-req-processing}})
+
+&nbsp;
+
+* Name: gm_dh_pub_keys
 * CBOR Key: TBD
 * CBOR Type: Array
 * Reference: \[\[This document\]\] ({{ssec-join-req-processing}})
