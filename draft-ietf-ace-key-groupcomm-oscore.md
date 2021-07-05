@@ -182,7 +182,7 @@ Additionally, this document makes use of the following terminology.
 
 * Monitor: member of an OSCORE group that is configured as responder and never replies back to requesters after receiving request messages. This corresponds to the term "silent server" used in {{I-D.ietf-core-oscore-groupcomm}}.
 
-* Signature verifier: entity external to the OSCORE group and intended to verify the countersignature of messages exchanged in the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). An authorized signature verifier does not join the OSCORE group as an actual member, yet it can retrieve the public keys of the current group members from the Group Manager.
+* Signature verifier: entity external to the OSCORE group and intended to verify the signature of messages exchanged in the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). An authorized signature verifier does not join the OSCORE group as an actual member, yet it can retrieve the public keys of the current group members from the Group Manager.
 
 * Signature-only group: an OSCORE group that uses only the group mode (see {{Section 8 of I-D.ietf-core-oscore-groupcomm}}).
 
@@ -310,7 +310,7 @@ Then, for each scope entry:
 +-----------+-------+-------------------------------------------------+
 | Monitor   | 3     | Receive requests; never send requests/responses |
 |-----------+-------+-------------------------------------------------|
-| Verifier  | 4     | Verify countersignature of intercepted messages |
+| Verifier  | 4     | Verify signature of intercepted messages        |
 +-----------+-------+-------------------------------------------------+
 ~~~~~~~~~~~
 {: #fig-role-values title="Numeric identifier of roles in the OSCORE group" artwork-align="center"}
@@ -422,7 +422,7 @@ If the requesting client is a current group member, the Group Manager MUST respo
 
 If GROUPNAME denotes a pairwise-only group, the Group Manager MUST respond with a 4.00 (Bad Request) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
 
-If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying data that allows also a signature verifier to verify countersignatures of messages protected with the group mode and sent to the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is a CBOR map, which is formatted as defined in {{sec-verif-data}}.
+If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying data that allows also a signature verifier to verify signatures of messages protected with the group mode and sent to the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is a CBOR map, which is formatted as defined in {{sec-verif-data}}.
 
 ## ace-group/GROUPNAME/stale-sids {#ssec-resource-stale-sids}
 
@@ -771,7 +771,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
    
    * The 'sign_enc_alg' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the Signature Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}. 
    
-   * The 'sign_alg' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the Signature Algorithm used to countersign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+   * The 'sign_alg' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the Signature Algorithm used to sign messages in the OSCORE group. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
    * The 'sign_params' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the parameters of the Signature Algorithm. This parameter is a CBOR array, which includes the following two elements:
 
@@ -863,7 +863,7 @@ If the application requires backward security, the Group Manager MUST generate u
 
 # Public Keys of Joining Nodes # {#sec-public-keys-of-joining-nodes}
 
-Source authentication of a message sent within the group and protected with Group OSCORE is ensured by means of a digital countersignature embedded in the message (in group mode), or by integrity-protecting the message with pairwise keying material derived from the asymmetric keys of sender and recipient (in pairwise mode).
+Source authentication of a message sent within the group and protected with Group OSCORE is ensured by means of a digital signature embedded in the message (in group mode), or by integrity-protecting the message with pairwise keying material derived from the asymmetric keys of sender and recipient (in pairwise mode).
 
 Therefore, group members must be able to retrieve each other's public key from a trusted key repository, in order to verify source authenticity of incoming group messages.
 
@@ -1050,7 +1050,7 @@ Member                                                       Manager
 
 # Retrieval of Signature Verification Data # {#sec-verif-data}
 
-A signature verifier may need to retrieve data required to verify countersignatures of messages protected with the group mode and sent to a group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). To this end, the signature verifier sends a Signature Verification Data Request message to the Group Manager.
+A signature verifier may need to retrieve data required to verify signatures of messages protected with the group mode and sent to a group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). To this end, the signature verifier sends a Signature Verification Data Request message to the Group Manager.
 
 In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/verif-data at the Group Manager defined in {{ssec-resource-verif-data}} of this document, where GROUPNAME is the name of the OSCORE group.
 
@@ -1064,7 +1064,7 @@ The payload of the 2.05 (Content) Signature Verification Data Response is a CBOR
 
 * The parameter 'group_enc_key' is also included, with CBOR label defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter specifies the Group Encryption Key of the OSCORE Group, encoded as a CBOR byte string. The Group Manager derives the Group Encryption Key from the group keying material, as per {{Section 2.1.6 of I-D.ietf-core-oscore-groupcomm}}. This parameter MUST be present.
 
-In order to verify countersignatures in the group (see {{Section 8.5 of I-D.ietf-core-oscore-groupcomm}}), the signature verifier relies on: the data retrieved from the 2.05 (Content) Signature Verification Data Response; the public keys of the group members signing the messages to verify, that can be retrieved as defined in {{sec-pub-keys}}; and the public key of the Group Manager, which can be retrieved as defined in {{sec-gm-pub-key}}.
+In order to verify signatures in the group (see {{Section 8.5 of I-D.ietf-core-oscore-groupcomm}}), the signature verifier relies on: the data retrieved from the 2.05 (Content) Signature Verification Data Response; the public keys of the group members signing the messages to verify, that can be retrieved as defined in {{sec-pub-keys}}; and the public key of the Group Manager, which can be retrieved as defined in {{sec-gm-pub-key}}.
 
 {{fig-verif-data-req-resp}} gives an overview of the exchange described above,  while {{fig-verif-data-req-resp-ex}} shows an example.
 
@@ -1183,7 +1183,7 @@ A node may want to retrieve from the Group Manager the group name and the URI of
 
 * As signature verifier, the node also refers to a group name for retrieving the required public keys from the Group Manager (see {{sec-pub-keys}}). As discussed above, intercepted messages do not provide a direct hint to the correct group name, while they may specify the current Gid of the group, as value of the 'kid_context' field of the OSCORE CoAP option. In such a case, upon intercepting a message in the group, the node requires to correctly map the Gid currently used in the group with the invariant group name.
 
-   Furthermore, since it is not a group member, the node does not take part to a possible group rekeying. Thus, following a group rekeying and the consequent change of Gid in a group, the node would retain the old Gid value and cannot correctly associate intercepted messages to the right group, especially if acting as signature verifier in several groups. This in turn prevents the efficient verification of countersignatures, and especially the retrieval of required, new public keys from the Group Manager.
+   Furthermore, since it is not a group member, the node does not take part to a possible group rekeying. Thus, following a group rekeying and the consequent change of Gid in a group, the node would retain the old Gid value and cannot correctly associate intercepted messages to the right group, especially if acting as signature verifier in several groups. This in turn prevents the efficient verification of signatures, and especially the retrieval of required, new public keys from the Group Manager.
    
 In either case, the node only knows the current Gid of the group, as learned from received or intercepted messages exchanged in the group. As detailed below, the node can contact the Group Manager, and request the group name and URI to the group-membership resource corresponding to that Gid. Then, it can use that information to either join the group as a candidate group member, get the latest keying material as a current group member, or retrieve public keys used in the group as a signature verifier. To this end, the node sends a Group Name and URI Retrieval Request, as per {{Section 4.2 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -1463,7 +1463,7 @@ The Group Manager SHOULD use the following default values for the Signature Algo
 
 * For the Signature Encryption Algorithm 'sign_enc_alg' used to encrypted messages protected with the group mode, AES-CCM-16-64-128 (COSE algorithm encoding: 10).
 
-* For the Signature Algorithm 'sign_alg' used to countersign messages protected with the group mode, the signature algorithm EdDSA {{RFC8032}}.
+* For the Signature Algorithm 'sign_alg' used to sign messages protected with the group mode, the signature algorithm EdDSA {{RFC8032}}.
 
 * For the parameters 'sign_params' of the Signature Algorithm:
 
@@ -2242,7 +2242,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Challenge-response for proof-of-possession of signature keys (Section 4).
 
-* Renamed 'key_info' parameter to 'sign_info'; updated its format; extended to include also parameters of the countersignature key (Section 4.1).
+* Renamed 'key_info' parameter to 'sign_info'; updated its format; extended to include also parameters of the signature key (Section 4.1).
 
 * Code 4.00 (Bad request), in responses to joining nodes providing an invalid public key (Section 4.3).
 
