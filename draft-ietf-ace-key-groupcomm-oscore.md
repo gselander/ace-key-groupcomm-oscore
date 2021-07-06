@@ -230,9 +230,7 @@ The data distributed to a group through a rekeying MUST include:
 
 * A new value for the Master Secret parameter of the Group OSCORE Common Security Context of the group (see {{Section 2 of I-D.ietf-core-oscore-groupcomm}}).
 
-* A set of stale Sender IDs, so that each rekeyed node can delete the Recipient Contexts and public keys associated to former members of the group (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). More details on the maintenance of stale Sender IDs are provided in {{sssec-stale-sender-ids}}.
-
-   This allows every group member to rely on owned public keys to confidently assert the group membership of other sender nodes, when receiving protected messages in the group.
+* A set of stale Sender IDs, which allows each rekeyed node to purge public keys and Recipient Contexts used in the group and associated to those Sender IDs. This in turn allows every group member to rely on owned public keys to confidently assert the group membership of other sender nodes, when receiving protected messages in the group (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). More details on the maintenance of stale Sender IDs are provided in {{sssec-stale-sender-ids}}.
 
 Also, the data distributed through a group rekeying MAY include a new value for the Master Salt parameter of the Group OSCORE Common Security Context of that group.
 
@@ -1325,7 +1323,9 @@ Group members and the Group Manager SHOULD additionally support alternative dist
 
 Once received the new group keying material, a group member proceeds as follows.
 
-As per {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}, the group member MUST delete all its Recipient Contexts whose corresponding Recipient ID is included in the set of specified stale Sender IDs. If the group rekeying scheme defined in {{sending-rekeying-msg}} is used, this information is specified by the 'stale_node_ids' parameter.
+The group member considers the stale Sender IDs received from the Group Manager. If the group rekeying scheme defined in {{sending-rekeying-msg}} is used, the stale Sender IDs are specified by the 'stale_node_ids' parameter.
+
+After that, as per {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}, the group member MUST remove every public key associated to a stale Sender ID from its list of group members' public keys used in the group, and MUST delete each of its Recipient Contexts used in the group whose corresponding Recipient ID is a stale Sender ID. 
 
 Then, the following cases can occur, based on the version number V' of the new group keying material distributed through the rekeying process. If the group rekeying scheme defined in {{sending-rekeying-msg}} is used, this information is specified by the 'num' parameter.
 
@@ -1355,7 +1355,9 @@ In case case (a) or case (b) applies, the group member MUST perform the followin
 
 2. The group member sends a Stale Sender IDs Request to the Group Manager (see {{sec-retrieve-stale-sids}}), specifying the version number V as payload of the request.
 
-   The group member MUST delete each of its Recipient Contexts used in the group, such that the corresponding Recipient ID is specified in the Stale Sender IDs Response from the Group Manager. If that response has no payload, the group member MUST delete all its Recipient Contexts used in the group.
+   If the Stale Sender IDs Response from the Group Manager has no payload, the group member MUST remove all the public keys from its list of group members' public keys used in the group, and MUST delete all its Recipient Contexts used in the group.
+
+   Otherwise, the group member considers the stale Sender IDs specified in the Stale Sender IDs Response from the Group Manager. Then, the group member MUST remove every public key associated to a stale Sender ID from its list of group members' public keys used in the group, and MUST delete each of its Recipient Contexts used in the group whose corresponding Recipient ID is a stale Sender ID.
 
 3. The group member installs the latest keying material with version number V' and derives the corresponding new Security Context.
 
@@ -1363,7 +1365,9 @@ In case (c) or (d) applies, the group member SHOULD perform the following action
 
 1. The group member sends a Stale Sender IDs Request to the Group Manager (see {{sec-retrieve-stale-sids}}), specifying the version number V as payload of the request.
 
-   The group member MUST delete each of its Recipient Contexts used in the group, such that the corresponding Recipient ID is specified in the Stale Sender IDs Response from the Group Manager. If that response has no payload, the group member MUST delete all its Recipient Contexts used in the group.
+   If the Stale Sender IDs Response from the Group Manager has no payload, the group member MUST remove all the public keys from its list of group members' public keys used in the group, and MUST delete all its Recipient Contexts used in the group.
+
+   Otherwise, the group member considers the stale Sender IDs specified in the Stale Sender IDs Response from the Group Manager. Then, the group member MUST remove every public key associated to a stale Sender ID from its list of group members' public keys used in the group, and MUST delete each of its Recipient Contexts used in the group whose corresponding Recipient ID is a stale Sender ID.
 
 2. The group member obtains the latest keying material with version number V' from the Group Manager. This can happen by sending a Key Distribution Request to the Group Manager (see {{ssec-updated-key-only}}), or by re-joining the group (see {{ssec-join-req-sending}}).
 
@@ -1373,7 +1377,9 @@ In case (c) or (d) applies, the group member can alternatively perform the follo
 
 1. The group member re-joins the group (see {{ssec-join-req-sending}}). When doing so, the group member MUST re-join with the same roles it currently has in the group, and MUST request the Group Manager for the public keys of all the current group members. That is, the 'get_pub_keys' parameter of the Joining Request MUST be present and MUST be set to the CBOR simple value Null.
 
-2. When receiving the Joining Response (see {{ssec-join-resp-processing}} and {{ssec-join-resp-processing}}), the group member retrieves the public keys specified in the 'pub_keys' parameter. Then, the group member MUST delete each of its stored Recipient Contexts that does not include any of the public keys received from the Group Manager.
+2. When receiving the Joining Response (see {{ssec-join-resp-processing}} and {{ssec-join-resp-processing}}), the group member retrieves the set Z of public keys specified in the 'pub_keys' parameter.
+   
+   Then, the group member MUST remove every public key which is not in Z from its list of group members' public keys used in the group, and MUST delete each of its Recipient Contexts used in the group that does not include any of the public keys in Z.
 
 3. The group member installs the latest keying material with version number V' and derives the corresponding new Security Context.
 
