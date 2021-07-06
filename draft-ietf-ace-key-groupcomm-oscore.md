@@ -252,7 +252,7 @@ The Group Manager MAY rekey the group for other reasons, e.g., according to an a
 
 Throughout the lifetime of every group, the Group Manager MUST maintain a collection of stale Sender IDs for that group.
 
-The collection associated to a group MUST include up to N ordered sets of stale OSCORE Sender IDs. It is up to the application to specify the value of N, possibly on a per-group basis.
+The collection associated to a group MUST include up to N > 0 ordered sets of stale OSCORE Sender IDs. It is up to the application to specify the value of N, possibly on a per-group basis.
 
 The N-th set includes the Sender IDs that have become "stale" under the current version V of the group keying material. The (N-1)-th set refers to the immediately previous version (V - 1) of the group keying material, and so on.
 
