@@ -1445,23 +1445,25 @@ This section defines the default values that the Group Manager assumes for the c
 
 ## Common
 
-For the HKDF Algorithm 'hkdf', the Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}}, i.e., HKDF SHA-256 (COSE algorithm encoding: -10).
+This section always applies, as related to common configuration parameters.
 
-For the format 'pub_key_enc' used to encode the public keys in the group, the Group Manager SHOULD use a CBOR Web Token (CWT){{RFC8392}} or an unprotected CWT Claim Set {{I-D.ietf-rats-uccs}}.
+* For the HKDF Algorithm 'hkdf', the Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}}, i.e., HKDF SHA-256 (COSE algorithm encoding: -10).
+
+* For the format 'pub_key_enc' used to encode the public keys in the group, the Group Manager SHOULD use a CBOR Web Token (CWT){{RFC8392}} or an unprotected CWT Claim Set {{I-D.ietf-rats-uccs}}.
 
    \[
       This is a pending registration requested by draft-ietf-lake-edhoc.
    \]
 
-The Group Manager SHOULD store at most N = 3 sets of stale Sender IDs in the collection associated to the group (see {{sssec-stale-sender-ids}}).
+* For the maximum number 'max_stale_sets' of stored sets of stale Sender IDs, the Group Manager SHOULD store at most N = 3 sets of stale Sender IDs in the collection associated to the group (see {{sssec-stale-sender-ids}}).
 
 ## Group Mode
 
 This section applies if the group uses (also) the group mode of Group OSCORE.
 
-The Group Manager SHOULD use the following default values for the Signature Algorithm and related parameters, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
+* For the Signature Encryption Algorithm 'sign_enc_alg' used to encrypted messages protected with the group mode, the Group Manager SHOULD use AES-CCM-16-64-128 (COSE algorithm encoding: 10) as default value.
 
-* For the Signature Encryption Algorithm 'sign_enc_alg' used to encrypted messages protected with the group mode, AES-CCM-16-64-128 (COSE algorithm encoding: 10).
+The Group Manager SHOULD use the following default values for the Signature Algorithm 'sign_alg' and related parameters 'sign_params', consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
 
 * For the Signature Algorithm 'sign_alg' used to sign messages protected with the group mode, the signature algorithm EdDSA {{RFC8032}}.
 
@@ -1481,9 +1483,9 @@ The Group Manager SHOULD use the following default values for the Signature Algo
 
 This section applies if the group uses (also) the pairwise mode of Group OSCORE.
 
-The Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}} for the AEAD Algorithm used to encrypt messages protected with the pairwise mode, i.e., AES-CCM-16-64-128 (COSE algorithm encoding: 10).
-    
-The Group Manager SHOULD use the following default values for the Pairwise Key Agreement Algorithm and related parameters, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
+For the AEAD Algorithm 'alg' used to encrypt messages protected with the pairwise mode, the Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}}, i.e., AES-CCM-16-64-128 (COSE algorithm encoding: 10).
+
+For the Pairwise Key Agreement Algorithm 'ecdh_alg' and related parameters 'ecdh_params', the Group Manager SHOULD use the following default values, consistently with the "COSE Algorithms" Registry {{COSE.Algorithms}}, the "COSE Key Types" Registry {{COSE.Key.Types}} and the "COSE Elliptic Curves" Registry {{COSE.Elliptic.Curves}}.
 
 * For the Pairwise Key Agreement Algorithm 'ecdh_alg' used to compute static-static Diffie-Hellman shared secrets, the ECDH algorithm ECDH-SS + HKDF-256 specified in {{Section 6.3.1 of I-D.ietf-cose-rfc8152bis-algs}}.
 
