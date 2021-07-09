@@ -1461,7 +1461,7 @@ This section always applies, as related to common configuration parameters.
       This is a pending registration requested by draft-ietf-lake-edhoc.
    \]
 
-* For the maximum number 'max_stale_sets' of stored sets of stale Sender IDs, the Group Manager SHOULD store at most N = 3 sets of stale Sender IDs in the collection associated to the group (see {{sssec-stale-sender-ids}}).
+* For 'max_stale_sets', the Group Manager SHOULD consider N = 3 as the maximum number of stored sets of stale Sender IDs in the collection associated to the group (see {{sssec-stale-sender-ids}}).
 
 ## Group Mode
 
