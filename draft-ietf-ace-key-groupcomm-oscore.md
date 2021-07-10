@@ -260,7 +260,7 @@ In the following cases, the Group Manager MUST add a new element to the most rec
 
 * When a current group member leaves the group, its current Sender ID is added to X. This happens when a group member requests to leave the group (see {{sec-leave-req}}) or is forcibly evicted from the group (see {{sec-leaving}}).
 
-The value of N can change throughout the lifetime of the group. If the new value N' is smaller than N, the Group Manager MUST preserve the N' most recent sets in the collection and MUST delete the (N - N') oldest sets.
+The value of N can change throughout the lifetime of the group. If the new value N' is smaller than N, the Group Manager MUST preserve the (up to) N' most recent sets in the collection and MUST delete any possible older set from the collection.
 
 Finally, the Group Manager MUST perform the following actions, when the group is rekeyed and the group shifts to the next version V' = (V + 1) of the group keying material.
 
