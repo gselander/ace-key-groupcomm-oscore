@@ -1579,14 +1579,14 @@ The following registrations are done for the OAuth Parameters CBOR Mappings Regi
 
 * Name: ecdh_info
 * CBOR Key: TBD (range -256 to 255)
-* Value Type: array
+* Value Type: Simple value Null / array
 * Reference: \[\[This specification\]\]
 
 &nbsp;
 
 * Name: gm_dh_pub_keys
 * CBOR Key: TBD (range -256 to 255)
-* Value Type: array
+* Value Type: Simple value Null / array
 * Reference: \[\[This specification\]\]
 
 ## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
