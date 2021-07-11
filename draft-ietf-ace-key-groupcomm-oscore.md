@@ -346,7 +346,7 @@ The Authorization Request message is as defined in {{Section 3.1 of I-D.ietf-ace
 
       - The group name is encoded as a CBOR text string.
 
-      - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} (REQ2) from the numerical abbreviations defined in {{fig-role-values}} for each requested role (OPT8).
+      - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} (REQ2) from the numerical abbreviations defined in {{fig-role-values}} for each requested role (OPT7).
 
 ## Authorization Response {#ssec-auth-resp}
 
@@ -527,7 +527,7 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * If 'gm_dh_pub_keys' is included in the request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include in the response the 'gm_dh_pub_keys' parameter defined in {{gm-dh-info}}, with the same encoding. Otherwise, the Group Manager MAY include the 'gm_dh_pub_keys' parameter. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.
 
-Note that, other than through the above parameters as defined in {{Section 3.3 of I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means. For example, information conveyed in the 'sign_info' and 'ecdh_info' parameters can be obtained by using the approach described in {{I-D.tiloca-core-oscore-discovery}}, to discover the OSCORE group and the link to the associated group-membership resource at the Group Manager (OPT2).
+Note that, other than through the above parameters as defined in {{Section 3.3 of I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means. For example, information conveyed in the 'sign_info' and 'ecdh_info' parameters can be obtained by using the approach described in {{I-D.tiloca-core-oscore-discovery}}, to discover the OSCORE group and the link to the associated group-membership resource at the Group Manager (OPT1).
 
 Additionally, if allowed by the used transport profile of ACE, the joining node may instead provide the Access Token to the Group Manager by other means, e.g., during a secure session establishment (see {{Section 3.3.2 of I-D.ietf-ace-dtls-authorize}}).
 
@@ -937,7 +937,7 @@ Otherwise, the Group Manager performs one of the following actions.
 
     * The Group Manager rekeys the OSCORE group. That is, the Group Manager generates new group keying material for that group (see {{sec-group-rekeying-process}}), and replies to the group member with a group rekeying message as defined in {{sec-group-rekeying-process}}, providing the new group keying material. Then, the Group Manager rekeys the rest of the OSCORE group, as discussed in {{sec-group-rekeying-process}}.
     
-       The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g., according to an application-dependent rekeying period or scheduling, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT9).
+       The Group Manager SHOULD perform a group rekeying only if already scheduled to  occur shortly, e.g., according to an application-dependent rekeying period or scheduling, or as a reaction to a recent change in the group membership. In any other case, the Group Manager SHOULD NOT rekey the OSCORE group when receiving a Key Renewal Request (OPT8).
 
     * The Group Manager determines and assigns a new OSCORE Sender ID for that group member, and replies with a Key Renewal Response formatted as defined in {{Section 4.1.6.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the CBOR Map in the response payload includes a single parameter 'group_SenderId' defined in {{ssec-iana-ace-groupcomm-parameters-registry}} of this document, specifying the new Sender ID of the group member encoded as a CBOR byte string.
     
@@ -1243,7 +1243,7 @@ In either case, the Group Manager "forgets" the Birth Gid currently associated t
 
 If any of the two conditions below holds, the Group Manager MUST inform the leaving node of its eviction as follows. If both conditions hold, the Group Manager MUST inform the leaving node only once, using either of the corresponding methods.
 
-* If, upon joining the group (see {{ssec-join-req-sending}}), the leaving node specified a URI in the 'control_uri' parameter defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}, the Group Manager sends a DELETE request targeting the URI specified in the 'control_uri' parameter (OPT10).
+* If, upon joining the group (see {{ssec-join-req-sending}}), the leaving node specified a URI in the 'control_uri' parameter defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}, the Group Manager sends a DELETE request targeting the URI specified in the 'control_uri' parameter (OPT9).
 
 * If the leaving node has been observing the associated resource at ace-group/GROUPNAME/nodes/NODENAME, the Group Manager sends an unsolicited 4.04 (Not Found) response to the leaving node, as specified in 4.1.6.2 of {{I-D.ietf-ace-key-groupcomm}}.
 
@@ -1313,7 +1313,7 @@ The group rekeying messages MUST have Content-Format set to application/ace-grou
 
 The Group Manager separately sends a group rekeying message formatted as defined above to each group member to be rekeyed.
 
-Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the joining process. In particular, each rekeying message can target the 'control_uri' URI path defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}} (OPT10), if provided by the intended recipient upon joining the group (see {{ssec-join-req-sending}}).
+Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the joining process. In particular, each rekeying message can target the 'control_uri' URI path defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}} (OPT9), if provided by the intended recipient upon joining the group (see {{ssec-join-req-sending}}).
 
 This distribution approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g., by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
@@ -1940,27 +1940,27 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ24 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
 
-* OPT2 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
+* OPT1 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
-* OPT3 (Optional) - Specify additional parameters used in the Token Post exchange: 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE.
+* OPT2 (Optional) - Specify additional parameters used in the Token Post exchange: 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE.
 
-* OPT4 (Optional) - Specify the encoding of 'pub_keys_repos' if the default is not used: no.
+* OPT3 (Optional) - Specify the encoding of 'pub_keys_repos' if the default is not used: no.
 
-* OPT5 (Optional) - Specify policies that instruct clients to retain unsuccessfully decrypted messages and for how long, so that they can be decrypted after getting updated keying material: no.
+* OPT4 (Optional) - Specify policies that instruct clients to retain unsuccessfully decrypted messages and for how long, so that they can be decrypted after getting updated keying material: no.
 
-* OPT6 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
+* OPT5 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
 
-* OPT7 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
+* OPT6 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
 
-* OPT8 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic: see {{ssec-auth-req}}.
+* OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic: see {{ssec-auth-req}}.
 
-* OPT9 (Optional) - Specify for the KDC to perform group rekeying (together or instead of renewing individual keying material) when receiving a Key Renewal Request: the Group Manager SHOULD NOT perform a group rekeying, unless already scheduled to occur shortly (see {{sec-new-key}}).
+* OPT8 (Optional) - Specify for the KDC to perform group rekeying (together or instead of renewing individual keying material) when receiving a Key Renewal Request: the Group Manager SHOULD NOT perform a group rekeying, unless already scheduled to occur shortly (see {{sec-new-key}}).
 
-* OPT10 (Optional) - Specify the functionalities implemented at the 'control_uri' resource hosted at the Client, including message exchange encoding and other details (see {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}): see {{sec-leaving}} for the eviction of a group member; see {{sec-group-rekeying-process}} for the group rekeying process.
+* OPT9 (Optional) - Specify the functionalities implemented at the 'control_uri' resource hosted at the Client, including message exchange encoding and other details (see {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}): see {{sec-leaving}} for the eviction of a group member; see {{sec-group-rekeying-process}} for the group rekeying process.
 
-* OPT11 (Optional) - Specify how the identifier of the sender's public key is included in the group request: no.
+* OPT10 (Optional) - Specify how the identifier of the sender's public key is included in the group request: no.
 
-* OPT12 (Optional) - Specify additional identifiers of error types, as values of the 'error' field in an error response from the KDC: see {{iana-ace-groupcomm-errors}}.
+* OPT11 (Optional) - Specify additional identifiers of error types, as values of the 'error' field in an error response from the KDC: see {{iana-ace-groupcomm-errors}}.
 
 # Extensibility for Future COSE Algorithms # {#sec-future-cose-algs}
 
@@ -2166,7 +2166,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Security considerations on reusage of signature challenges.
 
-* Addressing optional requirement OPT9 from draft-ietf-ace-key-groupcomm
+* Addressing optional requirement OPT8 from draft-ietf-ace-key-groupcomm
 
 * Editorial improvements.
 
