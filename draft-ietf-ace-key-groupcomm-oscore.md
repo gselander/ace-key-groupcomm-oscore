@@ -250,11 +250,11 @@ The Group Manager MAY rekey the group for other reasons, e.g., according to an a
 
 Throughout the lifetime of every group, the Group Manager MUST maintain a collection of stale Sender IDs for that group.
 
-The collection associated to a group MUST include up to N > 0 ordered sets of stale OSCORE Sender IDs. It is up to the application to specify the value of N, possibly on a per-group basis.
+The collection associated to a group MUST include up to N > 1 ordered sets of stale OSCORE Sender IDs. It is up to the application to specify the value of N, possibly on a per-group basis.
 
 The N-th set includes the Sender IDs that have become "stale" under the current version V of the group keying material. The (N-1)-th set refers to the immediately previous version (V - 1) of the group keying material, and so on.
 
-In the following cases, the Group Manager MUST add a new element to the most recent set X, i.e.,  the set associated to the current version V of the group keying material.
+In the following cases, the Group Manager MUST add a new element to the most recent set X, i.e., the set associated to the current version V of the group keying material.
 
 * When a current group member obtains a new Sender ID, its old Sender ID is added to X. This happens when the Group Manager assigns a new Sender ID upon request from the group member (see {{sec-new-key}}), or in case the group member re-joins the group (see {{ssec-join-req-sending}} and {{ssec-join-resp}}), thus also obtaining a new Sender ID.
 
@@ -535,7 +535,7 @@ Additionally, if allowed by the used transport profile of ACE, the joining node 
 
 The 'ecdh_info' parameter is an OPTIONAL parameter of the Token Post response message defined in {{Section 5.10.1 of I-D.ietf-ace-oauth-authz}}.
 
-This parameter is used to require and retrieve from the Group Manager information and parameters about the ECDH algorithm and about the public keys to be used in the OSCORE group to compute a static-static Diffie-Hellman shared secret {{NIST-800-56A}}, in case the group supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+This parameter is used to require and retrieve from the Group Manager information and parameters about the ECDH algorithm and about the public keys to be used in the OSCORE group to compute a static-static Diffie-Hellman shared secret {{NIST-800-56A}}, in case the group uses the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
 When used in the request, the 'ecdh_info' parameter encodes the CBOR simple value Null, to require information and parameters on the ECDH algorithm and on the public keys to be used to compute Diffie-Hellman shared secrets in the OSCORE group.
 
@@ -547,7 +547,7 @@ The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the r
 
 The 'ecdh_info' parameter of the 2.01 (Created) response is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
 
-Each element contains information about ECDH parameters and about public keys, for one or more OSCORE groups that support the pairwise mode of Group OSCORE and that the client has been authorized to join. Each element is formatted as follows.
+Each element contains information about ECDH parameters and about public keys, for one or more OSCORE groups that use the pairwise mode of Group OSCORE and that the client has been authorized to join. Each element is formatted as follows.
 
 * The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies. In particular 'id' MUST NOT refer to OSCORE groups that are signature-only groups.
 
@@ -689,7 +689,7 @@ The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 
    
    - If the group uses (also) the pairwise mode of Group OSCORE, the CBOR map MUST contain the 'ecdh_info' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'ecdh_info_res' defined in {{ecdh-info}}. In particular, it includes a single element 'ecdh_info_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
    
-   - If the group uses (also) the pairwise mode of Group OSCORE, the CBOR map MUST contain the 'gm_dh_pub_keys' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'gm_dh_pub_keys_res' defined in {{gm-dh-info}}. In particular, it includes a single element 'gm_dh_pub_keys_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
+   - If the group is a pairwise-only group, the CBOR map MUST contain the 'gm_dh_pub_keys' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'gm_dh_pub_keys_res' defined in {{gm-dh-info}}. In particular, it includes a single element 'gm_dh_pub_keys_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
    
    - The CBOR map MAY include the 'kdcchallenge' parameter, whose CBOR label is defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}. If present, this parameter is a CBOR byte string, which encodes a newly generated 'kdcchallenge' value that the Client can use when preparing a Joining Request (see {{ssec-join-req-sending}}). In such a case the Group Manager MUST store the newly generated value as the 'kdcchallenge' value associated to the joining node, possibly replacing the currently stored value.
 
@@ -701,7 +701,7 @@ The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 
 
 * The Group Manager MAY return a 4.00 (Bad Request) response in case all the following conditions hold.
 
-   - The OSCORE group supports the pairwise mode of Group OSCORE.
+   - The OSCORE group uses the pairwise mode of Group OSCORE.
    
    - The OSCORE group uses EdDSA public keys {{RFC8032}}.
    
@@ -729,7 +729,7 @@ If the joining node has not taken exclusively the role of monitor, the Group Man
 
 * The Group Manager selects an available OSCORE Sender ID in the OSCORE group, and exclusively assigns it to the joining node. The Group Manager MUST NOT assign an OSCORE Sender ID to the joining node if this joins the group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}).
 
-   Consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign a OSCORE Sender ID that has not been used in the OSCORE group since the latest time when the current Gid value was assigned to the group.
+   Consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}, the Group Manager MUST assign an OSCORE Sender ID that has not been used in the OSCORE group since the latest time when the current Gid value was assigned to the group.
 
    If the joining node is recognized as a current group member, e.g., through the ongoing secure communication association, the following also applies.
    
@@ -1295,11 +1295,11 @@ The group rekeying messages MUST have Content-Format set to application/ace-grou
 
 * From the Joining Response, only the parameters 'gkty', 'key', 'num', 'exp', and 'ace-groupcomm-profile' are present. In particular, the 'key' parameter includes only the following data.
 
-   - The 'ms' parameter, specifying the new OSCORE Master Secret value.
+   - The 'ms' parameter, specifying the new OSCORE Master Secret value. This parameter MUST be present.
 
-   - The 'contextId' parameter, specifying the new Gid to use as OSCORE ID Context value.
+   - The 'contextId' parameter, specifying the new Gid to use as OSCORE ID Context value. This parameter MUST be present.
    
-   - Optionally, the 'salt' value, specifying the new OSCORE Master Salt value.
+   - The 'salt' value, specifying the new OSCORE Master Salt value. This parameter MAY be present.
 
 * The parameter 'stale_node_ids' MUST also be included, with CBOR label defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter is encoded as a CBOR array, where each element is encoded as a CBOR byte string. The CBOR array has to be intended as a set, i.e., the order of its elements is irrelevant. The parameter is populated as follows.
 
@@ -1349,9 +1349,9 @@ d. The group member has performed a Version Request-Response exchange with the G
 
 In either case, the group member MUST delete the stored keying material with version number V.
 
-In case case (a) or case (b) applies, the group member MUST perform the following actions.
+If case (a) or case (b) applies, the group member MUST perform the following actions.
 
-1. The group member MUST NOT install the latest keying material yet.
+1. The group member MUST NOT install the latest keying material yet, in case that was already obtained.
 
 2. The group member sends a Stale Sender IDs Request to the Group Manager (see {{sec-retrieve-stale-sids}}), specifying the version number V as payload of the request.
 
@@ -1361,7 +1361,7 @@ In case case (a) or case (b) applies, the group member MUST perform the followin
 
 3. The group member installs the latest keying material with version number V' and derives the corresponding new Security Context.
 
-In case (c) or (d) applies, the group member SHOULD perform the following actions.
+If case (c) or case (d) applies, the group member SHOULD perform the following actions.
 
 1. The group member sends a Stale Sender IDs Request to the Group Manager (see {{sec-retrieve-stale-sids}}), specifying the version number V as payload of the request.
 
@@ -1373,7 +1373,7 @@ In case (c) or (d) applies, the group member SHOULD perform the following action
 
 3. The group member installs the latest keying material with version number V' and derives the corresponding new Security Context.
 
-In case (c) or (d) applies, the group member can alternatively perform the following actions.
+If case (c) or case (d) applies, the group member can alternatively perform the following actions.
 
 1. The group member re-joins the group (see {{ssec-join-req-sending}}). When doing so, the group member MUST re-join with the same roles it currently has in the group, and MUST request the Group Manager for the public keys of all the current group members. That is, the 'get_pub_keys' parameter of the Joining Request MUST be present and MUST be set to the CBOR simple value Null.
 
@@ -1385,15 +1385,15 @@ In case (c) or (d) applies, the group member can alternatively perform the follo
 
 ### Retrieval of Stale Sender IDs {#sec-retrieve-stale-sids}
 
-When realizing to have missed one or more group rekeying instances (see {{missed-rekeying}}), a node needs to retrieve from the Group Manager the data required to delete some of its stored Recipient Contexts (see {{stale-sids-fetch}}). This data is provided as an aggregated set of stale Sender IDs, which are used as specified in {{missed-rekeying}}.
+When realizing to have missed one or more group rekeying instances (see {{missed-rekeying}}), a node needs to retrieve from the Group Manager the data required to delete some of its stored group members' public keys and Recipient Contexts (see {{stale-sids-fetch}}). This data is provided as an aggregated set of stale Sender IDs, which are used as specified in {{missed-rekeying}}.
 
 In particular, the node sends a CoAP FETCH request to the endpoint /ace-group/GROUPNAME/stale-sids at the Group Manager defined in {{ssec-resource-stale-sids}} of this document, where GROUPNAME is the name of the OSCORE group.
 
-The payload of the Stale Sender IDs Request MUST include a CBOR unsigned integer. This encodes the version number V of the most recent group keying material owned and installed by the requesting client.
+The payload of the Stale Sender IDs Request MUST include a CBOR unsigned integer. This encodes the version number V of the most recent group keying material owned and installed by the requesting client, which is older than the latest, possibly just distributed, keying material with version number V'.
 
 The handler MUST respond with a 4.00 (Bad Request) response, if the request is not formatted correctly. Also, the handler MUST respond with a 4.00 (Bad Request) response, if the specified version number V is greater or equal than the version number V' associated to the latest keying material in the group, i.e., if V >= V'.
 
-Otherwise, the handler responds with a 2.05 (Content) Stale Sender IDs Response. The payload of the response is formatted as defined below, where SKEW = (V' - V).
+Otherwise, the handler responds with a 2.05 (Content) Stale Sender IDs Response. The payload of the response is formatted as defined below, where SKEW = (V' - V + 1).
 
 * The Group Manager considers ITEMS as the current number of sets stored in the collection of stale Sender IDs associated to the group (see {{sssec-stale-sender-ids}}).
 
@@ -1421,7 +1421,7 @@ Node                                                         Manager
   |------------------------------------------------------------>|
   |             FETCH ace-group/GROUPNAME/stale-sids            |
   |                                                             |
-  |<----- Stale Sender IDs Request Response: 2.05 (Content) ----|
+  |<---------- Stale Sender IDs Response: 2.05 (Content) -------|
   |                                                             |
 ~~~~~~~~~~~
 {: #fig-stale-ids-req-resp title="Message Flow of Stale Sender IDs Request-Response" artwork-align="center"}
@@ -1728,7 +1728,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  CBOR Label: TBD
 *  CBOR Type: array
 *  Registry: COSE Algorithms, COSE Key Types, COSE Elliptic Curves
-*  Description: OSCORE Pairwise Key Agreement Parameters
+*  Description: OSCORE Pairwise Key Agreement Algorithm Parameters
 *  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
 ## TLS Exporter Label Registry {#ssec-iana-tls-esporter-label-registry}
