@@ -493,9 +493,9 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * The CoAP POST request MAY additionally contain the following parameters, which, if included, MUST have the corresponding values:
 
-   - 'ecdh_info' defined in {{ecdh-info}}, encoding the CBOR simple value Null to require information on the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and on the exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+   - 'ecdh_info' defined in {{ecdh-info}}, encoding the CBOR simple value Null to request information on the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and on the exact encoding of public keys used in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-   - 'gm_dh_pub_keys' defined in {{gm-dh-info}}, encoding the CBOR simple value Null to require the Diffie-Hellman public key of the Group Manager in the group, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+   - 'gm_dh_pub_keys' defined in {{gm-dh-info}}, encoding the CBOR simple value Null to request the Diffie-Hellman public keys of the Group Manager in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
    Alternatively, the joining node may retrieve this information by other means.
    
@@ -523,9 +523,9 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
   
   This format is consistent with every signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
   
-* If 'ecdh_info' is included in the request, the Group Manager MAY include in the response the 'ecdh_info' parameter defined in {{ecdh-info}}, with the same encoding. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'ecdh_info_entry' applies to.
+* If 'ecdh_info' is included in the request, the Group Manager MAY include in the response the 'ecdh_info' parameter defined in {{ecdh-info}}. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'ecdh_info_entry' applies to.
 
-* If 'gm_dh_pub_keys' is included in the request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include in the response the 'gm_dh_pub_keys' parameter defined in {{gm-dh-info}}, with the same encoding. Otherwise, the Group Manager MAY include the 'gm_dh_pub_keys' parameter. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.
+* If 'gm_dh_pub_keys' is included in the request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include in the response the 'gm_dh_pub_keys' parameter defined in {{gm-dh-info}}. Otherwise, the Group Manager MAY include the 'gm_dh_pub_keys' parameter. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.
 
 Note that, other than through the above parameters as defined in {{Section 3.3 of I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means. For example, information conveyed in the 'sign_info' and 'ecdh_info' parameters can be obtained by using the approach described in {{I-D.tiloca-core-oscore-discovery}}, to discover the OSCORE group and the link to the associated group-membership resource at the Group Manager (OPT1).
 
@@ -533,19 +533,13 @@ Additionally, if allowed by the used transport profile of ACE, the joining node 
 
 ### 'ecdh_info' Parameter {#ecdh-info}
 
-The 'ecdh_info' parameter is an OPTIONAL parameter of the Token Post response message defined in {{Section 5.10.1 of I-D.ietf-ace-oauth-authz}}.
+The 'ecdh_info' parameter is an OPTIONAL parameter of the Token Post request message and the corresponding response message defined in {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}.
 
-This parameter is used to require and retrieve from the Group Manager information and parameters about the ECDH algorithm and about the public keys to be used in the OSCORE group to compute a static-static Diffie-Hellman shared secret {{NIST-800-56A}}, in case the group uses the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+This parameter is used to request and retrieve from the Group Manager information and parameters about the ECDH algorithm and about the public keys to be used in the OSCORE group to compute a static-static Diffie-Hellman shared secret {{NIST-800-56A}}, in case the group uses the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-When used in the request, the 'ecdh_info' parameter encodes the CBOR simple value Null, to require information and parameters on the ECDH algorithm and on the public keys to be used to compute Diffie-Hellman shared secrets in the OSCORE group.
+When used in the Token Post request sent to the Group Manager, the 'ecdh_info' parameter encodes the CBOR simple value Null, to ask for information and parameters on the ECDH algorithm and on the public keys to be used to compute Diffie-Hellman shared secrets in the OSCORE groups that the client has been authorized to join.
 
-The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the request is given below.
-
-~~~~~~~~~~~ CDDL
-   ecdh_info_req = nil
-~~~~~~~~~~~
-
-The 'ecdh_info' parameter of the 2.01 (Created) response is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
+When used in the following 2.01 (Created) response from the Group Manager, the 'ecdh_info' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
 
 Each element contains information about ECDH parameters and about public keys, for one or more OSCORE groups that use the pairwise mode of Group OSCORE and that the client has been authorized to join. Each element is formatted as follows.
 
@@ -559,40 +553,40 @@ Each element contains information about ECDH parameters and about public keys, f
 
 * The fifth element 'pub_key_enc' is a CBOR integer indicating the encoding of public keys used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}} (REQ6). Acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see {{ssec-token-post}}) apply.
 
-The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter formatted as in the response is given below.
+The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter is given below.
 
 ~~~~~~~~~~~ CDDL
-   ecdh_info_res = [ + ecdh_info_entry ]
+ecdh_info = ecdh_info_req / ecdh_info_resp
+   
+ecdh_info_req = nil                   ; used in the Token Post
+                                      ; request to the Group Manager
+                                         
+ecdh_info_res = [ + ecdh_info_entry ] ; used in the 2.01 response
+                                      ; to the Token Post request
+   
+ecdh_info_entry =
+[
+  id : gname / [ + gname ],
+  ecdh_alg : int / tstr,
+  ecdh_parameters : [ any ],
+  ecdh_key_parameters : [ any ],
+  pub_key_enc = int
+]
 
-   ecdh_info_entry =
-   [
-     id : gname / [ + gname ],
-     ecdh_alg : int / tstr,
-     ecdh_parameters : [ any ],
-     ecdh_key_parameters : [ any ],
-     pub_key_enc = int
-   ]
-
-   gname = tstr
+gname = tstr
 ~~~~~~~~~~~
 
-This format is consistent with every ECDH algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} of this document describes how the format of each 'ecdh_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
+This format is consistent with every ECDH algorithm currently defined in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} of this document describes how the format of each 'ecdh_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
 
 ### 'gm_dh_pub_keys' Parameter {#gm-dh-info}
 
-The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the Token Post response message defined in {{Section 5.10.1 of I-D.ietf-ace-oauth-authz}}.
+The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the Token Post request message and the corresponding response message defined in {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}.
 
-This parameter is used to require and retrieve from the Group Manager its Diffie-Hellman public key used in the OSCORE group. The Group Manager has specifically a Diffie-Hellman public key if and only if the OSCORE group is a pairwise-only group. In this case, the early retrieval of the Group Manager's public key is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
+This parameter is used to request and retrieve from the Group Manager its Diffie-Hellman public keys used in the OSCORE groups that the client has been authorized to join. The Group Manager has specifically a Diffie-Hellman public key in an OSCORE group, if and only if the group is a pairwise-only group. In this case, the early retrieval of the Group Manager's public key is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
 
-When used in the request, the 'gm_dh_pub_keys' parameter encodes the CBOR simple value Null, to require the Diffie-Hellman public key that the Group Manager uses in the OSCORE group.
+When used in the Token Post request sent to the Group Manager, the 'gm_dh_pub_keys' parameter encodes the CBOR simple value Null, to ask for the Diffie-Hellman public key that the Group Manager uses in the OSCORE groups that the client has been authorized to join.
 
-The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter formatted as in the request is given below.
-
-~~~~~~~~~~~ CDDL
-   gm_dh_pub_keys_req = nil
-~~~~~~~~~~~
-
-The 'gm_dh_pub_keys' parameter of the 2.01 (Created) response is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
+When used in the following 2.01 (Created) response from the Group Manager, the 'gm_dh_pub_keys' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
 
 Each element 'gm_dh_pub_keys_entry' contains information about the Group Manager's Diffie-Hellman public keys, for one or more OSCORE groups that are pairwise-only groups and that the client has been authorized to join. Each element is formatted as follows.
 
@@ -602,19 +596,27 @@ Each element 'gm_dh_pub_keys_entry' contains information about the Group Manager
 
 * The third element 'pub_key' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman public key in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' parameter. Note that the public key provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.
 
-The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter formatted as in the response is given below.
+The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter is given below.
 
 ~~~~~~~~~~~ CDDL
-   gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ]
+gm_dh_pub_keys = gm_dh_pub_keys_req / gm_dh_pub_keys_resp
 
-   gm_dh_pub_keys_entry =
-   [
-     id : gname / [ + gname ],
-     pub_key_enc = int,
-     pub_key = bstr
-   ]
+gm_dh_pub_keys_req = nil                        ; used in the Token
+                                                ; Post request to
+                                                ; the Group Manager
 
-   gname = tstr
+gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ] ; used in the 2.01
+                                                ; response to the
+                                                ; Token Post request
+   
+gm_dh_pub_keys_entry =
+[
+  id : gname / [ + gname ],
+  pub_key_enc = int,
+  pub_key = bstr
+]
+
+gname = tstr
 ~~~~~~~~~~~
 
 ## Sending the Joining Request {#ssec-join-req-sending}
@@ -1985,22 +1987,22 @@ The format of each 'ecdh_info_entry' (see {{ssec-token-post}} and {{ecdh-info}})
 * The i-th array following 'ecdh_parameters', i.e., 'ecdh_capab_i' (i = 0, ..., N-1), is the array of COSE capabilities for the algorithm capability specified in 'ecdh_parameters'\[i\].
 
 ~~~~~~~~~~~ CDDL
-   ecdh_info_entry =
-   [
-     id : gname / [ + gname ],
-     ecdh_alg : int / tstr,
-     ecdh_parameters : [ alg_capab_1 : any,
-                         alg_capab_2 : any,
-                         ...,
-                         alg_capab_N : any],
-     ecdh_capab_1 : [ any ],
-     ecdh_capab_2 : [ any ],
-     ...,
-     ecdh_capab_N : [ any ],
-     pub_key_enc = int / nil
-   ]
+ecdh_info_entry =
+[
+  id : gname / [ + gname ],
+  ecdh_alg : int / tstr,
+  ecdh_parameters : [ alg_capab_1 : any,
+                      alg_capab_2 : any,
+                      ...,
+                      alg_capab_N : any],
+  ecdh_capab_1 : [ any ],
+  ecdh_capab_2 : [ any ],
+  ...,
+  ecdh_capab_N : [ any ],
+  pub_key_enc = int / nil
+]
 
-   gname = tstr
+gname = tstr
 ~~~~~~~~~~~
 {: #fig-ecdh-info-entry-general title="'ecdh_info_entry' with general format"}
 
@@ -2027,6 +2029,10 @@ The format of 'key' (see {{ssec-join-resp}}) is generalized as follows.
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -11 to -12 ## {#sec-11-12}
+
+* Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'
 
 ## Version -10 to -11 ## {#sec-10-11}
 
