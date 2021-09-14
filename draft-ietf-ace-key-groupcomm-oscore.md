@@ -1744,7 +1744,7 @@ IANA is asked to register the following entry to the "TLS Exporter Label" Regist
 
 ## AIF Registry {#ssec-iana-AIF-registry}
 
-IANA is asked to register the following entry to the "Toid" sub-registry of the "AIF" Registry defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
+IANA is asked to register the following entry to the "Toid" registry within the "AIF" registry group defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
 
 * Name: oscore-group-name
 * Description/Specification: group name of the OSCORE group, as specified in \[\[This document\]\].
@@ -1796,7 +1796,7 @@ Provisional registration?  No
 
 ## CoAP Content-Format Registry {#ssec-iana-coap-content-format-registry}
 
-IANA is asked to register the following entry to the "CoAP Content-Formats" registry, within the "CoRE Parameters" registry:
+IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group:
 
 Media Type: application/aif-groupcomm-oscore+cbor;Toid="oscore-group-name",Tperm"oscore-group-roles"
 
@@ -1828,7 +1828,7 @@ The Reference column for all of these entries will be \[\[This document\]\].
 
 ## CoRE Resource Type Registry # {#iana-rt}
 
-IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the  "Resource Type (rt=) Link Target Attribute Values" subregistry under the "Constrained Restful Environments (CoRE) Parameters" {{CORE.Parameters}} registry.
+IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the  "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" {{CORE.Parameters}} registry group.
 
 * Value: "core.osc.gm"
 
@@ -1838,7 +1838,7 @@ IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the
 
 ## ACE Scope Semantics Registry # {#iana-scope-semantics}
 
-IANA is asked to register the following entry in the  "ACE Scope Semantics" registry defined in {{Section 10.12 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Scope Semantics" registry defined in {{Section 10.12 of I-D.ietf-ace-key-groupcomm}}.
 
 * Value: SEM_ID_TBD
 
@@ -1848,7 +1848,7 @@ IANA is asked to register the following entry in the  "ACE Scope Semantics" regi
 
 ## ACE Groupcomm Errors {#iana-ace-groupcomm-errors}
 
-IANA is asked to register the following entry in the  "ACE Groupcomm Errors" registry defined in {{Section 10.13 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in {{Section 10.13 of I-D.ietf-ace-key-groupcomm}}.
 
 * Value: 7
 
@@ -2032,7 +2032,9 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -11 to -12 ## {#sec-11-12}
 
-* Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'
+* Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.
+
+* Fixes and editorial improvements.
 
 ## Version -10 to -11 ## {#sec-10-11}
 
