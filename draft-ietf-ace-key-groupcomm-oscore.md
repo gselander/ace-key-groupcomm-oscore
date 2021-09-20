@@ -2040,6 +2040,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Revised names of new IANA registries.
 
+* Alignment to new requirements from draft-ietf-ace-key-groupcomm.
+
 * Fixes and editorial improvements.
 
 ## Version -10 to -11 ## {#sec-10-11}
