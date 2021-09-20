@@ -743,7 +743,7 @@ If the joining node has not taken exclusively the role of monitor, the Group Man
 
 Then, the Group Manager replies to the joining node, providing the updated security parameters and keying meterial necessary to participate in the group communication. This success Joining Response is formatted as defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}, with the following additions:
 
-* The 'gkty' parameter identifies a key of type "Group_OSCORE_Input_Material object", defined in {{ssec-iana-groupcomm-key-registry}} of this document.
+* The 'gkty' parameter identifies a key of type "Group_OSCORE_Input_Material object", defined in {{ssec-iana-groupcomm-keys-registry}} of this document.
 
 * The 'key' parameter includes what the joining node needs in order to set up the Group OSCORE Security Context as per {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
@@ -1559,7 +1559,7 @@ Note to RFC Editor: Please replace all occurrences of "\[\[This document\]\]" wi
 
 This document has the following actions for IANA.
 
-## OAuth Parameters Registry {#iana-kinfo}
+## OAuth Parameters {#iana-kinfo}
 
 The following registrations are done for the OAuth Parameters Registry following the procedure specified in {{Section 11.2 of RFC6749}}.
 
@@ -1575,7 +1575,7 @@ The following registrations are done for the OAuth Parameters Registry following
 *  Change Controller: IESG
 *  Specification Document(s): \[\[This specification\]\]
 
-## OAuth Parameters CBOR Mappings Registry {#iana-kinfo-map}
+## OAuth Parameters CBOR Mappings {#iana-kinfo-map}
 
 The following registrations are done for the OAuth Parameters CBOR Mappings Registry following the procedure specified in {{Section 8.10 of I-D.ietf-ace-oauth-authz}}.
 
@@ -1591,7 +1591,7 @@ The following registrations are done for the OAuth Parameters CBOR Mappings Regi
 * Value Type: Simple value Null / array
 * Reference: \[\[This specification\]\]
 
-## ACE Groupcomm Parameters Registry {#ssec-iana-ace-groupcomm-parameters-registry}
+## ACE Groupcomm Parameters {#ssec-iana-ace-groupcomm-parameters-registry}
 
 IANA is asked to register the following entry to the "ACE Groupcomm Parameters" Registry defined in {{Section 10.5 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -1649,9 +1649,9 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 * CBOR Type: Array
 * Reference: \[\[This document\]\] ({{sec-group-rekeying-process}})
 
-## ACE Groupcomm Key Registry {#ssec-iana-groupcomm-key-registry}
+## ACE Groupcomm Keys {#ssec-iana-groupcomm-keys-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Key" Registry defined in {{Section 10.6 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Keys" Registry defined in {{Section 10.6 of I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Input_Material object
 *  Key Type Value: GROUPCOMM_KEY_TBD
@@ -1659,16 +1659,16 @@ IANA is asked to register the following entry to the "ACE Groupcomm Key" Registr
 *  Description: A Group_OSCORE_Input_Material object encoded as described in {{ssec-join-resp}} of this document.
 *  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
-## ACE Groupcomm Profile Registry {#ssec-iana-groupcomm-profile-registry}
+## ACE Groupcomm Profiles {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Profile" Registry defined in {{Section 10.7 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Profiles" Registry defined in {{Section 10.7 of I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
 *  CBOR Value: PROFILE_TBD
 *  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
-## OSCORE Security Context Parameters Registry {#ssec-iana-security-context-parameter-registry}
+## OSCORE Security Context Parameters {#ssec-iana-security-context-parameter-registry}
 
 IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in {{Section 9.4 of I-D.ietf-ace-oscore-profile}}.
 
@@ -1733,16 +1733,16 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 *  Description: OSCORE Pairwise Key Agreement Algorithm Parameters
 *  Reference: \[\[This document\]\] ({{ssec-join-resp}})
 
-## TLS Exporter Label Registry {#ssec-iana-tls-esporter-label-registry}
+## TLS Exporter Labels {#ssec-iana-tls-esporter-label-registry}
 
-IANA is asked to register the following entry to the "TLS Exporter Label" Registry defined in {{Section 6 of RFC5705}} and updated in {{Section 12 of RFC8447}}.
+IANA is asked to register the following entry to the "TLS Exporter Labels" Registry defined in {{Section 6 of RFC5705}} and updated in {{Section 12 of RFC8447}}.
 
 * Value: EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app
 * DTLS-OK: Y
 * Recommended: N
 * Reference: \[\[This document\]\] ({{sssec-challenge-value}})
 
-## AIF Registry {#ssec-iana-AIF-registry}
+## AIF {#ssec-iana-AIF-registry}
 
 IANA is asked to register the following entry to the "Toid" registry within the "AIF" registry group defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
 
@@ -1794,7 +1794,7 @@ Change controller: IESG
 
 Provisional registration?  No
 
-## CoAP Content-Format Registry {#ssec-iana-coap-content-format-registry}
+## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
 
 IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group:
 
@@ -1806,7 +1806,7 @@ ID: TBD
 
 Reference: \[\[This document\]\]
 
-## Group OSCORE Roles Registry {#ssec-iana-group-oscore-roles-registry}
+## Group OSCORE Roles {#ssec-iana-group-oscore-roles-registry}
 
 This document establishes the IANA "Group OSCORE Roles" Registry. The Registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
@@ -1826,7 +1826,7 @@ This registry will be initially populated by the values in {{fig-role-values}}.
 
 The Reference column for all of these entries will be \[\[This document\]\].
 
-## CoRE Resource Type Registry # {#iana-rt}
+## CoRE Resource Type # {#iana-rt}
 
 IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the  "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" {{CORE.Parameters}} registry group.
 
@@ -1836,7 +1836,7 @@ IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the
 
 * Reference: \[\[This document\]\]
 
-## ACE Scope Semantics Registry # {#iana-scope-semantics}
+## ACE Scope Semantics # {#iana-scope-semantics}
 
 IANA is asked to register the following entry in the "ACE Scope Semantics" registry defined in {{Section 10.12 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -2033,6 +2033,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -11 to -12 ## {#sec-11-12}
 
 * Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.
+
+* Revised names of new IANA registries.
 
 * Fixes and editorial improvements.
 
