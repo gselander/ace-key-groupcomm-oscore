@@ -619,7 +619,7 @@ gm_dh_pub_keys_entry =
 gname = tstr
 ~~~~~~~~~~~
 
-## Sending the Joining Request {#ssec-join-req-sending}
+## Send the Joining Request {#ssec-join-req-sending}
 
 The joining node requests to join the OSCORE group by sending a Joining Request message to the related group-membership resource at the Group Manager, as per {{Section 4.3 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -663,7 +663,7 @@ It is up to applications to define how N_S is computed in further alternative se
 
 {{ssec-security-considerations-reusage-nonces}} provides security considerations on the reusage of the N_S challenge.
 
-## Receiving the Joining Request {#ssec-join-req-processing}
+## Receive the Joining Request {#ssec-join-req-processing}
 
 The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}. Additionally, the following applies.
 
@@ -723,7 +723,7 @@ The Group Manager processes the Joining Request as defined in {{Section 4.1.2.1 
 
   * The 'client_cred_verify' parameter MUST include a PoP evidence computed as described in {{ssec-join-req-sending}}, by using the public key indicated in the current 'client_cred' parameter, with the signature or ECDH algorithm, and possible associated parameters indicated by the Group Manager. If the error response from the Group Manager includes the 'kdcchallenge' parameter, the joining node MUST use its content as new N\_S challenge to compute the PoP evidence.
   
-## Sending the Joining Response {#ssec-join-resp}
+## Send the Joining Response {#ssec-join-resp}
 
 If the processing of the Joining Request described in {{ssec-join-req-processing}} is successful, the Group Manager updates the group membership by registering the joining node NODENAME as a new member of the OSCORE group GROUPNAME, as described in {{Section 4.1.2.1 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -833,7 +833,7 @@ Furthermore, the CBOR map in the payload of the Joining Response MUST also inclu
 
 As a last action, the Group Manager MUST store the Gid specified in the 'contextId' parameter of the 'key' parameter, as the Birth Gid of the joining node in the joined group (see {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}). This applies also in case the node is in fact re-joining the group; in such a case, the newly determined Birth Gid overwrites the one currently stored.
 
-## Receiving the Joining Response {#ssec-join-resp-processing}
+## Receive the Joining Response {#ssec-join-resp-processing}
 
 Upon receiving the Joining Response, the joining node retrieves the Group Manager's public key from the 'kdc_cred' parameter. The joining node MUST verify the proof-of-possession (PoP) evidence specified in the 'kdc_cred_verify' parameter of the Joining Response as defined below.
 
@@ -883,13 +883,13 @@ In particular, one of the following four cases can occur when a new node joins a
 
 * The joining node and the Group Manager use a symmetric proof-of-possession key to establish a secure communication association. In this case, upon performing a joining process with that Group Manager for the first time, the joining node specifies its own public key in the 'client_cred' parameter of the Joining Request targeting the group-membership endpoint (see {{ssec-join-req-sending}}).
 
-# Retrieval of Updated Keying Material # {#sec-updated-key}
+# Retrieve of Updated Keying Material # {#sec-updated-key}
 
 At some point, a group member considers the Group OSCORE Security Context invalid and to be renewed. This happens, for instance, after a number of unsuccessful security processing of incoming messages from other group members, or when the Security Context expires as specified by the 'exp' parameter of the Joining Response.
 
 When this happens, the group member retrieves updated security parameters and group keying material. This can occur in the two different ways described below.
 
-## Retrieval of Group Keying Material ## {#ssec-updated-key-only}
+## Retrieve of Group Keying Material ## {#ssec-updated-key-only}
 
 If the group member wants to retrieve only the latest group keying material, it sends a Key Distribution Request to the Group Manager.
 
@@ -905,7 +905,7 @@ The Group Manager processes the Key Distribution Request according to {{Section 
 
 Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters and group keying material, and, if they differ from the current ones, uses them to set up the new Group OSCORE Security Context as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
-## Retrieval of Group Keying Material and OSCORE Sender ID ## {#ssec-updated-and-individual-key}
+## Retrieve of Group Keying Material and OSCORE Sender ID ## {#ssec-updated-and-individual-key}
 
 If the group member wants to retrieve the latest group keying material as well as the OSCORE Sender ID that it has in the OSCORE group, it sends a Key Distribution Request to the Group Manager.
 
@@ -921,7 +921,7 @@ The Group Manager processes the Key Distribution Request according to {{Section 
 
 Upon receiving the Key Distribution Response, the group member retrieves the updated security parameters, group keying material and Sender ID, and, if they differ from the current ones, uses them to set up the new Group OSCORE Security Context as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
-# Requesting a Change of Keying Material # {#sec-new-key}
+# Request to Change Individual Keying Material # {#sec-new-key}
 
 As discussed in {{Section 2.4.2 of I-D.ietf-core-oscore-groupcomm}}, a group member may at some point exhaust its Sender Sequence Numbers in the OSCORE group.
 
@@ -949,7 +949,7 @@ Otherwise, the Group Manager performs one of the following actions.
        
        The Group Manager MUST return a 5.03 (Service Unavailable) response in case there are currently no Sender IDs available to assign in the OSCORE group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 4 ("No available node identifiers").
 
-# Retrieval of Public Keys and Roles of Group Members # {#sec-pub-keys}
+# Retrieve Public Keys of Group Members # {#sec-pub-keys}
 
 A group member or a signature verifier may need to retrieve the public keys of (other) group members. To this end, the group member or signature verifier sends a Public Key Request message to the Group Manager, as per {{Section 4.6 of I-D.ietf-ace-key-groupcomm}}. In particular, it sends the request to the endpoint /ace-group/GROUPNAME/pub-key at the Group Manager.
 
@@ -963,7 +963,7 @@ Upon receiving the Public Key Request, the Group Manager processes it as per Sec
 
 The success Public Key Response is formatted as defined in Section 4.1.3.1 or Section 4.1.3.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being FETCH or GET, respectively.
 
-# Update of Public Key # {#sec-update-pub-key}
+# Upload a New Public Key # {#sec-update-pub-key}
 
 A group member may need to provide the Group Manager with its new public key to use in the group from then on, hence replacing the current one. This can be the case, for instance, if the signature or ECDH algorithm, and possible associated parameters used in the OSCORE group have been changed, and the current public key is not compatible with them.
 
@@ -985,7 +985,7 @@ Upon receiving the Public Key Update Request, the Group Manager processes it as 
 
 * If the request is successfully processed, the Group Manager stores the association between i) the new public key of the group member; and ii) the Group Identifier (Gid), i.e., the OSCORE ID Context, associated to the OSCORE group together with the OSCORE Sender ID assigned to the group member in the group. The Group Manager MUST keep this association updated over time.
 
-# Retrieval of the Group Manager's Public Key # {#sec-gm-pub-key}
+# Retrieve the Group Manager's Public Key # {#sec-gm-pub-key}
 
 A group member or a signature verifier may need to retrieve the public key of the Group Manager. To this end, the group member or signature verifier sends a Group Manager Public Key Request message to the Group Manager.
 
@@ -1048,7 +1048,7 @@ Member                                                       Manager
 ~~~~~~~~~~~
 {: #fig-gm-pub-key-req-resp-ex title="Example of Group Manager Public Key Request-Response"}
 
-# Retrieval of Signature Verification Data # {#sec-verif-data}
+# Retrieve Signature Verification Data # {#sec-verif-data}
 
 A signature verifier may need to retrieve data required to verify signatures of messages protected with the group mode and sent to a group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). To this end, the signature verifier sends a Signature Verification Data Request message to the Group Manager.
 
@@ -1116,19 +1116,19 @@ Verifier                                                     Manager
 ~~~~~~~~~~~
 {: #fig-verif-data-req-resp-ex title="Example of Signature Verification Data Request-Response"}
 
-# Retrieval of Group Policies # {#sec-policies}
+# Retrieve the Group Policies # {#sec-policies}
 
 A group member may request the current policies used in the OSCORE group. To this end, the group member sends a Policies Request, as per {{Section 4.8 of I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/policies at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 Upon receiving the Policies Request, the Group Manager processes it as per {{Section 4.1.4.1 of I-D.ietf-ace-key-groupcomm}}. The success Policies Response is formatted as defined in {{Section 4.1.4.1 of I-D.ietf-ace-key-groupcomm}}.
 
-# Retrieval of Keying Material Version # {#sec-version}
+# Retrieve the Keying Material Version # {#sec-version}
 
 A group member may request the current version of the keying material used in the OSCORE group. To this end, the group member sends a Version Request, as per {{Section 4.9 of I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/num at the Group Manager, where GROUPNAME is the name of the OSCORE group.
 
 Upon receiving the Version Request, the Group Manager processes it as per {{Section 4.1.5.1 of I-D.ietf-ace-key-groupcomm}}. The success Version Response is formatted as defined in {{Section 4.1.5.1 of I-D.ietf-ace-key-groupcomm}}.
 
-# Retrieval of Group Status # {#sec-status}
+# Retrieve the Group Status # {#sec-status}
 
 A group member may request the current status of the the OSCORE group, i.e., active or inactive. To this end, the group member sends a Group Status Request to the Group Manager.
 
@@ -1171,7 +1171,7 @@ Member                                                       Manager
 ~~~~~~~~~~~
 {: #fig-key-status-req-resp-ex title="Example of Group Status Request-Response"}
 
-# Retrieval of Group Names and URIs {#sec-retrieve-gnames}
+# Retrieve Group Names {#sec-retrieve-gnames}
 
 A node may want to retrieve from the Group Manager the group name and the URI of the group-membership resource of a group. This is relevant in the following cases.
 
@@ -1231,7 +1231,7 @@ Node                                                           Manager
 ~~~~~~~~~~~
 {: #fig-group-names-req-resp-ex title="Example of Group Name and URI Retrieval Request-Response"}
 
-# Request to Leave the Group # {#sec-leave-req}
+# Leave the Group # {#sec-leave-req}
 
 A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per {{Section 4.10 of I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /ace-group/GROUPNAME/nodes/NODENAME at the Group Manager.
 
@@ -2033,6 +2033,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -11 to -12 ## {#sec-11-12}
 
 * Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.
+
+* ace-group/ accessible also to non-members that are not Verifiers.
 
 * Revised names of new IANA registries.
 
