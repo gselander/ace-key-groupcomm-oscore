@@ -133,8 +133,7 @@ informative:
   I-D.ietf-core-coap-pubsub:
   I-D.tiloca-core-oscore-discovery:
   I-D.ietf-ace-dtls-authorize:
-  I-D.ietf-ace-oscore-gm-admin:  
-  I-D.ietf-rats-uccs:
+  I-D.ietf-ace-oscore-gm-admin:
   I-D.ietf-cose-cbor-encoded-cert:
   RFC5869:
   RFC6347:
@@ -513,11 +512,11 @@ The exchange of Token Transfer Request and Response is defined in {{Section 3.3 
   
   * 'pub_key_enc' takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}} (REQ6). Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
   
-     At the time of writing this specification, acceptable public key encodings are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
+     At the time of writing this specification, acceptable public key encodings are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
   
-     \[ As to CWTs and unprotected CWT claim sets, there is a pending registration requested by draft-ietf-lake-edhoc. \]
+     \[ As to CWTs and CCSs, the COSE Header Parameters 'kcwt' and 'kccs' are under pending registration requested by draft-ietf-lake-edhoc. \]
      
-     \[ As to C509 certificates, there is a pending registration requested by draft-ietf-cose-cbor-encoded-cert. \]
+     \[ As to C509 certificates, the COSE Header Parameters 'c5b' and 'c5c' are under pending registration requested by draft-ietf-cose-cbor-encoded-cert. \]
   
   This format is consistent with every signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
   
@@ -763,11 +762,11 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'pub_key_enc' parameter MUST be present and specifies the encoding of public keys used in the OSCORE group. It takes value from the "Label" column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}} (REQ6). Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
-      At the time of writing this specification, acceptable public key encodings are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
+      At the time of writing this specification, acceptable public key encodings are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
-        \[ As to CWTs and unprotected CWT claim sets, there is a pending registration requested by draft-ietf-lake-edhoc. \]
-    
-        \[ As to C509 certificates, there is a pending registration requested by draft-ietf-cose-cbor-encoded-cert. \]
+        \[ As to CWTs and CCSs, the COSE Header Parameters 'kcwt' and 'kccs' are under pending registration requested by draft-ietf-lake-edhoc. \]
+     
+        \[ As to C509 certificates, the COSE Header Parameters 'c5b' and 'c5c' are under pending registration requested by draft-ietf-cose-cbor-encoded-cert. \]
    
    * The 'sign_enc_alg' parameter MUST NOT be present if the OSCORE group is a pairwise-only group. Otherwise, it MUST be present and specifies the Signature Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}. 
    
@@ -1457,10 +1456,10 @@ This section always applies, as related to common configuration parameters.
 
 * For the HKDF Algorithm 'hkdf', the Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}}, i.e., HKDF SHA-256 (COSE algorithm encoding: -10).
 
-* For the format 'pub_key_enc' used to encode the public keys in the group, the Group Manager SHOULD use a CBOR Web Token (CWT){{RFC8392}} or an unprotected CWT Claim Set {{I-D.ietf-rats-uccs}}.
+* For the format 'pub_key_enc' used to encode the public keys in the group, the Group Manager SHOULD use CBOR Web Token (CWT) or CWT Claims Set (CCS) {{RFC8392}}, i.e., the COSE Header Parameter 'kcwt' and 'kccs', respectively.
 
    \[
-      This is a pending registration requested by draft-ietf-lake-edhoc.
+      These COSE Header Parameters are under pending registration requested by draft-ietf-lake-edhoc.
    \]
 
 * For 'max_stale_sets', the Group Manager SHOULD consider N = 3 as the maximum number of stored sets of stale Sender IDs in the collection associated to the group (see {{sssec-stale-sender-ids}}).
@@ -2043,6 +2042,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Alignment to new requirements from draft-ietf-ace-key-groupcomm.
 
 * Use of "Token Tranfer Request" and "Token Transfer Response".
+
+* Changed UCCS to CCS.
 
 * Fixes and editorial improvements.
 
