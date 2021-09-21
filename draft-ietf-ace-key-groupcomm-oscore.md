@@ -493,9 +493,9 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
 
 * The CoAP POST request MAY additionally contain the following parameters, which, if included, MUST have the corresponding values:
 
-   - 'ecdh_info' defined in {{ecdh-info}}, encoding the CBOR simple value Null to request information on the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and on the exact encoding of public keys used in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+   - 'ecdh_info' defined in {{ecdh-info}}, with value the CBOR simple value 'null' (0xf6) to request information on the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and on the exact encoding of public keys used in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-   - 'gm_dh_pub_keys' defined in {{gm-dh-info}}, encoding the CBOR simple value Null to request the Diffie-Hellman public keys of the Group Manager in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+   - 'gm_dh_pub_keys' defined in {{gm-dh-info}}, with value the CBOR simple value 'null' (0xf6) to request the Diffie-Hellman public keys of the Group Manager in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
    Alternatively, the joining node may retrieve this information by other means.
    
@@ -537,7 +537,7 @@ The 'ecdh_info' parameter is an OPTIONAL parameter of the Token Post request mes
 
 This parameter is used to request and retrieve from the Group Manager information and parameters about the ECDH algorithm and about the public keys to be used in the OSCORE group to compute a static-static Diffie-Hellman shared secret {{NIST-800-56A}}, in case the group uses the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-When used in the Token Post request sent to the Group Manager, the 'ecdh_info' parameter encodes the CBOR simple value Null, to ask for information and parameters on the ECDH algorithm and on the public keys to be used to compute Diffie-Hellman shared secrets in the OSCORE groups that the client has been authorized to join.
+When used in the Token Post request sent to the Group Manager, the 'ecdh_info' parameter has value the CBOR simple value 'null' (0xf6), to ask for information and parameters on the ECDH algorithm and on the public keys to be used to compute Diffie-Hellman shared secrets in the OSCORE groups that the client has been authorized to join.
 
 When used in the following 2.01 (Created) response from the Group Manager, the 'ecdh_info' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
 
@@ -584,7 +584,7 @@ The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the Token Post reques
 
 This parameter is used to request and retrieve from the Group Manager its Diffie-Hellman public keys used in the OSCORE groups that the client has been authorized to join. The Group Manager has specifically a Diffie-Hellman public key in an OSCORE group, if and only if the group is a pairwise-only group. In this case, the early retrieval of the Group Manager's public key is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
 
-When used in the Token Post request sent to the Group Manager, the 'gm_dh_pub_keys' parameter encodes the CBOR simple value Null, to ask for the Diffie-Hellman public key that the Group Manager uses in the OSCORE groups that the client has been authorized to join.
+When used in the Token Post request sent to the Group Manager, the 'gm_dh_pub_keys' parameter has value the CBOR simple value 'null' (0xf6), to ask for the Diffie-Hellman public key that the Group Manager uses in the OSCORE groups that the client has been authorized to join.
 
 When used in the following 2.01 (Created) response from the Group Manager, the 'gm_dh_pub_keys' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
 
@@ -797,7 +797,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'pub_keys' parameter, if present, includes the public keys requested by the joining node by means of the 'get_pub_keys' parameter in the Joining Request.
 
-   If the joining node has asked for the public keys of all the group members, i.e., 'get_pub_keys' had value Null in the Joining Request, then the Group Manager provides only the public keys of the group members that are relevant to the joining node. That is, in such a case, 'pub_keys' includes only: i) the public keys of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor.
+   If the joining node has asked for the public keys of all the group members, i.e., 'get_pub_keys' had value the CBOR simple value 'null' (0xf6) in the Joining Request, then the Group Manager provides only the public keys of the group members that are relevant to the joining node. That is, in such a case, 'pub_keys' includes only: i) the public keys of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor.
 
 * The 'peer_identifiers' parameter includes the OSCORE Sender ID of each group member whose public key is specified in the 'pub_keys' parameter. That is, a group member's Sender ID is used as identifier for that group member (REQ12).
    
@@ -1377,7 +1377,7 @@ If case (c) or case (d) applies, the group member SHOULD perform the following a
 
 If case (c) or case (d) applies, the group member can alternatively perform the following actions.
 
-1. The group member re-joins the group (see {{ssec-join-req-sending}}). When doing so, the group member MUST re-join with the same roles it currently has in the group, and MUST request the Group Manager for the public keys of all the current group members. That is, the 'get_pub_keys' parameter of the Joining Request MUST be present and MUST be set to the CBOR simple value Null.
+1. The group member re-joins the group (see {{ssec-join-req-sending}}). When doing so, the group member MUST re-join with the same roles it currently has in the group, and MUST request the Group Manager for the public keys of all the current group members. That is, the 'get_pub_keys' parameter of the Joining Request MUST be present and MUST be set to the CBOR simple value 'null' (0xf6).
 
 2. When receiving the Joining Response (see {{ssec-join-resp-processing}} and {{ssec-join-resp-processing}}), the group member retrieves the set Z of public keys specified in the 'pub_keys' parameter.
    
@@ -1581,14 +1581,14 @@ The following registrations are done for the OAuth Parameters CBOR Mappings Regi
 
 * Name: ecdh_info
 * CBOR Key: TBD (range -256 to 255)
-* Value Type: Simple value Null / array
+* Value Type: Simple value null / array
 * Reference: \[\[This specification\]\]
 
 &nbsp;
 
 * Name: gm_dh_pub_keys
 * CBOR Key: TBD (range -256 to 255)
-* Value Type: Simple value Null / array
+* Value Type: Simple value null / array
 * Reference: \[\[This specification\]\]
 
 ## ACE Groupcomm Parameters {#ssec-iana-ace-groupcomm-parameters-registry}
