@@ -479,29 +479,27 @@ Type4 = Non-member (not authorized to be Verifier)  |  D  = DELETE
 ~~~~~~~~~~~
 {: #method-table title="Admitted CoAP Methods on the Group Manager Resources" artwork-align="center"}
 
-# Token POST and Group Joining {#sec-joining-node-to-GM}
+# Token Transferring and Group Joining {#sec-joining-node-to-GM}
 
-The rest of this section describes the interactions between the joining node and the Group Manager, i.e., the sending of the Access Token and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the Group Manager consists of the messages defined in {{Sections 3.3 and 4.3.1.1 of I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
+The rest of this section describes the interactions between the joining node and the Group Manager, i.e., the transferring of the Access Token to the Group Manager and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the Group Manager consists of the messages defined in {{Sections 3.3 and 4.3.1.1 of I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
 
-A signature verifier provides the Group Manager with an Access Token, as described in {{ssec-token-post}}, just as any another joining node does. However, unlike candidate group members, it does not join any OSCORE group, i.e., it does not perform the joining process defined in {{ssec-join-req-sending}}. After successfully posting an Access Token, a signature verifier is authorized to perform only the operations specified in {{sec-pub-keys}}, to retrieve the public keys of group members, and only for the OSCORE groups specified in the validated Access Token. The Group Manager MUST respond with a 4.01 (Unauthorized) error message, in case a signature verifier attempts to access any other endpoint than /ace-group/GROUPNAME/pub-key at the Group Manager.
+A signature verifier provides the Group Manager with an Access Token, as described in {{ssec-token-post}}, just as any another joining node does. However, unlike candidate group members, it does not join any OSCORE group, i.e., it does not perform the joining process defined in {{ssec-join-req-sending}}. After successfully transferring an Access Token, a signature verifier is authorized to perform only the operations specified in {{sec-pub-keys}}, to retrieve the public keys of group members, and only for the OSCORE groups specified in the validated Access Token. The Group Manager MUST respond with a 4.01 (Unauthorized) error message, in case a signature verifier attempts to access any other endpoint than /ace-group/GROUPNAME/pub-key at the Group Manager.
 
-## Token Post {#ssec-token-post}
+## Token Transferring {#ssec-token-post}
 
-The Token post exchange is defined in {{Section 3.3 of I-D.ietf-ace-key-groupcomm}}.
+The exchange of Token Transfer Request and Response is defined in {{Section 3.3 of I-D.ietf-ace-key-groupcomm}}. In addition to that, the following applies.
 
-Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following applies.
+* The Token Transfer Request MAY additionally contain the following parameters, which, if included, MUST have the corresponding values:
 
-* The CoAP POST request MAY additionally contain the following parameters, which, if included, MUST have the corresponding values:
+   - 'ecdh_info' defined in {{ecdh-info}} of this document, with value the CBOR simple value 'null' (0xf6) to request information about the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and about the exact encoding of public keys used in the groups that the client has been authorized to join. This is relevant in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-   - 'ecdh_info' defined in {{ecdh-info}}, with value the CBOR simple value 'null' (0xf6) to request information on the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and on the exact encoding of public keys used in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
-
-   - 'gm_dh_pub_keys' defined in {{gm-dh-info}}, with value the CBOR simple value 'null' (0xf6) to request the Diffie-Hellman public keys of the Group Manager in the groups that the client has been authorized to join, in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+   - 'gm_dh_pub_keys' defined in {{gm-dh-info}} of this document, with value the CBOR simple value 'null' (0xf6) to request the Diffie-Hellman public keys of the Group Manager in the groups that the client has been authorized to join. This is relevant in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
    Alternatively, the joining node may retrieve this information by other means.
    
 * The 'kdcchallenge' parameter contains a dedicated nonce N_S generated by the Group Manager. For the N\_S value, it is RECOMMENDED to use a 8-byte long random nonce. The joining node can use this nonce in order to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
 
-    The 'kdcchallenge' parameter MAY be omitted from the 2.01 (Created) response, if the 'scope' of the Access Token specifies only the role "monitor" or only the role "verifier" or both of them, for each and every of the specified groups.
+    The 'kdcchallenge' parameter MAY be omitted from the Token Transfer Response, if the 'scope' of the Access Token specifies only the role "monitor" or only the role "verifier" or only a combination of the two, for each and every of the specified groups.
 
 * If the 'sign_info' parameter is present in the response, the following applies for each element 'sign_info_entry'.
 
@@ -523,23 +521,23 @@ Additionally to what defined in {{I-D.ietf-ace-key-groupcomm}}, the following ap
   
   This format is consistent with every signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
   
-* If 'ecdh_info' is included in the request, the Group Manager MAY include in the response the 'ecdh_info' parameter defined in {{ecdh-info}}. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'ecdh_info_entry' applies to.
+* If 'ecdh_info' is included in the Token Transfer Request, the Group Manager MAY include the 'ecdh_info' parameter in the Token Transfer Response, as per the format defined in {{ecdh-info}}. Note that the field 'id' specifies the name, or array of group names, for which the corresponding 'ecdh_info_entry' applies to.
 
-* If 'gm_dh_pub_keys' is included in the request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include in the response the 'gm_dh_pub_keys' parameter defined in {{gm-dh-info}}. Otherwise, the Group Manager MAY include the 'gm_dh_pub_keys' parameter. Note that the field 'id' takes as value the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.
+* If 'gm_dh_pub_keys' is included in the Token Transfer Request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include the 'gm_dh_pub_keys' parameter in the Token Transfer Response, as per the format defined in {{gm-dh-info}}. Otherwise, if 'gm_dh_pub_keys' is included in the Token Transfer Request, the Group Manager MAY include the 'gm_dh_pub_keys' parameter in the Token Transfer Response. Note that the field 'id' specifies the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.
 
 Note that, other than through the above parameters as defined in {{Section 3.3 of I-D.ietf-ace-key-groupcomm}}, the joining node MAY have previously retrieved this information by other means. For example, information conveyed in the 'sign_info' and 'ecdh_info' parameters can be obtained by using the approach described in {{I-D.tiloca-core-oscore-discovery}}, to discover the OSCORE group and the link to the associated group-membership resource at the Group Manager (OPT1).
 
-Additionally, if allowed by the used transport profile of ACE, the joining node may instead provide the Access Token to the Group Manager by other means, e.g., during a secure session establishment (see {{Section 3.3.2 of I-D.ietf-ace-dtls-authorize}}).
-
 ### 'ecdh_info' Parameter {#ecdh-info}
 
-The 'ecdh_info' parameter is an OPTIONAL parameter of the Token Post request message and the corresponding response message defined in {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}.
+The 'ecdh_info' parameter is an OPTIONAL parameter of the request and response messages exchanged between the client and the authz-info endpoint at the RS (see {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}).
 
-This parameter is used to request and retrieve from the Group Manager information and parameters about the ECDH algorithm and about the public keys to be used in the OSCORE group to compute a static-static Diffie-Hellman shared secret {{NIST-800-56A}}, in case the group uses the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+This parameter allows the client and the RS to exchange information about an ECDH algorithm and about public keys to accordingly use for deriving Diffie-Hellman secrets. Its exact semantics and content are application specific.
 
-When used in the Token Post request sent to the Group Manager, the 'ecdh_info' parameter has value the CBOR simple value 'null' (0xf6), to ask for information and parameters on the ECDH algorithm and on the public keys to be used to compute Diffie-Hellman shared secrets in the OSCORE groups that the client has been authorized to join.
+In this application profile, this parameter is used to exchange information about the ECDH algorithm and about public keys to be used with it, in the groups indicated by the transferred acces token as per its 'scope' claim (see {{Section 3.2 of I-D.ietf-ace-key-groupcomm}}).
 
-When used in the following 2.01 (Created) response from the Group Manager, the 'ecdh_info' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
+When used in the Token Transfer Request sent to the Group Manager, the 'ecdh_info' parameter has value the CBOR simple value 'null' (0xf6). This is done to ask for information about the ECDH algorithm and about the public keys to be used to compute static-static Diffie-Hellman shared secrets {{NIST-800-56A}}, in the OSCORE groups that the client has been authorized to join and that use the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+
+When used in the following Token Transfer Response from the Group Manager, the 'ecdh_info' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.
 
 Each element contains information about ECDH parameters and about public keys, for one or more OSCORE groups that use the pairwise mode of Group OSCORE and that the client has been authorized to join. Each element is formatted as follows.
 
@@ -558,11 +556,11 @@ The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter is given below.
 ~~~~~~~~~~~ CDDL
 ecdh_info = ecdh_info_req / ecdh_info_resp
    
-ecdh_info_req = nil                   ; used in the Token Post
-                                      ; request to the Group Manager
+ecdh_info_req = nil                   ; in the Token Transfer
+                                      ; Request to the KDC
                                          
-ecdh_info_res = [ + ecdh_info_entry ] ; used in the 2.01 response
-                                      ; to the Token Post request
+ecdh_info_res = [ + ecdh_info_entry ] ; in the Token Transfer
+                                      ; Response from the KDC
    
 ecdh_info_entry =
 [
@@ -580,13 +578,15 @@ This format is consistent with every ECDH algorithm currently defined in {{I-D.i
 
 ### 'gm_dh_pub_keys' Parameter {#gm-dh-info}
 
-The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the Token Post request message and the corresponding response message defined in {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}.
+The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the request and response messages exchanged between the Client and the authz-info endpoint at the RS (see {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}).
 
-This parameter is used to request and retrieve from the Group Manager its Diffie-Hellman public keys used in the OSCORE groups that the client has been authorized to join. The Group Manager has specifically a Diffie-Hellman public key in an OSCORE group, if and only if the group is a pairwise-only group. In this case, the early retrieval of the Group Manager's public key is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
+This parameter allows the client to request and retrieve the Diffie-Hellman public keys of the RS.
 
-When used in the Token Post request sent to the Group Manager, the 'gm_dh_pub_keys' parameter has value the CBOR simple value 'null' (0xf6), to ask for the Diffie-Hellman public key that the Group Manager uses in the OSCORE groups that the client has been authorized to join.
+In this application profile, this parameter is used to request and retrieve from the Group Manager its Diffie-Hellman public keys to use, in the OSCORE groups that the client has been authorized to join. The Group Manager has specifically a Diffie-Hellman public key in an OSCORE group, if and only if the group is a pairwise-only group. In this case, the early retrieval of the Group Manager's public key is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
 
-When used in the following 2.01 (Created) response from the Group Manager, the 'gm_dh_pub_keys' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups the client has been authorized to join.
+When used in the Token Transfer Request sent to the Group Manager, the 'gm_dh_pub_keys' parameter has value the CBOR simple value 'null' (0xf6). This is done to ask for the Diffie-Hellman public keys that the Group Manager uses in the OSCORE groups that the client has been authorized to join.
+
+When used in the following Token Transfer Response from the Group Manager, the 'gm_dh_pub_keys' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.
 
 Each element 'gm_dh_pub_keys_entry' contains information about the Group Manager's Diffie-Hellman public keys, for one or more OSCORE groups that are pairwise-only groups and that the client has been authorized to join. Each element is formatted as follows.
 
@@ -601,13 +601,13 @@ The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter is given below.
 ~~~~~~~~~~~ CDDL
 gm_dh_pub_keys = gm_dh_pub_keys_req / gm_dh_pub_keys_resp
 
-gm_dh_pub_keys_req = nil                        ; used in the Token
-                                                ; Post request to
-                                                ; the Group Manager
+gm_dh_pub_keys_req = nil                        ; in the Token Transfer
+                                                ; Request to the
+                                                ; Group Manager
 
-gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ] ; used in the 2.01
-                                                ; response to the
-                                                ; Token Post request
+gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ] ; in the Token Transfer
+                                                ; Response from the
+                                                ; Group Manager
    
 gm_dh_pub_keys_entry =
 [
@@ -655,9 +655,9 @@ Additionally to what defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}},
 
 The value of the N\_S challenge is determined as follows.
 
-1. If the joining node has posted the Access Token to the /authz-info endpoint of the Group Manager as in {{ssec-token-post}}, N\_S takes the same value of the most recent 'kdcchallenge' parameter received by the joining node from the Group Manager. This can be either the one specified in the 2.01 (Created) response to the Token POST, or the one possibly specified in a 4.00 (Bad Request) response to a following Joining Request (see {{ssec-join-req-processing}}).
+1. If the joining node has provided the Access Token to the Group Manager by means of a Token Transfer Request to the /authz-info endpoint as in {{ssec-token-post}}, then N\_S takes the same value of the most recent 'kdcchallenge' parameter received by the joining node from the Group Manager. This can be either the one specified in the Token Transfer Response, or the one possibly specified in a 4.00 (Bad Request) response to a following Joining Request (see {{ssec-join-req-processing}}).
 
-2. If the Token posting has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} with the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in {{Section 7.5 of RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app" defined in {{ssec-iana-tls-esporter-label-registry}} of this document.
+2. If the provisioning of the Access Token to the Group Manager has relied on the DTLS profile of ACE {{I-D.ietf-ace-dtls-authorize}} with the Access Token as content of the "psk_identity" field of the ClientKeyExchange message {{RFC6347}}, N\_S is an exporter value computed as defined in {{Section 7.5 of RFC8446}}. Specifically, N\_S is exported from the DTLS session between the joining node and the Group Manager, using an empty 'context_value', 32 bytes as 'key_length', and the exporter label "EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app" defined in {{ssec-iana-tls-esporter-label-registry}} of this document.
 
 It is up to applications to define how N_S is computed in further alternative settings.
 
@@ -1535,13 +1535,13 @@ For the N\_C challenge, it is RECOMMENDED to use a 8-byte long random nonce. Fur
 
 As defined in {{sssec-challenge-value}}, the way the N\_S value is computed depends on the particular way the joining node provides the Group Manager with the Access Token, as well as on following interactions between the two.
 
-* If the Access Token is not explicitly posted to the /authz-info endpoint of the Group Manager, then N\_S is computed as a 32-byte long challenge. For an example, see point (2) of {{sssec-challenge-value}}.
+* If the Access Token has not been provided to the Group Manager by means of a Token Transfer Request to the /authz-info endpoint as in {{ssec-token-post}}, then N\_S is computed as a 32-byte long challenge. For an example, see point (2) of {{sssec-challenge-value}}.
 
-* If the Access Token has been explicitly posted to the /authz-info endpoint of the Group Manager, N\_S takes the most recent value provided to the client by the Group Manager in the 'kdcchallenge' parameter, as specified in point (1) of {{sssec-challenge-value}}. This is provided either in the 2.01 response to the Token Post (see {{ssec-token-post}}), or in a 4.00 response to a following Joining Request (see {{ssec-join-req-processing}}). In either case, it is RECOMMENDED to use a 8-byte long random challenge as value for N\_S.
+* If the Access Token has been provided to the Group Manager by means of a Token Transfer Request to the /authz-info endpoint as in {{ssec-token-post}}, then N\_S takes the most recent value provided to the client by the Group Manager in the 'kdcchallenge' parameter, as specified in point (1) of {{sssec-challenge-value}}. This is provided either in the Token Transfer Response (see {{ssec-token-post}}), or in a 4.00 response to a following Joining Request (see {{ssec-join-req-processing}}). In either case, it is RECOMMENDED to use a 8-byte long random challenge as value for N\_S.
 
 If we consider both N\_C and N\_S to take 8-byte long values, the following considerations hold.
 
-* Let us consider both N\_C and N\_S as taking random values, and the Group Manager to never change the value of the N\_S provided to a Client during the lifetime of an Access Token. Then, as per the birthday paradox, the average collision for N\_S will happen after 2^32 new posted Access Tokens, while the average collision for N\_C will happen after 2^32 new Joining Requests. This amounts to considerably more token provisionings than the expected new joinings of OSCORE groups under a same Group Manager, as well as to considerably more requests to join OSCORE groups from a same Client using a same Access Token under a same Group Manager.
+* Let us consider both N\_C and N\_S as taking random values, and the Group Manager to never change the value of the N\_S provided to a Client during the lifetime of an Access Token. Then, as per the birthday paradox, the average collision for N\_S will happen after 2^32 new transferred Access Tokens, while the average collision for N\_C will happen after 2^32 new Joining Requests. This amounts to considerably more token provisionings than the expected new joinings of OSCORE groups under a same Group Manager, as well as to considerably more requests to join OSCORE groups from a same Client using a same Access Token under a same Group Manager.
 
 * {{Section 7 of I-D.ietf-ace-oscore-profile}} as well {{Section B.2 of RFC8613}} recommend the use of 8-byte random values as well. Unlike in those cases, the values of N\_C and N\_S considered in this document are not used for as sensitive operations as the derivation of a Security Context, and thus do not have possible implications in the security of AEAD ciphers.
 
@@ -1934,7 +1934,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ20 - Specify the exact approaches used to compute and verify the PoP evidence to include in 'client_cred_verify', and which of those approaches is used in which case: see {{ssec-join-req-sending}} and {{ssec-join-req-processing}}.
 
-* REQ21 - Specify how the nonce N\_S is generated, if the token is not being posted (e.g., if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
+* REQ21 - Specify how the nonce N\_S is generated, if the token is not provided to the KDC through the Token Transfer Request to the authz-info endpoint (e.g., if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
 
 * REQ22 - Specify if 'mgt_key_material' is used, and if yes specify its format and content: not used in this version of the profile.
 
@@ -1946,7 +1946,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT1 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
-* OPT2 (Optional) - Specify additional parameters used in the Token Post exchange: 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE.
+* OPT2 (Optional) - Specify additional parameters used in the exchange of Token Transfer Request and Response: 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE.
 
 * OPT3 (Optional) - Specify the encoding of 'pub_keys_repos' if the default is not used: no.
 
@@ -1972,11 +1972,11 @@ As defined in {{Section 8.1 of I-D.ietf-cose-rfc8152bis-algs}}, future algorithm
 
 To enable the seamless use of such future registered algorithms, this section defines a general, agile format for:
 
-* Each 'ecdh_info_entry' of the 'ecdh_info' parameter in the Token Post response, see {{ssec-token-post}} and {{ecdh-info}};
+* Each 'ecdh_info_entry' of the 'ecdh_info' parameter in the Token Transfer Response, see {{ssec-token-post}} and {{ecdh-info}};
 
 * The 'sign_params' and 'ecdh_params' parameters within the 'key' parameter, see {{ssec-join-resp}}, as part of the response payloads used in {{ssec-join-resp}}, {{ssec-updated-key-only}}, {{ssec-updated-and-individual-key}} and {{sec-group-rekeying-process}}.
 
-Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes the analogous general format for 'sign_info_entry' of the 'sign_info' parameter in the Token Post response, see {{ssec-token-post}}.
+Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes the analogous general format for 'sign_info_entry' of the 'sign_info' parameter in the Token Transfer Response, see {{ssec-token-post}}.
 
 If any of the currently registered COSE algorithms is considered, using this general format yields the same structure defined in this document for the items above, thus ensuring retro-compatibility.
 
@@ -2041,6 +2041,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Revised names of new IANA registries.
 
 * Alignment to new requirements from draft-ietf-ace-key-groupcomm.
+
+* Use of "Token Tranfer Request" and "Token Transfer Response".
 
 * Fixes and editorial improvements.
 
