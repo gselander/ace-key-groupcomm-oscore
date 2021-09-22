@@ -1941,7 +1941,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ24 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
 
-* REQ25 - Specify if any functionality of the KDC interface as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} is not supported: not applicable.
+* REQ25 - Specify if any part of the KDC interface as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} is not supported by the KDC: not applicable.
 
 * OPT1 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
