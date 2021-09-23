@@ -1955,7 +1955,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT6 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
 
-* OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group or topic: see {{ssec-auth-req}}.
+* OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group: see {{ssec-auth-req}}.
 
 * OPT8 (Optional) - Specify for the KDC to perform group rekeying (together or instead of renewing individual keying material) when receiving a Key Renewal Request: the Group Manager SHOULD NOT perform a group rekeying, unless already scheduled to occur shortly (see {{sec-new-key}}).
 
