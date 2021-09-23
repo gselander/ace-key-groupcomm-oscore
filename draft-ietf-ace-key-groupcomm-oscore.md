@@ -345,7 +345,7 @@ The Authorization Request message is as defined in {{Section 3.1 of I-D.ietf-ace
 
       - The group name is encoded as a CBOR text string.
 
-      - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} (REQ2) from the numerical abbreviations defined in {{fig-role-values}} for each requested role (OPT7).
+      - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} from the numerical abbreviations defined in {{fig-role-values}} for each requested role (REQ2).
 
 ## Authorization Response {#ssec-auth-resp}
 
@@ -1895,7 +1895,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ1 - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in {{Section 3.1 of I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
 
-* REQ2 - Specify the encoding and value of roles, for scope entries of 'scope': see {{sec-format-scope}} and {{ssec-auth-req}}.
+* REQ2 - Specify the exact format and encoding of 'scope'. This includes defining the set of possible roles and their identifiers, as well as the corresponding encoding to use in the scope entries according to the used scope format: see {{sec-format-scope}} and {{ssec-auth-req}}.
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
@@ -1943,6 +1943,8 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ25 - Specify if any part of the KDC interface as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} is not supported by the KDC: not applicable.
 
+* REQ26 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm", as well as the corresponding Media Type and Content-Format, as per the guidelines in {{I-D.ietf-ace-aif}}: see {{ssec-iana-AIF-registry}}, {{ssec-iana-media-types}} and {{ssec-iana-coap-content-format-registry}}.
+
 * OPT1 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
 * OPT2 (Optional) - Specify additional parameters used in the exchange of Token Transfer Request and Response: 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact encoding of public keys used in the group, in case the joining node supports the pairwise mode of Group OSCORE.
@@ -1955,7 +1957,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT6 (Optional) - Specify the behavior of the handler in case of failure to retrieve a public key for the specific node: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
 
-* OPT7 (Optional) - Specify CBOR values to use for abbreviating identifiers of roles in the group: see {{ssec-auth-req}}.
+* OPT7 (Optional) - If the textual format of 'scope' is used, specify CBOR values to use for abbreviating the role identifiers in the group: not applicable.
 
 * OPT8 (Optional) - Specify for the KDC to perform group rekeying (together or instead of renewing individual keying material) when receiving a Key Renewal Request: the Group Manager SHOULD NOT perform a group rekeying, unless already scheduled to occur shortly (see {{sec-new-key}}).
 
