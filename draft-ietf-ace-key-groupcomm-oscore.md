@@ -1829,6 +1829,8 @@ IANA is asked to register the following entry in the "Resource Type (rt=) Link T
 
 * Reference: \[\[This document\]\]
 
+Client applications can use this resource type to discover a group membership resource at an OSCORE Group Manager, where to send a request for joining the corresponding OSCORE group.
+
 ## ACE Scope Semantics # {#iana-scope-semantics}
 
 IANA is asked to register the following entry in the "ACE Scope Semantics" registry defined in {{Section 10.12 of I-D.ietf-ace-key-groupcomm}}.
@@ -2040,6 +2042,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Use of "Token Tranfer Request" and "Token Transfer Response".
 
 * Changed UCCS to CCS.
+
+* Clarified meaning of registered CoRE resource type.
 
 * Fixes and editorial improvements.
 
