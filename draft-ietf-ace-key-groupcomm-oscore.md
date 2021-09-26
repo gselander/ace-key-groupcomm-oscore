@@ -120,12 +120,6 @@ normative:
     date: false
     title: COSE Header Parameters
     target: https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
-  CORE.Parameters:
-    author:
-        org: IANA
-    date: false
-    title: Constrained RESTful Environments (CoRE) Parameters
-    target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml
        
 informative:
   I-D.ietf-core-groupcomm-bis:
@@ -1560,7 +1554,7 @@ This document has the following actions for IANA.
 
 ## OAuth Parameters {#iana-kinfo}
 
-The following registrations are done for the OAuth Parameters Registry following the procedure specified in {{Section 11.2 of RFC6749}}.
+IANA is asked to register the following entries to the "OAuth Parameters" registry, as per the procedure specified in {{Section 11.2 of RFC6749}}.
 
 *  Parameter name: ecdh_info
 *  Parameter usage location: client-rs request, rs-client response
@@ -1576,7 +1570,7 @@ The following registrations are done for the OAuth Parameters Registry following
 
 ## OAuth Parameters CBOR Mappings {#iana-kinfo-map}
 
-The following registrations are done for the OAuth Parameters CBOR Mappings Registry following the procedure specified in {{Section 8.10 of I-D.ietf-ace-oauth-authz}}.
+IANA is asked to register the following entries to the "OAuth Parameters CBOR Mappings" registry, as per the procedure specified in {{Section 8.10 of I-D.ietf-ace-oauth-authz}}.
 
 * Name: ecdh_info
 * CBOR Key: TBD (range -256 to 255)
@@ -1592,7 +1586,7 @@ The following registrations are done for the OAuth Parameters CBOR Mappings Regi
 
 ## ACE Groupcomm Parameters {#ssec-iana-ace-groupcomm-parameters-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Parameters" Registry defined in {{Section 10.5 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Parameters" registry defined in {{Section 10.5 of I-D.ietf-ace-key-groupcomm}}.
 
 * Name: group_senderId
 * CBOR Key: TBD
@@ -1650,7 +1644,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 
 ## ACE Groupcomm Key Typess {#ssec-iana-groupcomm-keys-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Key Types" Registry defined in {{Section 10.6 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Key Types" registry defined in {{Section 10.6 of I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: Group_OSCORE_Input_Material object
 *  Key Type Value: GROUPCOMM_KEY_TBD
@@ -1660,7 +1654,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Key Types" R
 
 ## ACE Groupcomm Profiles {#ssec-iana-groupcomm-profile-registry}
 
-IANA is asked to register the following entry to the "ACE Groupcomm Profiles" Registry defined in {{Section 10.7 of I-D.ietf-ace-key-groupcomm}}.
+IANA is asked to register the following entry to the "ACE Groupcomm Profiles" registry defined in {{Section 10.7 of I-D.ietf-ace-key-groupcomm}}.
 
 *  Name: coap_group_oscore_app
 *  Description: Application profile to provision keying material for participating in group communication protected with Group OSCORE as per {{I-D.ietf-core-oscore-groupcomm}}.
@@ -1669,7 +1663,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Profiles" Re
 
 ## OSCORE Security Context Parameters {#ssec-iana-security-context-parameter-registry}
 
-IANA is asked to register the following entries in the "OSCORE Security Context Parameters" Registry defined in {{Section 9.4 of I-D.ietf-ace-oscore-profile}}.
+IANA is asked to register the following entries in the "OSCORE Security Context Parameters" registry defined in {{Section 9.4 of I-D.ietf-ace-oscore-profile}}.
 
 *  Name: group_SenderId
 *  CBOR Label: TBD
@@ -1734,7 +1728,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 ## TLS Exporter Labels {#ssec-iana-tls-esporter-label-registry}
 
-IANA is asked to register the following entry to the "TLS Exporter Labels" Registry defined in {{Section 6 of RFC5705}} and updated in {{Section 12 of RFC8447}}.
+IANA is asked to register the following entry to the "TLS Exporter Labels" registry defined in {{Section 6 of RFC5705}} and updated in {{Section 12 of RFC8447}}.
 
 * Value: EXPORTER-ACE-Sign-Challenge-coap-group-oscore-app
 * DTLS-OK: Y
@@ -1748,7 +1742,7 @@ IANA is asked to register the following entry to the "Toid" registry within the 
 * Name: oscore-group-name
 * Description/Specification: group name of the OSCORE group, as specified in \[\[This document\]\].
 
-IANA is asked to register the following entry to the "Tperm" sub-Registry of the "AIF" Registry defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
+IANA is asked to register the following entry to the "Tperm" registry within the "AIF" registry group defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
 
 * Name: oscore-group-roles
 * Description/Specification: role(s) of the member of the OSCORE group, as specified in \[\[This document\]\].
@@ -1795,7 +1789,7 @@ Provisional registration?  No
 
 ## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
 
-IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group:
+IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group:
 
 Media Type: application/aif-groupcomm-oscore+cbor;Toid="oscore-group-name",Tperm"oscore-group-roles"
 
@@ -1807,7 +1801,7 @@ Reference: \[\[This document\]\]
 
 ## Group OSCORE Roles {#ssec-iana-group-oscore-roles-registry}
 
-This document establishes the IANA "Group OSCORE Roles" Registry. The Registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
+This document establishes the IANA "Group OSCORE Roles" registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{ssec-iana-expert-review}}.
 
 This registry includes the possible roles that nodes can take in an OSCORE group, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about joining OSCORE groups, as specified in {{sec-format-scope}} of \[\[This document\]\].
 
@@ -1827,7 +1821,7 @@ The Reference column for all of these entries will be \[\[This document\]\].
 
 ## CoRE Resource Type # {#iana-rt}
 
-IANA is asked to register a new Resource Type (rt=) Link Target Attribute in the  "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" {{CORE.Parameters}} registry group.
+IANA is asked to register the following entry in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
 * Value: "core.osc.gm"
 
@@ -1873,7 +1867,7 @@ IANA is asked to register the following entry in the "ACE Groupcomm Errors" regi
 
 ## Expert Review Instructions {#ssec-iana-expert-review}
 
-The IANA Registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
+The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
 
