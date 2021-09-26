@@ -598,13 +598,14 @@ The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter is given below.
 ~~~~~~~~~~~ CDDL
 gm_dh_pub_keys = gm_dh_pub_keys_req / gm_dh_pub_keys_resp
 
-gm_dh_pub_keys_req = nil                        ; in the Token Transfer
-                                                ; Request to the
-                                                ; Group Manager
+gm_dh_pub_keys_req = nil                        ; in the Token
+                                                ; Transfer Request to
+                                                ; the Group Manager
 
-gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ] ; in the Token Transfer
-                                                ; Response from the
-                                                ; Group Manager
+gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ] ; in the Token
+                                                ; Transfer Response
+                                                ; from the Group
+                                                ; Manager
    
 gm_dh_pub_keys_entry =
 [
