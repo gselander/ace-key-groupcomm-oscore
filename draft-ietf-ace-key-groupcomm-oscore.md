@@ -476,7 +476,11 @@ Type4 = Non-member (not authorized to be Verifier)  |  D  = DELETE
 
 The rest of this section describes the interactions between the joining node and the Group Manager, i.e., the transferring of the Access Token to the Group Manager and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the Group Manager consists of the messages defined in {{Sections 3.3 and 4.3.1.1 of I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
 
-A signature verifier provides the Group Manager with an Access Token, as described in {{ssec-token-post}}, just as any another joining node does. However, unlike candidate group members, it does not join any OSCORE group, i.e., it does not perform the joining process defined in {{ssec-join-req-sending}}. After successfully transferring an Access Token, a signature verifier is authorized to perform only the operations specified in {{sec-pub-keys}}, to retrieve the public keys of group members, and only for the OSCORE groups specified in the validated Access Token. The Group Manager MUST respond with a 4.01 (Unauthorized) error message, in case a signature verifier attempts to access any other endpoint than /ace-group/GROUPNAME/pub-key at the Group Manager.
+Just like any candidate group member, a signature verifier provides the Group Manager with an Access Token, as described in {{ssec-token-post}}. However, unlike candidate group members, it does not join any OSCORE group, i.e., it does not perform the joining process defined in {{ssec-join-req-sending}}.
+
+After successfully transferring an Access Token to the Group Manager, a signature verifier is allowed to perform only some operations as non-member of a group, and only for the OSCORE groups specified in the validated Access Token. These are the operations specified in {{sec-pub-keys}}, {{sec-gm-pub-key}}, {{sec-verif-data}} and {{sec-retrieve-gnames}}.
+
+Consistently, in case a node is non-member of the group with group name GROUPNAME and is authorized to be only signature verifier for that group, the Group Manager MUST respond with a 4.03 (Forbidden) error message if that node attempts to access any other endpoint than: /ace-group/GROUPNAME/pub-key; ace-group/GROUPNAME/gm-pub-key; ace-group/GROUPNAME/verif-data; and /ace-group.
 
 ## Token Transferring {#ssec-token-post}
 
@@ -2034,6 +2038,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.
 
 * ace-group/ accessible also to non-members that are not Verifiers.
+
+* Clarified what resources are accessible to Verifiers.
 
 * Revised names of new IANA registries.
 
