@@ -518,7 +518,9 @@ The exchange of Token Transfer Request and Response is defined in {{Section 3.3 
   
   This format is consistent with every signature algorithm currently considered in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. Appendix B of {{I-D.ietf-ace-key-groupcomm}} describes how the format of each 'sign_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
   
-* If 'ecdh_info' is included in the Token Transfer Request, the Group Manager MAY include the 'ecdh_info' parameter in the Token Transfer Response, as per the format defined in {{ecdh-info}}. Note that the field 'id' specifies the name, or array of group names, for which the corresponding 'ecdh_info_entry' applies to.
+* If 'ecdh_info' is included in the Token Transfer Request, the Group Manager SHOULD include the 'ecdh_info' parameter in the Token Transfer Response, as per the format defined in {{ecdh-info}}. Note that the field 'id' of each 'ecdh_info_entry' specifies the name, or array of group names, for which that 'ecdh_info_entry' applies to.
+
+   As an exception, the KDC MAY NOT include the 'ecdh_info' parameter in the Token Transfer Response even if 'ecdh_info' is included in the Token Transfer Request, in case all the groups that the Client is authorized to join are signature-only groups.
 
 * If 'gm_dh_pub_keys' is included in the Token Transfer Request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include the 'gm_dh_pub_keys' parameter in the Token Transfer Response, as per the format defined in {{gm-dh-info}}. Otherwise, if 'gm_dh_pub_keys' is included in the Token Transfer Request, the Group Manager MAY include the 'gm_dh_pub_keys' parameter in the Token Transfer Response. Note that the field 'id' specifies the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.
 
