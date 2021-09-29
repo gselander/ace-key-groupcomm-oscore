@@ -1944,9 +1944,17 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ24 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
 
+<!-- START NEW REQUIREMENTS -->
+
 * REQ25 - Specify if any part of the KDC interface as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} is not supported by the KDC: not applicable.
 
 * REQ26 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm", as well as the corresponding Media Type and Content-Format, as per the guidelines in {{I-D.ietf-ace-aif}}: see {{ssec-iana-AIF-registry}}, {{ssec-iana-media-types}} and {{ssec-iana-coap-content-format-registry}}.
+
+* REQ27 - Sort newly defined parameters according to the same categorization defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}: TODO
+
+* REQ28 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: TODO
+
+<!-- END NEW REQUIREMENTS -->
 
 * OPT1 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -1969,6 +1977,12 @@ This appendix lists the specifications on this application profile of ACE, based
 * OPT10 (Optional) - Specify how the identifier of the sender's public key is included in the group request: no.
 
 * OPT11 (Optional) - Specify additional identifiers of error types, as values of the 'error' field in an error response from the KDC: see {{iana-ace-groupcomm-errors}}.
+
+<!-- START NEW REQUIREMENTS -->
+
+* OPT12 (Optional) - Specify if Clients must or should support any of the parameters defined as optional in {{Section 7 of I-D.ietf-ace-key-groupcomm}}.
+
+<!-- END NEW REQUIREMENTS -->
 
 # Extensibility for Future COSE Algorithms # {#sec-future-cose-algs}
 
