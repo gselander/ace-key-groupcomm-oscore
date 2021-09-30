@@ -209,7 +209,7 @@ A node performs the steps described in {{Section 4.3.1.1 of I-D.ietf-ace-key-gro
 
 In a number of cases, the Group Manager has to generate new keying material and distribute it to the group (rekeying), as also discussed in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
 
-To this end the Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} of this document. Future application profiles may define alternative rekeying message formats and group rekeying schemes, which MUST comply with the functional steps defined in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
+To this end the Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} of this document, as an instance of the "Point-to-Point" rekeying scheme registered in {{Section 10.14 of I-D.ietf-ace-key-groupcomm}}. Future document may define the use of alternative group rekeying schemes for this application profile, together with the corresponding rekeying message formats. The resulting group rekeying process MUST comply with the functional steps defined in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
 
 Upon generating the new group keying material and before starting its distribution, the Group Manager MUST increment the version number of the group keying material. When rekeying a group, the Group Manager MUST preserve the current value of the OSCORE Sender ID of each member in that group.
 
@@ -830,6 +830,8 @@ In case of successful verification of the PoP evidence, the joining node uses th
 * Absent the 'hkdf' parameter, the joining node considers HKDF SHA-256 as HKDF Algorithm to use in the OSCORE group.
 
 * Absent the 'salt' parameter, the joining node considers the empty byte string as Master Salt to use in the OSCORE group.
+
+* Absent the 'group_rekeying' parameter, the joining node considers the "Point-to-Point" group rekeying scheme registered in {{Section 10.14 of I-D.ietf-ace-key-groupcomm}} as the rekeying scheme used in the group (OPT13). Its detailed use for this profile is defined in {{sec-group-rekeying-process}} of this document.
 
 In addition, the joining node maintains an association between each public key retrieved from the 'pub_keys' parameter and the role(s) that the corresponding group member has in the OSCORE group.
 
@@ -1896,6 +1898,8 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * OPT12 (Optional) - Specify if Clients must or should support any of the parameters defined as optional in {{Section 7 of I-D.ietf-ace-key-groupcomm}}: no.
 
+* OPT13 (Optional) - Define a default group rekeying scheme, to refer to in case the 'rekeying_scheme' parameter is not included in the Joining Response (see {{Section 4.3.1.1 of I-D.ietf-ace-key-groupcomm}}): the "Point-to-Point" rekeying scheme registered in {{Section 10.14 of I-D.ietf-ace-key-groupcomm}}, whose detailed use for this profile is defined in {{sec-group-rekeying-process}} of this document.
+
 <!-- END NEW REQUIREMENTS -->
 
 # Extensibility for Future COSE Algorithms # {#sec-future-cose-algs}
@@ -1981,6 +1985,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Alignment to new requirements from draft-ietf-ace-key-groupcomm.
 
 * Use of "Token Tranfer Request" and "Token Transfer Response".
+
+* New parameter 'rekeying_scheme'.
 
 * Changed UCCS to CCS.
 
