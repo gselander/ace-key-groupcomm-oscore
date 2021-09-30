@@ -1970,6 +1970,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.
 
+* Definition of /ace-group/GROUPNAME/kdc-pub-key moved to draft-ietf-ace-key-groupcomm.
+
 * ace-group/ accessible also to non-members that are not Verifiers.
 
 * Clarified what resources are accessible to Verifiers.
