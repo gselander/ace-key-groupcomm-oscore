@@ -381,22 +381,6 @@ If the verifications above succeed, the handler returns a 2.05 (Content) message
 
 The method to set the current group status is out of the scope of this document, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
 
-## ace-group/GROUPNAME/gm-pub-key {#ssec-resource-gm-pub-key}
-
-This resource implements a GET handler.
-       
-### GET Handler {#gm-pub-key-get}
-
-The handler expects a GET request.
-
-The handler verifies that the group name in the /ace-group/GROUPNAME/gm-pub-key path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
-
-The handler also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ8). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
-
-If the requesting client is not a current group member and GROUPNAME denotes a pairwise-only group, the Group Manager MUST respond with a 4.00 (Bad Request) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
-
-If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying the Group Manager's public key together with a proof-of-possession evidence. The response MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is a CBOR map, which is formatted as defined in {{sec-gm-pub-key}}.
-
 ## ace-group/GROUPNAME/verif-data {#ssec-resource-verif-data}
 
 This resource implements a GET handler.
@@ -436,33 +420,33 @@ If the verifications above succeed, the handler returns a 2.05 (Content) message
 The table in {{method-table}} summarizes the CoAP methods admitted to access different resources at the Group Manager, for (non-)members of a group with group name GROUPNAME, and considering different roles. The last two rows of the table apply to a node with node name NODENAME.
 
 ~~~~~~~~~~~
-+--------------------------------+--------+-------+-------+-------+
-|   Resource                     | Type1  | Type2 | Type3 | Type4 |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/                     | F      | F     | F     | F     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/           | G Po   | G Po  | Po *  | Po    |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/active     | G      | G     | -     | -     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/gm-pub-key | G      | G     | G     | -     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/verif-data | -      | -     | G     | -     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/pub-key    | G F    | G F   | G F   | -     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/stale-sids | F      | F     | -     | -     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/policies   | G      | G     | -     | -     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/num        | G      | G     | -     | -     |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/nodes/     | G Pu D | G D   | -     | -     |
-|           NODENAME             |        |       |       |       |
-+--------------------------------+--------+-------+-------+-------+
-| ace-group/GROUPNAME/nodes/     | Po     | -     | -     | -     |
-|           NODENAME/pub-key     |        |       |       |       |
-+--------------------------------+--------+-------+-------+-------+
++---------------------------------+--------+-------+-------+-------+
+|   Resource                      | Type1  | Type2 | Type3 | Type4 |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/                      | F      | F     | F     | F     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/            | G Po   | G Po  | Po *  | Po    |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/active      | G      | G     | -     | -     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/verif-data  | -      | -     | G     | -     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/pub-key     | G F    | G F   | G F   | -     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/kdc-pub-key | G      | G     | G     | -     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/stale-sids  | F      | F     | -     | -     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/policies    | G      | G     | -     | -     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/num         | G      | G     | -     | -     |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/nodes/      | G Pu D | G D   | -     | -     |
+|           NODENAME              |        |       |       |       |
++---------------------------------+--------+-------+-------+-------+
+| ace-group/GROUPNAME/nodes/      | Po     | -     | -     | -     |
+|           NODENAME/pub-key      |        |       |       |       |
++---------------------------------+--------+-------+-------+-------+
 
 Type1 = Member as Requester and/or Responder        |  G  = GET
 Type2 = Member as Monitor                           |  F  = FETCH
@@ -985,66 +969,17 @@ Upon receiving the Public Key Update Request, the Group Manager processes it as 
 
 # Retrieve the Group Manager's Public Key # {#sec-gm-pub-key}
 
-A group member or a signature verifier may need to retrieve the public key of the Group Manager. To this end, the group member or signature verifier sends a Group Manager Public Key Request message to the Group Manager.
+A group member or a signature verifier may need to retrieve the public key of the Group Manager. To this end, the requesting client sends a KDC Public Key Request message to the Group Manager.
 
-In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/gm-pub-key at the Group Manager defined in {{ssec-resource-gm-pub-key}} of this document, where GROUPNAME is the name of the OSCORE group.
+In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/kdc-pub-key at the Group Manager defined in {{Section 4.5 of I-D.ietf-ace-key-groupcomm}}, where GROUPNAME is the name of the OSCORE group.
 
-The payload of the 2.05 (Content) Group Manager Public Key Response is a CBOR map, which MUST contain the following parameters defined in {{ssec-iana-ace-groupcomm-parameters-registry}}.
+In addition to what defined in {{Section 4.5.1 of I-D.ietf-ace-key-groupcomm}}, the Group Manager MUST responsd with a 4.00 (Bad Request) error message, if the requesting client is not a current group member and GROUPNAME denotes a pairwise-only group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
 
-* The 'kdc_nonce' parameter, specifying a nonce generated by the Group Manager. This parameter is encoded like the 'kdc_nonce' parameter in the Joining Response (see {{ssec-join-resp}}).
+The payload of the 2.05 (Content) KDC Public Key Response is a CBOR map, which is formatted as defined in {{Section 4.5.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the Group Manager specifies the parameters 'kdc_cred', 'kdc_nonce' and 'kdc_challenge' as defined for the Joining Response in {{ssec-join-resp}} of this document. This especially applies to the computing of the proof-of-possession (PoP) evidence included in 'kdc_cred_verify' (REQ30).
 
-* The 'kdc_cred' parameter, specifying the Group Manager's public key. This parameter is encoded like the 'kdc_cred' parameter in the Joining Response (see {{ssec-join-resp}}).
+Upon receiving a 2.05 (Content) KDC Public Key Response, the requesting client retrieves the Group Manager's public key from the 'kdc_cred' parameter, and proceeds as defined in {{Section 4.5.1.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the requesting client verifies the PoP evidence included in 'kdc_cred_verify' by means of the same method used when processing the Joining Response, as defined in {{ssec-join-resp}} of this document (REQ30).
 
-* The 'kdc_cred_verify' parameter, specifying a proof-of-possession (PoP) evidence computed by the Group Manager. This parameter is encoded like the 'kdc_cred_verify' parameter in the Joining Response (see {{ssec-join-resp}}).
-
-   The PoP evidence is computed over the nonce specified in the 'kdc_nonce' parameter and taken as PoP input, by means of the same method used when preparing the Joining Response (see {{ssec-join-resp}}). In particular, if the group is a pairwise-only group, the Group Manager computes IKM by using its own Diffie-Hellman private key as well as the Diffie-Hellman public key of the requesting client.
-
-Upon receiving a 2.05 (Content) Group Manager Public Key Response, the group member or signature verifier retrieves the Group Manager's public key from the 'kdc_cred' parameter, and MUST verify the proof-of-possession (PoP) evidence specified in the 'kdc_cred_verify' parameter. That is:
-
-* A group member verifies the PoP evidence by means of the same method used when processing the Joining Response (see {{ssec-join-resp}}). In particular, if the group is a pairwise-only group, the group member computes IKM by using its own Diffie-Hellman private key as well as the Diffie-Hellman public key of the Group Manager.
-
-* A signature verifier verifies the PoP evidence as a signature, by using the public key of the Group Manager, as well as the signature algorithm used in the OSCORE group and possible corresponding parameters. Note that a signature verifier would not receive a successful response from the Group Manager, in case GROUPNAME denotes a pairwise-only group.
-
-In case of successful verification of the PoP evidence, the group member or signature verifier MUST store the obtained Group Manager's public key, possibly replacing the currently stored one.
-
-{{fig-gm-pub-key-req-resp}} gives an overview of the exchange described above, while {{fig-gm-pub-key-req-resp-ex}} shows an example.
-
-~~~~~~~~~~~
-Group                                                         Group
-Member                                                       Manager
-  |                                                             |
-  |               Group Manager Public Key Request              |
-  |------------------------------------------------------------>|
-  |              GET ace-group/GROUPNAME/gm-pub-key             |
-  |                                                             |
-  |<---- Group Manager Public Key Response: 2.05 (Content) -----|
-  |                                                             |
-~~~~~~~~~~~
-{: #fig-gm-pub-key-req-resp title="Message Flow of Group Manager Public Key Request-Response" artwork-align="center"}
-
-~~~~~~~~~~~
-   Request:
-
-   Header: GET (Code=0.01)
-   Uri-Host: "kdc.example.com"
-   Uri-Path: "ace-group"
-   Uri-Path: "g1"
-   Uri-Path: "gm-pub-key"
-   Payload: -
-
-   Response:
-
-   Header: Content (Code=2.05)
-   Content-Format: "application/ace-groupcomm+cbor"
-   Payload (in CBOR diagnostic notation, with PUB_KEY_GM
-            and POP_EVIDENCE being CBOR byte strings):
-     {
-       "kdc_nonce": h'25a8991cd700ac01',
-       "kdc_cred": PUB_KEY_GM,
-       "kdc_cred_verify": POP_EVIDENCE
-     }
-~~~~~~~~~~~
-{: #fig-gm-pub-key-req-resp-ex title="Example of Group Manager Public Key Request-Response"}
+Note that a signature verifier would not receive a successful response from the Group Manager, in case GROUPNAME denotes a pairwise-only group.
 
 # Retrieve Signature Verification Data # {#sec-verif-data}
 
@@ -1931,9 +1866,9 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ28 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: TODO
 
-* REQ29 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: see {{ssec-join-resp}}.
+* REQ29 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: yes as required by the Group OSCORE protocol {{I-D.ietf-core-oscore-groupcomm}}, see {{ssec-join-resp}} of this document.
 
-* REQ30 - Specify the exact approaches used to compute and verify the PoP evidence to include in 'kdc_cred_verify', and which of those approaches is used in which case: see {{ssec-join-resp}} and {{ssec-join-resp-processing}}.
+* REQ30 - Specify the exact approaches used to compute and verify the PoP evidence to include in 'kdc_cred_verify', and which of those approaches is used in which case: see {{ssec-join-resp}}, {{ssec-join-resp-processing}} and {{sec-gm-pub-key}}.
 
 <!-- END NEW REQUIREMENTS -->
 
