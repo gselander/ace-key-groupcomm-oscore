@@ -1561,7 +1561,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 * CBOR Type: Array
 * Reference: \[\[This document\]\] ({{sec-group-rekeying-process}})
 
-## ACE Groupcomm Key Typess {#ssec-iana-groupcomm-keys-registry}
+## ACE Groupcomm Key Types {#ssec-iana-groupcomm-keys-registry}
 
 IANA is asked to register the following entry to the "ACE Groupcomm Key Types" registry defined in {{Section 10.6 of I-D.ietf-ace-key-groupcomm}}.
 
@@ -1850,8 +1850,6 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ21 - Specify how the nonce N\_S is generated, if the token is not provided to the KDC through the Token Transfer Request to the authz-info endpoint (e.g., if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
 
-* REQ22 - Specify if 'mgt_key_material' is used, and if yes specify its format and content: not used in this version of the profile.
-
 * REQ23 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g., as in {{I-D.ietf-ace-oscore-gm-admin}}.
 
 * REQ24 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
@@ -1896,7 +1894,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 <!-- START NEW REQUIREMENTS -->
 
-* OPT12 (Optional) - Specify if Clients must or should support any of the parameters defined as optional in {{Section 7 of I-D.ietf-ace-key-groupcomm}}.
+* OPT12 (Optional) - Specify if Clients must or should support any of the parameters defined as optional in {{Section 7 of I-D.ietf-ace-key-groupcomm}}: no.
 
 <!-- END NEW REQUIREMENTS -->
 
