@@ -1409,6 +1409,25 @@ Clients are required to support the new parameters defined in this application p
 
 * 'stale_node_ids' MUST be supported.
 
+When the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} are used with this application profile, Clients must, should or may support them as specified below (REQ28).
+
+* 'client_cred', 'cnonce', 'client_cred_verify'. A Client that has a public key to use in a group MUST support these parameters.
+
+* 'kdcchallenge'. A Client that has a public key to use in a group and that provides the Access Token to the Group Manager through a Token Transfer Request (see {{ssec-token-post}}) MUST support this parameter.
+
+* 'pub_keys_repo'. This parameter is not relevant for this application profile, since the Group Manager always acts as repository of the group members' public keys.
+
+* 'group_policies'. A Client that is interested in the specific policies used in a group, but that does not know them or cannot become aware of them before joining that group SHOULD support this parameter.
+
+* 'peer_roles'. A Client MUST support this parameter, since in this application profile it is relevant for Clients to know the roles of the group member associated to each public key.
+
+* 'kdc_nonce', 'kdc_cred' and 'kdc_cred_verify'. A Client MUST support these parameters, since the Group Manager's public key is required to process messages protected with Group OSCORE (see Section 4.3 of {{I-D.ietf-core-oscore-groupcomm}}).
+
+* 'mgt_key_material'. A Client that supports an advanced rekeying scheme possibly used in the group, such as based on one-to-many rekeying messages sent over IP multicast, MUST support this parameter.
+
+* 'control_group_uri'. A Client that support the hosting of local resources each associated to a group (hence acting as CoAP server) and the reception of one-to-many requests sent to those resources by the Group Manager (e.g., over IP
+multicast) MUST support this parameter.
+
 # Default Values for Group Configuration Parameters
 
 This section defines the default values that the Group Manager assumes for the configuration parameters of an OSCORE group, unless differently specified when creating and configuring the group. This can be achieved as specified in {{I-D.ietf-ace-oscore-gm-admin}}.
@@ -1891,7 +1910,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ27 - Sort newly defined parameters according to the same categorization defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}: see {{ace-groupcomm-params}}.
 
-* REQ28 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: TODO
+* REQ28 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: see {{ace-groupcomm-params}}.
 
 * REQ29 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: yes as required by the Group OSCORE protocol {{I-D.ietf-core-oscore-groupcomm}}, see {{ssec-join-resp}} of this document.
 
@@ -2018,6 +2037,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Use of "Token Tranfer Request" and "Token Transfer Response".
 
 * New parameter 'rekeying_scheme'.
+
+* Categorization of new parameters and inherited conditional parameters.
 
 * Changed UCCS to CCS.
 
