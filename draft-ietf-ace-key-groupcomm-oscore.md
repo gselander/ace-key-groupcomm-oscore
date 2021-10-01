@@ -1395,6 +1395,20 @@ Node                                                         Manager
 ~~~~~~~~~~~
 {: #fig-stale-ids-req-resp-ex title="Example of Stale Sender IDs Request-Response"}
 
+# ACE Groupcomm Parameters {#ace-groupcomm-params}
+
+Clients are required to support the new parameters defined in this application profile as specified below (REQ27).
+
+* 'group_senderId' MUST be supported by a Client that intends to join an OSCORE group with the role of Requester and/or Responder.
+
+* 'ecdh_info' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE.
+
+* 'gm_dh_pub_keys' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE and that does not plan to or cannot rely on an early retrieval of the Group Manager's Diffie-Hellman public key.
+
+* 'group_enc_key' MUST be supported by a Client that intends to join a group which uses the group mode of Group OSCORE or to be signature verifier for that group.
+
+* 'stale_node_ids' MUST be supported.
+
 # Default Values for Group Configuration Parameters
 
 This section defines the default values that the Group Manager assumes for the configuration parameters of an OSCORE group, unless differently specified when creating and configuring the group. This can be achieved as specified in {{I-D.ietf-ace-oscore-gm-admin}}.
@@ -1875,7 +1889,7 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ26 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm", as well as the corresponding Media Type and Content-Format, as per the guidelines in {{I-D.ietf-ace-aif}}: see {{ssec-iana-AIF-registry}}, {{ssec-iana-media-types}} and {{ssec-iana-coap-content-format-registry}}.
 
-* REQ27 - Sort newly defined parameters according to the same categorization defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}: TODO
+* REQ27 - Sort newly defined parameters according to the same categorization defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}: see {{ace-groupcomm-params}}.
 
 * REQ28 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: TODO
 
