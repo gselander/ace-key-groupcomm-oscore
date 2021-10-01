@@ -456,6 +456,17 @@ Type4 = Non-member (not authorized to be Verifier)  |  D  = DELETE
 ~~~~~~~~~~~
 {: #method-table title="Admitted CoAP Methods on the Group Manager Resources" artwork-align="center"}
 
+## Operations Supported by Clients {#client-operations}
+
+Building on what is defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, and with reference to the resources at the Group Manager newly defined earlier in {{sec-interface-GM}} of this document, it is expected that a Client minimally supports also the following set of operations and corresponding interactions with the Group (REQ31).
+
+* GET request to ace-group/GROUPNAME/active , in order to check the current status of the group.
+
+* GET request to ace-group/GROUPNAME/verif-data , in order for a signature verifier to retrieve data required to verify signatures of messages protected with the group mode of Group OSCORE and sent to a group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). Note that this operation is relevant to support only to signature verifiers.
+
+* FETCH request to ace-group/GROUPNAME/stale-sids , in order to retrieve from the Group Manager the data required to delete some of the stored group members' public
+keys and Recipient Contexts (see {{stale-sids-fetch}}). This data is provided as an aggregated set of stale Sender IDs, which are used as specified in Section {{missed-rekeying}}. 
+
 # Token Transferring and Group Joining {#sec-joining-node-to-GM}
 
 The rest of this section describes the interactions between the joining node and the Group Manager, i.e., the transferring of the Access Token to the Group Manager and the Request-Response exchange to join the OSCORE group. The message exchange between the joining node and the Group Manager consists of the messages defined in {{Sections 3.3 and 4.3.1.1 of I-D.ietf-ace-key-groupcomm}}. Note that what is defined in {{I-D.ietf-ace-key-groupcomm}} applies, and only additions or modifications to that specification are defined here.
@@ -1871,6 +1882,8 @@ This appendix lists the specifications on this application profile of ACE, based
 * REQ29 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: yes as required by the Group OSCORE protocol {{I-D.ietf-core-oscore-groupcomm}}, see {{ssec-join-resp}} of this document.
 
 * REQ30 - Specify the exact approaches used to compute and verify the PoP evidence to include in 'kdc_cred_verify', and which of those approaches is used in which case: see {{ssec-join-resp}}, {{ssec-join-resp-processing}} and {{sec-gm-pub-key}}.
+
+* REQ31 - Categorize possible newly defined operations for Clients into primary operations expected to be minimally supported and secondary operations, and provide accompanying considerations (see {{client-operations}}).
 
 <!-- END NEW REQUIREMENTS -->
 
