@@ -824,6 +824,8 @@ Then, the Group Manager replies to the joining node, providing the updated secur
         
         * L is equal to 8, i.e., the size of the MAC, in bytes.
 
+* The 'group_rekeying' parameter MAY be omitted, if the Group Manager uses the "Point-to-Point" group rekeying scheme registered in {{Section 10.14 of I-D.ietf-ace-key-groupcomm}} as rekeying scheme in the OSCORE group (OPT13). Its detailed use for this profile is defined in {{sec-group-rekeying-process}} of this document. In any other case, the 'group_rekeying' parameter MUST be included.
+        
 As a last action, the Group Manager MUST store the Gid specified in the 'contextId' parameter of the 'key' parameter, as the Birth Gid of the joining node in the joined group (see {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}). This applies also in case the node is in fact re-joining the group; in such a case, the newly determined Birth Gid overwrites the one currently stored.
 
 ## Receive the Joining Response {#ssec-join-resp-processing}
@@ -1223,7 +1225,7 @@ Consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}:
 
 Across the rekeying execution, the Group Manager MUST preserve the same unchanged OSCORE Sender IDs for all group members intended to remain in the group. This avoids affecting the retrieval of public keys from the Group Manager and the verification of group messages.
 
-The Group Manager MUST support at least the group rekeying scheme defined in {{sending-rekeying-msg}}. Future application profiles may define alternative message formats and group rekeying schemes, which MUST comply with the functional steps defined in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
+The Group Manager MUST support the "Point-to-Point" group rekeying scheme registered in {{Section 10.14 of I-D.ietf-ace-key-groupcomm}}, as per the detailed use defined in {{sending-rekeying-msg}} of this document. Future specifications may define how this application profile can use alternative group rekeying schemes, which MUST comply with the functional steps defined in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}. The Group Manager MUST indicate the use of such an alternative group rekeying scheme to joining nodes, by means of the 'group_rekeying' parameter included in Joining Response messages (see {{ssec-join-resp}}).
 
 It is RECOMMENDED that the Group Manager gets confirmation of successful distribution from the group members, and admits a maximum number of individual retransmissions to non-confirming group members. Once completed the group rekeying process, the Group Manager creates a new empty set X' of stale Sender IDs associated to the version of the newly distributed group keying material. Then, the Group Manager MUST add the set X' to the collection of stale Sender IDs associated to the group (see {{sssec-stale-sender-ids}}).
 
@@ -1238,8 +1240,6 @@ Furthermore, some of these group members can be in multiple groups, all of which
 Finally, {{missed-rekeying}} discusses how a group member can realize that it has missed one or more rekeying instances, and the actions it is accordingly required to take.
 
 ## Sending Rekeying Messages {#sending-rekeying-msg}
-
-The Group Manager MUST support at least the group rekeying scheme defined in this section.
 
 The group rekeying messages MUST have Content-Format set to application/ace-groupcomm+cbor and have the same format used for the Joining Response message in {{ssec-join-resp}}, with the following differences.
 
