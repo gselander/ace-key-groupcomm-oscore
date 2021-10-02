@@ -1428,6 +1428,31 @@ When the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-group
 * 'control_group_uri'. A Client that support the hosting of local resources each associated to a group (hence acting as CoAP server) and the reception of one-to-many requests sent to those resources by the Group Manager (e.g., over IP
 multicast) MUST support this parameter.
 
+# ACE Groupcomm Error Identifiers {#error-types}
+
+In addition to what is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}, this application profile defines new values that the Group Manager can include as error identifiers, in the 'error' field of an error response with Content-Format application/ace-groupcomm+cbor.
+
+~~~~~~~~~~~
++-------+-------------------------------------------------+
+| Value |                   Description                   |
++-------+-------------------------------------------------+
+|   7   | Signatures not used in the group                |
++-------+-------------------------------------------------+
+|   8   | Operation permitted only to signature verifiers |
++-------+-------------------------------------------------+
+|   9   | Group currently not active                      |
++-------+-------------------------------------------------+
+~~~~~~~~~~~
+{: #fig-ACE-Groupcomm-Error Identifiers title="ACE Groupcomm Error Identifiers" artwork-align="center"}
+
+A Client supporting the 'error' parameter (see {{Sections 4.1.2 and 8 of I-D.ietf-ace-key-groupcomm}}) and able to understand the specified error may use that information to determine what actions to take next. If it is included in the error response and supported by the Client, the 'error_description' parameter may provide additional context. In particular, the following guidelines apply.
+
+* In case of error 7, the Client should stop sending the request in question to the Group Manager. In this application profile, this error is relevant only for a signature verifiers, in case it tries to access resources related to a pairwise-only group.
+
+* In case of error 8, the Client should stop sending the request in question to the Group Manager.
+
+* In case of error 9, the Client should wait for a certain (pre-configured) amount of time, before trying re-sending its request to the Group Manager.
+
 # Default Values for Group Configuration Parameters
 
 This section defines the default values that the Group Manager assumes for the configuration parameters of an OSCORE group, unless differently specified when creating and configuring the group. This can be achieved as specified in {{I-D.ietf-ace-oscore-gm-admin}}.
@@ -2039,6 +2064,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * New parameter 'rekeying_scheme'.
 
 * Categorization of new parameters and inherited conditional parameters.
+
+* Clarifications on what to do in case of enhanced error responses.
 
 * Changed UCCS to CCS.
 
