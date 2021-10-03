@@ -1879,7 +1879,7 @@ Expert reviewers should take into consideration the following points:
 
 # Profile Requirements # {#profile-req}
 
-This appendix lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
+This section lists how this application profile of ACE addresses the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
 * REQ1 - Specify the format and encoding of 'scope'. This includes defining the set of possible roles and their identifiers, as well as the corresponding encoding to use in the scope entries according to the used scope format: see {{sec-format-scope}} and {{ssec-auth-req}}.
 
