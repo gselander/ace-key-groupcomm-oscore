@@ -371,13 +371,9 @@ This resource implements a GET handler.
 
 The handler expects a GET request.
 
-The handler verifies that the group name in the /ace-group/GROUPNAME/active path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
+In addition to what is defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, the handler verifies that the requesting client is a current member of the group. If the verification fails, the KDC MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
 
-The handler also verifies that the roles granted to the requesting client in the group allow it to perform this operation on this resource (REQ11). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
-
-Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
-
-If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying the current status of the group, i.e., active or inactive. The payload of the response is formatted as defined in {{sec-status}}.
+If all verifications succeed, the handler replies with a 2.05 (Content) response, specifying the current status of the group, i.e., active or inactive. The payload of the response is formatted as defined in {{sec-status}}.
 
 The method to set the current group status is out of the scope of this document, and is defined for the administrator interface of the Group Manager specified in {{I-D.ietf-ace-oscore-gm-admin}}.
 
@@ -389,15 +385,13 @@ This resource implements a GET handler.
 
 The handler expects a GET request.
 
-The handler verifies that the group name in the /ace-group/GROUPNAME/verif-data path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
+In addition to what is defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, the Group Manager performs the following checks.
 
-The handler also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ11). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
+If the requesting client is a current group member, the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 8 ("Operation permitted only to signature verifiers").
 
-If the requesting client is a current group member, the Group Manager MUST respond with a 4.03 (Forbidden) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 8 ("Operation permitted only to signature verifiers").
+If GROUPNAME denotes a pairwise-only group, the Group Manager MUST reply with a 4.00 (Bad Request) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
 
-If GROUPNAME denotes a pairwise-only group, the Group Manager MUST respond with a 4.00 (Bad Request) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
-
-If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying data that allows also a signature verifier to verify signatures of messages protected with the group mode and sent to the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is a CBOR map, which is formatted as defined in {{sec-verif-data}}.
+If all verifications succeed, the handler replies with a 2.05 (Content) response, specifying data that allows also a signature verifier to verify signatures of messages protected with the group mode and sent to the group (see {{Sections 3.1 and 8.5 of I-D.ietf-core-oscore-groupcomm}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor. The payload of the response is a CBOR map, which is formatted as defined in {{sec-verif-data}}.
 
 ## ace-group/GROUPNAME/stale-sids {#ssec-resource-stale-sids}
 
@@ -407,13 +401,9 @@ This resource implements a FETCH handler.
 
 The handler expects a FETCH request, whose payload specifies a version number of the group keying material, encoded as an unsigned CBOR integer.
 
-The handler verifies that the group name in the /ace-group/GROUPNAME/stale-sids path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
+In addition to what is defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, the handler verifies that the requesting client is a current member of the group. If the verification fails, the Group Manager MUST reply with a 4.03 (Forbidden) error response. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
 
-The handler also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ11). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
-
-Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
-
-If the verifications above succeed, the handler returns a 2.05 (Content) message, specifying data that allows the requesting client to delete the Recipient Contexts and public keys associated to former members of the group (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}. The payload of the response is formatted as defined in {{sec-retrieve-stale-sids}}.
+If all verifications succeed, the handler replies with a 2.05 (Content) response, specifying data that allows the requesting client to delete the Recipient Contexts and public keys associated to former members of the group (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}. The payload of the response is formatted as defined in {{sec-retrieve-stale-sids}}.
 
 ## Admitted Methods {#ssec-admitted-methods}
 
@@ -2052,6 +2042,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * ace-group/ accessible also to non-members that are not Verifiers.
 
 * Clarified what resources are accessible to Verifiers.
+
+* Revised error handling for the newly defined resources.
 
 * Revised use of CoAP error codes.
 
