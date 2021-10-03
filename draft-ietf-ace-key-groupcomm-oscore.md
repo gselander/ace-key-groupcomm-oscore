@@ -283,7 +283,7 @@ Then, for each scope entry:
 
 * the object identifier ("Toid") is specialized as a CBOR text string, specifying the group name for the scope entry;
 
-* the permission set ("Tperm") is specialized as a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ2). The value R is computed as follows:
+* the permission set ("Tperm") is specialized as a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ1). The value R is computed as follows:
 
    - each role in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the table in {{fig-role-values}}.
 
@@ -339,7 +339,7 @@ The Authorization Request message is as defined in {{Section 3.1 of I-D.ietf-ace
 
       - The group name is encoded as a CBOR text string.
 
-      - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} from the numerical abbreviations defined in {{fig-role-values}} for each requested role (REQ2).
+      - The set of requested roles is expressed as a single CBOR unsigned integer, computed as defined in {{sec-format-scope}} from the numerical abbreviations defined in {{fig-role-values}} for each requested role (REQ1).
 
 ## Authorization Response {#ssec-auth-resp}
 
@@ -349,17 +349,17 @@ The Authorization Response message is as defined in {{Section 3.2 of I-D.ietf-ac
 
 * The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and specifies the set of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in {{ssec-auth-req}}.
 
-Furthermore, if the AS uses the extended format of scope defined in {{Section 6 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this document (REQ24). This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined for this application profile in {{sec-format-scope}} of this document.
+Furthermore, if the AS uses the extended format of scope defined in {{Section 6 of I-D.ietf-ace-key-groupcomm}} for the 'scope' claim of the Access Token, the first element of the CBOR sequence {{RFC8742}} MUST be the CBOR integer with value SEM_ID_TBD, defined in {{iana-scope-semantics}} of this document (REQ28). This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined for this application profile in {{sec-format-scope}} of this document.
 
 # Interface at the Group Manager {#sec-interface-GM}
 
 The Group Manager provides the interface defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}, with the additional sub-resources defined from {{ssec-resource-active}} to {{ssec-resource-stale-sids}} of this document.
 
-Furthermore, {{ssec-admitted-methods}} provides a summary of the CoAP methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ8).
+Furthermore, {{ssec-admitted-methods}} provides a summary of the CoAP methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ10).
 
-The GROUPNAME segment of the URI path MUST match with the group name specified in the scope entry of the Access Token scope (i.e., 'gname' in {{Section 3.1 of I-D.ietf-ace-key-groupcomm}}) (REQ1).
+The GROUPNAME segment of the URI path MUST match with the group name specified in the scope entry of the Access Token scope (i.e., 'gname' in {{Section 3.1 of I-D.ietf-ace-key-groupcomm}}) (REQ7).
 
-The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ7), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g., by using a link-format document {{RFC6690}}.
+The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}} (REQ9), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g., by using a link-format document {{RFC6690}}.
 
 Applications can use this common resource type to discover links to group-membership resources for joining OSCORE groups, e.g., by using the approach described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -373,7 +373,7 @@ The handler expects a GET request.
 
 The handler verifies that the group name in the /ace-group/GROUPNAME/active path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
 
-The handler also verifies that the roles granted to the requesting client in the group allow it to perform this operation on this resource (REQ8). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
+The handler also verifies that the roles granted to the requesting client in the group allow it to perform this operation on this resource (REQ10). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
 
 Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
 
@@ -391,7 +391,7 @@ The handler expects a GET request.
 
 The handler verifies that the group name in the /ace-group/GROUPNAME/verif-data path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
 
-The handler also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ8). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
+The handler also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ10). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
 
 If the requesting client is a current group member, the Group Manager MUST respond with a 4.03 (Forbidden) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 8 ("Operation permitted only to signature verifiers").
 
@@ -409,7 +409,7 @@ The handler expects a FETCH request, whose payload specifies a version number of
 
 The handler verifies that the group name in the /ace-group/GROUPNAME/stale-sids path is a subset of the 'scope' stored in the Access Token associated to the requesting client.
 
-The handler also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ8). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
+The handler also verifies that the roles granted to the requesting client allow it to perform this operation on this resource (REQ10). If either verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message.
 
 Additionally, the handler verifies that the requesting client is a current member of the group. If verification fails, the Group Manager MUST respond with a 4.03 (Forbidden) error message. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 0 ("Operation permitted only to group members").
 
@@ -458,7 +458,7 @@ Type4 = Non-member (not authorized to be Verifier)  |  D  = DELETE
 
 ## Operations Supported by Clients {#client-operations}
 
-Building on what is defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, and with reference to the resources at the Group Manager newly defined earlier in {{sec-interface-GM}} of this document, it is expected that a Client minimally supports also the following set of operations and corresponding interactions with the Group (REQ31).
+Building on what is defined in {{Section 4.1.2 of I-D.ietf-ace-key-groupcomm}}, and with reference to the resources at the Group Manager newly defined earlier in {{sec-interface-GM}} of this document, it is expected that a Client minimally supports also the following set of operations and corresponding interactions with the Group (REQ11).
 
 * GET request to ace-group/GROUPNAME/active , in order to check the current status of the group.
 
@@ -628,7 +628,7 @@ Additionally to what defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}},
 
 * 'cnonce' contains a dedicated nonce N_C generated by the joining node. For the N\_C value, it is RECOMMENDED to use a 8-byte long random nonce.
 
-* The proof-of-possession (PoP) evidence included in 'client_cred_verify' is computed as defined below (REQ20). In either case, the N_S used to build the PoP input is as defined in {{sssec-challenge-value}}.
+* The proof-of-possession (PoP) evidence included in 'client_cred_verify' is computed as defined below (REQ13). In either case, the N_S used to build the PoP input is as defined in {{sssec-challenge-value}}.
 
    - If the group is not a pairwise-only group, the PoP evidence MUST be a signature. The joining node computes the signature by using the same private key and signature algorithm it intends to use for signing messages in the OSCORE group.
    
@@ -794,7 +794,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    If the joining node has asked for the public keys of all the group members, i.e., 'get_pub_keys' had value the CBOR simple value 'null' (0xf6) in the Joining Request, then the Group Manager provides only the public keys of the group members that are relevant to the joining node. That is, in such a case, 'pub_keys' includes only: i) the public keys of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the public keys of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor.
 
-* The 'peer_identifiers' parameter includes the OSCORE Sender ID of each group member whose public key is specified in the 'pub_keys' parameter. That is, a group member's Sender ID is used as identifier for that group member (REQ12).
+* The 'peer_identifiers' parameter includes the OSCORE Sender ID of each group member whose public key is specified in the 'pub_keys' parameter. That is, a group member's Sender ID is used as identifier for that group member (REQ25).
    
 * The 'group_policies' parameter SHOULD be present, and SHOULD include the following elements:
 
@@ -802,11 +802,11 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * "Expiration Delta" defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}}, with default value 0.
 
-* The 'kdc_cred' parameter MUST be present, specifying the Group Manager's public key in its original binary representation (REQ29). The Group Manager's public key MUST be compatible with the encoding, signature or ECDH algorithm, and possible associated parameters used in the OSCORE group.
+* The 'kdc_cred' parameter MUST be present, specifying the Group Manager's public key in its original binary representation (REQ20). The Group Manager's public key MUST be compatible with the encoding, signature or ECDH algorithm, and possible associated parameters used in the OSCORE group.
 
 * The 'kdc_nonce' parameter MUST be present, specifying the dedicated nonce N_KDC generated by the Group Manager. For N_KDC, it is RECOMMENDED to use a 8-byte long random nonce.
 
-* The 'kdc_cred_verify' parameter MUST be present, specifying the proof-of-possession (PoP) evidence computed by the Group Manager. The PoP evidence is computed over the nonce N_KDC, which is specified in the 'kdc_nonce' parameter and taken as PoP input. The PoP evidence is computed as defined below (REQ30).
+* The 'kdc_cred_verify' parameter MUST be present, specifying the proof-of-possession (PoP) evidence computed by the Group Manager. The PoP evidence is computed over the nonce N_KDC, which is specified in the 'kdc_nonce' parameter and taken as PoP input. The PoP evidence is computed as defined below (REQ21).
 
    - If the group is not a pairwise-only group, the PoP evidence MUST be a signature. The Group Manager computes the signature by using the signature algorithm used in the OSCORE group, as well as its own private key associated to the public key specified in the 'kdc_cred' parameter.
    
@@ -830,7 +830,7 @@ As a last action, the Group Manager MUST store the Gid specified in the 'context
 
 ## Receive the Joining Response {#ssec-join-resp-processing}
 
-Upon receiving the Joining Response, the joining node retrieves the Group Manager's public key from the 'kdc_cred' parameter. The joining node MUST verify the proof-of-possession (PoP) evidence specified in the 'kdc_cred_verify' parameter of the Joining Response as defined below (REQ30).
+Upon receiving the Joining Response, the joining node retrieves the Group Manager's public key from the 'kdc_cred' parameter. The joining node MUST verify the proof-of-possession (PoP) evidence specified in the 'kdc_cred_verify' parameter of the Joining Response as defined below (REQ21).
 
 * If the group is not a pairwise-only group, the PoP evidence is a signature. The joining node verifies it by using the public key of the Group Manager, as well as the signature algorithm used in the OSCORE group and possible corresponding parameters.
 
@@ -954,7 +954,7 @@ If the Public Key Request uses the method FETCH, the Public Key Request is forma
 
 * Each element (if any) of the inner CBOR array 'role_filter' is formatted as in the inner CBOR array 'role_filter' of the 'get_pub_keys' parameter of the Joining Request when the parameter value is non-null (see {{ssec-join-req-sending}}).
 
-* Each element (if any) of the inner CBOR array 'id_filter' is a CBOR byte string, which encodes the OSCORE Sender ID of the group member for which the associated public key is requested (REQ12).
+* Each element (if any) of the inner CBOR array 'id_filter' is a CBOR byte string, which encodes the OSCORE Sender ID of the group member for which the associated public key is requested (REQ25).
 
 Upon receiving the Public Key Request, the Group Manager processes it as per Section 4.4.1 or Section 4.4.2 of {{I-D.ietf-ace-key-groupcomm}}, depending on the request method being GET or FETCH, respectively. Additionally, if the Public Key Request uses the method FETCH, the Group Manager silently ignores node identifiers included in the ’get_pub_keys’ parameter of the request that are not associated to any current group member.
 
@@ -966,15 +966,15 @@ A group member may need to provide the Group Manager with its new public key to 
 
 To this end, the group member sends a Public Key Update Request message to the Group Manager, as per {{Section 4.8.1.1 of I-D.ietf-ace-key-groupcomm}}, with the following addition.
 
-* The group member computes the proof-of-possession (PoP) evidence included in 'client_cred_verify' in the same way taken when preparing a Joining Request for the OSCORE group in question, as defined in {{ssec-join-req-sending}} (REQ20).
+* The group member computes the proof-of-possession (PoP) evidence included in 'client_cred_verify' in the same way taken when preparing a Joining Request for the OSCORE group in question, as defined in {{ssec-join-req-sending}} (REQ13).
 
 In particular, the group member sends a CoAP POST request to the endpoint /ace-group/GROUPNAME/nodes/NODENAME/pub-key at the Group Manager.
 
 Upon receiving the Public Key Update Request, the Group Manager processes it as per {{Section 4.8.1 of I-D.ietf-ace-key-groupcomm}}, with the following additions.
 
-* The N\_S challenge used to build the proof-of-possession input is computed as per point (1) in {{sssec-challenge-value}} (REQ21).
+* The N\_S challenge used to build the proof-of-possession input is computed as per point (1) in {{sssec-challenge-value}} (REQ14).
 
-* The Group Manager verifies the PoP challenge included in 'client_cred_verify' in the same way taken when processing a Joining Request for the OSCORE group in question, as defined in {{ssec-join-req-processing}} (REQ20).
+* The Group Manager verifies the PoP challenge included in 'client_cred_verify' in the same way taken when processing a Joining Request for the OSCORE group in question, as defined in {{ssec-join-req-processing}} (REQ13).
 
 * The Group Manager MUST return a 5.03 (Service Unavailable) response in case the OSCORE group identified by GROUPNAME is currently inactive (see {{ssec-resource-active}}). The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 9 ("Group currently not active").
 
@@ -990,9 +990,9 @@ In particular, it sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/
 
 In addition to what defined in {{Section 4.5.1 of I-D.ietf-ace-key-groupcomm}}, the Group Manager MUST responsd with a 4.00 (Bad Request) error message, if the requesting client is not a current group member and GROUPNAME denotes a pairwise-only group. The response MUST have Content-Format set to application/ace-groupcomm+cbor and is formatted as defined in Section {{Section 4.1.1 of I-D.ietf-ace-key-groupcomm}}. The value of the 'error' field MUST be set to 7 ("Signatures not used in the group").
 
-The payload of the 2.05 (Content) KDC Public Key Response is a CBOR map, which is formatted as defined in {{Section 4.5.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the Group Manager specifies the parameters 'kdc_cred', 'kdc_nonce' and 'kdc_challenge' as defined for the Joining Response in {{ssec-join-resp}} of this document. This especially applies to the computing of the proof-of-possession (PoP) evidence included in 'kdc_cred_verify' (REQ30).
+The payload of the 2.05 (Content) KDC Public Key Response is a CBOR map, which is formatted as defined in {{Section 4.5.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the Group Manager specifies the parameters 'kdc_cred', 'kdc_nonce' and 'kdc_challenge' as defined for the Joining Response in {{ssec-join-resp}} of this document. This especially applies to the computing of the proof-of-possession (PoP) evidence included in 'kdc_cred_verify' (REQ21).
 
-Upon receiving a 2.05 (Content) KDC Public Key Response, the requesting client retrieves the Group Manager's public key from the 'kdc_cred' parameter, and proceeds as defined in {{Section 4.5.1.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the requesting client verifies the PoP evidence included in 'kdc_cred_verify' by means of the same method used when processing the Joining Response, as defined in {{ssec-join-resp}} of this document (REQ30).
+Upon receiving a 2.05 (Content) KDC Public Key Response, the requesting client retrieves the Group Manager's public key from the 'kdc_cred' parameter, and proceeds as defined in {{Section 4.5.1.1 of I-D.ietf-ace-key-groupcomm}}. In particular, the requesting client verifies the PoP evidence included in 'kdc_cred_verify' by means of the same method used when processing the Joining Response, as defined in {{ssec-join-resp}} of this document (REQ21).
 
 Note that a signature verifier would not receive a successful response from the Group Manager, in case GROUPNAME denotes a pairwise-only group.
 
@@ -1135,9 +1135,9 @@ A node may want to retrieve from the Group Manager the group name and the URI of
    
 In either case, the node only knows the current Gid of the group, as learned from received or intercepted messages exchanged in the group. As detailed below, the node can contact the Group Manager, and request the group name and URI to the group-membership resource corresponding to that Gid. Then, it can use that information to either join the group as a candidate group member, get the latest keying material as a current group member, or retrieve public keys used in the group as a signature verifier. To this end, the node sends a Group Name and URI Retrieval Request, as per {{Section 4.2.1.1 of I-D.ietf-ace-key-groupcomm}}.
 
-In particular, the node sends a CoAP FETCH request to the endpoint /ace-group at the Group Manager formatted as defined in {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}. Each element of the CBOR array 'gid' is a CBOR byte string (REQ9), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are requested.
+In particular, the node sends a CoAP FETCH request to the endpoint /ace-group at the Group Manager formatted as defined in {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}. Each element of the CBOR array 'gid' is a CBOR byte string (REQ12), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are requested.
 
-Upon receiving the Group Name and URI Retrieval Request, the Group Manager processes it as per {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}. The success Group Name and URI Retrieval Response is formatted as defined in {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}. In particular, each element of the CBOR array 'gid' is a CBOR byte string (REQ9), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are provided.
+Upon receiving the Group Name and URI Retrieval Request, the Group Manager processes it as per {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}. The success Group Name and URI Retrieval Response is formatted as defined in {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}. In particular, each element of the CBOR array 'gid' is a CBOR byte string (REQ12), which encodes the Gid of the group for which the group name and the URI to the group-membership resource are provided.
 
 For each of its groups, the Group Manager maintains an association between the group name and the URI to the group-membership resource on one hand, and only the current Gid for that group on the other hand. That is, the Group Manager MUST NOT maintain an association between the former pair and any other Gid for that group than the current, most recent one.
 
@@ -1397,7 +1397,7 @@ Node                                                         Manager
 
 # ACE Groupcomm Parameters {#ace-groupcomm-params}
 
-Clients are required to support the new parameters defined in this application profile as specified below (REQ27).
+Clients are required to support the new parameters defined in this application profile as specified below (REQ29).
 
 * 'group_senderId' MUST be supported by a Client that intends to join an OSCORE group with the role of Requester and/or Responder.
 
@@ -1409,7 +1409,7 @@ Clients are required to support the new parameters defined in this application p
 
 * 'stale_node_ids' MUST be supported.
 
-When the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} are used with this application profile, Clients must, should or may support them as specified below (REQ28).
+When the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}} are used with this application profile, Clients must, should or may support them as specified below (REQ30).
 
 * 'client_cred', 'cnonce', 'client_cred_verify'. A Client that has a public key to use in a group MUST support these parameters.
 
@@ -1881,9 +1881,9 @@ Expert reviewers should take into consideration the following points:
 
 This appendix lists the specifications on this application profile of ACE, based on the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
-* REQ1 - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in {{Section 3.1 of I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
+* REQ1 - Specify the format and encoding of 'scope'. This includes defining the set of possible roles and their identifiers, as well as the corresponding encoding to use in the scope entries according to the used scope format: see {{sec-format-scope}} and {{ssec-auth-req}}.
 
-* REQ2 - Specify the exact format and encoding of 'scope'. This includes defining the set of possible roles and their identifiers, as well as the corresponding encoding to use in the scope entries according to the used scope format: see {{sec-format-scope}} and {{ssec-auth-req}}.
+* REQ2 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm", as well as the corresponding Media Type and Content-Format, as per the guidelines in {{I-D.ietf-ace-aif}}: see {{ssec-iana-AIF-registry}}, {{ssec-iana-media-types}} and {{ssec-iana-coap-content-format-registry}}.
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
@@ -1893,57 +1893,53 @@ This appendix lists the specifications on this application profile of ACE, based
 
 * REQ6 - Specify the acceptable formats for encoding public keys and, if used, the acceptable values for 'pub\_key\_enc': acceptable formats explicitly provide the full set of information related to the public key algorithm (see {{ssec-token-post}} and {{ssec-join-resp}}). Consistent acceptable values for 'pub\_key\_enc' are taken from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}}.
 
-* REQ7 - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
+* REQ7 - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in {{Section 3.1 of I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
 
-* REQ8 - Define what specific actions (e.g., CoAP methods) are allowed on each resource provided by the KDC interface, depending on whether the Client is a current group member; the roles that a Client is authorized to take as per the obtained access token; and the roles that the Client has as current group member: see {{ssec-admitted-methods}}.
+* REQ8 - Specify if any part of the KDC interface as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} is not supported by the KDC: not applicable.
 
-* REQ9 - Specify the exact encoding of group identifier (see {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}): CBOR byte string (see {{sec-retrieve-gnames}}).
+* REQ9 - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see {{Section 4.1 of I-D.ietf-ace-key-groupcomm}}): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in {{iana-rt}}.
 
-* REQ10 - Format of the 'key' value: see {{ssec-join-resp}}.
+* REQ10 - Define what specific actions (e.g., CoAP methods) are allowed on each resource provided by the KDC interface, depending on whether the Client is a current group member; the roles that a Client is authorized to take as per the obtained access token; and the roles that the Client has as current group member: see {{ssec-admitted-methods}}.
 
-* REQ11 - Acceptable values of 'gkty': Group_OSCORE_Input_Material object (see {{ssec-join-resp}}).
+* REQ11 - Categorize possible newly defined operations for Clients into primary operations expected to be minimally supported and secondary operations, and provide accompanying considerations (see {{client-operations}}).
 
-* REQ12 - Specify the format of the identifiers of group members: the Sender ID used in the OSCORE group (see {{ssec-join-resp}} and {{sec-pub-keys}}).
+* REQ12 - Specify the encoding of group identifier (see {{Section 4.2.1 of I-D.ietf-ace-key-groupcomm}}): CBOR byte string (see {{sec-retrieve-gnames}}).
 
-* REQ13 - Specify the communication protocol that the members of the group must use: CoAP {{RFC7252}}, possibly over IP multicast {{I-D.ietf-core-groupcomm-bis}}.
+* REQ13 - Specify the approaches used to compute and verify the PoP evidence to include in 'client_cred_verify', and which of those approaches is used in which case: see {{ssec-join-req-sending}} and {{ssec-join-req-processing}}.
 
-* REQ14 - Specify the security protocols that the group members must use to protect their communication: Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+* REQ14 - Specify how the nonce N\_S is generated, if the token is not provided to the KDC through the Token Transfer Request to the authz-info endpoint (e.g., if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
 
-* REQ15 - Specify and register the application profile identifier: coap_group_oscore_app (see {{ssec-iana-groupcomm-profile-registry}}).
+* REQ15 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g., as in {{I-D.ietf-ace-oscore-gm-admin}}.
 
-* REQ16 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
+* REQ16 - Specify the format of the 'key' parameter: see {{ssec-join-resp}}.
 
-* REQ17 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}.
+* REQ17 - Specify acceptable values of the 'gkty' parameter: Group_OSCORE_Input_Material object (see {{ssec-join-resp}}).
 
-* REQ18 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
+* REQ18 - Specify and register the application profile identifier: coap_group_oscore_app (see {{ssec-iana-groupcomm-profile-registry}}).
 
-* REQ19 - Specify how the communication is secured between the Client and KDC: by means of any transport profile of ACE {{I-D.ietf-ace-oauth-authz}} between Client and Group Manager that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
+* REQ19 - If used, specify the format and content of 'group\_policies' and its entries: see {{ssec-join-resp}}.
 
-* REQ20 - Specify the exact approaches used to compute and verify the PoP evidence to include in 'client_cred_verify', and which of those approaches is used in which case: see {{ssec-join-req-sending}} and {{ssec-join-req-processing}}.
+* REQ20 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: yes as required by the Group OSCORE protocol {{I-D.ietf-core-oscore-groupcomm}}, see {{ssec-join-resp}} of this document.
 
-* REQ21 - Specify how the nonce N\_S is generated, if the token is not provided to the KDC through the Token Transfer Request to the authz-info endpoint (e.g., if it is used directly to validate TLS instead): see {{sssec-challenge-value}}.
+* REQ21 - Specify the approaches used to compute and verify the PoP evidence to include in 'kdc_cred_verify', and which of those approaches is used in which case: see {{ssec-join-resp}}, {{ssec-join-resp-processing}} and {{sec-gm-pub-key}}.
 
-* REQ23 - Define the initial value of the 'num' parameter: The initial value MUST be set to 0 when creating the OSCORE group, e.g., as in {{I-D.ietf-ace-oscore-gm-admin}}.
+* REQ22 - Specify the communication protocol that the members of the group must use: CoAP {{RFC7252}}, possibly over IP multicast {{I-D.ietf-core-groupcomm-bis}}.
 
-* REQ24 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
+* REQ23 - Specify the security protocols that the group members must use to protect their communication: Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-<!-- START NEW REQUIREMENTS -->
+* REQ24 - Specify how the communication is secured between the Client and KDC: by means of any transport profile of ACE {{I-D.ietf-ace-oauth-authz}} between Client and Group Manager that complies with the requirements in Appendix C of {{I-D.ietf-ace-oauth-authz}}.
 
-* REQ25 - Specify if any part of the KDC interface as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} is not supported by the KDC: not applicable.
+* REQ25 - Specify the format of the identifiers of group members: the Sender ID used in the OSCORE group (see {{ssec-join-resp}} and {{sec-pub-keys}}).
 
-* REQ26 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm", as well as the corresponding Media Type and Content-Format, as per the guidelines in {{I-D.ietf-ace-aif}}: see {{ssec-iana-AIF-registry}}, {{ssec-iana-media-types}} and {{ssec-iana-coap-content-format-registry}}.
+* REQ26 - Specify policies at the KDC to handle member ids that are not included in 'get_pub_keys': see {{sec-pub-keys}}.
 
-* REQ27 - Sort newly defined parameters according to the same categorization defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}: see {{ace-groupcomm-params}}.
+* REQ27 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see {{sec-new-key}}.
 
-* REQ28 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: see {{ace-groupcomm-params}}.
+* REQ28 - Specify and register the identifier of newly defined semantics for binary scopes: see {{iana-scope-semantics}}.
 
-* REQ29 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: yes as required by the Group OSCORE protocol {{I-D.ietf-core-oscore-groupcomm}}, see {{ssec-join-resp}} of this document.
+* REQ29 - Categorize newly defined parameters according to the same criteria of {{Section 7 of I-D.ietf-ace-key-groupcomm}}: see {{ace-groupcomm-params}}.
 
-* REQ30 - Specify the exact approaches used to compute and verify the PoP evidence to include in 'kdc_cred_verify', and which of those approaches is used in which case: see {{ssec-join-resp}}, {{ssec-join-resp-processing}} and {{sec-gm-pub-key}}.
-
-* REQ31 - Categorize possible newly defined operations for Clients into primary operations expected to be minimally supported and secondary operations, and provide accompanying considerations (see {{client-operations}}).
-
-<!-- END NEW REQUIREMENTS -->
+* REQ30 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: see {{ace-groupcomm-params}}.
 
 * OPT1 (Optional) - If the textual format of 'scope' is used, specify CBOR values to use for abbreviating the role identifiers in the group: not applicable.
 
