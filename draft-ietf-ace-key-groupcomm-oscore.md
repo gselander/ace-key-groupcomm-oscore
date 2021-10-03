@@ -1881,7 +1881,7 @@ Expert reviewers should take into consideration the following points:
 
 This section lists how this application profile of ACE addresses the requirements defined in Appendix A of {{I-D.ietf-ace-key-groupcomm}}.
 
-## Mandatory Requirements
+## Mandatory-to-Address Requirements
 
 * REQ1 - Specify the format and encoding of 'scope'. This includes defining the set of possible roles and their identifiers, as well as the corresponding encoding to use in the scope entries according to the used scope format: see {{sec-format-scope}} and {{ssec-auth-req}}.
 
@@ -1897,7 +1897,7 @@ This section lists how this application profile of ACE addresses the requirement
 
 * REQ7 - If the value of the GROUPNAME URI path and the group name in the Access Token scope (gname in {{Section 3.1 of I-D.ietf-ace-key-groupcomm}}) do not match, specify the mechanism to map the GROUPNAME value in the URI to the group name: not applicable, since a match is required.
 
-* REQ8 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: yes as required by the Group OSCORE protocol {{I-D.ietf-core-oscore-groupcomm}}, see {{ssec-join-resp}} of this document.
+* REQ8 - Define whether the KDC has a public key and if this has to be provided through the 'kdc_cred' parameter, see {{Section 7 of I-D.ietf-ace-key-groupcomm}}: yes, as required by the Group OSCORE protocol {{I-D.ietf-core-oscore-groupcomm}}, see {{ssec-join-resp}} of this document.
 
 * REQ9 - Specify if any part of the KDC interface as defined in {{Section 4.1 of I-D.ietf-ace-key-groupcomm}} is not supported by the KDC: not applicable.
 
@@ -1943,7 +1943,7 @@ This section lists how this application profile of ACE addresses the requirement
 
 * REQ30 - Define whether Clients must, should or may support the conditional parameters defined in {{Section 7 of I-D.ietf-ace-key-groupcomm}}, and under which circumstances: see {{ace-groupcomm-params}}.
 
-## Optional Requirements
+## Optional-to-Address Requirements
 
 * OPT1 (Optional) - If the textual format of 'scope' is used, specify CBOR values to use for abbreviating the role identifiers in the group: not applicable.
 
@@ -1955,7 +1955,7 @@ This section lists how this application profile of ACE addresses the requirement
 
 * OPT3 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
-* OPT4 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 (Bad Request) response to a Joining Request (see {{ssec-join-req-processing}}).
+* OPT4 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 (Bad Request) error response to a Joining Request (see {{ssec-join-req-processing}}).
 
 * OPT5 (Optional) - Specify additional identifiers of error types, as values of the 'error' field in an error response from the KDC: see {{iana-ace-groupcomm-errors}}.
 
