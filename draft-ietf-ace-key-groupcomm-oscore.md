@@ -1231,7 +1231,7 @@ Finally, {{missed-rekeying}} discusses how a group member can realize that it ha
 
 ## Sending Rekeying Messages {#sending-rekeying-msg}
 
-The group rekeying messages MUST have Content-Format set to application/ace-groupcomm+cbor and have the same format used for the Joining Response message in {{ssec-join-resp}}, with the following differences.
+The group rekeying messages MUST have Content-Format set to application/ace-groupcomm+cbor and have the same format used for the Joining Response message in {{ssec-join-resp}}, with the following differences. Note that this extends the minimal content of a rekeying message as defined in {{Section 6 of I-D.ietf-ace-key-groupcomm}} (OPT14).
 
 * From the Joining Response, only the parameters 'gkty', 'key', 'num', 'exp', and 'ace-groupcomm-profile' are present. In particular, the 'key' parameter includes only the following data.
 
@@ -1251,13 +1251,15 @@ The group rekeying messages MUST have Content-Format set to application/ace-grou
    
    - The parameter 'stale_node_ids' takes ARRAY as value.
 
+* The parameters 'pub_keys', 'peer_roles' and 'peer_identifiers' SHOULD be present, if the group rekeying is performed due to one or multiple Clients that have requested join the group. Following the same semantics used in the Joining Response message (see {{ssec-join-resp}}), the three parameters specify the public key, roles in the group and node identifier of each of the Clients that have requested to join the group. The Group Manager MUST NOT include a non-empty subset of these three parameters.
+
 The Group Manager separately sends a group rekeying message formatted as defined above to each group member to be rekeyed.
 
 Each rekeying message MUST be secured with the pairwise secure communication channel between the Group Manager and the group member used during the joining process. In particular, each rekeying message can target the 'control_uri' URI path defined in {{Section 4.3.1 of I-D.ietf-ace-key-groupcomm}} (OPT7), if provided by the intended recipient upon joining the group (see {{ssec-join-req-sending}}).
 
 This distribution approach requires group members to act (also) as servers, in order to correctly handle unsolicited group rekeying messages from the Group Manager. In particular, if a group member and the Group Manager use OSCORE {{RFC8613}} to secure their pairwise communications, the group member MUST create a Replay Window in its own Recipient Context upon establishing the OSCORE Security Context with the Group Manager, e.g., by means of the OSCORE profile of ACE {{I-D.ietf-ace-oscore-profile}}.
 
-Group members and the Group Manager SHOULD additionally support alternative distribution approaches that do not require group members to act (also) as servers. A number of such approaches are defined in {{Section 6 of I-D.ietf-ace-key-groupcomm}}. In particular, a group member may subscribe for updates to the group-membership resource of the group, at the endpoint /ace-group/GROUPNAME/ of the Group Manager. This can rely on CoAP Observe {{RFC7641}} or on a full-fledged Pub-Sub model {{I-D.ietf-core-coap-pubsub}} with the Group Manager acting as Broker.
+Group members and the Group Manager SHOULD additionally support alternative distribution approaches that do not require group members to act (also) as servers. A number of such approaches are defined in {{Section 6 of I-D.ietf-ace-key-groupcomm}}. In particular, a group member may use CoAP Observe {{RFC7641}} and subscribe for updates to the group-membership resource of the group, at the endpoint /ace-group/GROUPNAME/ of the Group Manager (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}). Alternatively, a full-fledged Pub-Sub model can be considered {{I-D.ietf-core-coap-pubsub}}, where the Group Manager publishes to a rekeying topic hosted at a Broker, while the group members subscribe to such topic (see {{Section 6.2 of I-D.ietf-ace-key-groupcomm}}).
 
 ## Receiving Rekeying Messages {#receiving-rekeying-msg}
 
@@ -1965,7 +1967,9 @@ This section lists how this application profile of ACE addresses the requirement
 
 * OPT13 (Optional) - Specify how the identifier of the sender's public key is included in the group request: no.
 
-* OPT14 (Optional) - Specify if Clients must or should support any of the parameters defined as optional in {{Section 8 of I-D.ietf-ace-key-groupcomm}}: no.
+* OPT14 (Optional) - Specify additional information to include in rekeying messages for the "Point-to-Point" group rekeying scheme (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}): see {{sending-rekeying-msg}}.
+
+* OPT15 (Optional) - Specify if Clients must or should support any of the parameters defined as optional in {{Section 8 of I-D.ietf-ace-key-groupcomm}}: no.
 
 # Extensibility for Future COSE Algorithms # {#sec-future-cose-algs}
 
@@ -2047,10 +2051,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Revised use of CoAP error codes.
 
-* Revised names of new IANA registries.
-
-* Alignment to new requirements from draft-ietf-ace-key-groupcomm.
-
 * Use of "Token Tranfer Request" and "Token Transfer Response".
 
 * New parameter 'rekeying_scheme'.
@@ -2061,7 +2061,13 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Changed UCCS to CCS.
 
+* Public keys of just joined Clients can be in rekeying messages.
+
+* Revised names of new IANA registries.
+
 * Clarified meaning of registered CoRE resource type.
+
+* Alignment to new requirements from draft-ietf-ace-key-groupcomm.
 
 * Fixes and editorial improvements.
 
