@@ -209,7 +209,7 @@ A node performs the steps described in {{Section 4.3.1.1 of I-D.ietf-ace-key-gro
 
 In a number of cases, the Group Manager has to generate new keying material and distribute it to the group (rekeying), as also discussed in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
 
-To this end the Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} of this document, as an instance of the "Point-to-Point" rekeying scheme registered in {{Section 11.14 of I-D.ietf-ace-key-groupcomm}}. Future document may define the use of alternative group rekeying schemes for this application profile, together with the corresponding rekeying message formats. The resulting group rekeying process MUST comply with the functional steps defined in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
+To this end the Group Manager MUST support the Group Rekeying Process described in {{sec-group-rekeying-process}} of this document, as an instance of the "Point-to-Point" rekeying scheme defined in {{Section 6.1 of I-D.ietf-ace-key-groupcomm}} and registered in {{Section 11.14 of I-D.ietf-ace-key-groupcomm}}. Future documents may define the use of alternative group rekeying schemes for this application profile, together with the corresponding rekeying message formats. The resulting group rekeying process MUST comply with the functional steps defined in {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
 
 Upon generating the new group keying material and before starting its distribution, the Group Manager MUST increment the version number of the group keying material. When rekeying a group, the Group Manager MUST preserve the current value of the OSCORE Sender ID of each member in that group.
 
@@ -1173,7 +1173,7 @@ Node                                                           Manager
 
 A group member may request to leave the OSCORE group. To this end, the group member sends a Group Leaving Request, as per {{Section 4.8.3.1 of I-D.ietf-ace-key-groupcomm}}. In particular, it sends a CoAP DELETE request to the endpoint /ace-group/GROUPNAME/nodes/NODENAME at the Group Manager.
 
-Upon receiving the Group Leaving Request, the Group Manager processes it as per {{Section 4.8.3 of I-D.ietf-ace-key-groupcomm}}.
+Upon receiving the Group Leaving Request, the Group Manager processes it as per {{Section 4.8.3 of I-D.ietf-ace-key-groupcomm}}. Then, the Group Manager performs the follow-up actions defined in {{sec-leaving}}.
 
 # Removal of a Group Member # {#sec-leaving}
 
@@ -1199,7 +1199,7 @@ If the leaving node has not exclusively the role of monitor, the Group Manager p
 
 Then, the Group Manager MUST generate updated security parameters and group keying material, and provide it to the remaining group members (see {{sec-group-rekeying-process}}). As a consequence, the leaving node is not able to acquire the new security parameters and group keying material distributed after its leaving.
 
-Same considerations in {{Section 5 of I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC.
+The same considerations from {{Section 5 of I-D.ietf-ace-key-groupcomm}} apply here as well, considering the Group Manager acting as KDC.
 
 # Group Rekeying Process {#sec-group-rekeying-process}
 
