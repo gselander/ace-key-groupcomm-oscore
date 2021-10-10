@@ -1965,7 +1965,7 @@ This section lists how this application profile of ACE addresses the requirement
 
 * OPT12 (Optional) - Specify for the KDC to perform group rekeying (together or instead of renewing individual keying material) when receiving a Key Renewal Request: the Group Manager SHOULD NOT perform a group rekeying, unless already scheduled to occur shortly (see {{sec-new-key}}).
 
-* OPT13 (Optional) - Specify how the identifier of the sender's public key is included in the group request: no.
+* OPT13 (Optional) - Specify how the identifier of a group members's public key is included in requests sent to other group members: no.
 
 * OPT14 (Optional) - Specify additional information to include in rekeying messages for the "Point-to-Point" group rekeying scheme (see {{Section 6.1 of I-D.ietf-ace-key-groupcomm}}): see {{sending-rekeying-msg}}.
 
