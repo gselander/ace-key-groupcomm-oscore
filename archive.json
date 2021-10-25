@@ -1,0 +1,1283 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2021-07-15T00:15:31.945432+00:00",
+  "repo": "ace-wg/ace-key-groupcomm-oscore",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU0NTEzNDk5NDQ=",
+      "title": "Editorial",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/3",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP1: In the abstract, change \u201cwhere communications are based\u201d to \u201cwhere the group communication is based\u201d.",
+      "createdAt": "2019-06-03T08:17:24Z",
+      "updatedAt": "2019-06-04T16:09:50Z",
+      "closedAt": "2019-06-04T16:09:50Z",
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWU0NTEzNTM3NTk=",
+      "title": "Terminology",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/4",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP8: Switch to Requester, Responder, Monitor\r\n",
+      "createdAt": "2019-06-03T08:26:58Z",
+      "updatedAt": "2019-06-05T08:43:35Z",
+      "closedAt": "2019-06-05T08:43:35Z",
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWU0NTEzNTU3OTM=",
+      "title": "Sec cons",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/5",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP9: add sec cons that this is up to the application to decide what to do with collisions of Gid",
+      "createdAt": "2019-06-03T08:31:42Z",
+      "updatedAt": "2019-06-05T12:54:52Z",
+      "closedAt": "2019-06-05T12:54:52Z",
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU0NTEzNTkwMzg=",
+      "title": "Extend key_info",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/6",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP2: In Section 4.1, extend the format of \u2018key_info\u2019",
+      "createdAt": "2019-06-03T08:39:36Z",
+      "updatedAt": "2019-06-05T08:56:20Z",
+      "closedAt": "2019-06-05T08:56:20Z",
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "MDU6SXNzdWU0NTEzNTkzNDA=",
+      "title": "Editorial",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/7",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP3: In Section 4.4.1, about 'key_info', change \"its format\" to \"its exact content\".",
+      "createdAt": "2019-06-03T08:40:22Z",
+      "updatedAt": "2019-06-04T16:12:24Z",
+      "closedAt": "2019-06-04T16:12:24Z",
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "MDU6SXNzdWU0NTEzNjE1NTU=",
+      "title": "error code",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/8",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP10: Section 4.3 - GM refuses the join request with 4.xx if the client_cred passed in was not in the correct format.",
+      "createdAt": "2019-06-03T08:45:36Z",
+      "updatedAt": "2019-06-05T09:07:21Z",
+      "closedAt": "2019-06-05T09:07:21Z",
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "MDU6SXNzdWU0NTEzNjE4OTM=",
+      "title": "Editorial",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/9",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP4: In Section 6, clarify in the third bullet on asymmetric PoP.\r\n",
+      "createdAt": "2019-06-03T08:46:19Z",
+      "updatedAt": "2019-06-04T16:34:47Z",
+      "closedAt": "2019-06-04T16:34:47Z",
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "MDU6SXNzdWU0NTEzNjM0NTE=",
+      "title": "PoP of signature key",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/10",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP5: In Section 6, proof-of-possession of the client\u2019s private key, e.g. by signing a nonce returned by the GM in the response to the Token post.",
+      "createdAt": "2019-06-03T08:49:52Z",
+      "updatedAt": "2019-06-05T15:29:54Z",
+      "closedAt": "2019-06-05T15:29:54Z",
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "MDU6SXNzdWU0NTEzNjM3Mjg=",
+      "title": "Editorial",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/11",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP6: In Section 6, third bullet point, clarify about ensuring that any signature algorithm parameters that might exist are going to be checked and enforced.",
+      "createdAt": "2019-06-03T08:50:30Z",
+      "updatedAt": "2019-06-04T16:50:51Z",
+      "closedAt": "2019-06-04T16:50:51Z",
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "MDU6SXNzdWU0NTEzNjY2NjM=",
+      "title": "addition about rekeying",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/12",
+      "state": "CLOSED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "AP7: Specify that when using the OSCORE profile between group member and GM, the joining nodes need to have both client and server roles. This means configuring their keying material accordingly. In particular, the group member\u2019s recipient context need to contain a replay window).",
+      "createdAt": "2019-06-03T08:56:52Z",
+      "updatedAt": "2019-06-05T10:04:23Z",
+      "closedAt": "2019-06-05T10:04:23Z",
+      "comments": []
+    },
+    {
+      "number": 16,
+      "id": "MDU6SXNzdWU1NjAyOTc0Nzc=",
+      "title": "New TLS EXPORTER label to generate a signature challenge",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/16",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-02-05T11:03:56Z",
+      "updatedAt": "2020-02-17T09:38:45Z",
+      "closedAt": "2020-02-17T09:38:45Z",
+      "comments": []
+    },
+    {
+      "number": 17,
+      "id": "MDU6SXNzdWU1NjAyOTc3ODg=",
+      "title": "Justify the size of the nonces N_S and N_C as shares of the signature challenge.",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/17",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-02-05T11:04:31Z",
+      "updatedAt": "2020-02-19T15:56:26Z",
+      "closedAt": "2020-02-19T15:56:26Z",
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "https://github.com/ace-wg/ace-key-groupcomm-oscore/commit/a6c7e50ec200217228d169384778592c44528c4a",
+          "createdAt": "2020-02-19T15:25:06Z",
+          "updatedAt": "2020-02-19T15:25:06Z"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "MDU6SXNzdWU1NjAyOTgzOTE=",
+      "title": "Fix retrieval of group vs. group+individual keying material.",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/18",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-02-05T11:05:43Z",
+      "updatedAt": "2020-02-17T10:01:45Z",
+      "closedAt": "2020-02-17T10:01:45Z",
+      "comments": []
+    },
+    {
+      "number": 19,
+      "id": "MDU6SXNzdWU1NjAyOTg3NDM=",
+      "title": "Support for legal requester.",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/19",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-02-05T11:06:27Z",
+      "updatedAt": "2020-03-01T18:02:24Z",
+      "closedAt": "2020-03-01T18:02:24Z",
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "See discussion at: https://mailarchive.ietf.org/arch/msg/ace/f29T-f3dicGljh-ivPifNlWf_Wg/",
+          "createdAt": "2020-02-26T14:38:40Z",
+          "updatedAt": "2020-02-26T14:38:40Z"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "MDU6SXNzdWU1NjAyOTg5OTA=",
+      "title": "Generation of security parameters upon membership change.",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/20",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-02-05T11:06:54Z",
+      "updatedAt": "2020-02-19T09:39:00Z",
+      "closedAt": "2020-02-19T09:39:00Z",
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "MDU6SXNzdWU1NjAyOTkzNjE=",
+      "title": "Confirmed key redistribution vs. incrementing version number",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/21",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-02-05T11:07:37Z",
+      "updatedAt": "2020-02-17T11:04:48Z",
+      "closedAt": "2020-02-17T11:04:48Z",
+      "comments": []
+    },
+    {
+      "number": 22,
+      "id": "MDU6SXNzdWU1NjAyOTk5OTI=",
+      "title": "Nonce N_S returned in error messages.",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/22",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-02-05T11:08:48Z",
+      "updatedAt": "2020-02-17T10:41:49Z",
+      "closedAt": "2020-02-17T10:41:49Z",
+      "comments": []
+    },
+    {
+      "number": 24,
+      "id": "MDU6SXNzdWU1ODM3OTI1NzA=",
+      "title": "Section 1 - Fix sentence \"This relies on a Group Manager ...\"",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/24",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:02:00Z",
+      "updatedAt": "2020-03-24T15:59:10Z",
+      "closedAt": "2020-03-24T15:59:10Z",
+      "comments": []
+    },
+    {
+      "number": 25,
+      "id": "MDU6SXNzdWU1ODM3OTM3MDM=",
+      "title": "Section 2 - \"Rely on the CoAP protocol\" locks out JSON/HTTP.",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/25",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:03:36Z",
+      "updatedAt": "2020-03-24T15:59:16Z",
+      "closedAt": "2020-03-24T15:59:16Z",
+      "comments": []
+    },
+    {
+      "number": 26,
+      "id": "MDU6SXNzdWU1ODM3OTUzNzY=",
+      "title": "Section 2.2 - OSCORE Id Context vs. plain group identifier (name)",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/26",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:05:57Z",
+      "updatedAt": "2020-03-24T15:59:22Z",
+      "closedAt": "2020-03-24T15:59:22Z",
+      "comments": []
+    },
+    {
+      "number": 27,
+      "id": "MDU6SXNzdWU1ODM3OTYwOTk=",
+      "title": "Section 3.1 - Remove role combination [\"requester\", \"monitor\"]",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/27",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:06:59Z",
+      "updatedAt": "2020-03-24T18:44:35Z",
+      "closedAt": "2020-03-24T18:44:35Z",
+      "comments": []
+    },
+    {
+      "number": 28,
+      "id": "MDU6SXNzdWU1ODM3OTcxOTI=",
+      "title": "Section 3.1 - Implicit scope and audience in Authorization Request",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/28",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:08:35Z",
+      "updatedAt": "2020-03-24T18:44:41Z",
+      "closedAt": "2020-03-24T18:44:41Z",
+      "comments": []
+    },
+    {
+      "number": 29,
+      "id": "MDU6SXNzdWU1ODM3OTc5OTc=",
+      "title": "Section  4 - Fix resource base name as group-oscore/",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/29",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:09:45Z",
+      "updatedAt": "2020-03-24T18:44:46Z",
+      "closedAt": "2020-03-24T18:44:46Z",
+      "comments": []
+    },
+    {
+      "number": 30,
+      "id": "MDU6SXNzdWU1ODM3OTg1ODE=",
+      "title": "Section 5.2 - Scope non mandatory in the joining request",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/30",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:10:36Z",
+      "updatedAt": "2020-03-24T18:44:58Z",
+      "closedAt": "2020-03-24T18:44:58Z",
+      "comments": []
+    },
+    {
+      "number": 31,
+      "id": "MDU6SXNzdWU1ODM3OTkxOTc=",
+      "title": "Section 5.2.1 - Pointer to considerations about (no) risk of replay",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/31",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:11:28Z",
+      "updatedAt": "2020-03-24T19:38:35Z",
+      "closedAt": "2020-03-24T19:38:35Z",
+      "comments": []
+    },
+    {
+      "number": 32,
+      "id": "MDU6SXNzdWU1ODM3OTk1NzI=",
+      "title": "Section 5.4 - cs_alg should refer to the IANA registries not the COSE document",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/32",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:12:01Z",
+      "updatedAt": "2020-03-24T19:12:50Z",
+      "closedAt": "2020-03-24T19:12:50Z",
+      "comments": []
+    },
+    {
+      "number": 33,
+      "id": "MDU6SXNzdWU1ODM4MDA0ODA=",
+      "title": "Section 6 - is it an error for a monitor-only to provide a public key?",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/33",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:13:17Z",
+      "updatedAt": "2020-03-24T19:27:26Z",
+      "closedAt": "2020-03-24T19:27:26Z",
+      "comments": []
+    },
+    {
+      "number": 34,
+      "id": "MDU6SXNzdWU1ODM4MDA5MTE=",
+      "title": "Section 6 - does kdcnonce need to be provided on a token post from a monitor-only?",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/34",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:13:55Z",
+      "updatedAt": "2020-05-11T15:55:07Z",
+      "closedAt": "2020-05-11T15:55:07Z",
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It's not needed if the token authorizes the client to be only monitor in all the groups covered in the token.\r\n\r\nIs it worth addressing and implementing this optimization? Or rather to just return a kdcnonce even in such a case, even thoug that joining node is not going to use the received kdcnonce to build a signature challenge?",
+          "createdAt": "2020-04-16T08:25:18Z",
+          "updatedAt": "2020-04-16T08:25:18Z"
+        },
+        {
+          "author": "jimsch",
+          "authorAssociation": "NONE",
+          "body": "I don't know if it is worth it or not, that is a question that could be left to the implementer if it the field is optional rather than required.  ",
+          "createdAt": "2020-04-16T13:06:41Z",
+          "updatedAt": "2020-04-16T13:06:41Z"
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "id": "MDU6SXNzdWU1ODM4MDE5Nzk=",
+      "title": "Section 8 - For bullet 2.a , rekeying vs. returning an error",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/35",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-18T15:15:25Z",
+      "updatedAt": "2020-03-24T19:12:55Z",
+      "closedAt": "2020-03-24T19:12:55Z",
+      "comments": []
+    },
+    {
+      "number": 36,
+      "id": "MDU6SXNzdWU2MDA4NDA4MDE=",
+      "title": "Group policy for support of Group OSCORE pairwise mode",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/36",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-04-16T08:18:52Z",
+      "updatedAt": "2020-04-19T20:51:01Z",
+      "closedAt": "2020-04-19T20:51:01Z",
+      "comments": []
+    },
+    {
+      "number": 37,
+      "id": "MDU6SXNzdWU2MDA4NDIzMTI=",
+      "title": "Reusing kdcchallenge for a same valid token",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/37",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This may result in removing the alternative techniques to compute the signature challenge for joining requests following the first one after token posting, e.g. using a TLS exporter.",
+      "createdAt": "2020-04-16T08:21:06Z",
+      "updatedAt": "2020-04-19T18:40:49Z",
+      "closedAt": "2020-04-19T18:40:49Z",
+      "comments": []
+    },
+    {
+      "number": 38,
+      "id": "MDU6SXNzdWU2MDI3NzE0NzQ=",
+      "title": "Role for signature verifiers",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/38",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-04-19T17:18:06Z",
+      "updatedAt": "2020-04-19T19:09:19Z",
+      "closedAt": "2020-04-19T19:09:19Z",
+      "comments": []
+    },
+    {
+      "number": 43,
+      "id": "MDU6SXNzdWU3NDU2MjA4OTM=",
+      "title": "Non recycling policy of Sender IDs",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/43",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "To be aligned with changes to draft-ietf-core-oscore-groupcomm :\r\n\r\n1) A Sender ID cannot be recycled under the same Group ID value;\r\n\r\n2) If a node re-joins and is recognized as a current group member, it must still get a new Sender ID.",
+      "createdAt": "2020-11-18T12:34:06Z",
+      "updatedAt": "2020-11-18T13:46:43Z",
+      "closedAt": "2020-11-18T13:46:43Z",
+      "comments": []
+    },
+    {
+      "number": 44,
+      "id": "MDU6SXNzdWU3NDU2MjEwOTQ=",
+      "title": "Align ToC with draft-ietf-ace-key-groupcomm",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/44",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-11-18T12:34:28Z",
+      "updatedAt": "2020-11-18T12:34:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 46,
+      "id": "MDU6SXNzdWU4MzU2NTY1NDE=",
+      "title": "Recycling Group IDs by tracking \"Birth GIDs\"",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/46",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-03-19T07:38:47Z",
+      "updatedAt": "2021-03-21T12:41:33Z",
+      "closedAt": "2021-03-21T12:41:33Z",
+      "comments": []
+    },
+    {
+      "number": 47,
+      "id": "MDU6SXNzdWU4MzU2NTc4OTg=",
+      "title": "Remove redundancy of key type capabilities",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/47",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This applies to 'sign_info' and 'ecdh_info' in the response to the Token POST, as well as to 'key:cs_params' in the Joining Response.",
+      "createdAt": "2021-03-19T07:40:42Z",
+      "updatedAt": "2021-03-20T11:04:18Z",
+      "closedAt": "2021-03-20T11:04:18Z",
+      "comments": []
+    },
+    {
+      "number": 48,
+      "id": "MDU6SXNzdWU4MzY3ODYyNDE=",
+      "title": "Parameter Extensibility for Future COSE Algorithms",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/48",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In Section 3.3.1 of ace-key-groupcomm, the definition of 'sign_info_entry' adheres with the existing COSE algorithm. However, future COSE algorithms may admit zero or more than one capabilities, beyond Key Type. That would need to be reflected with additional, corresponding arrays following 'sign_key_parameters'. At the same time, REQ4 and REQ5 leave the details about specified properties to application profiles. The same applies also to the specific content of 'key' in the Joining Response, whose details are also left to application profiles (REQ10).\r\n\r\nConsidering exactly Group OSCORE, this can be addressed in ace-key-groupcomm-oscore as done in core-oscore-groupcomm, where Appendix H defines a future-friendly template for the same kind of extension, there with respect to parameters in the OSCORE Security Context and to elements in the external_aad.\r\n   \r\nFollowing the same rationale, the 'sign_*_parameters' arrays after 'sign_parameters' would be as many as the elements of 'sign_parameters', i.e. one for each capability of the signature algorithm.\r\n   \r\nThe same thing can be done for 'ecdh_info_entry' , i.e. the 'ecdh_*_parameters' arrays after 'ecdh_parameters' would be as many as the elements of 'ecdh_parameters', i.e. one for each capability of the ECDH algorithm.\r\n\r\nThe same logic applies to corresponding parameters in the 'key' element of responses from ace-group/GROUPNAME (e.g. the Joining Response) and from ace-group/GROUPNAME/nodes/NODENAME, 'cs_params', 'cs_key_params', 'ecdh_params' and 'ecdh_key_params'.\r\n\r\nLike in core-oscore-groupcomm, applying this template to any of today's existing COSE algorithms results in the exact parameters and formats detailed in the document body.\r\n",
+      "createdAt": "2021-03-20T11:34:30Z",
+      "updatedAt": "2021-03-20T19:51:55Z",
+      "closedAt": "2021-03-20T18:28:43Z",
+      "comments": [
+        {
+          "author": "jimsch",
+          "authorAssociation": "NONE",
+          "body": "Can somebody help me unsubscribe?  \n\n \n\nMy brother was a member of this group. He has died and I need to monitor this email, but I have know access to his user name/password.\n\n \n\nAll I have is his email address:  ***@***.***\n\n \n\nTom Schaad\n\nAugust Cellars\n\n ***@***.***> ***@***.***\n\n503.554.6766 x102 desk\n\n503.789.7404 cell\n\n \n\nFrom: marco-tiloca-sics ***@***.***> \nSent: Saturday, March 20, 2021 11:29 AM\nTo: ace-wg/ace-key-groupcomm-oscore ***@***.***>\nCc: Subscribed ***@***.***>\nSubject: Re: [ace-wg/ace-key-groupcomm-oscore] Parameter Extensibility for Future COSE Algorithms (#48)\n\n \n\nClosed #48 <https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/48> .\n\n\u2014\nYou are receiving this because you are subscribed to this thread.\nReply to this email directly, view it on GitHub <https://github.com/ace-wg/ace-key-groupcomm-oscore/issues/48#event-4485885192> , or unsubscribe <https://github.com/notifications/unsubscribe-auth/ABFXQ5NAQKFLHBO77LJCI43TETSOTANCNFSM4ZQLBGBQ> .  <https://github.com/notifications/beacon/ABFXQ5NAZYVIXBLBFA6ZONTTETSOTA5CNFSM4ZQLBGB2YY3PNVWWK3TUL52HS4DFWZEXG43VMVCXMZLOORHG65DJMZUWGYLUNFXW5KTDN5WW2ZLOORPWSZGPAAAAAAILMEWQQ.gif> \n\n",
+          "createdAt": "2021-03-20T19:33:43Z",
+          "updatedAt": "2021-03-20T19:33:43Z"
+        },
+        {
+          "author": "kaduk",
+          "authorAssociation": "NONE",
+          "body": "I will respond to Tom out of band.",
+          "createdAt": "2021-03-20T19:51:55Z",
+          "updatedAt": "2021-03-20T19:51:55Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQyNjEwOTY4",
+      "title": "V 06",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/1",
+      "state": "MERGED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-01-07T10:14:51Z",
+      "updatedAt": "2019-01-07T10:19:42Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "88b9c86b3bc4e5c684c2b8f3a2ecde9d83ac8d27",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-06",
+      "headRefOid": "1f4b0cd76dbfaa3d05ae6eb7274d2ad9c2a25c7b",
+      "closedAt": "2019-01-07T10:19:38Z",
+      "mergedAt": "2019-01-07T10:19:38Z",
+      "mergedBy": "fpalombini",
+      "mergeCommit": {
+        "oid": "7d51558365b18cda5351c7a6fc674ba067f703d2"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjU4ODIzNjM4",
+      "title": "V 01 wip",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/2",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-03-06T18:03:55Z",
+      "updatedAt": "2019-04-03T09:52:01Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "d3d5b294e4386568866cdaf6cba755a361abebe7",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-01-WIP",
+      "headRefOid": "101ce6096b31af29e76a4e3a4d9376b6fd242658",
+      "closedAt": "2019-04-03T09:51:58Z",
+      "mergedAt": "2019-04-03T09:51:58Z",
+      "mergedBy": "fpalombini",
+      "mergeCommit": {
+        "oid": "6548d675b613ef5d4995fb83d106321cac62cad7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 13,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mjk0NTQ2Mjk0",
+      "title": "V 02 wip",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/13",
+      "state": "MERGED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-07-04T11:44:38Z",
+      "updatedAt": "2019-07-08T14:38:44Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "6548d675b613ef5d4995fb83d106321cac62cad7",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-02-WIP",
+      "headRefOid": "39e32c3bd3d56ad8eff43128567eafc3b51a9aa4",
+      "closedAt": "2019-07-08T14:38:41Z",
+      "mergedAt": "2019-07-08T14:38:41Z",
+      "mergedBy": "fpalombini",
+      "mergeCommit": {
+        "oid": "3521e2cf0d005ece6d5cf7210b944a6714a1dcd7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 14,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MTg3MjI5",
+      "title": "V 03 wip",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/14",
+      "state": "MERGED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T09:44:29Z",
+      "updatedAt": "2019-11-05T09:34:44Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "3521e2cf0d005ece6d5cf7210b944a6714a1dcd7",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-03-WIP",
+      "headRefOid": "7cb36768ddb79e6aa70493da4962efadc72ac638",
+      "closedAt": "2019-11-05T09:33:17Z",
+      "mergedAt": "2019-11-05T09:33:17Z",
+      "mergedBy": "fpalombini",
+      "mergeCommit": {
+        "oid": "9e5b73f4769535f39e853b734186ab51114c27c8"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExMDYwNTAz",
+          "commit": {
+            "abbreviatedOid": "ea287cc"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-11-04T13:18:02Z",
+          "updatedAt": "2019-11-04T14:01:17Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "\"endpoint\" and \"resource\" mixes up 2 terminology (CoAP and ACE), to refer to the same thing... how is the resource different from the endpoint?",
+              "createdAt": "2019-11-04T13:18:03Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 116,
+              "body": "I'm all for deleting this figure.",
+              "createdAt": "2019-11-04T13:19:27Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 146,
+              "body": "may signal -> MAY signal",
+              "createdAt": "2019-11-04T13:23:34Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 161,
+              "body": "\"a joining node must have\": either replace with \"MUST have\" or \"uses\"",
+              "createdAt": "2019-11-04T13:26:00Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 211,
+              "body": "The AS may -> The AS MAY",
+              "createdAt": "2019-11-04T13:27:48Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 239,
+              "body": "Remind me where this comes from?",
+              "createdAt": "2019-11-04T13:36:51Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 279,
+              "body": "general comment (not to fix for this submisson, obviously) for this and following sections: this is maybe too much detail, for things that are already defined in ace-key-groupcomm. We should try to avoid repetition, which makes the document hard to read. What are the things that are not described in ace-key-groupcomm?",
+              "createdAt": "2019-11-04T13:42:14Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 399,
+              "body": "That is exactly what I meant with \"as little repetition as possible\" :) This looks great",
+              "createdAt": "2019-11-04T13:47:31Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 414,
+              "body": "Add a reference to 'clientId' IANA section?",
+              "createdAt": "2019-11-04T13:49:40Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 437,
+              "body": "may request to -> may request the",
+              "createdAt": "2019-11-04T13:53:15Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 461,
+              "body": "\"The leaving node must not\" -> \"is not\"",
+              "createdAt": "2019-11-04T13:54:31Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            },
+            {
+              "originalPosition": 520,
+              "body": "Why not \"Group_OSCORE_Security_Context\" as name",
+              "createdAt": "2019-11-04T13:59:09Z",
+              "updatedAt": "2019-11-04T18:32:47Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzYyMTgxODM5",
+      "title": "V-04",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/15",
+      "state": "MERGED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-01-13T15:37:08Z",
+      "updatedAt": "2020-02-05T11:02:41Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "9e5b73f4769535f39e853b734186ab51114c27c8",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-04",
+      "headRefOid": "43b223705991eb04e44382ffa789701d10a38ff3",
+      "closedAt": "2020-01-15T13:30:43Z",
+      "mergedAt": "2020-01-15T13:30:42Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "57e489b191ddc22ed10496d871c7c50bf10c4cd6"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 23,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mzg1NTMxNDg2",
+      "title": "V-05",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/23",
+      "state": "MERGED",
+      "author": "fpalombini",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-03-09T11:33:16Z",
+      "updatedAt": "2020-03-12T08:11:00Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "57e489b191ddc22ed10496d871c7c50bf10c4cd6",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-05",
+      "headRefOid": "26931ba8f77dc15f8b80dfff72f49178173368ce",
+      "closedAt": "2020-03-10T18:39:33Z",
+      "mergedAt": "2020-03-10T18:39:33Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "1e49af20f8392dd27e7fc49ef840f0d6b3f23a2c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMTMwMTk3",
+          "commit": {
+            "abbreviatedOid": "8173f85"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-03-09T12:44:31Z",
+          "updatedAt": "2020-03-09T13:10:18Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "what does it mean for a group to be \"active\"?",
+              "createdAt": "2020-03-09T12:44:31Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            },
+            {
+              "originalPosition": 96,
+              "body": "> associated to the requesting client\r\n\r\nDo we say somewhere that the association token - sec ctx is stored? I can only find at line 493:\r\n\r\n> The Group Manager stores the association between i) the public key of the joining node; and ii) the Group Identifier (Gid), i.e. the OSCORE ID Context, associated to the OSCORE group together with the OSCORE Sender ID assigned to the joining node in the group. The Group Manager MUST keep this association updated over time.\r\n\r\nBut that's not enough",
+              "createdAt": "2020-03-09T12:50:15Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            },
+            {
+              "originalPosition": 155,
+              "body": "We need to say in which condition it will not contain the rsnonce parameter (why SHOULD)",
+              "createdAt": "2020-03-09T12:53:31Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            },
+            {
+              "originalPosition": 250,
+              "body": "I don't remember this, when does this happen? (by the way changed to 4.00 as 4.06 is not right)",
+              "createdAt": "2020-03-09T13:01:12Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            },
+            {
+              "originalPosition": 261,
+              "body": "I don't understand what this sentence adds.",
+              "createdAt": "2020-03-09T13:02:05Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            },
+            {
+              "originalPosition": 328,
+              "body": "I would change this to it is RECOMMENDED",
+              "createdAt": "2020-03-09T13:04:41Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMTgzNDk2",
+          "commit": {
+            "abbreviatedOid": "917aea4"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-03-09T13:30:50Z",
+          "updatedAt": "2020-03-09T13:30:50Z",
+          "comments": [
+            {
+              "originalPosition": 98,
+              "body": "now fixed.",
+              "createdAt": "2020-03-09T13:30:50Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMTkwOTAy",
+          "commit": {
+            "abbreviatedOid": "917aea4"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-03-09T13:40:53Z",
+          "updatedAt": "2020-03-09T13:40:54Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "solved in ace key groupcomm",
+              "createdAt": "2020-03-09T13:40:53Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMTk3MzUw",
+          "commit": {
+            "abbreviatedOid": "917aea4"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-03-09T13:49:21Z",
+          "updatedAt": "2020-03-09T13:49:22Z",
+          "comments": [
+            {
+              "originalPosition": 155,
+              "body": "See https://github.com/ace-wg/ace-key-groupcomm/issues/60 for some situation where rsnonce can not be sent.",
+              "createdAt": "2020-03-09T13:49:22Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMTk3ODI4",
+          "commit": {
+            "abbreviatedOid": "3234aff"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-03-09T13:49:57Z",
+          "updatedAt": "2020-03-09T13:49:57Z",
+          "comments": [
+            {
+              "originalPosition": 250,
+              "body": "depending on policies",
+              "createdAt": "2020-03-09T13:49:57Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMjA0NjU3",
+          "commit": {
+            "abbreviatedOid": "60107d6"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-03-09T13:58:29Z",
+          "updatedAt": "2020-03-09T13:58:29Z",
+          "comments": [
+            {
+              "originalPosition": 261,
+              "body": "moved ",
+              "createdAt": "2020-03-09T13:58:29Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMjA2MjYw",
+          "commit": {
+            "abbreviatedOid": "60107d6"
+          },
+          "author": "fpalombini",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-03-09T14:00:26Z",
+          "updatedAt": "2020-03-09T14:00:27Z",
+          "comments": [
+            {
+              "originalPosition": 328,
+              "body": "kept MUST because of history",
+              "createdAt": "2020-03-09T14:00:26Z",
+              "updatedAt": "2020-03-09T17:04:59Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDE2MjA2MTg4",
+      "title": "V 06",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/39",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-05-11T16:18:17Z",
+      "updatedAt": "2020-06-25T09:36:26Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "1e49af20f8392dd27e7fc49ef840f0d6b3f23a2c",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-06",
+      "headRefOid": "7d0b7f67e04f016204bb3dcd35c0cb4bfc4a8bfc",
+      "closedAt": "2020-05-11T16:27:16Z",
+      "mergedAt": "2020-05-11T16:27:16Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "238e68ed620e8100a677eae43693f37b6af2f1cd"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 40,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDM2MzM0OTA5",
+      "title": "V 07",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/40",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-06-18T09:07:14Z",
+      "updatedAt": "2020-06-25T09:36:28Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "238e68ed620e8100a677eae43693f37b6af2f1cd",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-07",
+      "headRefOid": "74a468113107ed6035293270e2c647b4511079fe",
+      "closedAt": "2020-06-18T09:07:37Z",
+      "mergedAt": "2020-06-18T09:07:37Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "6c9e68c689e8188c0d32a25e36bc5fed62aceecb"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 41,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDQ4NDEyODI1",
+      "title": "V 08",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/41",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-07-13T18:15:17Z",
+      "updatedAt": "2020-08-27T07:38:01Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "6c9e68c689e8188c0d32a25e36bc5fed62aceecb",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-08",
+      "headRefOid": "e5b67ddbd26a5bdd7434ab470c5055579f9cc11e",
+      "closedAt": "2020-07-13T18:15:37Z",
+      "mergedAt": "2020-07-13T18:15:37Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "ada1706d55602e19de7f81d71a380b6a89bdd378"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 42,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTEzNDYxMTE5",
+      "title": "V 09",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/42",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-31T16:32:03Z",
+      "updatedAt": "2020-11-18T12:06:04Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "ada1706d55602e19de7f81d71a380b6a89bdd378",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-09",
+      "headRefOid": "db37ea2337feed347b2db274c24b725140abcfd7",
+      "closedAt": "2020-11-18T12:04:53Z",
+      "mergedAt": "2020-11-18T12:04:53Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "bcf95bf9f7333cc467179c021ed11ce27240f45c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 45,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTc5MDg0OTU2",
+      "title": "V 10",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/45",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-02-24T07:50:58Z",
+      "updatedAt": "2021-02-24T07:53:14Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "bcf95bf9f7333cc467179c021ed11ce27240f45c",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-10",
+      "headRefOid": "6502b48086cac171d224af20eaa1acd4cc5b3bd2",
+      "closedAt": "2021-02-24T07:51:06Z",
+      "mergedAt": "2021-02-24T07:51:06Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "cc95a3cd6707f92168c81b57023c4e86bfc198b3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 49,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg5ODgzOTcx",
+      "title": "V 11",
+      "url": "https://github.com/ace-wg/ace-key-groupcomm-oscore/pull/49",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-07-14T12:47:45Z",
+      "updatedAt": "2021-07-14T12:50:24Z",
+      "baseRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "baseRefName": "master",
+      "baseRefOid": "cc95a3cd6707f92168c81b57023c4e86bfc198b3",
+      "headRepository": "ace-wg/ace-key-groupcomm-oscore",
+      "headRefName": "v-11",
+      "headRefOid": "5e61e2741acba2954bbf1a32a0dc46364fc9bb18",
+      "closedAt": "2021-07-14T12:48:36Z",
+      "mergedAt": "2021-07-14T12:48:36Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "3edca675671c4464bc0460bff48f45bdf8e1ed58"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
