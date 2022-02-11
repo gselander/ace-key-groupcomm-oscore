@@ -5,10 +5,10 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                   RISE AB
 Intended status: Standards Track                                 J. Park
-Expires: 28 April 2022                       Universitaet Duisburg-Essen
+Expires: 15 August 2022                      Universitaet Duisburg-Essen
                                                             F. Palombini
                                                              Ericsson AB
-                                                         25 October 2021
+                                                        11 February 2022
 
 
                 Key Management for OSCORE Groups in ACE
@@ -43,11 +43,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 April 2022.
+   This Internet-Draft will expire on 15 August 2022.
 
 Copyright Notice
 
-   Copyright (c) 2021 IETF Trust and the persons identified as the
+   Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -55,9 +55,9 @@ Copyright Notice
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.  Code Components
-   extracted from this document must include Simplified BSD License text
-   as described in Section 4.e of the Trust Legal Provisions and are
-   provided without warranty as described in the Simplified BSD License.
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
 
 Table of Contents
 
@@ -145,18 +145,19 @@ Table of Contents
      B.1.  Format of 'ecdh_info_entry'
      B.2.  Format of 'key'
    Appendix C.  Document Updates
-     C.1.  Version -11 to -12
-     C.2.  Version -10 to -11
-     C.3.  Version -09 to -10
-     C.4.  Version -08 to -09
-     C.5.  Version -07 to -08
-     C.6.  Version -06 to -07
-     C.7.  Version -05 to -06
-     C.8.  Version -04 to -05
-     C.9.  Version -03 to -04
-     C.10. Version -02 to -03
-     C.11. Version -01 to -02
-     C.12. Version -00 to -01
+     C.1.  Version -12 to -13
+     C.2.  Version -11 to -12
+     C.3.  Version -10 to -11
+     C.4.  Version -09 to -10
+     C.5.  Version -08 to -09
+     C.6.  Version -07 to -08
+     C.7.  Version -06 to -07
+     C.8.  Version -05 to -06
+     C.9.  Version -04 to -05
+     C.10. Version -03 to -04
+     C.11. Version -02 to -03
+     C.12. Version -01 to -02
+     C.13. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -3579,8 +3580,8 @@ Table of Contents
 
    *  Value: SEM_ID_TBD
 
-   *  Description: Access to OSCORE groups through the ACE Group
-      Manager.
+   *  Description: Membership and key management operations at the ACE
+      Group Manager for Group OSCORE.
 
    *  Reference: [[This document]]
 
@@ -3679,25 +3680,25 @@ Table of Contents
    [I-D.ietf-ace-aif]
               Bormann, C., "An Authorization Information Format (AIF)
               for ACE", Work in Progress, Internet-Draft, draft-ietf-
-              ace-aif-03, 24 June 2021,
+              ace-aif-04, 28 January 2022,
               <https://www.ietf.org/archive/id/draft-ietf-ace-aif-
-              03.txt>.
+              04.txt>.
 
    [I-D.ietf-ace-key-groupcomm]
               Palombini, F. and M. Tiloca, "Key Provisioning for Group
               Communication using ACE", Work in Progress, Internet-
-              Draft, draft-ietf-ace-key-groupcomm-13, 12 July 2021,
+              Draft, draft-ietf-ace-key-groupcomm-15, 23 December 2021,
               <https://www.ietf.org/archive/id/draft-ietf-ace-key-
-              groupcomm-13.txt>.
+              groupcomm-15.txt>.
 
    [I-D.ietf-ace-oauth-authz]
               Seitz, L., Selander, G., Wahlstroem, E., Erdtman, S., and
               H. Tschofenig, "Authentication and Authorization for
               Constrained Environments (ACE) using the OAuth 2.0
               Framework (ACE-OAuth)", Work in Progress, Internet-Draft,
-              draft-ietf-ace-oauth-authz-45, 29 August 2021,
+              draft-ietf-ace-oauth-authz-46, 8 November 2021,
               <https://www.ietf.org/archive/id/draft-ietf-ace-oauth-
-              authz-45.txt>.
+              authz-46.txt>.
 
    [I-D.ietf-ace-oscore-profile]
               Palombini, F., Seitz, L., Selander, G., and M. Gunnarsson,
@@ -3711,9 +3712,9 @@ Table of Contents
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
               and J. Park, "Group OSCORE - Secure Group Communication
               for CoAP", Work in Progress, Internet-Draft, draft-ietf-
-              core-oscore-groupcomm-12, 12 July 2021,
+              core-oscore-groupcomm-13, 25 October 2021,
               <https://www.ietf.org/archive/id/draft-ietf-core-oscore-
-              groupcomm-12.txt>.
+              groupcomm-13.txt>.
 
    [I-D.ietf-cose-rfc8152bis-algs]
               Schaad, J., "CBOR Object Signing and Encryption (COSE):
@@ -3827,8 +3828,8 @@ Table of Contents
               Tiloca, M., Höglund, R., Stok, P. V. D., and F. Palombini,
               "Admin Interface for the OSCORE Group Manager", Work in
               Progress, Internet-Draft, draft-ietf-ace-oscore-gm-admin-
-              03, 12 July 2021, <https://www.ietf.org/archive/id/draft-
-              ietf-ace-oscore-gm-admin-03.txt>.
+              04, 25 October 2021, <https://www.ietf.org/archive/id/
+              draft-ietf-ace-oscore-gm-admin-04.txt>.
 
    [I-D.ietf-core-coap-pubsub]
               Koster, M., Keranen, A., and J. Jimenez, "Publish-
@@ -3842,24 +3843,24 @@ Table of Contents
               Dijk, E., Wang, C., and M. Tiloca, "Group Communication
               for the Constrained Application Protocol (CoAP)", Work in
               Progress, Internet-Draft, draft-ietf-core-groupcomm-bis-
-              04, 12 July 2021, <https://www.ietf.org/archive/id/draft-
-              ietf-core-groupcomm-bis-04.txt>.
+              05, 25 October 2021, <https://www.ietf.org/archive/id/
+              draft-ietf-core-groupcomm-bis-05.txt>.
 
    [I-D.ietf-cose-cbor-encoded-cert]
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-02, 12 July 2021,
+              ietf-cose-cbor-encoded-cert-03, 10 January 2022,
               <https://www.ietf.org/archive/id/draft-ietf-cose-cbor-
-              encoded-cert-02.txt>.
+              encoded-cert-03.txt>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsuess, C., and P. V. D. Stok, "Discovery of
               OSCORE Groups with the CoRE Resource Directory", Work in
               Progress, Internet-Draft, draft-tiloca-core-oscore-
-              discovery-09, 12 July 2021,
+              discovery-10, 25 October 2021,
               <https://www.ietf.org/archive/id/draft-tiloca-core-oscore-
-              discovery-09.txt>.
+              discovery-10.txt>.
 
    [RFC5869]  Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
               Key Derivation Function (HKDF)", RFC 5869,
@@ -4230,7 +4231,12 @@ Appendix C.  Document Updates
 
    RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-C.1.  Version -11 to -12
+C.1.  Version -12 to -13
+
+   *  Updated textual description of registered ACE Scope Semantics
+      value.
+
+C.2.  Version -11 to -12
 
    *  Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.
 
@@ -4266,7 +4272,7 @@ C.1.  Version -11 to -12
 
    *  Fixes and editorial improvements.
 
-C.2.  Version -10 to -11
+C.3.  Version -10 to -11
 
    *  Removed redundancy of key type capabilities, from 'sign_info',
       'ecdh_info' and 'key'.
@@ -4313,7 +4319,7 @@ C.2.  Version -10 to -11
    *  General format of parameters related to COSE capabilities,
       supporting future registered COSE algorithms (new Appendix).
 
-C.3.  Version -09 to -10
+C.4.  Version -09 to -10
 
    *  Updated non-recycling policy of Sender IDs.
 
@@ -4333,7 +4339,7 @@ C.3.  Version -09 to -10
 
    *  Renumbered requirements.
 
-C.4.  Version -08 to -09
+C.5.  Version -08 to -09
 
    *  The url-path "ace-group" is used.
 
@@ -4367,7 +4373,7 @@ C.4.  Version -08 to -09
 
    *  Clarifications and editorial revision.
 
-C.5.  Version -07 to -08
+C.6.  Version -07 to -08
 
    *  AIF specific data model to express scope entries.
 
@@ -4386,7 +4392,7 @@ C.5.  Version -07 to -08
 
    *  IANA registrations to support the AIF specific data model.
 
-C.6.  Version -06 to -07
+C.7.  Version -06 to -07
 
    *  Alignments with draft-ietf-core-oscore-groupcomm.
 
@@ -4399,7 +4405,7 @@ C.6.  Version -06 to -07
 
    *  Editorial revision.
 
-C.7.  Version -05 to -06
+C.8.  Version -05 to -06
 
    *  Added role of external signature verifier.
 
@@ -4429,7 +4435,7 @@ C.7.  Version -05 to -06
 
    *  Editorial improvements.
 
-C.8.  Version -04 to -05
+C.9.  Version -04 to -05
 
    *  Nonce N_S also in error responses to the Joining Requests.
 
@@ -4458,7 +4464,7 @@ C.8.  Version -04 to -05
 
    *  Added CBOR values to abbreviate role identifiers in the group.
 
-C.9.  Version -03 to -04
+C.10.  Version -03 to -04
 
    *  New abstract.
 
@@ -4480,7 +4486,7 @@ C.9.  Version -03 to -04
 
    *  Editorial improvements.
 
-C.10.  Version -02 to -03
+C.11.  Version -02 to -03
 
    *  New sections, aligned with the interface of ace-key-groupcomm .
 
@@ -4503,7 +4509,7 @@ C.10.  Version -02 to -03
 
    *  More fulfilled profile requirements (Appendix A).
 
-C.11.  Version -01 to -02
+C.12.  Version -01 to -02
 
    *  Editorial fixes.
 
@@ -4541,7 +4547,7 @@ C.11.  Version -01 to -02
    *  Registered one public key encoding in the "ACE Public Key
       Encoding" IANA registry (Section 9).
 
-C.12.  Version -00 to -01
+C.13.  Version -00 to -01
 
    *  Changed name of 'req_aud' to 'audience' in the Authorization
       Request (Section 3.1).
