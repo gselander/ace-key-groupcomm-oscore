@@ -1821,7 +1821,7 @@ IANA is asked to register the following entry in the "ACE Scope Semantics" regis
 
 * Value: SEM_ID_TBD
 
-* Description: Access to OSCORE groups through the ACE Group Manager.
+* Description: Membership and key management operations at the ACE Group Manager for Group OSCORE.
 
 * Reference: \[\[This document\]\]
 
@@ -2036,6 +2036,10 @@ The format of 'key' (see {{ssec-join-resp}}) is generalized as follows.
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -12 to -13 ## {#sec-12-13}
+
+* Updated textual description of registered ACE Scope Semantics value.
 
 ## Version -11 to -12 ## {#sec-11-12}
 
