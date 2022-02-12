@@ -1937,7 +1937,7 @@ As an exception, the KDC MAY NOT include the 'ecdh_info' parameter in the Token 
 </li>
             <li class="normal" id="section-6.1.1-7.4">The fourth element 'ecdh_key_parameters' is a CBOR array indicating the parameters of the keys used with the ECDH algorithm in the OSCORE group identified by 'gname'. Its content depends on the value of 'ecdh_alg'. In particular, its format and value are the same of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" registry <span>[<a href="#COSE.Key.Types" class="xref">COSE.Key.Types</a>]</span>.<a href="#section-6.1.1-7.4" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.1.1-7.5">The fifth element 'pub_key_enc' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span> (REQ6). Acceptable values denote a format that MUST  provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see <a href="#ssec-token-post" class="xref">Section 6.1</a>) apply.<a href="#section-6.1.1-7.5" class="pilcrow">¶</a>
+            <li class="normal" id="section-6.1.1-7.5">The fifth element 'cred_fmt' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span> (REQ6). Acceptable values denote a format that MUST  provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see <a href="#ssec-token-post" class="xref">Section 6.1</a>) apply.<a href="#section-6.1.1-7.5" class="pilcrow">¶</a>
 </li>
           </ul>
 <p id="section-6.1.1-8">The CDDL notation <span>[<a href="#RFC8610" class="xref">RFC8610</a>]</span> of the 'ecdh_info' parameter is given below.<a href="#section-6.1.1-8" class="pilcrow">¶</a></p>
@@ -1957,7 +1957,7 @@ ecdh_info_entry =
   ecdh_alg : int / tstr,
   ecdh_parameters : [ any ],
   ecdh_key_parameters : [ any ],
-  pub_key_enc = int
+  cred_fmt = int
 ]
 
 gname = tstr
@@ -1980,9 +1980,9 @@ gname = tstr
 <ul class="normal">
 <li class="normal" id="section-6.1.2-7.1">The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies. In particular 'id' MUST refer exclusively to OSCORE groups that are pairwise-only groups.<a href="#section-6.1.2-7.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.1.2-7.2">The second element 'pub_key_enc' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span> (REQ6). Acceptable values denote a format that MUST explicitly provide the public key as well as full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see <a href="#ssec-token-post" class="xref">Section 6.1</a>) apply.<a href="#section-6.1.2-7.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-6.1.2-7.2">The second element 'cred_fmt' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span> (REQ6). Acceptable values denote a format that MUST explicitly provide the public key as well as full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see <a href="#ssec-token-post" class="xref">Section 6.1</a>) apply.<a href="#section-6.1.2-7.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.1.2-7.3">The third element 'cred' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.<a href="#section-6.1.2-7.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-6.1.2-7.3">The third element 'cred' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'cred_fmt' element. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.<a href="#section-6.1.2-7.3" class="pilcrow">¶</a>
 </li>
           </ul>
 <p id="section-6.1.2-8">The CDDL notation <span>[<a href="#RFC8610" class="xref">RFC8610</a>]</span> of the 'kdc_dh_creds' parameter is given below.<a href="#section-6.1.2-8" class="pilcrow">¶</a></p>
@@ -2001,7 +2001,7 @@ kdc_dh_creds_res = [ + kdc_dh_creds_entry ] ; in the Token Transfer
 kdc_dh_creds_entry =
 [
   id : gname / [ + gname ],
-  pub_key_enc = int,
+  cred_fmt = int,
   cred = bstr
 ]
 
@@ -2187,7 +2187,7 @@ If the joining node is recognized as a current group member, e.g., through the o
           <li class="normal" id="section-6.4-5.2">
             <p id="section-6.4-5.2.1">The 'key' parameter includes what the joining node needs in order to set up the Group OSCORE Security Context as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-2" class="relref">Section 2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.4-5.2.1" class="pilcrow">¶</a></p>
 <p id="section-6.4-5.2.2">
-This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-profile-19#section-3.2.1" class="relref">Section 3.2.1</a> of [<a href="#I-D.ietf-ace-oscore-profile" class="xref">I-D.ietf-ace-oscore-profile</a>]</span>. In particular, it contains the additional parameters 'group_senderId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' defined in <a href="#ssec-iana-security-context-parameter-registry" class="xref">Section 25.6</a> of this document.<a href="#section-6.4-5.2.2" class="pilcrow">¶</a></p>
+This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-profile-19#section-3.2.1" class="relref">Section 3.2.1</a> of [<a href="#I-D.ietf-ace-oscore-profile" class="xref">I-D.ietf-ace-oscore-profile</a>]</span>. In particular, it contains the additional parameters 'group_senderId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' defined in <a href="#ssec-iana-security-context-parameter-registry" class="xref">Section 25.6</a> of this document.<a href="#section-6.4-5.2.2" class="pilcrow">¶</a></p>
 <p id="section-6.4-5.2.3">
 More specifically, the 'key' parameter is composed as follows.<a href="#section-6.4-5.2.3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2202,7 +2202,7 @@ More specifically, the 'key' parameter is composed as follows.<a href="#section-
               <li class="normal" id="section-6.4-5.2.4.5">The 'group_senderId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter MUST NOT be present if the node joins the OSCORE group exclusively with the role of monitor, according to what specified in the Access Token (see <a href="#ssec-auth-resp" class="xref">Section 4.2</a>). In any other case, this parameter MUST be present.<a href="#section-6.4-5.2.4.5" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-6.4-5.2.4.6">
-                <p id="section-6.4-5.2.4.6.1">The 'pub_key_enc' parameter MUST be present and specifies the format of authentication credentials used in the OSCORE group. It takes value from the "Label" column of the "COSE Header Parameters" registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span> (REQ6). Consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-2.3" class="relref">Section 2.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, acceptable values denote a format that MUST explicitly provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).<a href="#section-6.4-5.2.4.6.1" class="pilcrow">¶</a></p>
+                <p id="section-6.4-5.2.4.6.1">The 'cred_fmt' parameter MUST be present and specifies the format of authentication credentials used in the OSCORE group. It takes value from the "Label" column of the "COSE Header Parameters" registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span> (REQ6). Consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-2.3" class="relref">Section 2.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, acceptable values denote a format that MUST explicitly provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).<a href="#section-6.4-5.2.4.6.1" class="pilcrow">¶</a></p>
 <p id="section-6.4-5.2.4.6.2">
 At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span>, X.509 certificates <span>[<a href="#RFC7925" class="xref">RFC7925</a>]</span> and C509 certificates <span>[<a href="#I-D.ietf-cose-cbor-encoded-cert" class="xref">I-D.ietf-cose-cbor-encoded-cert</a>]</span>. Further formats may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.<a href="#section-6.4-5.2.4.6.2" class="pilcrow">¶</a></p>
 <p id="section-6.4-5.2.4.6.3">
@@ -2519,7 +2519,7 @@ The Group Manager MUST return a 5.03 (Service Unavailable) response in case ther
 <li class="normal" id="section-13-4.1">
           <p id="section-13-4.1.1">From the Joining Response message, only the parameters 'gkty', 'key', 'num', 'exp' and 'ace-groupcomm-profile' are present. In particular, the 'key' parameter includes only the following data.<a href="#section-13-4.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-13-4.1.2.1">The parameters 'hkdf', 'contextId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params'. These parameters MUST be present.<a href="#section-13-4.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-13-4.1.2.1">The parameters 'hkdf', 'contextId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', 'sign_params'. These parameters MUST be present.<a href="#section-13-4.1.2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-13-4.1.2.2">The parameters 'alg' and 'ecdh_alg'. These parameter MUST NOT be present if the group is a signature-only group. Otherwise, they MUST be present.<a href="#section-13-4.1.2.2" class="pilcrow">¶</a>
 </li>
@@ -2574,7 +2574,7 @@ Verifier                                                     Manager
       "key": {
         'hkdf': -10,                   ; HKDF SHA-256
         'contextId': h'37fc',
-        'pub_key_enc': 33,             ; x5chain
+        'cred_fmt': 33,                ; x5chain
         'sign_enc_alg': 10,            ; AES-CCM-16-64-128
         'sign_alg': -8,                ; EdDSA
         'sign_params': [[1], [1, 6]]   ; [[OKP], [OKP, Ed25519]]
@@ -3085,7 +3085,7 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
 <li class="normal" id="section-23.1-2.1">For the HKDF Algorithm 'hkdf', the Group Manager SHOULD use the same default value defined in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC8613" class="xref">RFC8613</a>]</span>, i.e., HKDF SHA-256 (COSE algorithm encoding: -10).<a href="#section-23.1-2.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-23.1-2.2">
-            <p id="section-23.1-2.2.1">For the format 'pub_key_enc' used for the authentication credentials in the group, the Group Manager SHOULD use CBOR Web Token (CWT) or CWT Claims Set (CCS) <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span>, i.e., the COSE Header Parameter 'kcwt' and 'kccs', respectively.<a href="#section-23.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-23.1-2.2.1">For the format 'cred_fmt' used for the authentication credentials in the group, the Group Manager SHOULD use CBOR Web Token (CWT) or CWT Claims Set (CCS) <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span>, i.e., the COSE Header Parameter 'kcwt' and 'kccs', respectively.<a href="#section-23.1-2.2.1" class="pilcrow">¶</a></p>
 <p id="section-23.1-2.2.2">
 [
     These COSE Header Parameters are under pending registration requested by draft-ietf-lake-edhoc.
@@ -3406,7 +3406,7 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
         </ul>
 <p id="section-25.6-3"></p>
 <ul class="normal">
-<li class="normal" id="section-25.6-4.1">Name: pub_key_enc<a href="#section-25.6-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.6-4.1">Name: cred_fmt<a href="#section-25.6-4.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-25.6-4.2">CBOR Label: TBD<a href="#section-25.6-4.2" class="pilcrow">¶</a>
 </li>
@@ -4035,7 +4035,7 @@ ecdh_info_entry =
   ecdh_capab_2 : [ any ],
   ...,
   ecdh_capab_N : [ any ],
-  pub_key_enc = int / nil
+  cred_fmt = int / nil
 ]
 
 gname = tstr
@@ -4159,7 +4159,7 @@ For example, if 'ecdh_params'[0][0] specifies the key type as capability of the 
 </li>
           <li class="normal" id="appendix-C.3-1.4">New parameter 'sign_enc_alg' related to the group mode.<a href="#appendix-C.3-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.3-1.5">'pub_key_enc' takes value from the COSE Header Parameters registry.<a href="#appendix-C.3-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.3-1.5">'cred_fmt' takes value from the COSE Header Parameters registry.<a href="#appendix-C.3-1.5" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-C.3-1.6">Improved alignment of the Joining Response payload with the Group OSCORE Security Context parameters.<a href="#appendix-C.3-1.6" class="pilcrow">¶</a>
 </li>
