@@ -535,7 +535,7 @@ Each element contains information about ECDH parameters as well as about authent
 
 * The fourth element 'ecdh_key_parameters' is a CBOR array indicating the parameters of the keys used with the ECDH algorithm in the OSCORE group identified by 'gname'. Its content depends on the value of 'ecdh_alg'. In particular, its format and value are the same of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'ecdh_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" registry {{COSE.Key.Types}}. 
 
-* The fifth element 'pub_key_enc' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}} (REQ6). Acceptable values denote a format that MUST  provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see {{ssec-token-post}}) apply.
+* The fifth element 'cred_fmt' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}} (REQ6). Acceptable values denote a format that MUST  provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see {{ssec-token-post}}) apply.
 
 The CDDL notation {{RFC8610}} of the 'ecdh_info' parameter is given below.
 
@@ -554,7 +554,7 @@ ecdh_info_entry =
   ecdh_alg : int / tstr,
   ecdh_parameters : [ any ],
   ecdh_key_parameters : [ any ],
-  pub_key_enc = int
+  cred_fmt = int
 ]
 
 gname = tstr
@@ -578,9 +578,9 @@ Each element 'kdc_dh_creds_entry' contains information about the Group Manager's
 
 * The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies. In particular 'id' MUST refer exclusively to OSCORE groups that are pairwise-only groups.
 
-* The second element 'pub_key_enc' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}} (REQ6). Acceptable values denote a format that MUST explicitly provide the public key as well as full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see {{ssec-token-post}}) apply.
+* The second element 'cred_fmt' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}} (REQ6). Acceptable values denote a format that MUST explicitly provide the public key as well as full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see {{ssec-token-post}}) apply.
 
-* The third element 'cred' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.
+* The third element 'cred' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'cred_fmt' element. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.
 
 The CDDL notation {{RFC8610}} of the 'kdc_dh_creds' parameter is given below.
 
@@ -598,7 +598,7 @@ kdc_dh_creds_res = [ + kdc_dh_creds_entry ] ; in the Token Transfer
 kdc_dh_creds_entry =
 [
   id : gname / [ + gname ],
-  pub_key_enc = int,
+  cred_fmt = int,
   cred = bstr
 ]
 
@@ -733,7 +733,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'key' parameter includes what the joining node needs in order to set up the Group OSCORE Security Context as per {{Section 2 of I-D.ietf-core-oscore-groupcomm}}.
 
-   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this document.
+   This parameter has as value a Group_OSCORE_Input_Material object, which is defined in this document and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}. In particular, it contains the additional parameters 'group_senderId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', 'sign_params', 'ecdh_alg' and 'ecdh_params' defined in {{ssec-iana-security-context-parameter-registry}} of this document.
    
    More specifically, the 'key' parameter is composed as follows.
 
@@ -747,7 +747,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
    * The 'group_senderId' parameter, if present, has as value the OSCORE Sender ID assigned to the joining node by the Group Manager, as described above. This parameter MUST NOT be present if the node joins the OSCORE group exclusively with the role of monitor, according to what specified in the Access Token (see {{ssec-auth-resp}}). In any other case, this parameter MUST be present.
 
-   * The 'pub_key_enc' parameter MUST be present and specifies the format of authentication credentials used in the OSCORE group. It takes value from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}} (REQ6). Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that MUST explicitly provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
+   * The 'cred_fmt' parameter MUST be present and specifies the format of authentication credentials used in the OSCORE group. It takes value from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}} (REQ6). Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that MUST explicitly provide the public key as well as the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
       At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claims Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further formats may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
@@ -1003,7 +1003,7 @@ The payload of the 2.05 (Content) Signature Verification Data Response is a CBOR
 
 * From the Joining Response message, only the parameters 'gkty', 'key', 'num', 'exp' and 'ace-groupcomm-profile' are present. In particular, the 'key' parameter includes only the following data.
 
-   - The parameters 'hkdf', 'contextId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params'. These parameters MUST be present.
+   - The parameters 'hkdf', 'contextId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', 'sign_params'. These parameters MUST be present.
    
    - The parameters 'alg' and 'ecdh_alg'. These parameter MUST NOT be present if the group is a signature-only group. Otherwise, they MUST be present.
 
@@ -1048,7 +1048,7 @@ Verifier                                                     Manager
       "key": {
         'hkdf': -10,                   ; HKDF SHA-256
         'contextId': h'37fc',
-        'pub_key_enc': 33,             ; x5chain
+        'cred_fmt': 33,                ; x5chain
         'sign_enc_alg': 10,            ; AES-CCM-16-64-128
         'sign_alg': -8,                ; EdDSA
         'sign_params': [[1], [1, 6]]   ; [[OKP], [OKP, Ed25519]]
@@ -1462,7 +1462,7 @@ This section always applies, as related to common configuration parameters.
 
 * For the HKDF Algorithm 'hkdf', the Group Manager SHOULD use the same default value defined in {{Section 3.2 of RFC8613}}, i.e., HKDF SHA-256 (COSE algorithm encoding: -10).
 
-* For the format 'pub_key_enc' used for the authentication credentials in the group, the Group Manager SHOULD use CBOR Web Token (CWT) or CWT Claims Set (CCS) {{RFC8392}}, i.e., the COSE Header Parameter 'kcwt' and 'kccs', respectively.
+* For the format 'cred_fmt' used for the authentication credentials in the group, the Group Manager SHOULD use CBOR Web Token (CWT) or CWT Claims Set (CCS) {{RFC8392}}, i.e., the COSE Header Parameter 'kcwt' and 'kccs', respectively.
 
    \[
       These COSE Header Parameters are under pending registration requested by draft-ietf-lake-edhoc.
@@ -1667,7 +1667,7 @@ IANA is asked to register the following entries in the "OSCORE Security Context 
 
 &nbsp;
 
-*  Name: pub_key_enc
+*  Name: cred_fmt
 *  CBOR Label: TBD
 *  CBOR Type: integer
 *  Registry: COSE Header Parameters
@@ -2015,7 +2015,7 @@ ecdh_info_entry =
   ecdh_capab_2 : [ any ],
   ...,
   ecdh_capab_N : [ any ],
-  pub_key_enc = int / nil
+  cred_fmt = int / nil
 ]
 
 gname = tstr
@@ -2100,7 +2100,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * New parameter 'sign_enc_alg' related to the group mode.
 
-* 'pub_key_enc' takes value from the COSE Header Parameters registry.
+* 'cred_fmt' takes value from the COSE Header Parameters registry.
 
 * Improved alignment of the Joining Response payload with the Group OSCORE Security Context parameters.
 
