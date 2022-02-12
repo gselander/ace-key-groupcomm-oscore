@@ -1648,10 +1648,12 @@ Table of Contents
       profile is defined in Section 20 of this document.  In any other
       case, the 'group_rekeying' parameter MUST be included.
 
-   As a last action, the Group Manager MUST store the Gid specified in
-   the 'contextId' parameter of the 'key' parameter, as the Birth Gid of
-   the joining node in the joined group (see Section 3 of
-   [I-D.ietf-core-oscore-groupcomm]).  This applies also in case the
+   As a last action, if the Group Manager reassigns Gid values during
+   the group's lifetime (see Section 3.2.1.1 of
+   [I-D.ietf-core-oscore-groupcomm]), the Group Manager MUST store the
+   Gid specified in the 'contextId' parameter of the 'key' parameter, as
+   the Birth Gid of the joining node in the joined group (see Section 3
+   of [I-D.ietf-core-oscore-groupcomm]).  This applies also in case the
    node is in fact re-joining the group; in such a case, the newly
    determined Birth Gid overwrites the one currently stored.
 
@@ -2428,10 +2430,13 @@ Table of Contents
    described in Section 18, a node may be forcibly removed from the
    OSCORE group, e.g., due to expired or revoked authorization.
 
-   In either case, the Group Manager "forgets" the Birth Gid currently
-   associated to the leaving node in the OSCORE group.  This was stored
-   following the Joining Response sent to that node, after its latest
-   (re-)joining of the OSCORE group (see Section 6.4).
+   In either case, if the Group Manager reassigns Gid values during the
+   group's lifetime (see Section 3.2.1.1 of
+   [I-D.ietf-core-oscore-groupcomm]), the Group Manager "forgets" the
+   Birth Gid currently associated to the leaving node in the OSCORE
+   group.  This was stored following the Joining Response sent to that
+   node, after its latest (re-)joining of the OSCORE group (see
+   Section 6.4).
 
    If any of the two conditions below holds, the Group Manager MUST
    inform the leaving node of its eviction as follows.  If both
@@ -2495,22 +2500,25 @@ Table of Contents
    version number of the group keying material, before starting its
    distribution.
 
-   Consistently with Section 3.2 of [I-D.ietf-core-oscore-groupcomm]:
-
-   *  The Group Manager can reassign a Gid to the same group over that
-      group's lifetime, e.g., once the whole space of Gid values has
-      been used for the group in question.
+   As per Section 3.2.1.1 of [I-D.ietf-core-oscore-groupcomm], the Group
+   Manager MAY reassign a Gid to the same group over that group's
+   lifetime, e.g., once the whole space of Gid values has been used for
+   the group in question.  If the Group Manager supports reassignment of
+   Gid values and performs it in a group, then the Group Manager
+   additionally takes the following actions.
 
    *  Before rekeying the group, the Group Manager MUST check if the new
       Gid to be distributed coincides with the Birth Gid of any of the
-      current group members (see Section 6.4).  If any of such "elder
-      members" is found in the group, the Group Manager MUST evict them
-      from the group.  That is, the Group Manager MUST terminate their
-      membership and MUST rekey the group in such a way that the new
-      keying material is not provided to those evicted elder members.
-      This also includes adding their relinquished Sender IDs to the
-      most recent set of stale Sender IDs, in the collection associated
-      to the group (see Section 2.2.1), before rekeying the group.
+      current group members (see Section 6.4).
+
+   *  If any of such "elder members" is found in the group, the Group
+      Manager MUST evict them from the group.  That is, the Group
+      Manager MUST terminate their membership and MUST rekey the group
+      in such a way that the new keying material is not provided to
+      those evicted elder members.  This also includes adding their
+      relinquished Sender IDs to the most recent set of stale Sender
+      IDs, in the collection associated to the group (see
+      Section 2.2.1), before rekeying the group.
 
       Until a further following group rekeying, the Group Manager MUST
       store the list of those latest-evicted elder members.  If any of
@@ -4311,6 +4319,9 @@ C.1.  Version -12 to -13
    *  Replaced CBOR simple value "null" with "nil".
 
    *  Renamed parameters about authentication credentials.
+
+   *  It is optional for the Group Manager to reassign Gids by tracking
+      "Birth Gids".
 
    *  Distinction between authentication credentials and public keys.
 
