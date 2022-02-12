@@ -580,7 +580,7 @@ Each element 'kdc_dh_creds_entry' contains information about the Group Manager's
 
 * The second element 'pub_key_enc' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry {{COSE.Header.Parameters}} (REQ6). Acceptable values denote a format that MUST explicitly provide the public key as well as full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see {{ssec-token-post}}) apply.
 
-* The third element 'pub_key' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.
+* The third element 'cred' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.
 
 The CDDL notation {{RFC8610}} of the 'kdc_dh_creds' parameter is given below.
 
@@ -599,7 +599,7 @@ kdc_dh_creds_entry =
 [
   id : gname / [ + gname ],
   pub_key_enc = int,
-  pub_key = bstr
+  cred = bstr
 ]
 
 gname = tstr
