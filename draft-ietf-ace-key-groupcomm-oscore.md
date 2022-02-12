@@ -477,7 +477,7 @@ The exchange of Token Transfer Request and Response is defined in {{Section 3.3 
 
    - 'ecdh_info' defined in {{ecdh-info}} of this document, with value the CBOR simple value "nil" (0xf6) to request information about the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and about the exact format of authentication credentials used in the groups that the client has been authorized to join. This is relevant in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-   - 'gm_dh_pub_keys' defined in {{gm-dh-info}} of this document, with value the CBOR simple value "nil" (0xf6) to request the Diffie-Hellman authentication credentials of the Group Manager for the groups that the client has been authorized to join. That is, each of such authentication credentials includes a Diffie-Hellman public key of the Group Manager. This is relevant in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+   - 'kdc_dh_creds' defined in {{gm-dh-info}} of this document, with value the CBOR simple value "nil" (0xf6) to request the Diffie-Hellman authentication credentials of the Group Manager for the groups that the client has been authorized to join. That is, each of such authentication credentials includes a Diffie-Hellman public key of the Group Manager. This is relevant in case the joining node supports the pairwise mode of Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
    Alternatively, the joining node may retrieve this information by other means.
    
@@ -509,7 +509,7 @@ The exchange of Token Transfer Request and Response is defined in {{Section 3.3 
 
    As an exception, the KDC MAY NOT include the 'ecdh_info' parameter in the Token Transfer Response even if 'ecdh_info' is included in the Token Transfer Request, in case all the groups that the Client is authorized to join are signature-only groups.
 
-* If 'gm_dh_pub_keys' is included in the Token Transfer Request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include the 'gm_dh_pub_keys' parameter in the Token Transfer Response, as per the format defined in {{gm-dh-info}}. Otherwise, if 'gm_dh_pub_keys' is included in the Token Transfer Request, the Group Manager MAY include the 'gm_dh_pub_keys' parameter in the Token Transfer Response. Note that the field 'id' specifies the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.
+* If 'kdc_dh_creds' is included in the Token Transfer Request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include the 'kdc_dh_creds' parameter in the Token Transfer Response, as per the format defined in {{gm-dh-info}}. Otherwise, if 'kdc_dh_creds' is included in the Token Transfer Request, the Group Manager MAY include the 'kdc_dh_creds' parameter in the Token Transfer Response. Note that the field 'id' specifies the group name, or array of group names, for which the corresponding 'kdc_dh_creds' applies to.
 
 Note that, other than through the above parameters as defined in {{Section 3.3 of I-D.ietf-ace-key-groupcomm}}, the joining node may have obtained such information by alternative means. For example, information conveyed in the 'sign_info' and 'ecdh_info' parameters may have been pre-configured, or the joining node MAY early retrieve it by using the approach described in {{I-D.tiloca-core-oscore-discovery}}, to discover the OSCORE group and the link to the associated group-membership resource at the Group Manager (OPT3).
 
@@ -562,19 +562,19 @@ gname = tstr
 
 This format is consistent with every ECDH algorithm currently defined in {{I-D.ietf-cose-rfc8152bis-algs}}, i.e., with algorithms that have only the COSE key type as their COSE capability. {{sec-future-cose-algs}} of this document describes how the format of each 'ecdh_info_entry' can be generalized for possible future registered algorithms having a different set of COSE capabilities.
 
-### 'gm_dh_pub_keys' Parameter {#gm-dh-info}
+### 'kdc_dh_creds' Parameter {#gm-dh-info}
 
-The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the request and response messages exchanged between the Client and the authz-info endpoint at the RS (see {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}).
+The 'kdc_dh_creds' parameter is an OPTIONAL parameter of the request and response messages exchanged between the Client and the authz-info endpoint at the RS (see {{Section 5.10.1. of I-D.ietf-ace-oauth-authz}}).
 
 This parameter allows the client to request and retrieve the Diffie-Hellman authentication credentials of the RS, i.e., authentication credentials including a Diffie-Hellman public key of the RS.
 
 In this application profile, this parameter is used to request and retrieve from the Group Manager its Diffie-Hellman authentication credentials to use, in the OSCORE groups that the client has been authorized to join. The Group Manager has specifically a Diffie-Hellman authentication credential in an OSCORE group, and thus a Diffie-Hellman public key in that group, if and only if the group is a pairwise-only group. In this case, the early retrieval of the Group Manager's authentication credential is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see {{ssec-join-req-sending}}).
 
-When used in the Token Transfer Request sent to the Group Manager, the 'gm_dh_pub_keys' parameter has value the CBOR simple value "nil" (0xf6). This is done to ask for the Diffie-Hellman authentication credentials that the Group Manager uses in the OSCORE groups that the client has been authorized to join.
+When used in the Token Transfer Request sent to the Group Manager, the 'kdc_dh_creds' parameter has value the CBOR simple value "nil" (0xf6). This is done to ask for the Diffie-Hellman authentication credentials that the Group Manager uses in the OSCORE groups that the client has been authorized to join.
 
-When used in the following Token Transfer Response from the Group Manager, the 'gm_dh_pub_keys' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.
+When used in the following Token Transfer Response from the Group Manager, the 'kdc_dh_creds' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.
 
-Each element 'gm_dh_pub_keys_entry' contains information about the Group Manager's Diffie-Hellman authentication credentials, for one or more OSCORE groups that are pairwise-only groups and that the client has been authorized to join. Each element is formatted as follows.
+Each element 'kdc_dh_creds_entry' contains information about the Group Manager's Diffie-Hellman authentication credentials, for one or more OSCORE groups that are pairwise-only groups and that the client has been authorized to join. Each element is formatted as follows.
 
 * The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies. In particular 'id' MUST refer exclusively to OSCORE groups that are pairwise-only groups.
 
@@ -582,20 +582,20 @@ Each element 'gm_dh_pub_keys_entry' contains information about the Group Manager
 
 * The third element 'pub_key' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.
 
-The CDDL notation {{RFC8610}} of the 'gm_dh_pub_keys' parameter is given below.
+The CDDL notation {{RFC8610}} of the 'kdc_dh_creds' parameter is given below.
 
 ~~~~~~~~~~~ CDDL
-gm_dh_pub_keys = gm_dh_pub_keys_req / gm_dh_pub_keys_resp
+kdc_dh_creds = kdc_dh_creds_req / kdc_dh_creds_resp
 
-gm_dh_pub_keys_req = nil                        ; in the Token Transfer
-                                                ; Request to the
-                                                ; Group Manager
+kdc_dh_creds_req = nil                      ; in the Token Transfer
+                                            ; Request to the
+                                            ; Group Manager
 
-gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ] ; in the Token Transfer
-                                                ; Response from the
-                                                ; Group Manager
+kdc_dh_creds_res = [ + kdc_dh_creds_entry ] ; in the Token Transfer
+                                            ; Response from the
+                                            ; Group Manager
    
-gm_dh_pub_keys_entry =
+kdc_dh_creds_entry =
 [
   id : gname / [ + gname ],
   pub_key_enc = int,
@@ -677,7 +677,7 @@ The Group Manager processes the Joining Request as defined in {{Section 4.3.1 of
    
    - If the group uses (also) the pairwise mode of Group OSCORE, the CBOR map MUST contain the 'ecdh_info' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'ecdh_info_res' defined in {{ecdh-info}}. In particular, it includes a single element 'ecdh_info_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
    
-   - If the group is a pairwise-only group, the CBOR map MUST contain the 'gm_dh_pub_keys' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'gm_dh_pub_keys_res' defined in {{gm-dh-info}}. In particular, it includes a single element 'gm_dh_pub_keys_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
+   - If the group is a pairwise-only group, the CBOR map MUST contain the 'kdc_dh_creds' parameter, whose CBOR label is defined in {{ssec-iana-ace-groupcomm-parameters-registry}}. This parameter has the same format of 'kdc_dh_creds_res' defined in {{gm-dh-info}}. In particular, it includes a single element 'kdc_dh_creds_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.
    
    - The CBOR map MAY include the 'kdcchallenge' parameter, whose CBOR label is defined in {{Section 8 of I-D.ietf-ace-key-groupcomm}}. If present, this parameter is a CBOR byte string, which encodes a newly generated 'kdcchallenge' value that the Client can use when preparing a Joining Request (see {{ssec-join-req-sending}}). In such a case the Group Manager MUST store the newly generated value as the 'kdcchallenge' value associated to the joining node, possibly replacing the currently stored value.
 
@@ -1402,7 +1402,7 @@ Clients are required to support the new parameters defined in this application p
 
 * 'ecdh_info' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE.
 
-* 'gm_dh_pub_keys' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE and that does not plan to or cannot rely on an early retrieval of the Group Manager's Diffie-Hellman authentication credential.
+* 'kdc_dh_creds' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE and that does not plan to or cannot rely on an early retrieval of the Group Manager's Diffie-Hellman authentication credential.
 
 * 'group_enc_key' MUST be supported by a Client that intends to join a group which uses the group mode of Group OSCORE or to be signature verifier for that group.
 
@@ -1577,7 +1577,7 @@ IANA is asked to register the following entries to the "OAuth Parameters" regist
 
 &nbsp;
 
-*  Parameter name: gm_dh_pub_keys
+*  Parameter name: kdc_dh_creds
 *  Parameter usage location: client-rs request, rs-client response
 *  Change Controller: IESG
 *  Specification Document(s): \[\[This specification\]\]
@@ -1593,7 +1593,7 @@ IANA is asked to register the following entries to the "OAuth Parameters CBOR Ma
 
 &nbsp;
 
-* Name: gm_dh_pub_keys
+* Name: kdc_dh_creds
 * CBOR Key: TBD (range -256 to 255)
 * Value Type: Simple value "null" / array
 * Reference: \[\[This specification\]\]
@@ -1616,7 +1616,7 @@ IANA is asked to register the following entry to the "ACE Groupcomm Parameters" 
 
 &nbsp;
 
-* Name: gm_dh_pub_keys
+* Name: kdc_dh_creds
 * CBOR Key: TBD
 * CBOR Type: Array
 * Reference: \[\[This document\]\] ({{ssec-join-req-processing}})
@@ -1952,7 +1952,7 @@ This section lists how this application profile of ACE addresses the requirement
 
    - 'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact format of authentication credentials used in the group, in case the joining node supports the pairwise mode of Group OSCORE (see {{ssec-token-post}}).
    
-   - 'gm_dh_pub_keys', to ask for and retrieve the Group Manager's Diffie-Hellman authentication credentials, in case the joining node supports the pairwise mode of Group OSCORE and the Access Token authorizes to join parwise-only groups (see {{ssec-token-post}}).
+   - 'kdc_dh_creds', to ask for and retrieve the Group Manager's Diffie-Hellman authentication credentials, in case the joining node supports the pairwise mode of Group OSCORE and the Access Token authorizes to join parwise-only groups (see {{ssec-token-post}}).
 
 * OPT3 (Optional) - Specify the negotiation of parameter values for signature algorithm and signature keys, if 'sign_info' is not used: possible early discovery by using the approach based on the CoRE Resource Directory described in {{I-D.tiloca-core-oscore-discovery}}.
 
@@ -2048,7 +2048,9 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -12 to -13 ## {#sec-12-13}
 
-* * Replaced CBOR simple value "null" with "nil".
+* Replaced CBOR simple value "null" with "nil".
+
+* Renamed parameters about authentication credentials.
 
 * Distinction between authentication credentials and public keys.
 
@@ -2056,7 +2058,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -11 to -12 ## {#sec-11-12}
 
-* Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.
+* Clarified semantics of 'ecdh_info' and 'kdc_dh_creds'.
 
 * Definition of /ace-group/GROUPNAME/kdc-pub-key moved to draft-ietf-ace-key-groupcomm.
 
