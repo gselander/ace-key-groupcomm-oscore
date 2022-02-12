@@ -1190,7 +1190,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
                     <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="xref">6.1.1</a>.  <a href="#name-ecdh_info-parameter" class="xref">'ecdh_info' Parameter</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.2">
-                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="xref">6.1.2</a>.  <a href="#name-gm_dh_pub_keys-parameter" class="xref">'gm_dh_pub_keys' Parameter</a></p>
+                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="xref">6.1.2</a>.  <a href="#name-kdc_dh_creds-parameter" class="xref">'kdc_dh_creds' Parameter</a></p>
 </li>
                 </ul>
 </li>
@@ -1873,7 +1873,7 @@ Type4 = Non-member (not authorized to be Verifier)  |  D  = DELETE
 <ul class="normal">
 <li class="normal" id="section-6.1-2.1.2.1">'ecdh_info' defined in <a href="#ecdh-info" class="xref">Section 6.1.1</a> of this document, with value the CBOR simple value "nil" (0xf6) to request information about the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and about the exact format of authentication credentials used in the groups that the client has been authorized to join. This is relevant in case the joining node supports the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1-2.1.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-6.1-2.1.2.2">'gm_dh_pub_keys' defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a> of this document, with value the CBOR simple value "nil" (0xf6) to request the Diffie-Hellman authentication credentials of the Group Manager for the groups that the client has been authorized to join. That is, each of such authentication credentials includes a Diffie-Hellman public key of the Group Manager. This is relevant in case the joining node supports the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1-2.1.2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-6.1-2.1.2.2">'kdc_dh_creds' defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a> of this document, with value the CBOR simple value "nil" (0xf6) to request the Diffie-Hellman authentication credentials of the Group Manager for the groups that the client has been authorized to join. That is, each of such authentication credentials includes a Diffie-Hellman public key of the Group Manager. This is relevant in case the joining node supports the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1-2.1.2.2" class="pilcrow">¶</a>
 </li>
             </ul>
 <p id="section-6.1-2.1.3">
@@ -1913,7 +1913,7 @@ This format is consistent with every signature algorithm currently considered in
 <p id="section-6.1-2.4.2">
 As an exception, the KDC MAY NOT include the 'ecdh_info' parameter in the Token Transfer Response even if 'ecdh_info' is included in the Token Transfer Request, in case all the groups that the Client is authorized to join are signature-only groups.<a href="#section-6.1-2.4.2" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.1-2.5">If 'gm_dh_pub_keys' is included in the Token Transfer Request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include the 'gm_dh_pub_keys' parameter in the Token Transfer Response, as per the format defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a>. Otherwise, if 'gm_dh_pub_keys' is included in the Token Transfer Request, the Group Manager MAY include the 'gm_dh_pub_keys' parameter in the Token Transfer Response. Note that the field 'id' specifies the group name, or array of group names, for which the corresponding 'gm_dh_pub_keys' applies to.<a href="#section-6.1-2.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-6.1-2.5">If 'kdc_dh_creds' is included in the Token Transfer Request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include the 'kdc_dh_creds' parameter in the Token Transfer Response, as per the format defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a>. Otherwise, if 'kdc_dh_creds' is included in the Token Transfer Request, the Group Manager MAY include the 'kdc_dh_creds' parameter in the Token Transfer Response. Note that the field 'id' specifies the group name, or array of group names, for which the corresponding 'kdc_dh_creds' applies to.<a href="#section-6.1-2.5" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-6.1-3">Note that, other than through the above parameters as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-3.3" class="relref">Section 3.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>, the joining node may have obtained such information by alternative means. For example, information conveyed in the 'sign_info' and 'ecdh_info' parameters may have been pre-configured, or the joining node MAY early retrieve it by using the approach described in <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="xref">I-D.tiloca-core-oscore-discovery</a>]</span>, to discover the OSCORE group and the link to the associated group-membership resource at the Group Manager (OPT3).<a href="#section-6.1-3" class="pilcrow">¶</a></p>
@@ -1968,15 +1968,15 @@ gname = tstr
 </div>
 <div id="gm-dh-info">
 <section id="section-6.1.2">
-          <h4 id="name-gm_dh_pub_keys-parameter">
-<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-gm_dh_pub_keys-parameter" class="section-name selfRef">'gm_dh_pub_keys' Parameter</a>
+          <h4 id="name-kdc_dh_creds-parameter">
+<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-kdc_dh_creds-parameter" class="section-name selfRef">'kdc_dh_creds' Parameter</a>
           </h4>
-<p id="section-6.1.2-1">The 'gm_dh_pub_keys' parameter is an OPTIONAL parameter of the request and response messages exchanged between the Client and the authz-info endpoint at the RS (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oauth-authz-46#section-5.10.1." class="relref">Section 5.10.1.</a> of [<a href="#I-D.ietf-ace-oauth-authz" class="xref">I-D.ietf-ace-oauth-authz</a>]</span>).<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-1">The 'kdc_dh_creds' parameter is an OPTIONAL parameter of the request and response messages exchanged between the Client and the authz-info endpoint at the RS (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oauth-authz-46#section-5.10.1." class="relref">Section 5.10.1.</a> of [<a href="#I-D.ietf-ace-oauth-authz" class="xref">I-D.ietf-ace-oauth-authz</a>]</span>).<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-2">This parameter allows the client to request and retrieve the Diffie-Hellman authentication credentials of the RS, i.e., authentication credentials including a Diffie-Hellman public key of the RS.<a href="#section-6.1.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-3">In this application profile, this parameter is used to request and retrieve from the Group Manager its Diffie-Hellman authentication credentials to use, in the OSCORE groups that the client has been authorized to join. The Group Manager has specifically a Diffie-Hellman authentication credential in an OSCORE group, and thus a Diffie-Hellman public key in that group, if and only if the group is a pairwise-only group. In this case, the early retrieval of the Group Manager's authentication credential is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>).<a href="#section-6.1.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-4">When used in the Token Transfer Request sent to the Group Manager, the 'gm_dh_pub_keys' parameter has value the CBOR simple value "nil" (0xf6). This is done to ask for the Diffie-Hellman authentication credentials that the Group Manager uses in the OSCORE groups that the client has been authorized to join.<a href="#section-6.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-5">When used in the following Token Transfer Response from the Group Manager, the 'gm_dh_pub_keys' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.<a href="#section-6.1.2-5" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-6">Each element 'gm_dh_pub_keys_entry' contains information about the Group Manager's Diffie-Hellman authentication credentials, for one or more OSCORE groups that are pairwise-only groups and that the client has been authorized to join. Each element is formatted as follows.<a href="#section-6.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-4">When used in the Token Transfer Request sent to the Group Manager, the 'kdc_dh_creds' parameter has value the CBOR simple value "nil" (0xf6). This is done to ask for the Diffie-Hellman authentication credentials that the Group Manager uses in the OSCORE groups that the client has been authorized to join.<a href="#section-6.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-5">When used in the following Token Transfer Response from the Group Manager, the 'kdc_dh_creds' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.<a href="#section-6.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-6">Each element 'kdc_dh_creds_entry' contains information about the Group Manager's Diffie-Hellman authentication credentials, for one or more OSCORE groups that are pairwise-only groups and that the client has been authorized to join. Each element is formatted as follows.<a href="#section-6.1.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1.2-7.1">The first element 'id' is the group name of the OSCORE group or an array of group names for the OSCORE groups for which the specified information applies. In particular 'id' MUST refer exclusively to OSCORE groups that are pairwise-only groups.<a href="#section-6.1.2-7.1" class="pilcrow">¶</a>
 </li>
@@ -1985,20 +1985,20 @@ gname = tstr
             <li class="normal" id="section-6.1.2-7.3">The third element 'pub_key' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.<a href="#section-6.1.2-7.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-6.1.2-8">The CDDL notation <span>[<a href="#RFC8610" class="xref">RFC8610</a>]</span> of the 'gm_dh_pub_keys' parameter is given below.<a href="#section-6.1.2-8" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-8">The CDDL notation <span>[<a href="#RFC8610" class="xref">RFC8610</a>]</span> of the 'kdc_dh_creds' parameter is given below.<a href="#section-6.1.2-8" class="pilcrow">¶</a></p>
 <div id="section-6.1.2-9">
 <pre class="lang-CDDL sourcecode">
-gm_dh_pub_keys = gm_dh_pub_keys_req / gm_dh_pub_keys_resp
+kdc_dh_creds = kdc_dh_creds_req / kdc_dh_creds_resp
 
-gm_dh_pub_keys_req = nil                        ; in the Token Transfer
-                                                ; Request to the
-                                                ; Group Manager
+kdc_dh_creds_req = nil                      ; in the Token Transfer
+                                            ; Request to the
+                                            ; Group Manager
 
-gm_dh_pub_keys_res = [ + gm_dh_pub_keys_entry ] ; in the Token Transfer
-                                                ; Response from the
-                                                ; Group Manager
+kdc_dh_creds_res = [ + kdc_dh_creds_entry ] ; in the Token Transfer
+                                            ; Response from the
+                                            ; Group Manager
 
-gm_dh_pub_keys_entry =
+kdc_dh_creds_entry =
 [
   id : gname / [ + gname ],
   pub_key_enc = int,
@@ -2110,7 +2110,7 @@ The input parameters of HKDF are as follows.<a href="#section-6.2-3.4.2.2.3" cla
 </li>
               <li class="normal" id="section-6.3-2.5.2.2">If the group uses (also) the pairwise mode of Group OSCORE, the CBOR map MUST contain the 'ecdh_info' parameter, whose CBOR label is defined in <a href="#ssec-iana-ace-groupcomm-parameters-registry" class="xref">Section 25.3</a>. This parameter has the same format of 'ecdh_info_res' defined in <a href="#ecdh-info" class="xref">Section 6.1.1</a>. In particular, it includes a single element 'ecdh_info_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.<a href="#section-6.3-2.5.2.2" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-6.3-2.5.2.3">If the group is a pairwise-only group, the CBOR map MUST contain the 'gm_dh_pub_keys' parameter, whose CBOR label is defined in <a href="#ssec-iana-ace-groupcomm-parameters-registry" class="xref">Section 25.3</a>. This parameter has the same format of 'gm_dh_pub_keys_res' defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a>. In particular, it includes a single element 'gm_dh_pub_keys_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.<a href="#section-6.3-2.5.2.3" class="pilcrow">¶</a>
+              <li class="normal" id="section-6.3-2.5.2.3">If the group is a pairwise-only group, the CBOR map MUST contain the 'kdc_dh_creds' parameter, whose CBOR label is defined in <a href="#ssec-iana-ace-groupcomm-parameters-registry" class="xref">Section 25.3</a>. This parameter has the same format of 'kdc_dh_creds_res' defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a>. In particular, it includes a single element 'kdc_dh_creds_entry' pertaining to the OSCORE group that the joining node has tried to join with the Joining Request.<a href="#section-6.3-2.5.2.3" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-6.3-2.5.2.4">The CBOR map MAY include the 'kdcchallenge' parameter, whose CBOR label is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>. If present, this parameter is a CBOR byte string, which encodes a newly generated 'kdcchallenge' value that the Client can use when preparing a Joining Request (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>). In such a case the Group Manager MUST store the newly generated value as the 'kdcchallenge' value associated to the joining node, possibly replacing the currently stored value.<a href="#section-6.3-2.5.2.4" class="pilcrow">¶</a>
 </li>
@@ -3004,7 +3004,7 @@ Node                                                         Manager
 </li>
         <li class="normal" id="section-21-2.2">'ecdh_info' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE.<a href="#section-21-2.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-21-2.3">'gm_dh_pub_keys' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE and that does not plan to or cannot rely on an early retrieval of the Group Manager's Diffie-Hellman authentication credential.<a href="#section-21-2.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-21-2.3">'kdc_dh_creds' MUST be supported by a Client that intends to join a group which uses the pairwise mode of Group OSCORE and that does not plan to or cannot rely on an early retrieval of the Group Manager's Diffie-Hellman authentication credential.<a href="#section-21-2.3" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-21-2.4">'group_enc_key' MUST be supported by a Client that intends to join a group which uses the group mode of Group OSCORE or to be signature verifier for that group.<a href="#section-21-2.4" class="pilcrow">¶</a>
 </li>
@@ -3244,7 +3244,7 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
         </ul>
 <p id="section-25.1-3"></p>
 <ul class="normal">
-<li class="normal" id="section-25.1-4.1">Parameter name: gm_dh_pub_keys<a href="#section-25.1-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.1-4.1">Parameter name: kdc_dh_creds<a href="#section-25.1-4.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-25.1-4.2">Parameter usage location: client-rs request, rs-client response<a href="#section-25.1-4.2" class="pilcrow">¶</a>
 </li>
@@ -3273,7 +3273,7 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
         </ul>
 <p id="section-25.2-3"></p>
 <ul class="normal">
-<li class="normal" id="section-25.2-4.1">Name: gm_dh_pub_keys<a href="#section-25.2-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.2-4.1">Name: kdc_dh_creds<a href="#section-25.2-4.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-25.2-4.2">CBOR Key: TBD (range -256 to 255)<a href="#section-25.2-4.2" class="pilcrow">¶</a>
 </li>
@@ -3313,7 +3313,7 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
         </ul>
 <p id="section-25.3-5"></p>
 <ul class="normal">
-<li class="normal" id="section-25.3-6.1">Name: gm_dh_pub_keys<a href="#section-25.3-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.3-6.1">Name: kdc_dh_creds<a href="#section-25.3-6.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-25.3-6.2">CBOR Key: TBD<a href="#section-25.3-6.2" class="pilcrow">¶</a>
 </li>
@@ -3957,7 +3957,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 <ul class="normal">
 <li class="normal" id="appendix-A.2-1.2.2.1">'ecdh_info', to negotiate the ECDH algorithm, ECDH algorithm parameters, ECDH key parameters and exact format of authentication credentials used in the group, in case the joining node supports the pairwise mode of Group OSCORE (see <a href="#ssec-token-post" class="xref">Section 6.1</a>).<a href="#appendix-A.2-1.2.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="appendix-A.2-1.2.2.2">'gm_dh_pub_keys', to ask for and retrieve the Group Manager's Diffie-Hellman authentication credentials, in case the joining node supports the pairwise mode of Group OSCORE and the Access Token authorizes to join parwise-only groups (see <a href="#ssec-token-post" class="xref">Section 6.1</a>).<a href="#appendix-A.2-1.2.2.2" class="pilcrow">¶</a>
+              <li class="normal" id="appendix-A.2-1.2.2.2">'kdc_dh_creds', to ask for and retrieve the Group Manager's Diffie-Hellman authentication credentials, in case the joining node supports the pairwise mode of Group OSCORE and the Access Token authorizes to join parwise-only groups (see <a href="#ssec-token-post" class="xref">Section 6.1</a>).<a href="#appendix-A.2-1.2.2.2" class="pilcrow">¶</a>
 </li>
             </ul>
 </li>
@@ -4093,15 +4093,13 @@ For example, if 'ecdh_params'[0][0] specifies the key type as capability of the 
 <a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-version-12-to-13" class="section-name selfRef">Version -12 to -13</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.1-1.1">
-            <ul class="normal">
-<li class="normal" id="appendix-C.1-1.1.1.1">Replaced CBOR simple value "null" with "nil".<a href="#appendix-C.1-1.1.1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-C.1-1.1">Replaced CBOR simple value "null" with "nil".<a href="#appendix-C.1-1.1" class="pilcrow">¶</a>
 </li>
-            </ul>
+          <li class="normal" id="appendix-C.1-1.2">Renamed parameters about authentication credentials.<a href="#appendix-C.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.2">Distinction between authentication credentials and public keys.<a href="#appendix-C.1-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.3">Distinction between authentication credentials and public keys.<a href="#appendix-C.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.3">Updated textual description of registered ACE Scope Semantics value.<a href="#appendix-C.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.4">Updated textual description of registered ACE Scope Semantics value.<a href="#appendix-C.1-1.4" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -4112,7 +4110,7 @@ For example, if 'ecdh_params'[0][0] specifies the key type as capability of the 
 <a href="#appendix-C.2" class="section-number selfRef">C.2. </a><a href="#name-version-11-to-12" class="section-name selfRef">Version -11 to -12</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.2-1.1">Clarified semantics of 'ecdh_info' and 'gm_dh_pub_keys'.<a href="#appendix-C.2-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-C.2-1.1">Clarified semantics of 'ecdh_info' and 'kdc_dh_creds'.<a href="#appendix-C.2-1.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-C.2-1.2">Definition of /ace-group/GROUPNAME/kdc-pub-key moved to draft-ietf-ace-key-groupcomm.<a href="#appendix-C.2-1.2" class="pilcrow">¶</a>
 </li>
