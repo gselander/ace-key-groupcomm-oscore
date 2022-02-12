@@ -817,7 +817,7 @@ Then, the Group Manager replies to the joining node, providing the updated secur
 
 * The 'group_rekeying' parameter MAY be omitted, if the Group Manager uses the "Point-to-Point" group rekeying scheme registered in {{Section 11.14 of I-D.ietf-ace-key-groupcomm}} as rekeying scheme in the OSCORE group (OPT9). Its detailed use for this profile is defined in {{sec-group-rekeying-process}} of this document. In any other case, the 'group_rekeying' parameter MUST be included.
         
-As a last action, the Group Manager MUST store the Gid specified in the 'contextId' parameter of the 'key' parameter, as the Birth Gid of the joining node in the joined group (see {{Section 3 of I-D.ietf-core-oscore-groupcomm}}). This applies also in case the node is in fact re-joining the group; in such a case, the newly determined Birth Gid overwrites the one currently stored.
+As a last action, if the Group Manager reassigns Gid values during the group's lifetime (see {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}}), the Group Manager MUST store the Gid specified in the 'contextId' parameter of the 'key' parameter, as the Birth Gid of the joining node in the joined group (see {{Section 3 of I-D.ietf-core-oscore-groupcomm}}). This applies also in case the node is in fact re-joining the group; in such a case, the newly determined Birth Gid overwrites the one currently stored.
 
 ## Receive the Joining Response {#ssec-join-resp-processing}
 
@@ -1186,7 +1186,7 @@ Upon receiving the Group Leaving Request, the Group Manager processes it as per 
 
 Other than after a spontaneous request to the Group Manager as described in {{sec-leave-req}}, a node may be forcibly removed from the OSCORE group, e.g., due to expired or revoked authorization.
 
-In either case, the Group Manager "forgets" the Birth Gid currently associated to the leaving node in the OSCORE group. This was stored following the Joining Response sent to that node, after its latest (re-)joining of the OSCORE group (see {{ssec-join-resp}}).
+In either case, if the Group Manager reassigns Gid values during the group's lifetime (see {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}}), the Group Manager "forgets" the Birth Gid currently associated to the leaving node in the OSCORE group. This was stored following the Joining Response sent to that node, after its latest (re-)joining of the OSCORE group (see {{ssec-join-resp}}).
 
 If any of the two conditions below holds, the Group Manager MUST inform the leaving node of its eviction as follows. If both conditions hold, the Group Manager MUST inform the leaving node only once, using either of the corresponding methods.
 
@@ -1212,11 +1212,11 @@ The same considerations from {{Section 5 of I-D.ietf-ace-key-groupcomm}} apply h
 
 In order to rekey the OSCORE group, the Group Manager distributes a new Group Identifier (Gid), i.e., a new OSCORE ID Context; a new OSCORE Master Secret; and, optionally, a new OSCORE Master Salt for that group. When doing so, the Group Manager MUST increment the version number of the group keying material, before starting its distribution.
 
-Consistently with {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}:
+As per {{Section 3.2.1.1 of I-D.ietf-core-oscore-groupcomm}}, the Group Manager MAY reassign a Gid to the same group over that group's lifetime, e.g., once the whole space of Gid values has been used for the group in question. If the Group Manager supports reassignment of Gid values and performs it in a group, then the Group Manager additionally takes the following actions.
 
-* The Group Manager can reassign a Gid to the same group over that group's lifetime, e.g., once the whole space of Gid values has been used for the group in question.
+* Before rekeying the group, the Group Manager MUST check if the new Gid to be distributed coincides with the Birth Gid of any of the current group members (see {{ssec-join-resp}}).
 
-* Before rekeying the group, the Group Manager MUST check if the new Gid to be distributed coincides with the Birth Gid of any of the current group members (see {{ssec-join-resp}}). If any of such "elder members" is found in the group, the Group Manager MUST evict them from the group. That is, the Group Manager MUST terminate their membership and MUST rekey the group in such a way that the new keying material is not provided to those evicted elder members. This also includes adding their relinquished Sender IDs to the most recent set of stale Sender IDs, in the collection associated to the group (see {{sssec-stale-sender-ids}}), before rekeying the group.
+* If any of such "elder members" is found in the group, the Group Manager MUST evict them from the group. That is, the Group Manager MUST terminate their membership and MUST rekey the group in such a way that the new keying material is not provided to those evicted elder members. This also includes adding their relinquished Sender IDs to the most recent set of stale Sender IDs, in the collection associated to the group (see {{sssec-stale-sender-ids}}), before rekeying the group.
 
    Until a further following group rekeying, the Group Manager MUST store the list of those latest-evicted elder members. If any of those nodes re-joins the group before a further following group rekeying occurs, the Group Manager MUST NOT rekey the group upon their re-joining. When one of those nodes re-joins the group, the Group Manager can rely, e.g., on the ongoing secure communication association to recognize the node as included in the stored list.
 
@@ -2051,6 +2051,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Replaced CBOR simple value "null" with "nil".
 
 * Renamed parameters about authentication credentials.
+
+* It is optional for the Group Manager to reassign Gids by tracking "Birth Gids".
 
 * Distinction between authentication credentials and public keys.
 
