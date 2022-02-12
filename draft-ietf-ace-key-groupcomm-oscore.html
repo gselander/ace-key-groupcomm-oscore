@@ -1982,7 +1982,7 @@ gname = tstr
 </li>
             <li class="normal" id="section-6.1.2-7.2">The second element 'pub_key_enc' is a CBOR integer indicating the format of authentication credentials used in the OSCORE group identified by 'gname'. It takes value from the "Label" column of the "COSE Header Parameters" registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span> (REQ6). Acceptable values denote a format that MUST explicitly provide the public key as well as full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable). The same considerations and guidelines for the 'pub_key_enc' element of 'sign_info' (see <a href="#ssec-token-post" class="xref">Section 6.1</a>) apply.<a href="#section-6.1.2-7.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.1.2-7.3">The third element 'pub_key' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.<a href="#section-6.1.2-7.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-6.1.2-7.3">The third element 'cred' is a CBOR byte string, which encodes the Group Manager's Diffie-Hellman authentication credential in its original binary representation made available to other endpoints in the group. In particular, the original binary representation complies with the format specified by the 'pub_key_enc' parameter. Note that the authentication credential provides the full set of information related to its public key algorithm, i.e., the ECDH algorithm used in the OSCORE group as pairwise key agreement algorithm.<a href="#section-6.1.2-7.3" class="pilcrow">¶</a>
 </li>
           </ul>
 <p id="section-6.1.2-8">The CDDL notation <span>[<a href="#RFC8610" class="xref">RFC8610</a>]</span> of the 'kdc_dh_creds' parameter is given below.<a href="#section-6.1.2-8" class="pilcrow">¶</a></p>
@@ -2002,7 +2002,7 @@ kdc_dh_creds_entry =
 [
   id : gname / [ + gname ],
   pub_key_enc = int,
-  pub_key = bstr
+  cred = bstr
 ]
 
 gname = tstr
