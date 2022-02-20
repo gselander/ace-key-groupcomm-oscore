@@ -5,10 +5,10 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                   RISE AB
 Intended status: Standards Track                                 J. Park
-Expires: 17 August 2022                      Universitaet Duisburg-Essen
+Expires: 24 August 2022                      Universitaet Duisburg-Essen
                                                             F. Palombini
                                                              Ericsson AB
-                                                        13 February 2022
+                                                        20 February 2022
 
 
                 Key Management for OSCORE Groups in ACE
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 August 2022.
+   This Internet-Draft will expire on 24 August 2022.
 
 Copyright Notice
 
@@ -128,13 +128,12 @@ Table of Contents
      25.6.  OSCORE Security Context Parameters
      25.7.  TLS Exporter Labels
      25.8.  AIF
-     25.9.  Media Type Registrations
-     25.10. CoAP Content-Format
-     25.11. Group OSCORE Roles
-     25.12. CoRE Resource Type
-     25.13. ACE Scope Semantics
-     25.14. ACE Groupcomm Errors
-     25.15. Expert Review Instructions
+     25.9.  CoAP Content-Format
+     25.10. Group OSCORE Roles
+     25.11. CoRE Resource Type
+     25.12. ACE Scope Semantics
+     25.13. ACE Groupcomm Errors
+     25.14. Expert Review Instructions
    26. References
      26.1.  Normative References
      26.2.  Informative References
@@ -515,7 +514,7 @@ Table of Contents
 
    Future specifications that define new roles MUST register a
    corresponding numeric identifier in the "Group OSCORE Roles" registry
-   defined in Section 25.11 of this document.
+   defined in Section 25.10 of this document.
 
 4.  Joining Node to Authorization Server
 
@@ -568,7 +567,7 @@ Table of Contents
    Section 7 of [I-D.ietf-ace-key-groupcomm] for the 'scope' claim of
    the Access Token, the first element of the CBOR sequence [RFC8742]
    MUST be the CBOR integer with value SEM_ID_TBD, defined in
-   Section 25.13 of this document (REQ28).  This indicates that the
+   Section 25.12 of this document (REQ28).  This indicates that the
    second element of the CBOR sequence, as conveying the actual access
    control information, follows the scope semantics defined for this
    application profile in Section 3 of this document.
@@ -588,7 +587,7 @@ Table of Contents
    in Section 3.1 of [I-D.ietf-ace-key-groupcomm]) (REQ7).
 
    The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is
-   registered in Section 25.12 (REQ10), and can be used to describe
+   registered in Section 25.11 (REQ10), and can be used to describe
    group-membership resources and its sub-resources at a Group Manager,
    e.g., by using a link-format document [RFC6690].
 
@@ -3521,96 +3520,57 @@ Table of Contents
 
 25.8.  AIF
 
-   IANA is asked to register the following entry to the "Toid" registry
-   within the "AIF" registry group defined in Section 5.2 of
-   [I-D.ietf-ace-aif].
+   For both media-types application/aif+cbor and application/aif+json
+   defined in Section 5.1 of [I-D.ietf-ace-aif], IANA is requested to
+   register the following entries for the two media-type parameters Toid
+   and Tperm, in the respective sub-registry defined in Section 5.2 of
+   [I-D.ietf-ace-aif] within the "MIME Media Type Sub-Parameter"
+   registry group.
 
    *  Name: oscore-group-name
 
-   *  Description/Specification: group name of the OSCORE group, as
-      specified in [[This document]].
+   *  Description/Specification: group name of an OSCORE group
 
-   IANA is asked to register the following entry to the "Tperm" registry
-   within the "AIF" registry group defined in Section 5.2 of
-   [I-D.ietf-ace-aif].
+   *  Reference: [[This document]]
+
 
    *  Name: oscore-group-roles
 
-   *  Description/Specification: role(s) of the member of the OSCORE
-      group, as specified in [[This document]].
+   *  Description/Specification: role(s) in the OSCORE group
 
-25.9.  Media Type Registrations
+   *  Reference: [[This document]]
 
-   This document registers the 'application/aif-groupcomm-oscore+cbor'
-   media type for the AIF specific data model AIF-OSCORE-GROUPCOMM
-   defined in Section 3 of [[This document]].  This registration follows
-   the procedures specified in [RFC6838].
+25.9.  CoAP Content-Format
 
-   These media type has parameters for specifying the object identifier
-   ("Toid") and set of permissions ("Tperm") defined for the AIF-generic
-   model in [I-D.ietf-ace-aif]; default values are the values "oscore-
-   group-name" for "Toid" and "oscore-group-roles" for "Tperm".
-
-   Type name: application
-
-   Subtype name: aif-groupcomm-oscore+cbor
-
-   Required parameters: "Toid", "Tperm"
-
-   Optional parameters: N/A
-
-   Encoding considerations: Must be encoded as a CBOR array, each
-   element of which is an array [Toid, Tperm] as defined in Section 3 of
-   [[This document]].
-
-   Security considerations: See Section 24 of [[This document]].
-
-   Interoperability considerations: N/A
-
-   Published specification: [[This document]]
-
-   Applications that use this media type: The type is used by
-   applications that want to express authorization information about
-   joining OSCORE groups, as specified in [[This document]].
-
-   Fragment identifier considerations: N/A
-
-   Additional information: N/A
-
-   Person & email address to contact for further information:
-   iesg@ietf.org (mailto:iesg@ietf.org)
-
-   Intended usage: COMMON
-
-   Restrictions on usage: None
-
-   Author: Marco Tiloca marco.tiloca@ri.se (mailto:marco.tiloca@ri.se)
-
-   Change controller: IESG
-
-   Provisional registration?  No
-
-25.10.  CoAP Content-Format
-
-   IANA is asked to register the following entry to the "CoAP Content-
+   IANA is asked to register the following entries to the "CoAP Content-
    Formats" registry within the "Constrained RESTful Environments (CoRE)
-   Parameters" registry group:
+   Parameters" registry group.
 
-   Media Type: application/aif-groupcomm-oscore+cbor;Toid="oscore-group-
-   name",Tperm"oscore-group-roles"
+   *  Media Type: application/aif+cbor;Toid="oscore-group-
+      name",Tperm="oscore-group-roles"
 
-   Encoding: -
+   *  Encoding: -
 
-   ID: TBD
+   *  ID: TBD
 
-   Reference: [[This document]]
+   *  Reference: [[This document]]
 
-25.11.  Group OSCORE Roles
+
+   *  Media Type: application/aif+json;Toid="oscore-group-
+      name",Tperm="oscore-group-roles"
+
+   *  Encoding: -
+
+   *  ID: TBD
+
+   *  Reference: [[This document]]
+
+25.10.  Group OSCORE Roles
 
    This document establishes the IANA "Group OSCORE Roles" registry.
    The registry has been created to use the "Expert Review" registration
    procedure [RFC8126].  Expert review guidelines are provided in
-   Section 25.15.
+   Section 25.14.
 
    This registry includes the possible roles that nodes can take in an
    OSCORE group, each in combination with a numeric identifier.  These
@@ -3638,7 +3598,7 @@ Table of Contents
    The Reference column for all of these entries will be [[This
    document]].
 
-25.12.  CoRE Resource Type
+25.11.  CoRE Resource Type
 
    IANA is asked to register the following entry in the "Resource Type
    (rt=) Link Target Attribute Values" registry within the "Constrained
@@ -3654,7 +3614,7 @@ Table of Contents
    membership resource at an OSCORE Group Manager, where to send a
    request for joining the corresponding OSCORE group.
 
-25.13.  ACE Scope Semantics
+25.12.  ACE Scope Semantics
 
    IANA is asked to register the following entry in the "ACE Scope
    Semantics" registry defined in Section 11.12 of
@@ -3667,7 +3627,7 @@ Table of Contents
 
    *  Reference: [[This document]]
 
-25.14.  ACE Groupcomm Errors
+25.13.  ACE Groupcomm Errors
 
    IANA is asked to register the following entry in the "ACE Groupcomm
    Errors" registry defined in Section 11.13 of
@@ -3693,7 +3653,7 @@ Table of Contents
 
    *  Reference: [[This document]]
 
-25.15.  Expert Review Instructions
+25.14.  Expert Review Instructions
 
    The IANA registry established in this document is defined as "Expert
    Review".  This section gives some general guidelines for what the
@@ -3762,9 +3722,9 @@ Table of Contents
    [I-D.ietf-ace-aif]
               Bormann, C., "An Authorization Information Format (AIF)
               for ACE", Work in Progress, Internet-Draft, draft-ietf-
-              ace-aif-04, 28 January 2022,
+              ace-aif-05, 14 February 2022,
               <https://www.ietf.org/archive/id/draft-ietf-ace-aif-
-              04.txt>.
+              05.txt>.
 
    [I-D.ietf-ace-dtls-authorize]
               Gerdes, S., Bergmann, O., Bormann, C., Selander, G., and
@@ -3989,10 +3949,9 @@ A.1.  Mandatory-to-Address Requirements
       according to the used scope format: see Section 3 and Section 4.1.
 
    *  REQ2 - If the AIF format of 'scope' is used, register its specific
-      instance of "Toid" and "Tperm", as well as the corresponding Media
-      Type and Content-Format, as per the guidelines in
-      [I-D.ietf-ace-aif]: see Section 25.8, Section 25.9 and
-      Section 25.10.
+      instance of "Toid" and "Tperm" as Media Type parameters and a
+      corresponding Content-Format, as per the guidelines in
+      [I-D.ietf-ace-aif]: see Section 25.8 and Section 25.9.
 
    *  REQ3 - if used, specify the acceptable values for 'sign_alg':
       values from the "Value" column of the "COSE Algorithms" registry
@@ -4036,7 +3995,7 @@ A.1.  Mandatory-to-Address Requirements
       used to discover the correct url to access at the KDC (see
       Section 4.1 of [I-D.ietf-ace-key-groupcomm]): the Resource Type
       (rt=) Link Target Attribute value "core.osc.gm" is registered in
-      Section 25.12.
+      Section 25.11.
 
    *  REQ11 - Define what specific actions (e.g., CoAP methods) are
       allowed on each resource provided by the KDC interface, depending
@@ -4110,7 +4069,7 @@ A.1.  Mandatory-to-Address Requirements
       and corresponding CBOR label: see Section 9.
 
    *  REQ28 - Specify and register the identifier of newly defined
-      semantics for binary scopes: see Section 25.13.
+      semantics for binary scopes: see Section 25.12.
 
    *  REQ29 - Categorize newly defined parameters according to the same
       criteria of Section 8 of [I-D.ietf-ace-key-groupcomm]: see
@@ -4153,7 +4112,7 @@ A.2.  Optional-to-Address Requirements
 
    *  OPT5 (Optional) - Specify additional identifiers of error types,
       as values of the 'error' field in an error response from the KDC:
-      see Section 25.14.
+      see Section 25.13.
 
    *  OPT6 (Optional) - Specify the encoding of 'pub_keys_repos' if the
       default is not used: no.
@@ -4324,6 +4283,8 @@ C.1.  Version -12 to -13
       "Birth Gids".
 
    *  Distinction between authentication credentials and public keys.
+
+   *  Updated IANA considerations related to AIF.
 
    *  Updated textual description of registered ACE Scope Semantics
       value.
@@ -4680,7 +4641,6 @@ Authors' Addresses
    Isafjordsgatan 22
    SE-164 29 Stockholm Kista
    Sweden
-
    Email: marco.tiloca@ri.se
 
 
@@ -4689,7 +4649,6 @@ Authors' Addresses
    Schuetzenbahn 70
    45127 Essen
    Germany
-
    Email: ji-ye.park@uni-due.de
 
 
@@ -4698,5 +4657,4 @@ Authors' Addresses
    Torshamnsgatan 23
    SE-16440 Stockholm Kista
    Sweden
-
    Email: francesca.palombini@ericsson.com

@@ -11,11 +11,11 @@
 <meta content="
        This document defines an application profile of the ACE framework for Authentication and Authorization, to request and provision keying material in group communication scenarios that are based on CoAP and secured with Group Object Security for Constrained RESTful Environments (OSCORE). This application profile delegates the authentication and authorization of Clients that join an OSCORE group through a Resource Server acting as Group Manager for that group. This application profile leverages protocol-specific transport profiles of ACE to achieve communication security, server authentication and proof-of-possession for a key owned by the Client and bound to an OAuth 2.0 Access Token. 
     " name="description">
-<meta content="xml2rfc 3.12.1" name="generator">
+<meta content="xml2rfc 3.12.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-ace-key-groupcomm-oscore-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.1
+  xml2rfc 3.12.2
     Python 3.9.7
     appdirs 1.4.4
     ConfigArgParse 1.3
@@ -1018,7 +1018,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 17 August 2022</td>
+<td class="center">Expires 24 August 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1031,12 +1031,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-ietf-ace-key-groupcomm-oscore-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-02-13" class="published">13 February 2022</time>
+<time datetime="2022-02-20" class="published">20 February 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-08-17">17 August 2022</time></dd>
+<dd class="expires"><time datetime="2022-08-24">24 August 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1078,7 +1078,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1341,25 +1341,22 @@ svg [stroke="fill"], svg [fill^="#fff"] {
                 <p id="section-toc.1-1.25.2.8.1"><a href="#section-25.8" class="xref">25.8</a>.  <a href="#name-aif" class="xref">AIF</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.9">
-                <p id="section-toc.1-1.25.2.9.1"><a href="#section-25.9" class="xref">25.9</a>.  <a href="#name-media-type-registrations" class="xref">Media Type Registrations</a></p>
+                <p id="section-toc.1-1.25.2.9.1"><a href="#section-25.9" class="xref">25.9</a>.  <a href="#name-coap-content-format" class="xref">CoAP Content-Format</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.10">
-                <p id="section-toc.1-1.25.2.10.1"><a href="#section-25.10" class="xref">25.10</a>. <a href="#name-coap-content-format" class="xref">CoAP Content-Format</a></p>
+                <p id="section-toc.1-1.25.2.10.1"><a href="#section-25.10" class="xref">25.10</a>. <a href="#name-group-oscore-roles" class="xref">Group OSCORE Roles</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.11">
-                <p id="section-toc.1-1.25.2.11.1"><a href="#section-25.11" class="xref">25.11</a>. <a href="#name-group-oscore-roles" class="xref">Group OSCORE Roles</a></p>
+                <p id="section-toc.1-1.25.2.11.1"><a href="#section-25.11" class="xref">25.11</a>. <a href="#name-core-resource-type" class="xref">CoRE Resource Type</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.12">
-                <p id="section-toc.1-1.25.2.12.1"><a href="#section-25.12" class="xref">25.12</a>. <a href="#name-core-resource-type" class="xref">CoRE Resource Type</a></p>
+                <p id="section-toc.1-1.25.2.12.1"><a href="#section-25.12" class="xref">25.12</a>. <a href="#name-ace-scope-semantics" class="xref">ACE Scope Semantics</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.13">
-                <p id="section-toc.1-1.25.2.13.1"><a href="#section-25.13" class="xref">25.13</a>. <a href="#name-ace-scope-semantics" class="xref">ACE Scope Semantics</a></p>
+                <p id="section-toc.1-1.25.2.13.1"><a href="#section-25.13" class="xref">25.13</a>. <a href="#name-ace-groupcomm-errors" class="xref">ACE Groupcomm Errors</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.14">
-                <p id="section-toc.1-1.25.2.14.1"><a href="#section-25.14" class="xref">25.14</a>. <a href="#name-ace-groupcomm-errors" class="xref">ACE Groupcomm Errors</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.15">
-                <p id="section-toc.1-1.25.2.15.1"><a href="#section-25.15" class="xref">25.15</a>. <a href="#name-expert-review-instructions" class="xref">Expert Review Instructions</a></p>
+                <p id="section-toc.1-1.25.2.14.1"><a href="#section-25.14" class="xref">25.14</a>. <a href="#name-expert-review-instructions" class="xref">Expert Review Instructions</a></p>
 </li>
             </ul>
 </li>
@@ -1665,7 +1662,7 @@ Due to the set of stale Sender IDs distributed through the rekeying, this ensure
    )
 </pre><a href="#section-3-10" class="pilcrow">¶</a>
 </div>
-<p id="section-3-11">Future specifications that define new roles MUST register a corresponding numeric identifier in the "Group OSCORE Roles" registry defined in <a href="#ssec-iana-group-oscore-roles-registry" class="xref">Section 25.11</a> of this document.<a href="#section-3-11" class="pilcrow">¶</a></p>
+<p id="section-3-11">Future specifications that define new roles MUST register a corresponding numeric identifier in the "Group OSCORE Roles" registry defined in <a href="#ssec-iana-group-oscore-roles-registry" class="xref">Section 25.10</a> of this document.<a href="#section-3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-joining-node-to-AS">
@@ -1711,7 +1708,7 @@ Due to the set of stale Sender IDs distributed through the rekeying, this ensure
           <li class="normal" id="section-4.2-2.2">The AS MUST include the 'scope' parameter, when the value included in the Access Token differs from the one specified by the joining node in the request. In such a case, the second element of each scope entry MUST be present, and specifies the set of roles that the joining node is actually authorized to take in the OSCORE group for that scope entry, encoded as specified in <a href="#ssec-auth-req" class="xref">Section 4.1</a>.<a href="#section-4.2-2.2" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-4.2-3">Furthermore, if the AS uses the extended format of scope defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span> for the 'scope' claim of the Access Token, the first element of the CBOR sequence <span>[<a href="#RFC8742" class="xref">RFC8742</a>]</span> MUST be the CBOR integer with value SEM_ID_TBD, defined in <a href="#iana-scope-semantics" class="xref">Section 25.13</a> of this document (REQ28). This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined for this application profile in <a href="#sec-format-scope" class="xref">Section 3</a> of this document.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">Furthermore, if the AS uses the extended format of scope defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span> for the 'scope' claim of the Access Token, the first element of the CBOR sequence <span>[<a href="#RFC8742" class="xref">RFC8742</a>]</span> MUST be the CBOR integer with value SEM_ID_TBD, defined in <a href="#iana-scope-semantics" class="xref">Section 25.12</a> of this document (REQ28). This indicates that the second element of the CBOR sequence, as conveying the actual access control information, follows the scope semantics defined for this application profile in <a href="#sec-format-scope" class="xref">Section 3</a> of this document.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1724,7 +1721,7 @@ Due to the set of stale Sender IDs distributed through the rekeying, this ensure
 <p id="section-5-1">The Group Manager provides the interface defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-4.1" class="relref">Section 4.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>, with the additional sub-resources defined from <a href="#ssec-resource-active" class="xref">Section 5.1</a> to <a href="#ssec-resource-stale-sids" class="xref">Section 5.3</a> of this document.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">Furthermore, <a href="#ssec-admitted-methods" class="xref">Section 5.4</a> provides a summary of the CoAP methods admitted to access different resources at the Group Manager, for nodes with different roles in the group or as non members (REQ11).<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">The GROUPNAME segment of the URI path MUST match with the group name specified in the scope entry of the Access Token scope (i.e., 'gname' in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-3.1" class="relref">Section 3.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>) (REQ7).<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in <a href="#iana-rt" class="xref">Section 25.12</a> (REQ10), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g., by using a link-format document <span>[<a href="#RFC6690" class="xref">RFC6690</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-4">The Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in <a href="#iana-rt" class="xref">Section 25.11</a> (REQ10), and can be used to describe group-membership resources and its sub-resources at a Group Manager, e.g., by using a link-format document <span>[<a href="#RFC6690" class="xref">RFC6690</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">Applications can use this common resource type to discover links to group-membership resources for joining OSCORE groups, e.g., by using the approach described in <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="xref">I-D.tiloca-core-oscore-discovery</a>]</span>.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <div id="ssec-resource-active">
 <section id="section-5.1">
@@ -3519,167 +3516,162 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
         <h3 id="name-aif">
 <a href="#section-25.8" class="section-number selfRef">25.8. </a><a href="#name-aif" class="section-name selfRef">AIF</a>
         </h3>
-<p id="section-25.8-1">IANA is asked to register the following entry to the "Toid" registry within the "AIF" registry group defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-04#section-5.2" class="relref">Section 5.2</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>.<a href="#section-25.8-1" class="pilcrow">¶</a></p>
+<p id="section-25.8-1">For both media-types application/aif+cbor and application/aif+json defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-05#section-5.1" class="relref">Section 5.1</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-05#section-5.2" class="relref">Section 5.2</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span> within the "MIME Media Type Sub-Parameter" registry group.<a href="#section-25.8-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-25.8-2.1">Name: oscore-group-name<a href="#section-25.8-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.8-2.2">Description/Specification: group name of the OSCORE group, as specified in [[This document]].<a href="#section-25.8-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.8-2.2">Description/Specification: group name of an OSCORE group<a href="#section-25.8-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.8-2.3">Reference: [[This document]]<a href="#section-25.8-2.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-25.8-3">IANA is asked to register the following entry to the "Tperm" registry within the "AIF" registry group defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-04#section-5.2" class="relref">Section 5.2</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>.<a href="#section-25.8-3" class="pilcrow">¶</a></p>
+<p id="section-25.8-3"></p>
 <ul class="normal">
 <li class="normal" id="section-25.8-4.1">Name: oscore-group-roles<a href="#section-25.8-4.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.8-4.2">Description/Specification: role(s) of the member of the OSCORE group, as specified in [[This document]].<a href="#section-25.8-4.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.8-4.2">Description/Specification: role(s) in the OSCORE group<a href="#section-25.8-4.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.8-4.3">Reference: [[This document]]<a href="#section-25.8-4.3" class="pilcrow">¶</a>
 </li>
         </ul>
-</section>
-</div>
-<div id="ssec-iana-media-types">
-<section id="section-25.9">
-        <h3 id="name-media-type-registrations">
-<a href="#section-25.9" class="section-number selfRef">25.9. </a><a href="#name-media-type-registrations" class="section-name selfRef">Media Type Registrations</a>
-        </h3>
-<p id="section-25.9-1">This document registers the 'application/aif-groupcomm-oscore+cbor' media type for the AIF specific data model AIF-OSCORE-GROUPCOMM defined in <a href="#sec-format-scope" class="xref">Section 3</a> of [[This document]]. This registration follows the procedures specified in <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span>.<a href="#section-25.9-1" class="pilcrow">¶</a></p>
-<p id="section-25.9-2">These media type has parameters for specifying the object identifier ("Toid") and set of permissions ("Tperm") defined for the AIF-generic model in <span>[<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>; default values are the values "oscore-group-name" for "Toid" and "oscore-group-roles" for "Tperm".<a href="#section-25.9-2" class="pilcrow">¶</a></p>
-<p id="section-25.9-3">Type name: application<a href="#section-25.9-3" class="pilcrow">¶</a></p>
-<p id="section-25.9-4">Subtype name: aif-groupcomm-oscore+cbor<a href="#section-25.9-4" class="pilcrow">¶</a></p>
-<p id="section-25.9-5">Required parameters: "Toid", "Tperm"<a href="#section-25.9-5" class="pilcrow">¶</a></p>
-<p id="section-25.9-6">Optional parameters: N/A<a href="#section-25.9-6" class="pilcrow">¶</a></p>
-<p id="section-25.9-7">Encoding considerations: Must be encoded as a CBOR array, each element of which is an array [Toid, Tperm] as defined in <a href="#sec-format-scope" class="xref">Section 3</a> of [[This document]].<a href="#section-25.9-7" class="pilcrow">¶</a></p>
-<p id="section-25.9-8">Security considerations: See <a href="#sec-security-considerations" class="xref">Section 24</a> of [[This document]].<a href="#section-25.9-8" class="pilcrow">¶</a></p>
-<p id="section-25.9-9">Interoperability considerations: N/A<a href="#section-25.9-9" class="pilcrow">¶</a></p>
-<p id="section-25.9-10">Published specification: [[This document]]<a href="#section-25.9-10" class="pilcrow">¶</a></p>
-<p id="section-25.9-11">Applications that use this media type: The type is used by applications that want to express authorization information about joining OSCORE groups, as specified in [[This document]].<a href="#section-25.9-11" class="pilcrow">¶</a></p>
-<p id="section-25.9-12">Fragment identifier considerations: N/A<a href="#section-25.9-12" class="pilcrow">¶</a></p>
-<p id="section-25.9-13">Additional information: N/A<a href="#section-25.9-13" class="pilcrow">¶</a></p>
-<p id="section-25.9-14">Person &amp; email address to contact for further information: <a href="mailto:iesg@ietf.org">iesg@ietf.org</a><a href="#section-25.9-14" class="pilcrow">¶</a></p>
-<p id="section-25.9-15">Intended usage: COMMON<a href="#section-25.9-15" class="pilcrow">¶</a></p>
-<p id="section-25.9-16">Restrictions on usage: None<a href="#section-25.9-16" class="pilcrow">¶</a></p>
-<p id="section-25.9-17">Author: Marco Tiloca <a href="mailto:marco.tiloca@ri.se">marco.tiloca@ri.se</a><a href="#section-25.9-17" class="pilcrow">¶</a></p>
-<p id="section-25.9-18">Change controller: IESG<a href="#section-25.9-18" class="pilcrow">¶</a></p>
-<p id="section-25.9-19">Provisional registration?  No<a href="#section-25.9-19" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-iana-coap-content-format-registry">
-<section id="section-25.10">
+<section id="section-25.9">
         <h3 id="name-coap-content-format">
-<a href="#section-25.10" class="section-number selfRef">25.10. </a><a href="#name-coap-content-format" class="section-name selfRef">CoAP Content-Format</a>
+<a href="#section-25.9" class="section-number selfRef">25.9. </a><a href="#name-coap-content-format" class="section-name selfRef">CoAP Content-Format</a>
         </h3>
-<p id="section-25.10-1">IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group:<a href="#section-25.10-1" class="pilcrow">¶</a></p>
-<p id="section-25.10-2">Media Type: application/aif-groupcomm-oscore+cbor;Toid="oscore-group-name",Tperm"oscore-group-roles"<a href="#section-25.10-2" class="pilcrow">¶</a></p>
-<p id="section-25.10-3">Encoding: -<a href="#section-25.10-3" class="pilcrow">¶</a></p>
-<p id="section-25.10-4">ID: TBD<a href="#section-25.10-4" class="pilcrow">¶</a></p>
-<p id="section-25.10-5">Reference: [[This document]]<a href="#section-25.10-5" class="pilcrow">¶</a></p>
+<p id="section-25.9-1">IANA is asked to register the following entries to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-25.9-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-25.9-2.1">Media Type: application/aif+cbor;Toid="oscore-group-name",Tperm="oscore-group-roles"<a href="#section-25.9-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.9-2.2">Encoding: -<a href="#section-25.9-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.9-2.3">ID: TBD<a href="#section-25.9-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.9-2.4">Reference: [[This document]]<a href="#section-25.9-2.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-25.9-3"></p>
+<ul class="normal">
+<li class="normal" id="section-25.9-4.1">Media Type: application/aif+json;Toid="oscore-group-name",Tperm="oscore-group-roles"<a href="#section-25.9-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.9-4.2">Encoding: -<a href="#section-25.9-4.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.9-4.3">ID: TBD<a href="#section-25.9-4.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-25.9-4.4">Reference: [[This document]]<a href="#section-25.9-4.4" class="pilcrow">¶</a>
+</li>
+        </ul>
 </section>
 </div>
 <div id="ssec-iana-group-oscore-roles-registry">
-<section id="section-25.11">
+<section id="section-25.10">
         <h3 id="name-group-oscore-roles">
-<a href="#section-25.11" class="section-number selfRef">25.11. </a><a href="#name-group-oscore-roles" class="section-name selfRef">Group OSCORE Roles</a>
+<a href="#section-25.10" class="section-number selfRef">25.10. </a><a href="#name-group-oscore-roles" class="section-name selfRef">Group OSCORE Roles</a>
         </h3>
-<p id="section-25.11-1">This document establishes the IANA "Group OSCORE Roles" registry. The registry has been created to use the "Expert Review" registration procedure <span>[<a href="#RFC8126" class="xref">RFC8126</a>]</span>. Expert review guidelines are provided in <a href="#ssec-iana-expert-review" class="xref">Section 25.15</a>.<a href="#section-25.11-1" class="pilcrow">¶</a></p>
-<p id="section-25.11-2">This registry includes the possible roles that nodes can take in an OSCORE group, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about joining OSCORE groups, as specified in <a href="#sec-format-scope" class="xref">Section 3</a> of [[This document]].<a href="#section-25.11-2" class="pilcrow">¶</a></p>
-<p id="section-25.11-3">The columns of this registry are:<a href="#section-25.11-3" class="pilcrow">¶</a></p>
+<p id="section-25.10-1">This document establishes the IANA "Group OSCORE Roles" registry. The registry has been created to use the "Expert Review" registration procedure <span>[<a href="#RFC8126" class="xref">RFC8126</a>]</span>. Expert review guidelines are provided in <a href="#ssec-iana-expert-review" class="xref">Section 25.14</a>.<a href="#section-25.10-1" class="pilcrow">¶</a></p>
+<p id="section-25.10-2">This registry includes the possible roles that nodes can take in an OSCORE group, each in combination with a numeric identifier. These numeric identifiers are used to express authorization information about joining OSCORE groups, as specified in <a href="#sec-format-scope" class="xref">Section 3</a> of [[This document]].<a href="#section-25.10-2" class="pilcrow">¶</a></p>
+<p id="section-25.10-3">The columns of this registry are:<a href="#section-25.10-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-25.11-4.1">Name: A value that can be used in documents for easier comprehension, to identify a possible role that nodes can take in an OSCORE group.<a href="#section-25.11-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.10-4.1">Name: A value that can be used in documents for easier comprehension, to identify a possible role that nodes can take in an OSCORE group.<a href="#section-25.10-4.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.11-4.2">Value: The numeric identifier for this role. Integer values greater than 65535 are marked as "Private Use", all other values use the registration policy "Expert Review" <span>[<a href="#RFC8126" class="xref">RFC8126</a>]</span>.<a href="#section-25.11-4.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.10-4.2">Value: The numeric identifier for this role. Integer values greater than 65535 are marked as "Private Use", all other values use the registration policy "Expert Review" <span>[<a href="#RFC8126" class="xref">RFC8126</a>]</span>.<a href="#section-25.10-4.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.11-4.3">Description: This field contains a brief description of the role.<a href="#section-25.11-4.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.10-4.3">Description: This field contains a brief description of the role.<a href="#section-25.10-4.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.11-4.4">Reference: This contains a pointer to the public specification for the role.<a href="#section-25.11-4.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.10-4.4">Reference: This contains a pointer to the public specification for the role.<a href="#section-25.10-4.4" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-25.11-5">This registry will be initially populated by the values in <a href="#fig-role-values" class="xref">Figure 1</a>.<a href="#section-25.11-5" class="pilcrow">¶</a></p>
-<p id="section-25.11-6">The Reference column for all of these entries will be [[This document]].<a href="#section-25.11-6" class="pilcrow">¶</a></p>
+<p id="section-25.10-5">This registry will be initially populated by the values in <a href="#fig-role-values" class="xref">Figure 1</a>.<a href="#section-25.10-5" class="pilcrow">¶</a></p>
+<p id="section-25.10-6">The Reference column for all of these entries will be [[This document]].<a href="#section-25.10-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-rt">
-<section id="section-25.12">
+<section id="section-25.11">
         <h3 id="name-core-resource-type">
-<a href="#section-25.12" class="section-number selfRef">25.12. </a><a href="#name-core-resource-type" class="section-name selfRef">CoRE Resource Type</a>
+<a href="#section-25.11" class="section-number selfRef">25.11. </a><a href="#name-core-resource-type" class="section-name selfRef">CoRE Resource Type</a>
         </h3>
-<p id="section-25.12-1">IANA is asked to register the following entry in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.<a href="#section-25.12-1" class="pilcrow">¶</a></p>
+<p id="section-25.11-1">IANA is asked to register the following entry in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.<a href="#section-25.11-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-25.12-2.1">Value: "core.osc.gm"<a href="#section-25.12-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.11-2.1">Value: "core.osc.gm"<a href="#section-25.11-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.12-2.2">Description: Group-membership resource of an OSCORE Group Manager.<a href="#section-25.12-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.11-2.2">Description: Group-membership resource of an OSCORE Group Manager.<a href="#section-25.11-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.12-2.3">Reference: [[This document]]<a href="#section-25.12-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.11-2.3">Reference: [[This document]]<a href="#section-25.11-2.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-25.12-3">Client applications can use this resource type to discover a group membership resource at an OSCORE Group Manager, where to send a request for joining the corresponding OSCORE group.<a href="#section-25.12-3" class="pilcrow">¶</a></p>
+<p id="section-25.11-3">Client applications can use this resource type to discover a group membership resource at an OSCORE Group Manager, where to send a request for joining the corresponding OSCORE group.<a href="#section-25.11-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-scope-semantics">
-<section id="section-25.13">
+<section id="section-25.12">
         <h3 id="name-ace-scope-semantics">
-<a href="#section-25.13" class="section-number selfRef">25.13. </a><a href="#name-ace-scope-semantics" class="section-name selfRef">ACE Scope Semantics</a>
+<a href="#section-25.12" class="section-number selfRef">25.12. </a><a href="#name-ace-scope-semantics" class="section-name selfRef">ACE Scope Semantics</a>
         </h3>
-<p id="section-25.13-1">IANA is asked to register the following entry in the "ACE Scope Semantics" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-11.12" class="relref">Section 11.12</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>.<a href="#section-25.13-1" class="pilcrow">¶</a></p>
+<p id="section-25.12-1">IANA is asked to register the following entry in the "ACE Scope Semantics" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-11.12" class="relref">Section 11.12</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>.<a href="#section-25.12-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-25.13-2.1">Value: SEM_ID_TBD<a href="#section-25.13-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.12-2.1">Value: SEM_ID_TBD<a href="#section-25.12-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.13-2.2">Description: Membership and key management operations at the ACE Group Manager for Group OSCORE.<a href="#section-25.13-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.12-2.2">Description: Membership and key management operations at the ACE Group Manager for Group OSCORE.<a href="#section-25.12-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.13-2.3">Reference: [[This document]]<a href="#section-25.13-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.12-2.3">Reference: [[This document]]<a href="#section-25.12-2.3" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="iana-ace-groupcomm-errors">
-<section id="section-25.14">
+<section id="section-25.13">
         <h3 id="name-ace-groupcomm-errors">
-<a href="#section-25.14" class="section-number selfRef">25.14. </a><a href="#name-ace-groupcomm-errors" class="section-name selfRef">ACE Groupcomm Errors</a>
+<a href="#section-25.13" class="section-number selfRef">25.13. </a><a href="#name-ace-groupcomm-errors" class="section-name selfRef">ACE Groupcomm Errors</a>
         </h3>
-<p id="section-25.14-1">IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-11.13" class="relref">Section 11.13</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>.<a href="#section-25.14-1" class="pilcrow">¶</a></p>
+<p id="section-25.13-1">IANA is asked to register the following entry in the "ACE Groupcomm Errors" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-11.13" class="relref">Section 11.13</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>.<a href="#section-25.13-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-25.14-2.1">Value: 7<a href="#section-25.14-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.13-2.1">Value: 7<a href="#section-25.13-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.14-2.2">Description: Signatures not used in the group.<a href="#section-25.14-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.13-2.2">Description: Signatures not used in the group.<a href="#section-25.13-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.14-2.3">Reference: [[This document]]<a href="#section-25.14-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.13-2.3">Reference: [[This document]]<a href="#section-25.13-2.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-25.14-3"></p>
+<p id="section-25.13-3"></p>
 <ul class="normal">
-<li class="normal" id="section-25.14-4.1">Value: 8<a href="#section-25.14-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.13-4.1">Value: 8<a href="#section-25.13-4.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.14-4.2">Description: Operation permitted only to signature verifiers.<a href="#section-25.14-4.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.13-4.2">Description: Operation permitted only to signature verifiers.<a href="#section-25.13-4.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.14-4.3">Reference: [[This document]]<a href="#section-25.14-4.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.13-4.3">Reference: [[This document]]<a href="#section-25.13-4.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-25.14-5"></p>
+<p id="section-25.13-5"></p>
 <ul class="normal">
-<li class="normal" id="section-25.14-6.1">Value: 9<a href="#section-25.14-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-25.13-6.1">Value: 9<a href="#section-25.13-6.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.14-6.2">Description: Group currently not active.<a href="#section-25.14-6.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.13-6.2">Description: Group currently not active.<a href="#section-25.13-6.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.14-6.3">Reference: [[This document]]<a href="#section-25.14-6.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.13-6.3">Reference: [[This document]]<a href="#section-25.13-6.3" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="ssec-iana-expert-review">
-<section id="section-25.15">
+<section id="section-25.14">
         <h3 id="name-expert-review-instructions">
-<a href="#section-25.15" class="section-number selfRef">25.15. </a><a href="#name-expert-review-instructions" class="section-name selfRef">Expert Review Instructions</a>
+<a href="#section-25.14" class="section-number selfRef">25.14. </a><a href="#name-expert-review-instructions" class="section-name selfRef">Expert Review Instructions</a>
         </h3>
-<p id="section-25.15-1">The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.<a href="#section-25.15-1" class="pilcrow">¶</a></p>
-<p id="section-25.15-2">Expert reviewers should take into consideration the following points:<a href="#section-25.15-2" class="pilcrow">¶</a></p>
+<p id="section-25.14-1">The IANA registry established in this document is defined as "Expert Review".  This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.<a href="#section-25.14-1" class="pilcrow">¶</a></p>
+<p id="section-25.14-2">Expert reviewers should take into consideration the following points:<a href="#section-25.14-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-25.15-3.1">
-            <p id="section-25.15-3.1.1">Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts should inspect the entry for the considered role, to verify the correctness of its description against the role as intended in the specification that defined it. Expert should consider requesting an opinion on the correctness of registered parameters from the Authentication and Authorization for Constrained Environments (ACE) Working Group and the Constrained RESTful Environments (CoRE) Working Group.<a href="#section-25.15-3.1.1" class="pilcrow">¶</a></p>
-<p id="section-25.15-3.1.2">
-Entries that do not meet these objective of clarity and completeness should not be registered.<a href="#section-25.15-3.1.2" class="pilcrow">¶</a></p>
+<li class="normal" id="section-25.14-3.1">
+            <p id="section-25.14-3.1.1">Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts should inspect the entry for the considered role, to verify the correctness of its description against the role as intended in the specification that defined it. Expert should consider requesting an opinion on the correctness of registered parameters from the Authentication and Authorization for Constrained Environments (ACE) Working Group and the Constrained RESTful Environments (CoRE) Working Group.<a href="#section-25.14-3.1.1" class="pilcrow">¶</a></p>
+<p id="section-25.14-3.1.2">
+Entries that do not meet these objective of clarity and completeness should not be registered.<a href="#section-25.14-3.1.2" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-25.15-3.2">Duplicated registration and point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments.<a href="#section-25.15-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.14-3.2">Duplicated registration and point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments.<a href="#section-25.14-3.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.15-3.3">Experts should take into account the expected usage of roles when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.<a href="#section-25.15-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.14-3.3">Experts should take into account the expected usage of roles when approving point assignment. Given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against the usage of the entry, considering the resources and capabilities of devices it will be used on. Additionally, given a 'Value' V as code point, the length of the encoding of (2^(V+1) - 1) should be weighed against how many code points resulting in that encoding length are left, and the resources and capabilities of devices it will be used on.<a href="#section-25.14-3.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.15-3.4">Specifications are recommended. When specifications are not provided, the description provided needs to have sufficient information to verify the points above.<a href="#section-25.15-3.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.14-3.4">Specifications are recommended. When specifications are not provided, the description provided needs to have sufficient information to verify the points above.<a href="#section-25.14-3.4" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -3713,7 +3705,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-aif">[I-D.ietf-ace-aif]</dt>
         <dd>
-<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"An Authorization Information Format (AIF) for ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-aif-04</span>, <time datetime="2022-01-28" class="refDate">28 January 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-ace-aif-04.txt">https://www.ietf.org/archive/id/draft-ietf-ace-aif-04.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"An Authorization Information Format (AIF) for ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-aif-05</span>, <time datetime="2022-02-14" class="refDate">14 February 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-ace-aif-05.txt">https://www.ietf.org/archive/id/draft-ietf-ace-aif-05.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-dtls-authorize">[I-D.ietf-ace-dtls-authorize]</dt>
         <dd>
@@ -3883,7 +3875,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 <ul class="normal">
 <li class="normal" id="appendix-A.1-1.1">REQ1 - Specify the format and encoding of 'scope'. This includes defining the set of possible roles and their identifiers, as well as the corresponding encoding to use in the scope entries according to the used scope format: see <a href="#sec-format-scope" class="xref">Section 3</a> and <a href="#ssec-auth-req" class="xref">Section 4.1</a>.<a href="#appendix-A.1-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-A.1-1.2">REQ2 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm", as well as the corresponding Media Type and Content-Format, as per the guidelines in <span>[<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>: see <a href="#ssec-iana-AIF-registry" class="xref">Section 25.8</a>, <a href="#ssec-iana-media-types" class="xref">Section 25.9</a> and <a href="#ssec-iana-coap-content-format-registry" class="xref">Section 25.10</a>.<a href="#appendix-A.1-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-A.1-1.2">REQ2 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm" as Media Type parameters and a corresponding Content-Format, as per the guidelines in <span>[<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>: see <a href="#ssec-iana-AIF-registry" class="xref">Section 25.8</a> and <a href="#ssec-iana-coap-content-format-registry" class="xref">Section 25.9</a>.<a href="#appendix-A.1-1.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-A.1-1.3">REQ3 - if used, specify the acceptable values for 'sign_alg': values from the "Value" column of the "COSE Algorithms" registry <span>[<a href="#COSE.Algorithms" class="xref">COSE.Algorithms</a>]</span>.<a href="#appendix-A.1-1.3" class="pilcrow">¶</a>
 </li>
@@ -3899,7 +3891,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 </li>
           <li class="normal" id="appendix-A.1-1.9">REQ9 - Specify if any part of the KDC interface as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-4.1" class="relref">Section 4.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span> is not supported by the KDC: not applicable.<a href="#appendix-A.1-1.9" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-A.1-1.10">REQ10 - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-4.1" class="relref">Section 4.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in <a href="#iana-rt" class="xref">Section 25.12</a>.<a href="#appendix-A.1-1.10" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-A.1-1.10">REQ10 - Register a Resource Type for the root url-path, which is used to discover the correct url to access at the KDC (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-4.1" class="relref">Section 4.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>): the Resource Type (rt=) Link Target Attribute value "core.osc.gm" is registered in <a href="#iana-rt" class="xref">Section 25.11</a>.<a href="#appendix-A.1-1.10" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-A.1-1.11">REQ11 - Define what specific actions (e.g., CoAP methods) are allowed on each resource provided by the KDC interface, depending on whether the Client is a current group member; the roles that a Client is authorized to take as per the obtained access token; and the roles that the Client has as current group member: see <a href="#ssec-admitted-methods" class="xref">Section 5.4</a>.<a href="#appendix-A.1-1.11" class="pilcrow">¶</a>
 </li>
@@ -3935,7 +3927,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 </li>
           <li class="normal" id="appendix-A.1-1.27">REQ27 - Specify the format of newly-generated individual keying material for group members, or of the information to derive it, and corresponding CBOR label: see <a href="#sec-new-key" class="xref">Section 9</a>.<a href="#appendix-A.1-1.27" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-A.1-1.28">REQ28 - Specify and register the identifier of newly defined semantics for binary scopes: see <a href="#iana-scope-semantics" class="xref">Section 25.13</a>.<a href="#appendix-A.1-1.28" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-A.1-1.28">REQ28 - Specify and register the identifier of newly defined semantics for binary scopes: see <a href="#iana-scope-semantics" class="xref">Section 25.12</a>.<a href="#appendix-A.1-1.28" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-A.1-1.29">REQ29 - Categorize newly defined parameters according to the same criteria of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>: see <a href="#ace-groupcomm-params" class="xref">Section 21</a>.<a href="#appendix-A.1-1.29" class="pilcrow">¶</a>
 </li>
@@ -3965,7 +3957,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 </li>
           <li class="normal" id="appendix-A.2-1.4">OPT4 (Optional) - Specify possible or required payload formats for specific error cases: send a 4.00 (Bad Request) error response to a Joining Request (see <a href="#ssec-join-req-processing" class="xref">Section 6.3</a>).<a href="#appendix-A.2-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-A.2-1.5">OPT5 (Optional) - Specify additional identifiers of error types, as values of the 'error' field in an error response from the KDC: see <a href="#iana-ace-groupcomm-errors" class="xref">Section 25.14</a>.<a href="#appendix-A.2-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-A.2-1.5">OPT5 (Optional) - Specify additional identifiers of error types, as values of the 'error' field in an error response from the KDC: see <a href="#iana-ace-groupcomm-errors" class="xref">Section 25.13</a>.<a href="#appendix-A.2-1.5" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-A.2-1.6">OPT6 (Optional) - Specify the encoding of 'pub_keys_repos' if the default is not used: no.<a href="#appendix-A.2-1.6" class="pilcrow">¶</a>
 </li>
@@ -4101,7 +4093,9 @@ For example, if 'ecdh_params'[0][0] specifies the key type as capability of the 
 </li>
           <li class="normal" id="appendix-C.1-1.4">Distinction between authentication credentials and public keys.<a href="#appendix-C.1-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.5">Updated textual description of registered ACE Scope Semantics value.<a href="#appendix-C.1-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.5">Updated IANA considerations related to AIF.<a href="#appendix-C.1-1.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-C.1-1.6">Updated textual description of registered ACE Scope Semantics value.<a href="#appendix-C.1-1.6" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
