@@ -1730,67 +1730,39 @@ IANA is asked to register the following entry to the "TLS Exporter Labels" regis
 
 ## AIF {#ssec-iana-AIF-registry}
 
-IANA is asked to register the following entry to the "Toid" registry within the "AIF" registry group defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
+For both media-types application/aif+cbor and application/aif+json defined in {{Section 5.1 of I-D.ietf-ace-aif}}, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in {{Section 5.2 of I-D.ietf-ace-aif}} within the "MIME Media Type Sub-Parameter" registry group.
 
 * Name: oscore-group-name
-* Description/Specification: group name of the OSCORE group, as specified in \[\[This document\]\].
+* Description/Specification: group name of an OSCORE group
+* Reference: \[\[This document\]\]
 
-IANA is asked to register the following entry to the "Tperm" registry within the "AIF" registry group defined in {{Section 5.2 of I-D.ietf-ace-aif}}.
+&nbsp;
 
 * Name: oscore-group-roles
-* Description/Specification: role(s) of the member of the OSCORE group, as specified in \[\[This document\]\].
-
-## Media Type Registrations {#ssec-iana-media-types}
-
-This document registers the 'application/aif-groupcomm-oscore+cbor' media type for the AIF specific data model AIF-OSCORE-GROUPCOMM defined in {{sec-format-scope}} of \[\[This document\]\]. This registration follows the procedures specified in {{RFC6838}}.
-
-These media type has parameters for specifying the object identifier ("Toid") and set of permissions ("Tperm") defined for the AIF-generic model in {{I-D.ietf-ace-aif}}; default values are the values "oscore-group-name" for "Toid" and "oscore-group-roles" for "Tperm".
-
-Type name: application
-
-Subtype name: aif-groupcomm-oscore+cbor
-
-Required parameters: "Toid", "Tperm"
-
-Optional parameters: N/A
-
-Encoding considerations: Must be encoded as a CBOR array, each element of which is an array \[Toid, Tperm\] as defined in {{sec-format-scope}} of \[\[This document\]\].
-
-Security considerations: See {{sec-security-considerations}} of \[\[This document\]\].
-
-Interoperability considerations: N/A
-
-Published specification: \[\[This document\]\]
-
-Applications that use this media type: The type is used by applications that want to express authorization information about joining OSCORE groups, as specified in \[\[This document\]\].
-
-Fragment identifier considerations: N/A
-
-Additional information: N/A
-
-Person & email address to contact for further information: <iesg@ietf.org>
-
-Intended usage: COMMON
-
-Restrictions on usage: None
-
-Author: Marco Tiloca <marco.tiloca@ri.se>
-
-Change controller: IESG
-
-Provisional registration?  No
+* Description/Specification: role(s) in the OSCORE group
+* Reference: \[\[This document\]\]
 
 ## CoAP Content-Format {#ssec-iana-coap-content-format-registry}
 
-IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group:
+IANA is asked to register the following entries to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-Media Type: application/aif-groupcomm-oscore+cbor;Toid="oscore-group-name",Tperm"oscore-group-roles"
+* Media Type: application/aif+cbor;Toid="oscore-group-name",Tperm="oscore-group-roles"
 
-Encoding: -
+* Encoding: -
 
-ID: TBD
+* ID: TBD
 
-Reference: \[\[This document\]\]
+* Reference: \[\[This document\]\]
+
+&nbsp;
+
+* Media Type: application/aif+json;Toid="oscore-group-name",Tperm="oscore-group-roles"
+
+* Encoding: -
+
+* ID: TBD
+
+* Reference: \[\[This document\]\]
 
 ## Group OSCORE Roles {#ssec-iana-group-oscore-roles-registry}
 
@@ -1886,7 +1858,7 @@ This section lists how this application profile of ACE addresses the requirement
 
 * REQ1 - Specify the format and encoding of 'scope'. This includes defining the set of possible roles and their identifiers, as well as the corresponding encoding to use in the scope entries according to the used scope format: see {{sec-format-scope}} and {{ssec-auth-req}}.
 
-* REQ2 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm", as well as the corresponding Media Type and Content-Format, as per the guidelines in {{I-D.ietf-ace-aif}}: see {{ssec-iana-AIF-registry}}, {{ssec-iana-media-types}} and {{ssec-iana-coap-content-format-registry}}.
+* REQ2 - If the AIF format of 'scope' is used, register its specific instance of "Toid" and "Tperm" as Media Type parameters and a corresponding Content-Format, as per the guidelines in {{I-D.ietf-ace-aif}}: see {{ssec-iana-AIF-registry}} and {{ssec-iana-coap-content-format-registry}}.
 
 * REQ3 - if used, specify the acceptable values for 'sign\_alg': values from the "Value" column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
@@ -2055,6 +2027,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * It is optional for the Group Manager to reassign Gids by tracking "Birth Gids".
 
 * Distinction between authentication credentials and public keys.
+
+* Updated IANA considerations related to AIF.
 
 * Updated textual description of registered ACE Scope Semantics value.
 
