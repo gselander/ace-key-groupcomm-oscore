@@ -481,7 +481,7 @@ Table of Contents
       -  the set of N numbers is converted into the single value R, by
          taking each numeric identifier X_1, X_2, ..., X_N to the power
          of two, and then computing the inclusive OR of the binary
-         representations of all the power values.XXX
+         representations of all the power values.
 
  +-----------+-------+-------------------------------------------------+
  | Name      | Value | Description                                     |
