@@ -1617,7 +1617,7 @@ Due to the set of stale Sender IDs distributed through the rekeying, this ensure
         <li class="normal" id="section-3-7.2">
           <p id="section-3-7.2.1">the permission set ("Tperm") is specialized as a CBOR unsigned integer with value R, specifying the role(s) that the client wishes to take in the group (REQ1). The value R is computed as follows:<a href="#section-3-7.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-7.2.2.1">each role in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Roles" registry, for which this document defines the entry in <a href="#fig-role-values" class="xref">Figure 1</a>.<a href="#section-3-7.2.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3-7.2.2.1">each role in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Roles" registry, for which this document defines the entries in <a href="#fig-role-values" class="xref">Figure 1</a>.<a href="#section-3-7.2.2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3-7.2.2.2">the set of N numbers is converted into the single value R, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.<a href="#section-3-7.2.2.2" class="pilcrow">¶</a>
 </li>
