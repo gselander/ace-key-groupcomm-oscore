@@ -312,9 +312,9 @@ Then, for each scope entry:
 The CDDL {{RFC8610}} definition of the AIF-OSCORE-GROUPCOMM data model is as follows:
 
 ~~~~~~~~~~~
-   AIF-OSCORE-GROUPCOMM = AIF_Generic<path, permissions>
+   AIF-OSCORE-GROUPCOMM = AIF-Generic<gname, permissions>
 
-   path = tstr  ; Group name
+   gname = tstr  ; Group name
    permissions = uint . bits roles
    roles = &(
       Requester: 1,
