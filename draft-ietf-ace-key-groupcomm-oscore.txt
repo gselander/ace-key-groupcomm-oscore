@@ -5,10 +5,10 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                   RISE AB
 Intended status: Standards Track                                 J. Park
-Expires: 24 August 2022                      Universitaet Duisburg-Essen
+Expires: 26 August 2022                      Universitaet Duisburg-Essen
                                                             F. Palombini
                                                              Ericsson AB
-                                                        20 February 2022
+                                                        22 February 2022
 
 
                 Key Management for OSCORE Groups in ACE
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 August 2022.
+   This Internet-Draft will expire on 26 August 2022.
 
 Copyright Notice
 
@@ -501,9 +501,9 @@ Table of Contents
    The CDDL [RFC8610] definition of the AIF-OSCORE-GROUPCOMM data model
    is as follows:
 
-      AIF-OSCORE-GROUPCOMM = AIF_Generic<path, permissions>
+      AIF-OSCORE-GROUPCOMM = AIF-Generic<gname, permissions>
 
-      path = tstr  ; Group name
+      gname = tstr  ; Group name
       permissions = uint . bits roles
       roles = &(
          Requester: 1,
