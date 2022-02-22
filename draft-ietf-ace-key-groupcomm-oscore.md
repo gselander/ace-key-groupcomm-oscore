@@ -290,7 +290,7 @@ Then, for each scope entry:
 
    - each role in the permission set is converted into the corresponding numeric identifier X from the "Value" column of the "Group OSCORE Roles" registry, for which this document defines the entry in {{fig-role-values}}.
 
-   - the set of N numbers is converted into the single value R, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.XXX
+   - the set of N numbers is converted into the single value R, by taking each numeric identifier X_1, X_2, ..., X_N to the power of two, and then computing the inclusive OR of the binary representations of all the power values.
 
 ~~~~~~~~~~~
 +-----------+-------+-------------------------------------------------+
@@ -342,7 +342,7 @@ The Authorization Request message is as defined in {{Section 3.1 of I-D.ietf-ace
 
       - The group name is encoded as a CBOR text string.
 
-      - The set of requested roles is expressed as a single CBOR unsigned integer. This is computed as defined in {{sec-format-scope}}, from the numerical abbreviations of each requested role defined in the "Group OSCORE Roles" registry, for which this document defines the entry in {{fig-role-values}}  (REQ1).
+      - The set of requested roles is expressed as a single CBOR unsigned integer. This is computed as defined in {{sec-format-scope}}, from the numerical abbreviations of each requested role defined in the "Group OSCORE Roles" registry, for which this document defines the entry in {{fig-role-values}} (REQ1).
 
 ## Authorization Response {#ssec-auth-resp}
 
