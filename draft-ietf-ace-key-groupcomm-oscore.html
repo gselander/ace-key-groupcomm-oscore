@@ -1018,7 +1018,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 26 August 2022</td>
+<td class="center">Expires 31 August 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1031,12 +1031,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-ietf-ace-key-groupcomm-oscore-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-02-22" class="published">22 February 2022</time>
+<time datetime="2022-02-27" class="published">27 February 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-08-26">26 August 2022</time></dd>
+<dd class="expires"><time datetime="2022-08-31">31 August 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1078,7 +1078,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1868,9 +1868,9 @@ Type4 = Non-member (not authorized to be Verifier)  |  D  = DELETE
 <li class="normal" id="section-6.1-2.1">
             <p id="section-6.1-2.1.1">The Token Transfer Request MAY additionally contain the following parameters, which, if included, MUST have the corresponding values (OPT2):<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.1-2.1.2.1">'ecdh_info' defined in <a href="#ecdh-info" class="xref">Section 6.1.1</a> of this document, with value the CBOR simple value "nil" (0xf6) to request information about the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and about the exact format of authentication credentials used in the groups that the client has been authorized to join. This is relevant in case the joining node supports the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1-2.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6.1-2.1.2.1">'ecdh_info' defined in <a href="#ecdh-info" class="xref">Section 6.1.1</a> of this document, with value the CBOR simple value "null" (0xf6) to request information about the ECDH algorithm, the ECDH algorithm parameters, the ECDH key parameters and about the exact format of authentication credentials used in the groups that the client has been authorized to join. This is relevant in case the joining node supports the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1-2.1.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-6.1-2.1.2.2">'kdc_dh_creds' defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a> of this document, with value the CBOR simple value "nil" (0xf6) to request the Diffie-Hellman authentication credentials of the Group Manager for the groups that the client has been authorized to join. That is, each of such authentication credentials includes a Diffie-Hellman public key of the Group Manager. This is relevant in case the joining node supports the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1-2.1.2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-6.1-2.1.2.2">'kdc_dh_creds' defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a> of this document, with value the CBOR simple value "null" (0xf6) to request the Diffie-Hellman authentication credentials of the Group Manager for the groups that the client has been authorized to join. That is, each of such authentication credentials includes a Diffie-Hellman public key of the Group Manager. This is relevant in case the joining node supports the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1-2.1.2.2" class="pilcrow">¶</a>
 </li>
             </ul>
 <p id="section-6.1-2.1.3">
@@ -1922,7 +1922,7 @@ As an exception, the KDC MAY NOT include the 'ecdh_info' parameter in the Token 
 <p id="section-6.1.1-1">The 'ecdh_info' parameter is an OPTIONAL parameter of the request and response messages exchanged between the client and the authz-info endpoint at the RS (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oauth-authz-46#section-5.10.1." class="relref">Section 5.10.1.</a> of [<a href="#I-D.ietf-ace-oauth-authz" class="xref">I-D.ietf-ace-oauth-authz</a>]</span>).<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.1-2">This parameter allows the client and the RS to exchange information about an ECDH algorithm as well as about the authentication credentials and public keys to accordingly use for deriving Diffie-Hellman secrets. Its exact semantics and content are application specific.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.1-3">In this application profile, this parameter is used to exchange information about the ECDH algorithm as well as about the authentication credentials and public keys to be used with it, in the groups indicated by the transferred Acces Token as per its 'scope' claim (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>).<a href="#section-6.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-4">When used in the Token Transfer Request sent to the Group Manager, the 'ecdh_info' parameter has value the CBOR simple value "nil" (0xf6). This is done to ask for information about the ECDH algorithm as well as about the authentication credentials and public keys to be used to compute static-static Diffie-Hellman shared secrets <span>[<a href="#NIST-800-56A" class="xref">NIST-800-56A</a>]</span>, in the OSCORE groups that the client has been authorized to join and that use the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-4">When used in the Token Transfer Request sent to the Group Manager, the 'ecdh_info' parameter has value the CBOR simple value "null" (0xf6). This is done to ask for information about the ECDH algorithm as well as about the authentication credentials and public keys to be used to compute static-static Diffie-Hellman shared secrets <span>[<a href="#NIST-800-56A" class="xref">NIST-800-56A</a>]</span>, in the OSCORE groups that the client has been authorized to join and that use the pairwise mode of Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
 <p id="section-6.1.1-5">When used in the following Token Transfer Response from the Group Manager, the 'ecdh_info' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.<a href="#section-6.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-6.1.1-6">Each element contains information about ECDH parameters as well as about authentication credentials and public keys, for one or more OSCORE groups that use the pairwise mode of Group OSCORE and that the client has been authorized to join. Each element is formatted as follows.<a href="#section-6.1.1-6" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1942,7 +1942,7 @@ As an exception, the KDC MAY NOT include the 'ecdh_info' parameter in the Token 
 <pre class="lang-CDDL sourcecode">
 ecdh_info = ecdh_info_req / ecdh_info_resp
 
-ecdh_info_req = nil                   ; in the Token Transfer
+ecdh_info_req = null                  ; in the Token Transfer
                                       ; Request to the KDC
 
 ecdh_info_res = [ + ecdh_info_entry ] ; in the Token Transfer
@@ -1971,7 +1971,7 @@ gname = tstr
 <p id="section-6.1.2-1">The 'kdc_dh_creds' parameter is an OPTIONAL parameter of the request and response messages exchanged between the Client and the authz-info endpoint at the RS (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oauth-authz-46#section-5.10.1." class="relref">Section 5.10.1.</a> of [<a href="#I-D.ietf-ace-oauth-authz" class="xref">I-D.ietf-ace-oauth-authz</a>]</span>).<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-2">This parameter allows the client to request and retrieve the Diffie-Hellman authentication credentials of the RS, i.e., authentication credentials including a Diffie-Hellman public key of the RS.<a href="#section-6.1.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-3">In this application profile, this parameter is used to request and retrieve from the Group Manager its Diffie-Hellman authentication credentials to use, in the OSCORE groups that the client has been authorized to join. The Group Manager has specifically a Diffie-Hellman authentication credential in an OSCORE group, and thus a Diffie-Hellman public key in that group, if and only if the group is a pairwise-only group. In this case, the early retrieval of the Group Manager's authentication credential is necessary in order for the joining node to prove the possession of its own private key, upon joining the group (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>).<a href="#section-6.1.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-4">When used in the Token Transfer Request sent to the Group Manager, the 'kdc_dh_creds' parameter has value the CBOR simple value "nil" (0xf6). This is done to ask for the Diffie-Hellman authentication credentials that the Group Manager uses in the OSCORE groups that the client has been authorized to join.<a href="#section-6.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-4">When used in the Token Transfer Request sent to the Group Manager, the 'kdc_dh_creds' parameter has value the CBOR simple value "null" (0xf6). This is done to ask for the Diffie-Hellman authentication credentials that the Group Manager uses in the OSCORE groups that the client has been authorized to join.<a href="#section-6.1.2-4" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-5">When used in the following Token Transfer Response from the Group Manager, the 'kdc_dh_creds' parameter is a CBOR array of one or more elements. The number of elements is at most the number of OSCORE groups that the client has been authorized to join.<a href="#section-6.1.2-5" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-6">Each element 'kdc_dh_creds_entry' contains information about the Group Manager's Diffie-Hellman authentication credentials, for one or more OSCORE groups that are pairwise-only groups and that the client has been authorized to join. Each element is formatted as follows.<a href="#section-6.1.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1987,7 +1987,7 @@ gname = tstr
 <pre class="lang-CDDL sourcecode">
 kdc_dh_creds = kdc_dh_creds_req / kdc_dh_creds_resp
 
-kdc_dh_creds_req = nil                      ; in the Token Transfer
+kdc_dh_creds_req = null                     ; in the Token Transfer
                                             ; Request to the
                                             ; Group Manager
 
@@ -2022,7 +2022,7 @@ gname = tstr
           <li class="normal" id="section-6.2-3.2">
             <p id="section-6.2-3.2.1">The 'get_pub_keys' parameter is present only if the joining node wants to retrieve the authentication credentials of the group members from the Group Manager during the joining process (see <a href="#sec-public-keys-of-joining-nodes" class="xref">Section 7</a>). Otherwise, this parameter MUST NOT be present.<a href="#section-6.2-3.2.1" class="pilcrow">¶</a></p>
 <p id="section-6.2-3.2.2">
-If this parameter is present and its value is not the CBOR simple value "nil" (0xf6), each element of the inner CBOR array 'role_filter' is encoded as a CBOR unsigned integer, with the same value of a permission set ("Tperm") indicating that role or combination of roles in a scope entry, as defined in <a href="#sec-format-scope" class="xref">Section 3</a>.<a href="#section-6.2-3.2.2" class="pilcrow">¶</a></p>
+If this parameter is present and its value is not the CBOR simple value "null" (0xf6), each element of the inner CBOR array 'role_filter' is encoded as a CBOR unsigned integer, with the same value of a permission set ("Tperm") indicating that role or combination of roles in a scope entry, as defined in <a href="#sec-format-scope" class="xref">Section 3</a>.<a href="#section-6.2-3.2.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-3.3">'cnonce' contains a dedicated nonce N_C generated by the joining node. For the N_C value, it is RECOMMENDED to use a 8-byte long random nonce.<a href="#section-6.2-3.3" class="pilcrow">¶</a>
 </li>
@@ -2244,7 +2244,7 @@ The format of 'key' defined above is consistent with every signature algorithm a
           <li class="normal" id="section-6.4-5.5">
             <p id="section-6.4-5.5.1">The 'pub_keys' parameter, if present, includes the authentication credentials requested by the joining node by means of the 'get_pub_keys' parameter in the Joining Request.<a href="#section-6.4-5.5.1" class="pilcrow">¶</a></p>
 <p id="section-6.4-5.5.2">
-If the joining node has asked for the authentication credentials of all the group members, i.e., 'get_pub_keys' had value the CBOR simple value "nil" (0xf6) in the Joining Request, then the Group Manager provides only the authentication credentials of the group members that are relevant to the joining node. That is, in such a case, 'pub_keys' includes only: i) the authentication credentials of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the authentication credentials of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor.<a href="#section-6.4-5.5.2" class="pilcrow">¶</a></p>
+If the joining node has asked for the authentication credentials of all the group members, i.e., 'get_pub_keys' had value the CBOR simple value "null" (0xf6) in the Joining Request, then the Group Manager provides only the authentication credentials of the group members that are relevant to the joining node. That is, in such a case, 'pub_keys' includes only: i) the authentication credentials of the responders currently in the OSCORE group, in case the joining node is configured (also) as requester; and ii) the authentication credentials of the requesters currently in the OSCORE group, in case the joining node is configured (also) as responder or monitor.<a href="#section-6.4-5.5.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.4-5.6">The 'peer_identifiers' parameter includes the OSCORE Sender ID of each group member whose authentication credential is specified in the 'pub_keys' parameter. That is, a group member's Sender ID is used as identifier for that group member (REQ25).<a href="#section-6.4-5.6" class="pilcrow">¶</a>
 </li>
@@ -2455,7 +2455,7 @@ The Group Manager MUST return a 5.03 (Service Unavailable) response in case ther
 <p id="section-10-1">A group member or a signature verifier may need to retrieve the authentication credentials of (other) group members. To this end, the group member or signature verifier sends a Public Key Request message to the Group Manager, as per Sections <a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-4.4.1.1" class="relref">4.4.1.1</a> and <a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-4.4.2.1" class="relref">4.4.2.1</a> of <span>[<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>. In particular, it sends the request to the endpoint /ace-group/GROUPNAME/pub-key at the Group Manager.<a href="#section-10-1" class="pilcrow">¶</a></p>
 <p id="section-10-2">If the Public Key Request uses the method FETCH, the Public Key Request is formatted as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-15#section-4.4.1" class="relref">Section 4.4.1</a> of [<a href="#I-D.ietf-ace-key-groupcomm" class="xref">I-D.ietf-ace-key-groupcomm</a>]</span>. In particular:<a href="#section-10-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-10-3.1">Each element (if any) of the inner CBOR array 'role_filter' is formatted as in the inner CBOR array 'role_filter' of the 'get_pub_keys' parameter of the Joining Request when the parameter value is not the CBOR simple value "nil" (0xf6) (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>).<a href="#section-10-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-10-3.1">Each element (if any) of the inner CBOR array 'role_filter' is formatted as in the inner CBOR array 'role_filter' of the 'get_pub_keys' parameter of the Joining Request when the parameter value is not the CBOR simple value "null" (0xf6) (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>).<a href="#section-10-3.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-10-3.2">Each element (if any) of the inner CBOR array 'id_filter' is a CBOR byte string, which encodes the OSCORE Sender ID of the group member for which the associated authentication credential is requested (REQ25).<a href="#section-10-3.2" class="pilcrow">¶</a>
 </li>
@@ -2614,7 +2614,7 @@ Verifier                                                     Manager
       </h2>
 <p id="section-16-1">A group member may request the current status of the the OSCORE group, i.e., active or inactive. To this end, the group member sends a Group Status Request to the Group Manager.<a href="#section-16-1" class="pilcrow">¶</a></p>
 <p id="section-16-2">In particular, the group member sends a CoAP GET request to the endpoint /ace-group/GROUPNAME/active at the Group Manager defined in <a href="#ssec-resource-active" class="xref">Section 5.1</a> of this document, where GROUPNAME is the name of the OSCORE group.<a href="#section-16-2" class="pilcrow">¶</a></p>
-<p id="section-16-3">The payload of the 2.05 (Content) Group Status Response includes the CBOR simple value True if the group is currently active, or the CBOR simple value False otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is fine to happen.<a href="#section-16-3" class="pilcrow">¶</a></p>
+<p id="section-16-3">The payload of the 2.05 (Content) Group Status Response includes the CBOR simple value "true" (0xf5) if the group is currently active, or the CBOR simple value "false" (0xf4) otherwise. The group is considered active if it is set to allow new members to join, and if communication within the group is fine to happen.<a href="#section-16-3" class="pilcrow">¶</a></p>
 <p id="section-16-4">Upon learning from a 2.05 (Content) response that the group is currently inactive, the group member SHOULD stop taking part in communications within the group, until it becomes active again.<a href="#section-16-4" class="pilcrow">¶</a></p>
 <p id="section-16-5">Upon learning from a 2.05 (Content) response that the group has become active again, the group member can resume taking part in communications within the group.<a href="#section-16-5" class="pilcrow">¶</a></p>
 <p id="section-16-6"><a href="#fig-key-status-req-resp" class="xref">Figure 5</a> gives an overview of the exchange described above, while <a href="#fig-key-status-req-resp-ex" class="xref">Figure 6</a> shows an example.<a href="#section-16-6" class="pilcrow">¶</a></p>
@@ -2898,7 +2898,7 @@ Otherwise, the group member considers the stale Sender IDs specified in the Stal
         </ol>
 <p id="section-20.3-11">If case (c) or case (d) applies, the group member can alternatively perform the following actions.<a href="#section-20.3-11" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-20.3-12">
-<li id="section-20.3-12.1">The group member re-joins the group (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>). When doing so, the group member MUST re-join with the same roles it currently has in the group, and MUST request the Group Manager for the authentication credentials of all the current group members. That is, the 'get_pub_keys' parameter of the Joining Request MUST be present and MUST be set to the CBOR simple value "nil" (0xf6).<a href="#section-20.3-12.1" class="pilcrow">¶</a>
+<li id="section-20.3-12.1">The group member re-joins the group (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>). When doing so, the group member MUST re-join with the same roles it currently has in the group, and MUST request the Group Manager for the authentication credentials of all the current group members. That is, the 'get_pub_keys' parameter of the Joining Request MUST be present and MUST be set to the CBOR simple value "null" (0xf6).<a href="#section-20.3-12.1" class="pilcrow">¶</a>
 </li>
           <li id="section-20.3-12.2">
             <p id="section-20.3-12.2.1">When receiving the Joining Response (see <a href="#ssec-join-resp-processing" class="xref">Section 6.5</a> and <a href="#ssec-join-resp-processing" class="xref">Section 6.5</a>), the group member retrieves the set Z of authentication credentials specified in the 'pub_keys' parameter.<a href="#section-20.3-12.2.1" class="pilcrow">¶</a></p>
@@ -3263,7 +3263,7 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
 </li>
           <li class="normal" id="section-25.2-2.2">CBOR Key: TBD (range -256 to 255)<a href="#section-25.2-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-25.2-2.3">Value Type: Simple value "nil" / array<a href="#section-25.2-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-25.2-2.3">Value Type: Simple value "null" / array<a href="#section-25.2-2.3" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-25.2-2.4">Reference: [[This specification]]<a href="#section-25.2-2.4" class="pilcrow">¶</a>
 </li>
@@ -4027,7 +4027,7 @@ ecdh_info_entry =
   ecdh_capab_2 : [ any ],
   ...,
   ecdh_capab_N : [ any ],
-  cred_fmt = int / nil
+  cred_fmt = int / null
 ]
 
 gname = tstr
@@ -4085,17 +4085,15 @@ For example, if 'ecdh_params'[0][0] specifies the key type as capability of the 
 <a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-version-12-to-13" class="section-name selfRef">Version -12 to -13</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.1-1.1">Replaced CBOR simple value "null" with "nil".<a href="#appendix-C.1-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-C.1-1.1">Renamed parameters about authentication credentials.<a href="#appendix-C.1-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.2">Renamed parameters about authentication credentials.<a href="#appendix-C.1-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.2">It is optional for the Group Manager to reassign Gids by tracking "Birth Gids".<a href="#appendix-C.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.3">It is optional for the Group Manager to reassign Gids by tracking "Birth Gids".<a href="#appendix-C.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.3">Distinction between authentication credentials and public keys.<a href="#appendix-C.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.4">Distinction between authentication credentials and public keys.<a href="#appendix-C.1-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.4">Updated IANA considerations related to AIF.<a href="#appendix-C.1-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.5">Updated IANA considerations related to AIF.<a href="#appendix-C.1-1.5" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="appendix-C.1-1.6">Updated textual description of registered ACE Scope Semantics value.<a href="#appendix-C.1-1.6" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.5">Updated textual description of registered ACE Scope Semantics value.<a href="#appendix-C.1-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>

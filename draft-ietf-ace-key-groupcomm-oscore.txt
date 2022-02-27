@@ -5,10 +5,10 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                   RISE AB
 Intended status: Standards Track                                 J. Park
-Expires: 26 August 2022                      Universitaet Duisburg-Essen
+Expires: 31 August 2022                      Universitaet Duisburg-Essen
                                                             F. Palombini
                                                              Ericsson AB
-                                                        22 February 2022
+                                                        27 February 2022
 
 
                 Key Management for OSCORE Groups in ACE
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 August 2022.
+   This Internet-Draft will expire on 31 August 2022.
 
 Copyright Notice
 
@@ -795,22 +795,22 @@ Table of Contents
       (OPT2):
 
       -  'ecdh_info' defined in Section 6.1.1 of this document, with
-         value the CBOR simple value "nil" (0xf6) to request information
-         about the ECDH algorithm, the ECDH algorithm parameters, the
-         ECDH key parameters and about the exact format of
-         authentication credentials used in the groups that the client
-         has been authorized to join.  This is relevant in case the
-         joining node supports the pairwise mode of Group OSCORE
+         value the CBOR simple value "null" (0xf6) to request
+         information about the ECDH algorithm, the ECDH algorithm
+         parameters, the ECDH key parameters and about the exact format
+         of authentication credentials used in the groups that the
+         client has been authorized to join.  This is relevant in case
+         the joining node supports the pairwise mode of Group OSCORE
          [I-D.ietf-core-oscore-groupcomm].
 
       -  'kdc_dh_creds' defined in Section 6.1.2 of this document, with
-         value the CBOR simple value "nil" (0xf6) to request the Diffie-
-         Hellman authentication credentials of the Group Manager for the
-         groups that the client has been authorized to join.  That is,
-         each of such authentication credentials includes a Diffie-
-         Hellman public key of the Group Manager.  This is relevant in
-         case the joining node supports the pairwise mode of Group
-         OSCORE [I-D.ietf-core-oscore-groupcomm].
+         value the CBOR simple value "null" (0xf6) to request the
+         Diffie-Hellman authentication credentials of the Group Manager
+         for the groups that the client has been authorized to join.
+         That is, each of such authentication credentials includes a
+         Diffie-Hellman public key of the Group Manager.  This is
+         relevant in case the joining node supports the pairwise mode of
+         Group OSCORE [I-D.ietf-core-oscore-groupcomm].
 
       Alternatively, the joining node may retrieve this information by
       other means.
@@ -935,7 +935,7 @@ Table of Contents
    claim (see Section 3.2 of [I-D.ietf-ace-key-groupcomm]).
 
    When used in the Token Transfer Request sent to the Group Manager,
-   the 'ecdh_info' parameter has value the CBOR simple value "nil"
+   the 'ecdh_info' parameter has value the CBOR simple value "null"
    (0xf6).  This is done to ask for information about the ECDH algorithm
    as well as about the authentication credentials and public keys to be
    used to compute static-static Diffie-Hellman shared secrets
@@ -995,7 +995,7 @@ Table of Contents
 
    ecdh_info = ecdh_info_req / ecdh_info_resp
 
-   ecdh_info_req = nil                   ; in the Token Transfer
+   ecdh_info_req = null                  ; in the Token Transfer
                                          ; Request to the KDC
 
    ecdh_info_res = [ + ecdh_info_entry ] ; in the Token Transfer
@@ -1042,7 +1042,7 @@ Table of Contents
    joining the group (see Section 6.2).
 
    When used in the Token Transfer Request sent to the Group Manager,
-   the 'kdc_dh_creds' parameter has value the CBOR simple value "nil"
+   the 'kdc_dh_creds' parameter has value the CBOR simple value "null"
    (0xf6).  This is done to ask for the Diffie-Hellman authentication
    credentials that the Group Manager uses in the OSCORE groups that the
    client has been authorized to join.
@@ -1088,7 +1088,7 @@ Table of Contents
 
    kdc_dh_creds = kdc_dh_creds_req / kdc_dh_creds_resp
 
-   kdc_dh_creds_req = nil                      ; in the Token Transfer
+   kdc_dh_creds_req = null                     ; in the Token Transfer
                                                ; Request to the
                                                ; Group Manager
 
@@ -1126,7 +1126,7 @@ Table of Contents
       Section 7).  Otherwise, this parameter MUST NOT be present.
 
       If this parameter is present and its value is not the CBOR simple
-      value "nil" (0xf6), each element of the inner CBOR array
+      value "null" (0xf6), each element of the inner CBOR array
       'role_filter' is encoded as a CBOR unsigned integer, with the same
       value of a permission set ("Tperm") indicating that role or
       combination of roles in a scope entry, as defined in Section 3.
@@ -1571,7 +1571,7 @@ Table of Contents
 
       If the joining node has asked for the authentication credentials
       of all the group members, i.e., 'get_pub_keys' had value the CBOR
-      simple value "nil" (0xf6) in the Joining Request, then the Group
+      simple value "null" (0xf6) in the Joining Request, then the Group
       Manager provides only the authentication credentials of the group
       members that are relevant to the joining node.  That is, in such a
       case, 'pub_keys' includes only: i) the authentication credentials
@@ -2000,7 +2000,8 @@ Table of Contents
    *  Each element (if any) of the inner CBOR array 'role_filter' is
       formatted as in the inner CBOR array 'role_filter' of the
       'get_pub_keys' parameter of the Joining Request when the parameter
-      value is not the CBOR simple value "nil" (0xf6) (see Section 6.2).
+      value is not the CBOR simple value "null" (0xf6) (see
+      Section 6.2).
 
    *  Each element (if any) of the inner CBOR array 'id_filter' is a
       CBOR byte string, which encodes the OSCORE Sender ID of the group
@@ -2253,10 +2254,10 @@ Table of Contents
    OSCORE group.
 
    The payload of the 2.05 (Content) Group Status Response includes the
-   CBOR simple value True if the group is currently active, or the CBOR
-   simple value False otherwise.  The group is considered active if it
-   is set to allow new members to join, and if communication within the
-   group is fine to happen.
+   CBOR simple value "true" (0xf5) if the group is currently active, or
+   the CBOR simple value "false" (0xf4) otherwise.  The group is
+   considered active if it is set to allow new members to join, and if
+   communication within the group is fine to happen.
 
    Upon learning from a 2.05 (Content) response that the group is
    currently inactive, the group member SHOULD stop taking part in
@@ -2807,7 +2808,7 @@ Table of Contents
        for the authentication credentials of all the current group
        members.  That is, the 'get_pub_keys' parameter of the Joining
        Request MUST be present and MUST be set to the CBOR simple value
-       "nil" (0xf6).
+       "null" (0xf6).
 
    2.  When receiving the Joining Response (see Section 6.5 and
        Section 6.5), the group member retrieves the set Z of
@@ -3311,7 +3312,7 @@ Table of Contents
 
    *  CBOR Key: TBD (range -256 to 255)
 
-   *  Value Type: Simple value "nil" / array
+   *  Value Type: Simple value "null" / array
 
    *  Reference: [[This specification]]
 
@@ -4217,7 +4218,7 @@ B.1.  Format of 'ecdh_info_entry'
      ecdh_capab_2 : [ any ],
      ...,
      ecdh_capab_N : [ any ],
-     cred_fmt = int / nil
+     cred_fmt = int / null
    ]
 
    gname = tstr
@@ -4276,8 +4277,6 @@ Appendix C.  Document Updates
    RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 C.1.  Version -12 to -13
-
-   *  Replaced CBOR simple value "null" with "nil".
 
    *  Renamed parameters about authentication credentials.
 
