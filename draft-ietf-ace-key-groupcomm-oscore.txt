@@ -5,10 +5,10 @@
 ACE Working Group                                              M. Tiloca
 Internet-Draft                                                   RISE AB
 Intended status: Standards Track                                 J. Park
-Expires: 31 August 2022                      Universitaet Duisburg-Essen
+Expires: 6 September 2022                    Universitaet Duisburg-Essen
                                                             F. Palombini
                                                              Ericsson AB
-                                                        27 February 2022
+                                                            5 March 2022
 
 
                 Key Management for OSCORE Groups in ACE
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2022.
+   This Internet-Draft will expire on 6 September 2022.
 
 Copyright Notice
 
@@ -854,9 +854,9 @@ Table of Contents
          Consistently with Section 2.3 of
          [I-D.ietf-core-oscore-groupcomm], acceptable values denote a
          format of authentication credential that MUST explicitly
-         provide the public key as well as the full set of information
-         related to the public key algorithm, including, e.g., the used
-         elliptic curve (when applicable).
+         provide the public key as well as the comprehensive set of
+         information related to the public key algorithm, including,
+         e.g., the used elliptic curve (when applicable).
 
          At the time of writing this specification, acceptable formats
          of authentication credentials are CBOR Web Tokens (CWTs) and
@@ -985,10 +985,11 @@ Table of Contents
       identified by 'gname'.  It takes value from the "Label" column of
       the "COSE Header Parameters" registry [COSE.Header.Parameters]
       (REQ6).  Acceptable values denote a format that MUST provide the
-      public key as well as the full set of information related to the
-      public key algorithm, including, e.g., the used elliptic curve
-      (when applicable).  The same considerations and guidelines for the
-      'pub_key_enc' element of 'sign_info' (see Section 6.1) apply.
+      public key as well as the comprehensive set of information related
+      to the public key algorithm, including, e.g., the used elliptic
+      curve (when applicable).  The same considerations and guidelines
+      for the 'pub_key_enc' element of 'sign_info' (see Section 6.1)
+      apply.
 
    The CDDL notation [RFC8610] of the 'ecdh_info' parameter is given
    below.
@@ -1067,20 +1068,20 @@ Table of Contents
       identified by 'gname'.  It takes value from the "Label" column of
       the "COSE Header Parameters" registry [COSE.Header.Parameters]
       (REQ6).  Acceptable values denote a format that MUST explicitly
-      provide the public key as well as full set of information related
-      to the public key algorithm, including, e.g., the used elliptic
-      curve (when applicable).  The same considerations and guidelines
-      for the 'pub_key_enc' element of 'sign_info' (see Section 6.1)
-      apply.
+      provide the public key as well as comprehensive set of information
+      related to the public key algorithm, including, e.g., the used
+      elliptic curve (when applicable).  The same considerations and
+      guidelines for the 'pub_key_enc' element of 'sign_info' (see
+      Section 6.1) apply.
 
    *  The third element 'cred' is a CBOR byte string, which encodes the
       Group Manager's Diffie-Hellman authentication credential in its
       original binary representation made available to other endpoints
       in the group.  In particular, the original binary representation
       complies with the format specified by the 'cred_fmt' element.
-      Note that the authentication credential provides the full set of
-      information related to its public key algorithm, i.e., the ECDH
-      algorithm used in the OSCORE group as pairwise key agreement
+      Note that the authentication credential provides the comprehensive
+      set of information related to its public key algorithm, i.e., the
+      ECDH algorithm used in the OSCORE group as pairwise key agreement
       algorithm.
 
    The CDDL notation [RFC8610] of the 'kdc_dh_creds' parameter is given
@@ -1469,7 +1470,7 @@ Table of Contents
          Consistently with Section 2.3 of
          [I-D.ietf-core-oscore-groupcomm], acceptable values denote a
          format that MUST explicitly provide the public key as well as
-         the full set of information related to the public key
+         the comprehensive set of information related to the public key
          algorithm, including, e.g., the used elliptic curve (when
          applicable).
 
@@ -3973,10 +3974,11 @@ A.1.  Mandatory-to-Address Requirements
    *  REQ6 - Specify the acceptable formats for authentication
       credentials and, if used, the acceptable values for 'pub_key_enc':
       acceptable formats explicitly provide the public key as well as
-      the full set of information related to the public key algorithm
-      (see Section 6.1 and Section 6.4).  Consistent acceptable values
-      for 'pub_key_enc' are taken from the "Label" column of the "COSE
-      Header Parameters" registry [COSE.Header.Parameters].
+      the comprehensive set of information related to the public key
+      algorithm (see Section 6.1 and Section 6.4).  Consistent
+      acceptable values for 'pub_key_enc' are taken from the "Label"
+      column of the "COSE Header Parameters" registry
+      [COSE.Header.Parameters].
 
    *  REQ7 - If the value of the GROUPNAME URI path and the group name
       in the Access Token scope (gname in Section 3.1 of
