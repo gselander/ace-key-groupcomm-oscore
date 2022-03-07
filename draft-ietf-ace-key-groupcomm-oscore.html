@@ -1019,7 +1019,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 6 September 2022</td>
+<td class="center">Expires 8 September 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1032,12 +1032,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-ietf-ace-key-groupcomm-oscore-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-03-05" class="published">5 March 2022</time>
+<time datetime="2022-03-07" class="published">7 March 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-09-06">6 September 2022</time></dd>
+<dd class="expires"><time datetime="2022-09-08">8 September 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1079,7 +1079,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1909,7 +1909,7 @@ This format is consistent with every signature algorithm currently considered in
           <li class="normal" id="section-6.1-2.4">
             <p id="section-6.1-2.4.1">If 'ecdh_info' is included in the Token Transfer Request, the Group Manager SHOULD include the 'ecdh_info' parameter in the Token Transfer Response, as per the format defined in <a href="#ecdh-info" class="xref">Section 6.1.1</a>. Note that the field 'id' of each 'ecdh_info_entry' specifies the name, or array of group names, for which that 'ecdh_info_entry' applies to.<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2.4.2">
-As an exception, the KDC MAY NOT include the 'ecdh_info' parameter in the Token Transfer Response even if 'ecdh_info' is included in the Token Transfer Request, in case all the groups that the Client is authorized to join are signature-only groups.<a href="#section-6.1-2.4.2" class="pilcrow">¶</a></p>
+As an exception, the KDC MAY omit the 'ecdh_info' parameter in the Token Transfer Response even if 'ecdh_info' is included in the Token Transfer Request, in case all the groups that the Client is authorized to join are signature-only groups.<a href="#section-6.1-2.4.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-2.5">If 'kdc_dh_creds' is included in the Token Transfer Request and any of the groups that the client has been authorized to join is a pairwise-only group, then the Group Manager MUST include the 'kdc_dh_creds' parameter in the Token Transfer Response, as per the format defined in <a href="#gm-dh-info" class="xref">Section 6.1.2</a>. Otherwise, if 'kdc_dh_creds' is included in the Token Transfer Request, the Group Manager MAY include the 'kdc_dh_creds' parameter in the Token Transfer Response. Note that the field 'id' specifies the group name, or array of group names, for which the corresponding 'kdc_dh_creds' applies to.<a href="#section-6.1-2.5" class="pilcrow">¶</a>
 </li>
@@ -2349,7 +2349,7 @@ The input parameters of HKDF are as follows.<a href="#section-6.4-5.10.2.2.3" cl
 <li id="section-7-5.3.2.1">
               <p id="section-7-5.3.2.1.1">When establishing the secure communication association, the Group Manager obtained from the joining node the joining node's authentication credential, in the format used in the OSCORE group and including the asymmetric proof-of-possession key as public key. Also, such authentication credential and the proof-of-possession key are compatible with the signature or ECDH algorithm, and possible associated parameters used in the OSCORE group.<a href="#section-7-5.3.2.1.1" class="pilcrow">¶</a></p>
 <p id="section-7-5.3.2.1.2">
-In this case, the Group Manager considers the authentication credential as the one associated with the joining node in the OSCORE group. If the joining node is aware that the authentication credential and the public key included thereof are also valid for the OSCORE group, then the joining node MAY not provide again its own authentication credential to the Group Manager.<a href="#section-7-5.3.2.1.2" class="pilcrow">¶</a></p>
+In this case, the Group Manager considers the authentication credential as the one associated with the joining node in the OSCORE group. If the joining node is aware that the authentication credential and the public key included thereof are also valid for the OSCORE group, then the joining node MAY choose to not provide again its own authentication credential to the Group Manager.<a href="#section-7-5.3.2.1.2" class="pilcrow">¶</a></p>
 <p id="section-7-5.3.2.1.3">
 The joining node MUST provide again its own authentication credential if it has provided the Group Manager with multiple authentication credentials during past joining processes, intended for different OSCORE groups. If the joining node provides its own authentication credential in the 'client_cred' parameter of the Joining Request (see <a href="#ssec-join-req-sending" class="xref">Section 6.2</a>), the Group Manager performs consistency checks as per <a href="#ssec-join-req-processing" class="xref">Section 6.3</a> and, in case of success, considers it as the authentication credential associated with the joining node in the OSCORE group.<a href="#section-7-5.3.2.1.3" class="pilcrow">¶</a></p>
 </li>
@@ -3517,7 +3517,7 @@ multicast) MUST support this parameter.<a href="#section-21-4.8" class="pilcrow"
         <h3 id="name-aif">
 <a href="#section-25.8" class="section-number selfRef">25.8. </a><a href="#name-aif" class="section-name selfRef">AIF</a>
         </h3>
-<p id="section-25.8-1">For both media-types application/aif+cbor and application/aif+json defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-05#section-5.1" class="relref">Section 5.1</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-05#section-5.2" class="relref">Section 5.2</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span> within the "MIME Media Type Sub-Parameter" registry group.<a href="#section-25.8-1" class="pilcrow">¶</a></p>
+<p id="section-25.8-1">For both media-types application/aif+cbor and application/aif+json defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-06#section-5.1" class="relref">Section 5.1</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span>, IANA is requested to register the following entries for the two media-type parameters Toid and Tperm, in the respective sub-registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-aif-06#section-5.2" class="relref">Section 5.2</a> of [<a href="#I-D.ietf-ace-aif" class="xref">I-D.ietf-ace-aif</a>]</span> within the "MIME Media Type Sub-Parameter" registry group.<a href="#section-25.8-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-25.8-2.1">Name: oscore-group-name<a href="#section-25.8-2.1" class="pilcrow">¶</a>
 </li>
@@ -3706,7 +3706,7 @@ Entries that do not meet these objective of clarity and completeness should not 
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-aif">[I-D.ietf-ace-aif]</dt>
         <dd>
-<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"An Authorization Information Format (AIF) for ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-aif-05</span>, <time datetime="2022-02-14" class="refDate">14 February 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-ace-aif-05.txt">https://www.ietf.org/archive/id/draft-ietf-ace-aif-05.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"An Authorization Information Format (AIF) for ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-aif-06</span>, <time datetime="2022-03-04" class="refDate">4 March 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-ace-aif-06.txt">https://www.ietf.org/archive/id/draft-ietf-ace-aif-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-dtls-authorize">[I-D.ietf-ace-dtls-authorize]</dt>
         <dd>
